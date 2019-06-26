@@ -1,1 +1,1 @@
-# nosto-magento2-cmp
+# Nosto CMP extension for Magento 2
