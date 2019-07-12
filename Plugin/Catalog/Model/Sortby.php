@@ -39,7 +39,7 @@ namespace Nosto\TaggingCmp\Plugin\Catalog\Model;
 
 use Magento\Catalog\Model\Category\Attribute\Source\Sortby as MagentoSortby;
 use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\TaggingCmp\Helper\Data as NostoCmpHelperData;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\View\Element\Template;
@@ -49,8 +49,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Sortby extends Template
 {
 
-    /** @var NostoHelperData */
-    private $nostoHelperData;
+    /** @var NostoCmpHelperData */
+    private $nostoCmpHelperData;
 
     /** @var NostoHelperSorting */
     private $nostoHelperSorting;
@@ -63,20 +63,20 @@ class Sortby extends Template
 
     /**
      * Sortby constructor.
-     * @param NostoHelperData $nostoHelperData
+     * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperSorting $nostoHelperSorting
      * @param Context $context
      * @param Http $request
      * @param array $data
      */
     public function __construct(
-        NostoHelperData $nostoHelperData,
+        NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperSorting $nostoHelperSorting,
         Context $context,
         Http $request,
         array $data = []
     ) {
-        $this->nostoHelperData = $nostoHelperData;
+        $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperSorting = $nostoHelperSorting;
         $this->storeManager = $context->getStoreManager();
         $this->request = $request;
@@ -95,7 +95,7 @@ class Sortby extends Template
         $store = $this->storeManager->getStore($id);
 
         if ($this->nostoHelperSorting->canUseCategorySorting($id) &&
-            $this->nostoHelperData->isCategorySortingEnabled($store)
+            $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             // new option
             $customOption = [

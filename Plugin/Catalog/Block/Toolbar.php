@@ -36,7 +36,7 @@
 
 namespace Nosto\TaggingCmp\Plugin\Catalog\Block;
 
-use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\TaggingCmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
 use Magento\Backend\Block\Template\Context;
@@ -61,8 +61,8 @@ class Toolbar extends Template
     /**  @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var NostoHelperData */
-    private $nostoHelperData;
+    /** @var NostoCmpHelperData */
+    private $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
     private $nostoHelperAccount;
@@ -85,7 +85,7 @@ class Toolbar extends Template
     /**
      * Toolbar constructor.
      * @param Context $context
-     * @param NostoHelperData $nostoHelperData
+     * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StoreManagerInterface $storeManager
      * @param CategoryBuilder $builder
@@ -97,7 +97,7 @@ class Toolbar extends Template
      */
     public function __construct(
         Context $context,
-        NostoHelperData $nostoHelperData,
+        NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
@@ -106,7 +106,7 @@ class Toolbar extends Template
         Registry $registry,
         array $data = []
     ) {
-        $this->nostoHelperData = $nostoHelperData;
+        $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
@@ -132,7 +132,7 @@ class Toolbar extends Template
         if (($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             || $currentOrder === NostoHelperSorting::NOSTO_TOPLIST_KEY)
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
-            && $this->nostoHelperData->isCategorySortingEnabled($store)
+            && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
 
             try {

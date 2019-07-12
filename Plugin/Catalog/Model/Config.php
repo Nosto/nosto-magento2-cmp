@@ -37,7 +37,7 @@
 namespace  Nosto\TaggingCmp\Plugin\Catalog\Model;
 
 use Magento\Catalog\Model\Config as MagentoConfig;
-use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\TaggingCmp\Helper\Data as NostoCmpHelperData;
 use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Magento\Backend\Block\Template\Context;
@@ -47,8 +47,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class Config extends Template
 {
-    /** @var NostoHelperData */
-    private $nostoHelperData;
+    /** @var NostoCmpHelperData */
+    private $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
     private $nostoHelperAccount;
@@ -58,18 +58,18 @@ class Config extends Template
 
     /**
      * Config constructor.
-     * @param NostoHelperData $nostoHelperData
+     * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param Context $context
      * @param array $data
      */
     public function __construct(
-        NostoHelperData $nostoHelperData,
+        NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         Context $context,
         array $data = []
     ) {
-        $this->nostoHelperData = $nostoHelperData;
+        $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->storeManager = $context->getStoreManager();
         parent::__construct($context, $data);
@@ -88,7 +88,7 @@ class Config extends Template
     {
         $store = $this->storeManager->getStore();
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
-            $this->nostoHelperData->isCategorySortingEnabled($store)
+            $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             // new option
             $customOptions = NostoHelperSorting::getNostoSortingOptions();
