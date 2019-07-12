@@ -34,78 +34,54 @@
  *
  */
 
+namespace Nosto\TaggingCmp\Model\Config\Frontend;
 
-namespace Nosto\TaggingCmp\Plugin\Catalog\Model;
-
-use Magento\Catalog\Model\Category\Attribute\Source\Sortby as MagentoSortby;
-use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Backend\Block\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
 
-class Sortby extends Template
+class CategorySorting extends Field
 {
-
-    /** @var NostoHelperData */
-    private $nostoHelperData;
 
     /** @var NostoHelperSorting */
     private $nostoHelperSorting;
 
-    /** @var StoreManagerInterface */
-    private $storeManager;
-
     /** @var Http $request */
-    private $request;
+    public $request;
 
     /**
-     * Sortby constructor.
-     * @param NostoHelperData $nostoHelperData
+     * CategorySorting constructor.
+     * @param Http $request
      * @param NostoHelperSorting $nostoHelperSorting
      * @param Context $context
-     * @param Http $request
      * @param array $data
      */
     public function __construct(
-        NostoHelperData $nostoHelperData,
+        Http $request,
         NostoHelperSorting $nostoHelperSorting,
         Context $context,
-        Http $request,
         array $data = []
     ) {
-        $this->nostoHelperData = $nostoHelperData;
-        $this->nostoHelperSorting = $nostoHelperSorting;
-        $this->storeManager = $context->getStoreManager();
         $this->request = $request;
+        $this->nostoHelperSorting = $nostoHelperSorting;
         parent::__construct($context, $data);
     }
 
     /**
-     * @param MagentoSortby $sortBy
-     * @param $options
-     * @return array
-     * @throws NoSuchEntityException
+     * Disable input if APPS token is not found
+     *
+     * @param AbstractElement $element
+     * @return string
      */
-    public function afterGetAllOptions(MagentoSortby $sortBy, $options)
+    protected function _getElementHtml(AbstractElement $element) //@codingStandardsIgnoreLine
     {
         $id = (int)$this->request->getParam('store');
-        $store = $this->storeManager->getStore($id);
-
-        if ($this->nostoHelperSorting->canUseCategorySorting($id) &&
-            $this->nostoHelperData->isCategorySortingEnabled($store)
-        ) {
-            // new option
-            $customOption = [
-              ['label' => __('Personalized for you'), 'value' => NostoHelperSorting::NOSTO_PERSONALIZED_KEY],
-              ['label' => __('Top products'), 'value' => NostoHelperSorting::NOSTO_TOPLIST_KEY]
-            ];
-
-            // merge default sorting options with custom options
-            $options = array_merge($options, $customOption);
+        if (!$this->nostoHelperSorting->canUseCategorySorting($id)) {
+            $element->setReadonly(true, true);
         }
-        return $options;
+
+        return parent::_getElementHtml($element);
     }
 }
