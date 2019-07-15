@@ -142,6 +142,7 @@ class Toolbar extends Template
                     && !empty($orderIds)
                     && NostoHelperArray::onlyScalarValues($orderIds)
                 ) {
+                    $orderIds = array_reverse($orderIds);
                     $zendExpression = new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $orderIds) . ') DESC');
                     $subject->getCollection()->getSelect()->order($zendExpression);
                 }
