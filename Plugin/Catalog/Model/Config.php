@@ -34,11 +34,11 @@
  *
  */
 
-namespace  Nosto\TaggingCmp\Plugin\Catalog\Model;
+namespace  Nosto\Cmp\Plugin\Catalog\Model;
 
 use Magento\Catalog\Model\Config as MagentoConfig;
-use Nosto\TaggingCmp\Helper\Data as NostoCmpHelperData;
-use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;

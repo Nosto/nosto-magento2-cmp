@@ -36,12 +36,12 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Model\Config">
-        <plugin name="sortby_add_custom_option" type="Nosto\TaggingCmp\Plugin\Catalog\Model\Config" />
+        <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config" />
     </type>
     <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
-        <plugin name="sortby_extend_default_sort_filters" type="Nosto\TaggingCmp\Plugin\Catalog\Block\Toolbar" />
+        <plugin name="sortby_extend_default_sort_filters" type="Nosto\Cmp\Plugin\Catalog\Block\Toolbar" />
     </type>
     <type name="Magento\Catalog\Model\Category\Attribute\Source\Sortby">
-        <plugin name="sortby_add_default_nosto_option" type="Nosto\TaggingCmp\Plugin\Catalog\Model\Sortby" />
+        <plugin name="sortby_add_default_nosto_option" type="Nosto\Cmp\Plugin\Catalog\Model\Sortby" />
     </type>
 </config>

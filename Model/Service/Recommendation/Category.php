@@ -34,11 +34,11 @@
  *
  */
 
-namespace Nosto\TaggingCmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Nosto\Object\Signup\Account as NostoAccount;
 use Nosto\Service\FeatureAccess;
-use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Operation\Recommendation\CategoryBrowsingHistory;
 use Nosto\Operation\Recommendation\CategoryTopList;
 use Nosto\Tagging\Logger\Logger as NostoLogger;

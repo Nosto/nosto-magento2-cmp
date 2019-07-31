@@ -34,11 +34,11 @@
  *
  */
 
-namespace Nosto\TaggingCmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-use Nosto\TaggingCmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
@@ -47,7 +47,7 @@ use Magento\Framework\Registry;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\TaggingCmp\Model\Service\Recommendation\Category as CategoryRecommendation;
+use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;

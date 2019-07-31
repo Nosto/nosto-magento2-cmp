@@ -35,11 +35,11 @@
  */
 
 
-namespace Nosto\TaggingCmp\Plugin\Catalog\Model;
+namespace Nosto\Cmp\Plugin\Catalog\Model;
 
 use Magento\Catalog\Model\Category\Attribute\Source\Sortby as MagentoSortby;
-use Nosto\TaggingCmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\TaggingCmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\View\Element\Template;

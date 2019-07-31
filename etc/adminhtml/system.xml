@@ -42,7 +42,7 @@
                  showInWebsite="1" showInStore="1">
             <label>Nosto CMP</label>
             <tab>service</tab>
-            <resource>Nosto_TaggingCmp::config_nosto</resource>
+            <resource>Nosto_Cmp::config_nosto</resource>
             <group id="flags" translate="label" type="text" sortOrder="10" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Category Personalisation</label>
@@ -52,8 +52,8 @@
                     <comment>
                         <![CDATA[Experimental feature. Might be removed in future releases. Contact Nosto for further details.]]>
                     </comment>
-                    <source_model>Nosto\TaggingCmp\Model\Config\Source\CategorySorting</source_model>
-                    <frontend_model>Nosto\TaggingCmp\Model\Config\Frontend\CategorySorting</frontend_model>
+                    <source_model>Nosto\Cmp\Model\Config\Source\CategorySorting</source_model>
+                    <frontend_model>Nosto\Cmp\Model\Config\Frontend\CategorySorting</frontend_model>
                 </field>
             </group>
         </section>

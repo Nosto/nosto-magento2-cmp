@@ -34,7 +34,7 @@
  *
  */
 
-namespace Nosto\TaggingCmp\Helper;
+namespace Nosto\Cmp\Helper;
 
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
