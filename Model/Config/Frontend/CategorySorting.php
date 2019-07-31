@@ -34,6 +34,54 @@
  *
  */
 
-use Magento\Framework\Component\ComponentRegistrar;
+namespace Nosto\Cmp\Model\Config\Frontend;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Nosto_TaggingCmp', __DIR__);
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\Request\Http;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+
+class CategorySorting extends Field
+{
+
+    /** @var NostoHelperSorting */
+    private $nostoHelperSorting;
+
+    /** @var Http $request */
+    public $request;
+
+    /**
+     * CategorySorting constructor.
+     * @param Http $request
+     * @param NostoHelperSorting $nostoHelperSorting
+     * @param Context $context
+     * @param array $data
+     */
+    public function __construct(
+        Http $request,
+        NostoHelperSorting $nostoHelperSorting,
+        Context $context,
+        array $data = []
+    ) {
+        $this->request = $request;
+        $this->nostoHelperSorting = $nostoHelperSorting;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Disable input if APPS token is not found
+     *
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element) //@codingStandardsIgnoreLine
+    {
+        $id = (int)$this->request->getParam('store');
+        if (!$this->nostoHelperSorting->canUseCategorySorting($id)) {
+            $element->setReadonly(true, true);
+        }
+
+        return parent::_getElementHtml($element);
+    }
+}

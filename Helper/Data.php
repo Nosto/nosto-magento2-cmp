@@ -34,6 +34,57 @@
  *
  */
 
-use Magento\Framework\Component\ComponentRegistrar;
+namespace Nosto\Cmp\Helper;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Nosto_TaggingCmp', __DIR__);
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+
+class Data extends AbstractHelper
+{
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
+
+    /**
+     * Path to the configuration object that stores category sorting
+     */
+    const XML_PATH_CATEGORY_SORTING = 'nosto_cmp/flags/category_sorting';
+
+    /**
+     * Data constructor.
+     */
+    public function __construct(
+        Context $context,
+        NostoHelperScope $nostoHelperScope
+    ) {
+        parent::__construct($context);
+        $this->nostoHelperScope = $nostoHelperScope;
+    }
+
+    /**
+     * Returns if category sorting is enabled
+     *
+     * @param StoreInterface|null $store the store model or null.
+     * @return bool the configuration value
+     */
+    public function isCategorySortingEnabled(StoreInterface $store = null)
+    {
+        return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_SORTING, $store);
+    }
+
+    /**
+     * @param string $path
+     * @param StoreInterface|Store|null $store
+     * @return mixed|null
+     */
+    public function getStoreConfig($path, StoreInterface $store = null)
+    {
+        if ($store === null) {
+            $store = $this->nostoHelperScope->getStore(true);
+        }
+        return $store->getConfig($path);
+    }
+
+}

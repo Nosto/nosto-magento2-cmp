@@ -34,6 +34,60 @@
  *
  */
 
-use Magento\Framework\Component\ComponentRegistrar;
+namespace Nosto\Cmp\Model\Config\Source;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Nosto_TaggingCmp', __DIR__);
+use Magento\Framework\Phrase;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Config\Block\System\Config\Form\Field;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Magento\Framework\Data\OptionSourceInterface;
+
+class CategorySorting extends Field implements OptionSourceInterface
+{
+
+    /** @var NostoHelperSorting */
+    private $nostoHelperSorting;
+
+    /** @var Http $request */
+    private $request;
+
+    /**
+     * CategorySorting constructor.
+     * @param Http $request
+     * @param NostoHelperSorting $nostoHelperSorting
+     * @param Context $context
+     * @param array $data
+     */
+    public function __construct(
+        Http $request,
+        NostoHelperSorting $nostoHelperSorting,
+        Context $context,
+        array $data = []
+    ) {
+        $this->nostoHelperSorting = $nostoHelperSorting;
+        $this->request = $request;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $id = (int)$this->request->getParam('store');
+
+        if ($this->nostoHelperSorting->canUseCategorySorting($id)) {
+            $options = [
+                ['value' => '1', 'label' => new Phrase('Yes')],
+                ['value' => '0', 'label' => new Phrase('No')],
+            ];
+        } else {
+            $options = [
+                ['value' => '0', 'label' => new Phrase('No (missing tokens)')]
+            ];
+        }
+
+        return $options;
+    }
+}
