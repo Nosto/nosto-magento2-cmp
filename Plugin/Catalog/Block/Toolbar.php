@@ -48,7 +48,7 @@ use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FullTextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
@@ -87,7 +87,6 @@ class Toolbar extends Template
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
-     * @param StoreManagerInterface $storeManager
      * @param CategoryBuilder $builder
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
@@ -138,13 +137,12 @@ class Toolbar extends Template
             try {
                 //Get ids of products to order
                 $orderIds = $this->getSortedIds($store, $currentOrder);
-                if ($subject->getCollection() instanceof  Collection
+                if ($subject->getCollection() instanceof  FullTextCollection
                     && !empty($orderIds)
                     && NostoHelperArray::onlyScalarValues($orderIds)
                 ) {
                     $orderIds = array_reverse($orderIds);
-                    $zendExpression = new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $orderIds) . ') DESC');
-                    $subject->getCollection()->getSelect()->order($zendExpression);
+                    $this->manipulateSQL($subject->getCollection(), $orderIds);
                 }
             } catch (\Exception $e) {
                 $this->logger->exception($e);
@@ -175,5 +173,18 @@ class Toolbar extends Template
             $categoryString,
             $type
         );
+    }
+
+    /**
+     * Manipulate SQL to adapt to CMP logic
+     *
+     * @param FullTextCollection $collection
+     * @param array $ids
+     */
+    private function manipulateSQL(FullTextCollection $collection, array $ids)
+    {
+        $select = $collection->getSelect();
+        $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( '. implode(',', $ids) .' )');
+        $select->where($zendExpression);
     }
 }
