@@ -54,6 +54,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class Toolbar extends Template
 {
@@ -133,14 +134,18 @@ class Toolbar extends Template
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             try {
-                //Get ids of products to order
-                $orderIds = $this->getSortedIds($store, $currentOrder);
-                if ($subject->getCollection() instanceof  FullTextCollection
-                    && !empty($orderIds)
-                    && NostoHelperArray::onlyScalarValues($orderIds)
+                $result = $this->getCmpResult($store);
+                if ($result instanceof CategoryMerchandisingResult
+                    && $subject->getCollection() instanceof  FullTextCollection
                 ) {
-                    $orderIds = array_reverse($orderIds);
-                    $this->manipulateSQL($subject->getCollection(), $orderIds);
+                    //Get ids of products to order
+                    $orderIds = $this->getSortedIds($result);
+                    if (!empty($orderIds)
+                        && NostoHelperArray::onlyScalarValues($orderIds)
+                    ) {
+                        $orderIds = array_reverse($orderIds);
+                        $this->manipulateSQL($subject->getCollection(), $orderIds);
+                    }
                 }
             } catch (\Exception $e) {
                 $this->logger->exception($e);
@@ -152,10 +157,10 @@ class Toolbar extends Template
     /**
      * @param Store $store
      * @param $type
-     * @return array
+     * @return CategoryMerchandisingResult|null
      * @throws NostoException
      */
-    private function getSortedIds(Store $store, $type)
+    private function getCmpResult(Store $store)
     {
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
@@ -167,8 +172,7 @@ class Toolbar extends Template
         return $this->categoryRecommendation->getSortedProductIds(
             $nostoAccount,
             $nostoCustomer,
-            $categoryString,
-            $type
+            $categoryString
         );
     }
 
@@ -185,5 +189,25 @@ class Toolbar extends Template
         $select->where($zendExpression);
         $zendExpression = new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $ids) . ') DESC');
         $select->order($zendExpression);
+    }
+
+    /**
+     * @param CategoryMerchandisingResult $result
+     * @return array
+     */
+    private function getSortedIds(CategoryMerchandisingResult $result)
+    {
+        $productIds = [];
+        try {
+            foreach ($result->getResultSet() as $item) {
+                if ($item->getProductId() && is_numeric($item->getProductId())) {
+                    $productIds[] = $item->getProductId();
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger->exception($e);
+        }
+
+        return $productIds;
     }
 }

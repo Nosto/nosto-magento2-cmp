@@ -37,12 +37,13 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Nosto\Object\Signup\Account as NostoAccount;
+use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\Operation\Recommendation\CategoryBrowsingHistory;
-use Nosto\Operation\Recommendation\CategoryTopList;
+use Nosto\Operation\Recommendation\Builder as CMPBuilder;
+use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class Category
 {
@@ -65,48 +66,41 @@ class Category
     }
 
     /**
-     * Return array of personalized products ids
-     *
      * @param NostoAccount $nostoAccount
      * @param $nostoCustomerId
      * @param $category
-     * @param $type
-     * @return array
-     * @suppress PhanUndeclaredClassConstant
+     * @return CategoryMerchandisingResult|null
      */
     public function getSortedProductIds(
         NostoAccount $nostoAccount,
         $nostoCustomerId,
-        $category,
-        $type
+        $category
     ) {
-        $productIds = [];
+        $result = null;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            return $productIds;
+            return null;
         }
-        if ($type === NostoHelperSorting::NOSTO_PERSONALIZED_KEY) {
-            $recoOperation = new CategoryBrowsingHistory($nostoAccount, $nostoCustomerId);
-        } else {
-            $recoOperation = new CategoryTopList($nostoAccount, $nostoCustomerId);
-        }
-        $recoOperation->setCategory($category);
+
+        $cmpBuilder = new CMPBuilder();
+        $cmpBuilder->setNostoAccount($nostoAccount);
+        $cmpBuilder->setActiveDomain('');
+        $cmpBuilder->setCategory($category);
+        $cmpBuilder->setCustomerId($nostoCustomerId);
+        $cmpBuilder->setCustomerBy(AbstractGraphQLOperation::IDENTIFIER_BY_CID);
 
         $previewModeCookie = $this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         if ($previewModeCookie !== null && $previewModeCookie === "true") {
-            $recoOperation->setPreviewMode(true);
+            $cmpBuilder->setPreviewMode(true);
         }
 
         try {
-            $result = $recoOperation->execute();
-            foreach ($result as $item) {
-                if ($item->getProductId() && is_numeric($item->getProductId())) {
-                    $productIds[] = $item->getProductId();
-                }
-            }
+            /** @var CategoryMerchandising $categoryMerchandising */
+            $categoryMerchandising = $cmpBuilder->build();
+            $result = $categoryMerchandising->execute();
         } catch (\Exception $e) {
             $this->logger->exception($e);
         }
-        return $productIds;
+        return $result;
     }
 }
