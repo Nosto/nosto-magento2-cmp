@@ -1,5 +1,5 @@
 {
-  "name": "nosto/module-nostotagging-cmp",
+  "name": "nosto/module-nostocmp",
   "description": "Personalize category pages",
   "type": "magento2-module",
   "version": "0.1.0",

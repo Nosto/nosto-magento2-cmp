@@ -36,4 +36,4 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Nosto_TaggingCmp', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Nosto_Cmp', __DIR__);
