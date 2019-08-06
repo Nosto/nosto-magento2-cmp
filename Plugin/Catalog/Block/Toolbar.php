@@ -36,28 +36,27 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Magento\Backend\Block\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\Store\Model\Store;
-use Magento\Framework\Registry;
-use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FullTextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Template;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\NostoException;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
+use Nosto\NostoException;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
+use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 
 class Toolbar extends Template
 {
-
     /**  @var StoreManagerInterface */
     private $storeManager;
 
@@ -133,7 +132,6 @@ class Toolbar extends Template
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
-
             try {
                 //Get ids of products to order
                 $orderIds = $this->getSortedIds($store, $currentOrder);
@@ -147,7 +145,6 @@ class Toolbar extends Template
             } catch (\Exception $e) {
                 $this->logger->exception($e);
             }
-
         }
         return $subject;
     }
@@ -184,7 +181,9 @@ class Toolbar extends Template
     private function manipulateSQL(FullTextCollection $collection, array $ids)
     {
         $select = $collection->getSelect();
-        $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( '. implode(',', $ids) .' )');
+        $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( ' . implode(',', $ids) . ' )');
         $select->where($zendExpression);
+        $zendExpression = new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $ids) . ') DESC');
+        $select->order($zendExpression);
     }
 }
