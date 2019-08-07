@@ -99,8 +99,7 @@ class Sortby extends Template
         ) {
             // new option
             $customOption = [
-              ['label' => __('Personalized for you'), 'value' => NostoHelperSorting::NOSTO_PERSONALIZED_KEY],
-              ['label' => __('Top products'), 'value' => NostoHelperSorting::NOSTO_TOPLIST_KEY]
+              ['label' => __('Personalized for you'), 'value' => NostoHelperSorting::NOSTO_PERSONALIZED_KEY]
             ];
 
             // merge default sorting options with custom options

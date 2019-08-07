@@ -135,8 +135,7 @@ class Toolbar extends Template
     ) {
         $store = $this->storeManager->getStore();
         $currentOrder = $subject->getCurrentOrder();
-        if (($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
-            || $currentOrder === NostoHelperSorting::NOSTO_TOPLIST_KEY)
+        if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
