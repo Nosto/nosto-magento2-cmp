@@ -71,7 +71,7 @@ class Category
      * @param $category
      * @return CategoryMerchandisingResult|null
      */
-    public function getSortedProductIds(
+    public function getPersonalisationResult(
         NostoAccount $nostoAccount,
         $nostoCustomerId,
         $category
@@ -82,21 +82,22 @@ class Category
             return null;
         }
 
-        $cmpBuilder = new CMPBuilder();
-        $cmpBuilder->setNostoAccount($nostoAccount);
-        $cmpBuilder->setActiveDomain('');
-        $cmpBuilder->setCategory($category);
-        $cmpBuilder->setCustomerId($nostoCustomerId);
-        $cmpBuilder->setCustomerBy(AbstractGraphQLOperation::IDENTIFIER_BY_CID);
-
+        $previewMode = false;
         $previewModeCookie = $this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         if ($previewModeCookie !== null && $previewModeCookie === "true") {
-            $cmpBuilder->setPreviewMode(true);
+            $previewMode = true;
         }
 
+        $categoryMerchandising = new CategoryMerchandising(
+            $nostoAccount,
+            $nostoCustomerId,
+            $category,
+            '',
+            AbstractGraphQLOperation::IDENTIFIER_BY_CID,
+            $previewMode
+        );
+
         try {
-            /** @var CategoryMerchandising $categoryMerchandising */
-            $categoryMerchandising = $cmpBuilder->build();
             $result = $categoryMerchandising->execute();
         } catch (\Exception $e) {
             $this->logger->exception($e);

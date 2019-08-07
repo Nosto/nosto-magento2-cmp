@@ -55,6 +55,8 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Magento\Catalog\Model\ProductRepository;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 class Toolbar extends Template
 {
@@ -79,6 +81,9 @@ class Toolbar extends Template
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
+    /** @var ProductRepository */
+    private $productRepository;
+
     /** @var NostoLogger */
     private $logger;
 
@@ -101,6 +106,7 @@ class Toolbar extends Template
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
+        ProductRepository $productRepository,
         NostoLogger $logger,
         Registry $registry,
         array $data = []
@@ -111,6 +117,7 @@ class Toolbar extends Template
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
+        $this->productRepository = $productRepository;
         $this->logger = $logger;
         $this->registry = $registry;
         parent::__construct($context, $data);
@@ -145,6 +152,7 @@ class Toolbar extends Template
                     ) {
                         $orderIds = array_reverse($orderIds);
                         $this->manipulateSQL($subject->getCollection(), $orderIds);
+                        $this->addTrackParamToProduct($subject->getCollection(), $result->getTrackingCode());
                     }
                 }
             } catch (\Exception $e) {
@@ -169,7 +177,7 @@ class Toolbar extends Template
         $category = $this->registry->registry('current_category');
         $categoryString = $this->categoryBuilder->build($category, $store);
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-        return $this->categoryRecommendation->getSortedProductIds(
+        return $this->categoryRecommendation->getPersonalisationResult(
             $nostoAccount,
             $nostoCustomer,
             $categoryString
@@ -209,5 +217,16 @@ class Toolbar extends Template
         }
 
         return $productIds;
+    }
+
+    /**
+     * @param FullTextCollection $collection
+     * @param string $trackCode
+     */
+    private function addTrackParamToProduct(FullTextCollection $collection, $trackCode)
+    {
+        foreach ($collection->getItems() as $item) {
+            $item[NostoProductPlugin::NOSTO_TRACKING] = $trackCode;
+        }
     }
 }
