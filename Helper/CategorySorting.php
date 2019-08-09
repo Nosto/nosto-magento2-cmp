@@ -46,8 +46,6 @@ class CategorySorting extends AbstractHelper
 {
     const NOSTO_PERSONALIZED_KEY = 'nosto-personalized';
 
-    const NOSTO_TOPLIST_KEY = 'nosto-toplist';
-
     /** @var NostoHelperScope */
     private $nostoHelperScope;
 
@@ -78,8 +76,7 @@ class CategorySorting extends AbstractHelper
     public static function getNostoSortingOptions()
     {
         return [
-            self::NOSTO_PERSONALIZED_KEY => __('Personalized for you'),
-            self::NOSTO_TOPLIST_KEY => __('Top products')
+            self::NOSTO_PERSONALIZED_KEY => __('Personalized for you')
         ];
     }
 

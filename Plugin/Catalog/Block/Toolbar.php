@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FullTextCollection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -54,6 +54,9 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Magento\Catalog\Model\ProductRepository;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 class Toolbar extends Template
 {
@@ -78,6 +81,9 @@ class Toolbar extends Template
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
+    /** @var ProductRepository */
+    private $productRepository;
+
     /** @var NostoLogger */
     private $logger;
 
@@ -100,6 +106,7 @@ class Toolbar extends Template
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
+        ProductRepository $productRepository,
         NostoLogger $logger,
         Registry $registry,
         array $data = []
@@ -110,6 +117,7 @@ class Toolbar extends Template
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
+        $this->productRepository = $productRepository;
         $this->logger = $logger;
         $this->registry = $registry;
         parent::__construct($context, $data);
@@ -127,20 +135,24 @@ class Toolbar extends Template
     ) {
         $store = $this->storeManager->getStore();
         $currentOrder = $subject->getCurrentOrder();
-        if (($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
-            || $currentOrder === NostoHelperSorting::NOSTO_TOPLIST_KEY)
+        if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             try {
-                //Get ids of products to order
-                $orderIds = $this->getSortedIds($store, $currentOrder);
-                if ($subject->getCollection() instanceof  FullTextCollection
-                    && !empty($orderIds)
-                    && NostoHelperArray::onlyScalarValues($orderIds)
+                $result = $this->getCmpResult($store);
+                if ($result instanceof CategoryMerchandisingResult
+                    && $subject->getCollection() instanceof FulltextCollection
                 ) {
-                    $orderIds = array_reverse($orderIds);
-                    $this->manipulateSQL($subject->getCollection(), $orderIds);
+                    //Get ids of products to order
+                    $orderIds = $this->parseProductIds($result);
+                    if (!empty($orderIds)
+                        && NostoHelperArray::onlyScalarValues($orderIds)
+                    ) {
+                        $orderIds = array_reverse($orderIds);
+                        $this->filterAndSortByProductIds($subject->getCollection(), $orderIds);
+                        $this->addTrackParamToProduct($subject->getCollection(), $result->getTrackingCode());
+                    }
                 }
             } catch (\Exception $e) {
                 $this->logger->exception($e);
@@ -152,10 +164,10 @@ class Toolbar extends Template
     /**
      * @param Store $store
      * @param $type
-     * @return array
+     * @return CategoryMerchandisingResult|null
      * @throws NostoException
      */
-    private function getSortedIds(Store $store, $type)
+    private function getCmpResult(Store $store)
     {
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
@@ -164,26 +176,54 @@ class Toolbar extends Template
         $category = $this->registry->registry('current_category');
         $categoryString = $this->categoryBuilder->build($category, $store);
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-        return $this->categoryRecommendation->getSortedProductIds(
+        return $this->categoryRecommendation->getPersonalisationResult(
             $nostoAccount,
             $nostoCustomer,
-            $categoryString,
-            $type
+            $categoryString
         );
     }
 
     /**
-     * Manipulate SQL to adapt to CMP logic
-     *
-     * @param FullTextCollection $collection
+     * @param FulltextCollection $collection
      * @param array $ids
      */
-    private function manipulateSQL(FullTextCollection $collection, array $ids)
+    private function filterAndSortByProductIds(FulltextCollection $collection, array $ids)
     {
         $select = $collection->getSelect();
         $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( ' . implode(',', $ids) . ' )');
         $select->where($zendExpression);
         $zendExpression = new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $ids) . ') DESC');
         $select->order($zendExpression);
+    }
+
+    /**
+     * @param CategoryMerchandisingResult $result
+     * @return array
+     */
+    private function parseProductIds(CategoryMerchandisingResult $result)
+    {
+        $productIds = [];
+        try {
+            foreach ($result->getResultSet() as $item) {
+                if ($item->getProductId() && is_numeric($item->getProductId())) {
+                    $productIds[] = $item->getProductId();
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger->exception($e);
+        }
+
+        return $productIds;
+    }
+
+    /**
+     * @param FulltextCollection $collection
+     * @param $trackCode
+     */
+    private function addTrackParamToProduct(FulltextCollection $collection, $trackCode)
+    {
+        foreach ($collection->getItems() as $item) {
+            $item[NostoProductPlugin::NOSTO_TRACKING] = $trackCode;
+        }
     }
 }

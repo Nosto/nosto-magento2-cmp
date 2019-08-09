@@ -37,12 +37,13 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Nosto\Object\Signup\Account as NostoAccount;
+use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\Operation\Recommendation\CategoryBrowsingHistory;
-use Nosto\Operation\Recommendation\CategoryTopList;
+use Nosto\Operation\Recommendation\Builder as CMPBuilder;
+use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class Category
 {
@@ -65,48 +66,42 @@ class Category
     }
 
     /**
-     * Return array of personalized products ids
-     *
      * @param NostoAccount $nostoAccount
      * @param $nostoCustomerId
      * @param $category
-     * @param $type
-     * @return array
-     * @suppress PhanUndeclaredClassConstant
+     * @return CategoryMerchandisingResult|null
      */
-    public function getSortedProductIds(
+    public function getPersonalisationResult(
         NostoAccount $nostoAccount,
         $nostoCustomerId,
-        $category,
-        $type
+        $category
     ) {
-        $productIds = [];
+        $result = null;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            return $productIds;
+            return null;
         }
-        if ($type === NostoHelperSorting::NOSTO_PERSONALIZED_KEY) {
-            $recoOperation = new CategoryBrowsingHistory($nostoAccount, $nostoCustomerId);
-        } else {
-            $recoOperation = new CategoryTopList($nostoAccount, $nostoCustomerId);
-        }
-        $recoOperation->setCategory($category);
 
+        $previewMode = false;
         $previewModeCookie = $this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         if ($previewModeCookie !== null && $previewModeCookie === "true") {
-            $recoOperation->setPreviewMode(true);
+            $previewMode = true;
         }
 
+        $categoryMerchandising = new CategoryMerchandising(
+            $nostoAccount,
+            $nostoCustomerId,
+            $category,
+            '',
+            AbstractGraphQLOperation::IDENTIFIER_BY_CID,
+            $previewMode
+        );
+
         try {
-            $result = $recoOperation->execute();
-            foreach ($result as $item) {
-                if ($item->getProductId() && is_numeric($item->getProductId())) {
-                    $productIds[] = $item->getProductId();
-                }
-            }
+            $result = $categoryMerchandising->execute();
         } catch (\Exception $e) {
             $this->logger->exception($e);
         }
-        return $productIds;
+        return $result;
     }
 }
