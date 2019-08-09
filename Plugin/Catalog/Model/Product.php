@@ -49,7 +49,6 @@ class Product
      */
     public function afterGetProductUrl(MagentoProduct $product, $url)
     {
-        $url .= '?param1=abc&param2=def';
         if ($product->getData(self::NOSTO_TRACKING) !== null) {
             $existingParams = $this->parseExistingQueryParams($url);
             $nostoParam = [
@@ -69,8 +68,8 @@ class Product
      */
     private function parseExistingQueryParams($url)
     {
-        $parsed = parse_url($url);
-        parse_str($parsed['query'], $result);
+        $parsed = parse_url($url, PHP_URL_QUERY);
+        parse_str($parsed, $result);
         return $result;
     }
 }

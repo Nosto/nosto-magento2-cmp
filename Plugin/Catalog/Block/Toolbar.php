@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -142,7 +142,7 @@ class Toolbar extends Template
             try {
                 $result = $this->getCmpResult($store);
                 if ($result instanceof CategoryMerchandisingResult
-                    && $subject->getCollection() instanceof ProductCollection
+                    && $subject->getCollection() instanceof FulltextCollection
                 ) {
                     //Get ids of products to order
                     $orderIds = $this->parseProductIds($result);
@@ -184,10 +184,10 @@ class Toolbar extends Template
     }
 
     /**
-     * @param ProductCollection $collection
+     * @param FulltextCollection $collection
      * @param array $ids
      */
-    private function filterAndSortByProductIds(ProductCollection $collection, array $ids)
+    private function filterAndSortByProductIds(FulltextCollection $collection, array $ids)
     {
         $select = $collection->getSelect();
         $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( ' . implode(',', $ids) . ' )');
@@ -217,10 +217,10 @@ class Toolbar extends Template
     }
 
     /**
-     * @param ProductCollection $collection
+     * @param FulltextCollection $collection
      * @param $trackCode
      */
-    private function addTrackParamToProduct(ProductCollection $collection, $trackCode)
+    private function addTrackParamToProduct(FulltextCollection $collection, $trackCode)
     {
         foreach ($collection->getItems() as $item) {
             $item[NostoProductPlugin::NOSTO_TRACKING] = $trackCode;
