@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FullTextCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -142,15 +142,15 @@ class Toolbar extends Template
             try {
                 $result = $this->getCmpResult($store);
                 if ($result instanceof CategoryMerchandisingResult
-                    && $subject->getCollection() instanceof  FullTextCollection
+                    && $subject->getCollection() instanceof ProductCollection
                 ) {
                     //Get ids of products to order
-                    $orderIds = $this->getSortedIds($result);
+                    $orderIds = $this->parseProductIds($result);
                     if (!empty($orderIds)
                         && NostoHelperArray::onlyScalarValues($orderIds)
                     ) {
                         $orderIds = array_reverse($orderIds);
-                        $this->manipulateSQL($subject->getCollection(), $orderIds);
+                        $this->filterAndSortByProductIds($subject->getCollection(), $orderIds);
                         $this->addTrackParamToProduct($subject->getCollection(), $result->getTrackingCode());
                     }
                 }
@@ -184,12 +184,10 @@ class Toolbar extends Template
     }
 
     /**
-     * Manipulate SQL to adapt to CMP logic
-     *
-     * @param FullTextCollection $collection
+     * @param ProductCollection $collection
      * @param array $ids
      */
-    private function manipulateSQL(FullTextCollection $collection, array $ids)
+    private function filterAndSortByProductIds(ProductCollection $collection, array $ids)
     {
         $select = $collection->getSelect();
         $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( ' . implode(',', $ids) . ' )');
@@ -202,7 +200,7 @@ class Toolbar extends Template
      * @param CategoryMerchandisingResult $result
      * @return array
      */
-    private function getSortedIds(CategoryMerchandisingResult $result)
+    private function parseProductIds(CategoryMerchandisingResult $result)
     {
         $productIds = [];
         try {
@@ -219,10 +217,10 @@ class Toolbar extends Template
     }
 
     /**
-     * @param FullTextCollection $collection
-     * @param string $trackCode
+     * @param ProductCollection $collection
+     * @param $trackCode
      */
-    private function addTrackParamToProduct(FullTextCollection $collection, $trackCode)
+    private function addTrackParamToProduct(ProductCollection $collection, $trackCode)
     {
         foreach ($collection->getItems() as $item) {
             $item[NostoProductPlugin::NOSTO_TRACKING] = $trackCode;
