@@ -34,7 +34,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Nosto\\Tagging\\": ""
+      "Nosto\\Cmp\\": ""
     },
     "files": [
       "registration.php"
