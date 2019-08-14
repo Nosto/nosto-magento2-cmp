@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 use Nosto\Object\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
-use Nosto\Operation\Recommendation\Builder as CMPBuilder;
 use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -81,13 +80,7 @@ class Category
         if (!$featureAccess->canUseGraphql()) {
             return null;
         }
-
-        $previewMode = false;
-        $previewModeCookie = $this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
-        if ($previewModeCookie !== null && $previewModeCookie === "true") {
-            $previewMode = true;
-        }
-
+        $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $categoryMerchandising = new CategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,

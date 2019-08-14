@@ -55,7 +55,6 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Magento\Catalog\Model\ProductRepository;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 class Toolbar extends Template
@@ -81,9 +80,6 @@ class Toolbar extends Template
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
-    /** @var ProductRepository */
-    private $productRepository;
-
     /** @var NostoLogger */
     private $logger;
 
@@ -106,7 +102,6 @@ class Toolbar extends Template
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
-        ProductRepository $productRepository,
         NostoLogger $logger,
         Registry $registry,
         array $data = []
@@ -117,7 +112,6 @@ class Toolbar extends Template
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
-        $this->productRepository = $productRepository;
         $this->logger = $logger;
         $this->registry = $registry;
         parent::__construct($context, $data);
@@ -133,6 +127,7 @@ class Toolbar extends Template
     public function afterSetCollection(
         MagentoToolbar $subject
     ) {
+        /* @var Store $store */
         $store = $this->storeManager->getStore();
         $currentOrder = $subject->getCurrentOrder();
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
@@ -141,8 +136,9 @@ class Toolbar extends Template
         ) {
             try {
                 $result = $this->getCmpResult($store);
+                $subjectCollection = $subject->getCollection();
                 if ($result instanceof CategoryMerchandisingResult
-                    && $subject->getCollection() instanceof FulltextCollection
+                    && $subjectCollection instanceof FulltextCollection
                 ) {
                     //Get ids of products to order
                     $orderIds = $this->parseProductIds($result);
@@ -150,8 +146,8 @@ class Toolbar extends Template
                         && NostoHelperArray::onlyScalarValues($orderIds)
                     ) {
                         $orderIds = array_reverse($orderIds);
-                        $this->filterAndSortByProductIds($subject->getCollection(), $orderIds);
-                        $this->addTrackParamToProduct($subject->getCollection(), $result->getTrackingCode());
+                        $this->filterAndSortByProductIds($subjectCollection, $orderIds);
+                        $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode());
                     }
                 }
             } catch (\Exception $e) {
@@ -163,7 +159,6 @@ class Toolbar extends Template
 
     /**
      * @param Store $store
-     * @param $type
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
      */
