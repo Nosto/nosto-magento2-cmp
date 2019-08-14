@@ -5,7 +5,7 @@
     <default>
         <nosto>
             <flags>
-                <category_sorting>0</category_sorting>
+                <category_sorting>1</category_sorting>
             </flags>
         </nosto>
     </default>
