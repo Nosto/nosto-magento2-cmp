@@ -80,13 +80,7 @@ class Category
         if (!$featureAccess->canUseGraphql()) {
             return null;
         }
-
-        $previewMode = false;
-        $previewModeCookie = $this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
-        if ($previewModeCookie !== null && $previewModeCookie === "true") {
-            $previewMode = true;
-        }
-
+        $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $categoryMerchandising = new CategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,

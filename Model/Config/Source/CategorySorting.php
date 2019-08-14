@@ -80,7 +80,7 @@ class CategorySorting extends Field implements OptionSourceInterface
         if ($this->nostoHelperSorting->canUseCategorySorting($id)) {
             $options = [
                 ['value' => '1', 'label' => new Phrase('Yes')],
-                ['value' => '0', 'label' => new Phrase('No')],
+                ['value' => '0', 'label' => new Phrase('No')]
             ];
         } else {
             $options = [
