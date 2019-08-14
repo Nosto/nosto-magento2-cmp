@@ -95,6 +95,7 @@ class Toolbar extends Template
      * @param CategoryBuilder $builder
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
+     * @param ProductRepository $productRepository
      * @param NostoLogger $logger
      * @param Registry $registry
      * @param array $data
@@ -133,6 +134,7 @@ class Toolbar extends Template
     public function afterSetCollection(
         MagentoToolbar $subject
     ) {
+        /* @var Store $store */
         $store = $this->storeManager->getStore();
         $currentOrder = $subject->getCurrentOrder();
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
@@ -141,8 +143,9 @@ class Toolbar extends Template
         ) {
             try {
                 $result = $this->getCmpResult($store);
+                $subjectCollection = $subject->getCollection();
                 if ($result instanceof CategoryMerchandisingResult
-                    && $subject->getCollection() instanceof FulltextCollection
+                    && $subjectCollection instanceof FulltextCollection
                 ) {
                     //Get ids of products to order
                     $orderIds = $this->parseProductIds($result);
@@ -150,8 +153,8 @@ class Toolbar extends Template
                         && NostoHelperArray::onlyScalarValues($orderIds)
                     ) {
                         $orderIds = array_reverse($orderIds);
-                        $this->filterAndSortByProductIds($subject->getCollection(), $orderIds);
-                        $this->addTrackParamToProduct($subject->getCollection(), $result->getTrackingCode());
+                        $this->filterAndSortByProductIds($subjectCollection, $orderIds);
+                        $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode());
                     }
                 }
             } catch (\Exception $e) {
@@ -163,7 +166,6 @@ class Toolbar extends Template
 
     /**
      * @param Store $store
-     * @param $type
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
      */

@@ -54,6 +54,8 @@ class Data extends AbstractHelper
 
     /**
      * Data constructor.
+     * @param Context $context
+     * @param NostoHelperScope $nostoHelperScope
      */
     public function __construct(
         Context $context,
