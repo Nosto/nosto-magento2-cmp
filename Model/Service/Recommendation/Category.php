@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 use Nosto\Object\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
-use Nosto\Operation\Recommendation\Builder as CMPBuilder;
 use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;

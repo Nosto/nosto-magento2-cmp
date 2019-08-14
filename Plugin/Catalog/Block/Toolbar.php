@@ -55,7 +55,6 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Magento\Catalog\Model\ProductRepository;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 class Toolbar extends Template
@@ -81,9 +80,6 @@ class Toolbar extends Template
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
-    /** @var ProductRepository */
-    private $productRepository;
-
     /** @var NostoLogger */
     private $logger;
 
@@ -95,7 +91,6 @@ class Toolbar extends Template
      * @param CategoryBuilder $builder
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
-     * @param ProductRepository $productRepository
      * @param NostoLogger $logger
      * @param Registry $registry
      * @param array $data
@@ -107,7 +102,6 @@ class Toolbar extends Template
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
-        ProductRepository $productRepository,
         NostoLogger $logger,
         Registry $registry,
         array $data = []
@@ -118,7 +112,6 @@ class Toolbar extends Template
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
-        $this->productRepository = $productRepository;
         $this->logger = $logger;
         $this->registry = $registry;
         parent::__construct($context, $data);
