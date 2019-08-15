@@ -47,6 +47,7 @@ use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 class Category
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
+    const MAX_PRODUCT_AMOUNT = 100;
 
     private $logger;
     private $cookieManager;
@@ -68,13 +69,16 @@ class Category
      * @param NostoAccount $nostoAccount
      * @param $nostoCustomerId
      * @param $category
+     * @param int $limit
      * @return CategoryMerchandisingResult|null
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
         $nostoCustomerId,
-        $category
+        $category,
+        $limit = self::MAX_PRODUCT_AMOUNT
     ) {
+        $limit = self::MAX_PRODUCT_AMOUNT < $limit ? self::MAX_PRODUCT_AMOUNT : $limit;
         $result = null;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
@@ -87,7 +91,8 @@ class Category
             $category,
             '',
             AbstractGraphQLOperation::IDENTIFIER_BY_CID,
-            $previewMode
+            $previewMode,
+            $limit
         );
 
         try {
