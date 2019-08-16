@@ -232,7 +232,7 @@ class Toolbar extends Template
         /* @var Product $product */
         $collection->each(static function ($product) use ($nostoProductIds, $trackCode) {
             if (in_array($product->getId(), $nostoProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING, $trackCode);
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
             }
         });
     }

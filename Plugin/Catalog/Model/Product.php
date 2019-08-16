@@ -40,7 +40,10 @@ use Magento\Catalog\Model\Product as MagentoProduct;
 
 class Product
 {
-    const NOSTO_TRACKING = 'nosto';
+    const NOSTO_TRACKING_PARAMETER_NAME = 'nosto';
+    const NOSTO_SOURCE_PARAMETER_NAME = 'nosto_source';
+    const NOSTO_SOURCE_PARAMETER_VALUE = 'cmp';
+    const NOSTO_PRODUCT_ID_PARAMETER_VALUE = 'nosto-pid';
 
     /**
      * @param MagentoProduct $product
@@ -49,10 +52,12 @@ class Product
      */
     public function afterGetProductUrl(MagentoProduct $product, $url)
     {
-        if ($product->getData(self::NOSTO_TRACKING) !== null) {
+        if ($product->getData(self::NOSTO_TRACKING_PARAMETER_NAME) !== null) {
             $existingParams = $this->parseExistingQueryParams($url);
             $nostoParam = [
-                self::NOSTO_TRACKING => $product->getData(self::NOSTO_TRACKING)
+                self::NOSTO_TRACKING_PARAMETER_NAME => $product->getData(self::NOSTO_TRACKING_PARAMETER_NAME),
+                self::NOSTO_SOURCE_PARAMETER_NAME => self::NOSTO_SOURCE_PARAMETER_VALUE,
+                self::NOSTO_PRODUCT_ID_PARAMETER_VALUE => $product->getId()
             ];
             $params = array_merge($existingParams, $nostoParam);
             $url = $product->getUrlModel()->getUrl($product, ['_query' => $params]);
