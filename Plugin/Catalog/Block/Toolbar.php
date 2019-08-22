@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
@@ -48,14 +49,14 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 class Toolbar extends Template
 {
@@ -82,6 +83,8 @@ class Toolbar extends Template
 
     /** @var NostoLogger */
     private $logger;
+
+    private static $isProcessed = false;
 
     /**
      * Toolbar constructor.
@@ -127,6 +130,9 @@ class Toolbar extends Template
     public function afterSetCollection(
         MagentoToolbar $subject
     ) {
+        if (self::$isProcessed) {
+            return $subject;
+        }
         /* @var Store $store */
         $store = $this->storeManager->getStore();
         $currentOrder = $subject->getCurrentOrder();
@@ -135,34 +141,36 @@ class Toolbar extends Template
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             try {
-                $result = $this->getCmpResult($store);
                 $subjectCollection = $subject->getCollection();
+                $result = $this->getCmpResult($store, $subjectCollection);
                 if ($result instanceof CategoryMerchandisingResult
                     && $subjectCollection instanceof FulltextCollection
                 ) {
                     //Get ids of products to order
-                    $orderIds = $this->parseProductIds($result);
-                    if (!empty($orderIds)
-                        && NostoHelperArray::onlyScalarValues($orderIds)
+                    $nostoProductIds = $this->parseProductIds($result);
+                    if (!empty($nostoProductIds)
+                        && NostoHelperArray::onlyScalarValues($nostoProductIds)
                     ) {
-                        $orderIds = array_reverse($orderIds);
-                        $this->filterAndSortByProductIds($subjectCollection, $orderIds);
-                        $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode());
+                        $nostoProductIds = array_reverse($nostoProductIds);
+                        $this->sortByProductIds($subjectCollection, $nostoProductIds);
+                        $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
                     }
                 }
             } catch (\Exception $e) {
                 $this->logger->exception($e);
             }
         }
+        self::$isProcessed = true;
         return $subject;
     }
 
     /**
      * @param Store $store
+     * @param FulltextCollection $collection
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
      */
-    private function getCmpResult(Store $store)
+    private function getCmpResult(Store $store, FulltextCollection $collection)
     {
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
@@ -171,23 +179,26 @@ class Toolbar extends Template
         $category = $this->registry->registry('current_category');
         $categoryString = $this->categoryBuilder->build($category, $store);
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+        $limit = $collection->getSize();
         return $this->categoryRecommendation->getPersonalisationResult(
             $nostoAccount,
             $nostoCustomer,
-            $categoryString
+            $categoryString,
+            $limit
         );
     }
 
     /**
      * @param FulltextCollection $collection
-     * @param array $ids
+     * @param array $nostoProductIds
      */
-    private function filterAndSortByProductIds(FulltextCollection $collection, array $ids)
+    private function sortByProductIds(FulltextCollection $collection, array $nostoProductIds)
     {
         $select = $collection->getSelect();
-        $zendExpression = new \Zend_Db_Expr('e.entity_id IN ( ' . implode(',', $ids) . ' )');
-        $select->where($zendExpression);
-        $zendExpression = new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $ids) . ') DESC');
+        $zendExpression = [
+            new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC'),
+            new \Zend_Db_Expr($this->getSecondarySort())
+        ];
         $select->order($zendExpression);
     }
 
@@ -214,11 +225,25 @@ class Toolbar extends Template
     /**
      * @param FulltextCollection $collection
      * @param $trackCode
+     * @param array $nostoProductIds
      */
-    private function addTrackParamToProduct(FulltextCollection $collection, $trackCode)
+    private function addTrackParamToProduct(FulltextCollection $collection, $trackCode, array $nostoProductIds)
     {
-        foreach ($collection->getItems() as $item) {
-            $item[NostoProductPlugin::NOSTO_TRACKING] = $trackCode;
-        }
+        /* @var Product $product */
+        $collection->each(static function ($product) use ($nostoProductIds, $trackCode) {
+            if (in_array($product->getId(), $nostoProductIds, true)) {
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
+            }
+        });
+    }
+
+    /**
+     * Returns the secondary sort defined by the merchant
+     *
+     * @return string
+     */
+    private function getSecondarySort()
+    {
+        return 'cat_index_position ASC'; // ToDo - must be selectable by the merchant
     }
 }
