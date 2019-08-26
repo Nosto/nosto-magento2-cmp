@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7d0b39b929c0f3d099c3e06d6e32a29",
+    "content-hash": "514d48783db36adb793e6e68873b2d0e",
     "packages": [
         {
             "name": "nosto/module-nostotagging",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-magento2.git",
-                "reference": "eefd0617cbadbd1db76919a7453201fd248fac4f"
+                "reference": "a487fe1f25842749b0284eae4e257fa76d87cdf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/eefd0617cbadbd1db76919a7453201fd248fac4f",
-                "reference": "eefd0617cbadbd1db76919a7453201fd248fac4f",
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/a487fe1f25842749b0284eae4e257fa76d87cdf5",
+                "reference": "a487fe1f25842749b0284eae4e257fa76d87cdf5",
                 "shasum": ""
             },
             "require": {
-                "nosto/php-sdk": "3.15.0",
+                "nosto/php-sdk": "4.0.*",
                 "php": ">=7.0.0"
             },
             "require-dev": {
@@ -66,23 +66,25 @@
                 "OSL-3.0"
             ],
             "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
-            "time": "2019-08-02T10:56:24+00:00"
+            "time": "2019-08-16T08:35:06+00:00"
         },
         {
             "name": "nosto/php-sdk",
-            "version": "3.15.0",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-php-sdk.git",
-                "reference": "57535f635e6ae6e0d019609de4bfdd0f2e6ddf19"
+                "reference": "d60257a76d9f2687c35c259a493b089fbf0dbc9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/57535f635e6ae6e0d019609de4bfdd0f2e6ddf19",
-                "reference": "57535f635e6ae6e0d019609de4bfdd0f2e6ddf19",
+                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/d60257a76d9f2687c35c259a493b089fbf0dbc9b",
+                "reference": "d60257a76d9f2687c35c259a493b089fbf0dbc9b",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
                 "php": ">=5.4.0",
                 "phpseclib/phpseclib": "2.0.*",
                 "vlucas/phpdotenv": ">=2.4.0 <=3.0"
@@ -113,7 +115,7 @@
                 "BSD-3-Clause"
             ],
             "description": "PHP SDK for developing Nosto modules for e-commerce platforms",
-            "time": "2019-06-11T06:31:21+00:00"
+            "time": "2019-08-23T11:50:14+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -312,7 +314,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "nosto/module-nostotagging": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
