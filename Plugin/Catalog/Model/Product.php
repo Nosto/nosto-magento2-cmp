@@ -42,8 +42,8 @@ class Product
 {
     const NOSTO_TRACKING_PARAMETER_NAME = 'nosto';
     const NOSTO_SOURCE_PARAMETER_NAME = 'nosto_source';
+    const NOSTO_PRODUCT_ID_PARAMETER_VALUE = 'nosto_pid';
     const NOSTO_SOURCE_PARAMETER_VALUE = 'cmp';
-    const NOSTO_PRODUCT_ID_PARAMETER_VALUE = 'nosto-pid';
 
     /**
      * @param MagentoProduct $product
