@@ -191,7 +191,7 @@ class Toolbar extends Template
                     $limit
                 );
             },
-            'CMP'
+            'cmp_graphql_query'
         );
         return $personalizationResult;
     }
