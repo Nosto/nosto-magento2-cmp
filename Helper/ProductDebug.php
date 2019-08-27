@@ -36,7 +36,7 @@
 
 namespace Nosto\Cmp\Helper;
 
-class ProductDebugHelper
+class ProductDebug
 {
     /**
      * @var array Products ID's
@@ -44,7 +44,7 @@ class ProductDebugHelper
     private $productIds = [];
 
     /**
-     * @var ProductDebugHelper singleton
+     * @var ProductDebug singleton
      */
     private static $instance;
 
@@ -86,12 +86,12 @@ class ProductDebugHelper
 
     /**
      * Returns singleton instance
-     * @return ProductDebugHelper
+     * @return ProductDebug
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new ProductDebugHelper();
+            self::$instance = new ProductDebug();
         }
         return self::$instance;
     }

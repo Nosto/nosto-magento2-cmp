@@ -40,7 +40,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Nosto\Cmp\Helper\TimeHelper;
-use Nosto\Cmp\Helper\ProductDebugHelper;
+use Nosto\Cmp\Helper\ProductDebug;
 
 class Action implements ObserverInterface
 {
@@ -71,10 +71,10 @@ class Action implements ObserverInterface
             );
         }
 
-        if (!ProductDebugHelper::getInstance()->isEmpty()) {
+        if (!ProductDebug::getInstance()->isEmpty()) {
             $this->response->setHeader(
                 'X-Nosto-Product-Ids',
-                ProductDebugHelper::getInstance()->build(),
+                ProductDebug::getInstance()->build(),
                 true
             );
         }
