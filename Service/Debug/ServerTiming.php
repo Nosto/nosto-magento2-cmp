@@ -34,22 +34,22 @@
  *
  */
 
-namespace Nosto\Cmp\Helper;
+namespace Nosto\Cmp\Service\Debug;
 
-class ProductDebug
+class ServerTiming
 {
     /**
-     * @var array Products ID's
+     * @var array holds measurements for each request
      */
-    private $productIdsArray = [];
+    private $times = [];
 
     /**
-     * @var ProductDebug singleton
+     * @var ServerTiming singleton
      */
     private static $instance;
 
     /**
-     * ProductDebugHelper constructor.
+     * ServerTiming constructor.
      */
     private function __construct()
     {
@@ -57,41 +57,51 @@ class ProductDebug
     }
 
     /**
-     * @param array $ids
+     * Call user function, measure how long it takes and add time to array
+     * @param callable $fn
+     * @param string $name
      */
-    public function setProductIds(array $ids)
+    public function instrument(callable $fn, $name)
     {
-        $this->productIdsArray = $ids;
+        $start = microtime(true);
+        $fn();
+        $stop = microtime(true);
+        $this->times[$name] = round(($stop - $start) * 1000);
     }
 
     /**
+     * Builds and returns a string with all times/names in self::$times[]
      * @return string
      */
     public function build()
     {
-        $value = sprintf('%s,', implode(',',$this->productIdsArray));
-        $this->productIdsArray = [];
+        $value = '';
+        foreach ($this->times as $key => $time) {
+            $value .= sprintf( '%s;dur=%d,', $key, $time );
+        }
+
+        $this->times = [];
         return $value;
     }
 
     /**
      * Returns singleton instance
-     * @return ProductDebug
+     * @return ServerTiming
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new ProductDebug();
+            self::$instance = new ServerTiming();
         }
         return self::$instance;
     }
 
     /**
-     * Returns if there are product id's in the array for this request
+     * Returns if self::$times array has data
      * @return bool
      */
     public function isEmpty()
     {
-        return empty($this->productIdsArray);
+        return empty($this->times);
     }
 }

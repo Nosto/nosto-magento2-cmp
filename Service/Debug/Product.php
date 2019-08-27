@@ -34,22 +34,22 @@
  *
  */
 
-namespace Nosto\Cmp\Helper;
+namespace Nosto\Cmp\Service\Debug;
 
-class Time
+class Product
 {
     /**
-     * @var array holds measurements for each request
+     * @var array Products ID's
      */
-    private $times = [];
+    private $productIdsArray = [];
 
     /**
-     * @var Time singleton
+     * @var Product singleton
      */
     private static $instance;
 
     /**
-     * TimeHelper constructor.
+     * Product constructor.
      */
     private function __construct()
     {
@@ -57,51 +57,41 @@ class Time
     }
 
     /**
-     * Call user function, measure how long it takes and add time to array
-     * @param callable $fn
-     * @param string $name
+     * @param array $ids
      */
-    public function instrument(callable $fn, $name)
+    public function setProductIds(array $ids)
     {
-        $start = microtime(true);
-        $fn();
-        $stop = microtime(true);
-        $this->times[$name] = round(($stop - $start) * 1000);
+        $this->productIdsArray = $ids;
     }
 
     /**
-     * Builds and returns a string with all times/names in self::$times[]
      * @return string
      */
     public function build()
     {
-        $value = '';
-        foreach ($this->times as $key => $time) {
-            $value .= sprintf( '%s;dur=%d,', $key, $time );
-        }
-
-        $this->times = [];
+        $value = sprintf('%s,', implode(',',$this->productIdsArray));
+        $this->productIdsArray = [];
         return $value;
     }
 
     /**
      * Returns singleton instance
-     * @return Time
+     * @return Product
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new Time();
+            self::$instance = new Product();
         }
         return self::$instance;
     }
 
     /**
-     * Returns if self::$times array has data
+     * Returns if there are product id's in the array for this request
      * @return bool
      */
     public function isEmpty()
     {
-        return empty($this->times);
+        return empty($this->productIdsArray);
     }
 }
