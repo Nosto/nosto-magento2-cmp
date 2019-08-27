@@ -74,7 +74,7 @@ class ProductDebugHelper
         foreach ($this->productIds as $name => $productId) {
             $productIdsString = '';
             foreach ($productId as $item) {
-                $productIdsString .= sprintf('%d,',$item);
+                $productIdsString .= sprintf('%d,', $item);
             }
             $productIdsString = rtrim($productIdsString, ','); // Remove trailling comma
             $value .= sprintf('%s:%s,', $name, $productIdsString);
