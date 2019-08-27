@@ -191,7 +191,7 @@ class Toolbar extends Template
                     $limit
                 );
             },
-            'name'
+            'CMP'
         );
         return $personalizationResult;
     }

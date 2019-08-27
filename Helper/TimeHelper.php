@@ -57,8 +57,8 @@ class TimeHelper
     public function build()
     {
         $value = '';
-        foreach ($this->times as $key => $value) {
-            $value .= $key . ';dur=' . $value . ',';
+        foreach ($this->times as $key => $time) {
+            $value .= $key . ';dur=' . $time . ',';
         }
 
         $this->times = [];
