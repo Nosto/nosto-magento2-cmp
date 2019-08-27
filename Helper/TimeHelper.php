@@ -77,7 +77,7 @@ class TimeHelper
     {
         $value = '';
         foreach ($this->times as $key => $time) {
-            $value .= sprintf( '%s;dur=%d,', $key, $time );
+            $value .= sprintf('%s;dur=%d,', $key, $time);
         }
 
         $this->times = [];
