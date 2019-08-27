@@ -88,5 +88,4 @@ class Data extends AbstractHelper
         }
         return $store->getConfig($path);
     }
-
 }

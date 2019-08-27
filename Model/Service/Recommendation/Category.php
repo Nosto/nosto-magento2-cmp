@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+use Exception;
 use Nosto\Object\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
@@ -97,7 +98,7 @@ class Category
 
         try {
             $result = $categoryMerchandising->execute();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->exception($e);
         }
         return $result;

@@ -88,6 +88,7 @@ class Sortby extends Template
      * @param $options
      * @return array
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetAllOptions(MagentoSortby $sortBy, $options)
     {

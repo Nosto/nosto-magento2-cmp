@@ -36,12 +36,14 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
+use /** @noinspection PhpDeprecationInspection */
+    Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
@@ -59,6 +61,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Zend_Db_Expr;
 
 class Toolbar extends Template
 {
@@ -145,6 +148,7 @@ class Toolbar extends Template
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             try {
+                /* @var FulltextCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 $result = $this->getCmpResult($store, $subjectCollection);
                 if ($result instanceof CategoryMerchandisingResult
@@ -161,7 +165,7 @@ class Toolbar extends Template
                         $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->exception($e);
             }
         }
@@ -181,6 +185,7 @@ class Toolbar extends Template
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
+        /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category');
         $categoryString = $this->categoryBuilder->build($category, $store);
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
@@ -208,8 +213,8 @@ class Toolbar extends Template
     {
         $select = $collection->getSelect();
         $zendExpression = [
-            new \Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC'),
-            new \Zend_Db_Expr($this->getSecondarySort())
+            new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC'),
+            new Zend_Db_Expr($this->getSecondarySort())
         ];
         $select->order($zendExpression);
     }
@@ -227,7 +232,7 @@ class Toolbar extends Template
                     $productIds[] = $item->getProductId();
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->exception($e);
         }
 
@@ -241,8 +246,8 @@ class Toolbar extends Template
      */
     private function addTrackParamToProduct(FulltextCollection $collection, $trackCode, array $nostoProductIds)
     {
-        /* @var Product $product */
         $collection->each(static function ($product) use ($nostoProductIds, $trackCode) {
+            /* @var Product $product */
             if (in_array($product->getId(), $nostoProductIds, true)) {
                 $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
             }
