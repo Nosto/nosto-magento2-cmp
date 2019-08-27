@@ -37,7 +37,7 @@
 <!--suppress XmlUnboundNsPrefix -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="controller_action_predispatch">
+    <event name="catalog_block_product_list_collection">
         <observer name="nosto_cmp_request_predispatch" instance="Nosto\Cmp\Observer\App\Action\Action"/>
     </event>
 </config>
