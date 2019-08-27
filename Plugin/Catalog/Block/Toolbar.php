@@ -155,7 +155,7 @@ class Toolbar extends Template
                     if (!empty($nostoProductIds)
                         && NostoHelperArray::onlyScalarValues($nostoProductIds)
                     ) {
-                        ProductDebug::getInstance()->addProductIds($nostoProductIds, 'CMP');
+                        ProductDebug::getInstance()->addProductIds($nostoProductIds);
                         $nostoProductIds = array_reverse($nostoProductIds);
                         $this->sortByProductIds($subjectCollection, $nostoProductIds);
                         $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);

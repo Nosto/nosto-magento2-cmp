@@ -58,11 +58,10 @@ class ProductDebug
 
     /**
      * @param array $ids
-     * @param $name
      */
-    public function addProductIds(array $ids, $name)
+    public function addProductIds(array $ids)
     {
-        $this->productIdsArray[$name] = $ids;
+        $this->productIdsArray[] = $ids;
     }
 
     /**
@@ -71,8 +70,8 @@ class ProductDebug
     public function build()
     {
         $value = '';
-        foreach ($this->productIdsArray as $name => $productIds) {
-            $value .= sprintf('%s:%s,', $name, implode(',',$productIds));
+        foreach ($this->productIdsArray as $productIds) {
+            $value .= sprintf('%s,', implode(',',$productIds));
         }
 
         $this->productIdsArray = [];
