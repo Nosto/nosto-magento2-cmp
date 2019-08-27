@@ -61,6 +61,8 @@ use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 
 class Toolbar extends Template
 {
+    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
+
     /**  @var StoreManagerInterface */
     private $storeManager;
 
@@ -183,7 +185,7 @@ class Toolbar extends Template
         $limit = $collection->getSize();
         $personalizationResult = null;
         TimeHelper::getInstance()->instrument(
-            function () use (&$nostoAccount, &$nostoCustomer, &$categoryString, &$limit, &$personalizationResult) {
+            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
                     $nostoCustomer,
@@ -191,7 +193,7 @@ class Toolbar extends Template
                     $limit
                 );
             },
-            'cmp_graphql_query'
+            self::TIME_PROF_GRAPHQL_QUERY
         );
         return $personalizationResult;
     }
