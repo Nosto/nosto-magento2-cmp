@@ -51,7 +51,7 @@ class TimeHelper
         $start = microtime(true);
         $fn();
         $stop = microtime(true);
-        $this->times[$name] = $stop - $start;
+        $this->times[$name] = round(($stop - $start) * 1000);
     }
 
     public function build()
