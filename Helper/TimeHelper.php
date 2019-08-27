@@ -38,14 +38,29 @@ namespace Nosto\Cmp\Helper;
 
 class TimeHelper
 {
+    /**
+     * @var array holds measurements for each request
+     */
     private $times = [];
 
+    /**
+     * @var TimeHelper singleton
+     */
     private static $instance;
 
+    /**
+     * TimeHelper constructor.
+     */
     private function __construct()
     {
+        // Private
     }
 
+    /**
+     * Call user function, measure how long it takes and add time to array
+     * @param callable $fn
+     * @param string $name
+     */
     public function instrument(callable $fn, $name)
     {
         $start = microtime(true);
@@ -54,6 +69,10 @@ class TimeHelper
         $this->times[$name] = round(($stop - $start) * 1000);
     }
 
+    /**
+     * Builds and returns a string with all times/names in self::$times[]
+     * @return string
+     */
     public function build()
     {
         $value = '';
@@ -65,11 +84,24 @@ class TimeHelper
         return $value;
     }
 
+    /**
+     * Returns singleton instance
+     * @return TimeHelper
+     */
     public static function getInstance()
     {
         if (self::$instance === null) {
             self::$instance = new TimeHelper();
         }
         return self::$instance;
+    }
+
+    /**
+     * Returns if self::$times array has data
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->times);
     }
 }

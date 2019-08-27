@@ -39,39 +39,30 @@ namespace Nosto\Cmp\Observer\App\Action;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\App\Request\Http as HttpRequest;
 use Nosto\Cmp\Helper\TimeHelper;
 
 class Action implements ObserverInterface
 {
-    // app/code/Magento/Catalog/etc/frontend/page_types.xml
-    const CATALOG_PAGE_TYPE = 'catalog_category_view';
-
     /**
      * @var HttpResponse $response
      */
     private $response;
-    /**
-     * @var HttpRequest
-     */
-    private $request;
 
     /**
      * Action constructor.
      * @param HttpResponse $response
-     * @param HttpRequest $request
      */
-    public function __construct(
-        HttpResponse $response,
-        HttpRequest $request
-    )
+    public function __construct(HttpResponse $response)
     {
         $this->response = $response;
-        $this->request = $request;
     }
+
+    /**
+     * @param Observer $observer
+     */
     public function execute(Observer $observer)
     {
-        if ((string)$this->request->getFullActionName() === self::CATALOG_PAGE_TYPE) {
+        if (!TimeHelper::getInstance()->isEmpty()) {
             $this->response->setHeader(
                 'Server-Timing',
                 TimeHelper::getInstance()->build(),
