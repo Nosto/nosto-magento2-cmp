@@ -41,7 +41,7 @@ class ProductDebug
     /**
      * @var array Products ID's
      */
-    private $productIds = [];
+    private $productIdsArray = [];
 
     /**
      * @var ProductDebug singleton
@@ -62,7 +62,7 @@ class ProductDebug
      */
     public function addProductIds(array $ids, $name)
     {
-        $this->productIds[$name] = $ids;
+        $this->productIdsArray[$name] = $ids;
     }
 
     /**
@@ -71,11 +71,11 @@ class ProductDebug
     public function build()
     {
         $value = '';
-        foreach ($this->productIds as $name => $productId) {
-            $value .= sprintf('%s:%s,', $name, implode(',',$productId));
+        foreach ($this->productIdsArray as $name => $productIds) {
+            $value .= sprintf('%s:%s,', $name, implode(',',$productIds));
         }
 
-        $this->productIds = [];
+        $this->productIdsArray = [];
         return $value;
     }
 
@@ -97,6 +97,6 @@ class ProductDebug
      */
     public function isEmpty()
     {
-        return empty($this->productIds);
+        return empty($this->productIdsArray);
     }
 }
