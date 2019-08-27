@@ -48,6 +48,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\ProductDebugHelper;
 use Nosto\Cmp\Helper\TimeHelper;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
@@ -154,6 +155,7 @@ class Toolbar extends Template
                     if (!empty($nostoProductIds)
                         && NostoHelperArray::onlyScalarValues($nostoProductIds)
                     ) {
+                        ProductDebugHelper::getInstance()->addProductIds($nostoProductIds, 'CMP');
                         $nostoProductIds = array_reverse($nostoProductIds);
                         $this->sortByProductIds($subjectCollection, $nostoProductIds);
                         $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);

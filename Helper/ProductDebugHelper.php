@@ -34,49 +34,74 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Helper;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Nosto\Cmp\Helper\TimeHelper;
-use Nosto\Cmp\Helper\ProductDebugHelper;
-
-class Action implements ObserverInterface
+class ProductDebugHelper
 {
     /**
-     * @var HttpResponse $response
+     * @var array Products ID's
      */
-    private $response;
+    private $productIds = [];
 
     /**
-     * Action constructor.
-     * @param HttpResponse $response
+     * @var ProductDebugHelper singleton
      */
-    public function __construct(HttpResponse $response)
+    private static $instance;
+
+    /**
+     * ProductDebugHelper constructor.
+     */
+    private function __construct()
     {
-        $this->response = $response;
+        // Private
     }
 
     /**
-     * @param Observer $observer
+     * @param array $ids
+     * @param $name
      */
-    public function execute(Observer $observer)
+    public function addProductIds(array $ids, $name)
     {
-        if (!TimeHelper::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                'X-Server-Timing',
-                TimeHelper::getInstance()->build(),
-                true
-            );
+        $this->productIds[$name] = $ids;
+    }
+
+    /**
+     * @return string
+     */
+    public function build()
+    {
+        $value = '';
+        foreach ($this->productIds as $name => $productId) {
+            $productIdsString = '';
+            foreach ($productId as $item) {
+                $productIdsString .= sprintf('%d,',$item);
+            }
+            $productIdsString = rtrim($productIdsString, ','); // Remove trailling comma
+            $value .= sprintf('%s:%s,', $name, $productIdsString);
         }
 
-        if (!ProductDebugHelper::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                'X-Nosto-Product-Ids',
-                ProductDebugHelper::getInstance()->build(),
-                true
-            );
+        $this->productIds = [];
+        return $value;
+    }
+
+    /**
+     * Returns singleton instance
+     * @return ProductDebugHelper
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new ProductDebugHelper();
         }
+        return self::$instance;
+    }
+
+    /**
+     * Returns if there are product id's in the array for this request
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->productIds);
     }
 }
