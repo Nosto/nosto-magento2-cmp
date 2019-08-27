@@ -34,9 +34,9 @@
  *
  */
 
-namespace Nosto\Cmp\Helper;
+namespace Nosto\Cmp\Service\Debug;
 
-class TimeHelper
+class ServerTiming
 {
     /**
      * @var array holds measurements for each request
@@ -44,12 +44,12 @@ class TimeHelper
     private $times = [];
 
     /**
-     * @var TimeHelper singleton
+     * @var ServerTiming singleton
      */
     private static $instance;
 
     /**
-     * TimeHelper constructor.
+     * ServerTiming constructor.
      */
     private function __construct()
     {
@@ -86,12 +86,12 @@ class TimeHelper
 
     /**
      * Returns singleton instance
-     * @return TimeHelper
+     * @return ServerTiming
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new TimeHelper();
+            self::$instance = new ServerTiming();
         }
         return self::$instance;
     }
