@@ -36,8 +36,6 @@
 
 namespace Nosto\Cmp\Helper;
 
-use SebastianBergmann\Timer\Timer;
-
 class TimeHelper
 {
     private $times = [];
@@ -50,10 +48,10 @@ class TimeHelper
 
     public function instrument(callable $fn, $name)
     {
-        Timer::start();
+        $start = microtime(true);
         $fn();
-        $time = Timer::stop();
-        $this->times[$name] = Timer::secondsToTimeString($time);
+        $stop = microtime(true);
+        $this->times[$name] = $stop - $start;
     }
 
     public function build()
