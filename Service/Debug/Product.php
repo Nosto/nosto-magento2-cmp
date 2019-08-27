@@ -34,49 +34,64 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Service\Debug;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Nosto\Cmp\Service\Debug\ServerTiming;
-use Nosto\Cmp\Service\Debug\Product;
-
-class Action implements ObserverInterface
+class Product
 {
     /**
-     * @var HttpResponse $response
+     * @var array Products ID's
      */
-    private $response;
+    private $productIdsArray = [];
 
     /**
-     * Action constructor.
-     * @param HttpResponse $response
+     * @var Product singleton
      */
-    public function __construct(HttpResponse $response)
+    private static $instance;
+
+    /**
+     * Product constructor.
+     */
+    private function __construct()
     {
-        $this->response = $response;
+        // Private
     }
 
     /**
-     * @param Observer $observer
+     * @param array $ids
      */
-    public function execute(Observer $observer)
+    public function setProductIds(array $ids)
     {
-        if (!ServerTiming::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                'X-Server-Timing',
-                ServerTiming::getInstance()->build(),
-                true
-            );
-        }
+        $this->productIdsArray = $ids;
+    }
 
-        if (!Product::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                'X-Nosto-Product-Ids',
-                Product::getInstance()->build(),
-                true
-            );
+    /**
+     * @return string
+     */
+    public function build()
+    {
+        $value = sprintf('%s,', implode(',',$this->productIdsArray));
+        $this->productIdsArray = [];
+        return $value;
+    }
+
+    /**
+     * Returns singleton instance
+     * @return Product
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Product();
         }
+        return self::$instance;
+    }
+
+    /**
+     * Returns if there are product id's in the array for this request
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->productIdsArray);
     }
 }
