@@ -48,6 +48,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\TimeHelper;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
@@ -60,6 +61,8 @@ use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 
 class Toolbar extends Template
 {
+    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
+
     /**  @var StoreManagerInterface */
     private $storeManager;
 
@@ -180,12 +183,19 @@ class Toolbar extends Template
         $categoryString = $this->categoryBuilder->build($category, $store);
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         $limit = $collection->getSize();
-        return $this->categoryRecommendation->getPersonalisationResult(
-            $nostoAccount,
-            $nostoCustomer,
-            $categoryString,
-            $limit
+        $personalizationResult = null;
+        TimeHelper::getInstance()->instrument(
+            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
+                $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
+                    $nostoAccount,
+                    $nostoCustomer,
+                    $categoryString,
+                    $limit
+                );
+            },
+            self::TIME_PROF_GRAPHQL_QUERY
         );
+        return $personalizationResult;
     }
 
     /**
