@@ -59,9 +59,9 @@ class ProductDebug
     /**
      * @param array $ids
      */
-    public function addProductIds(array $ids)
+    public function setProductIds(array $ids)
     {
-        $this->productIdsArray[] = $ids;
+        $this->productIdsArray = $ids;
     }
 
     /**
@@ -69,11 +69,7 @@ class ProductDebug
      */
     public function build()
     {
-        $value = '';
-        foreach ($this->productIdsArray as $productIds) {
-            $value .= sprintf('%s,', implode(',',$productIds));
-        }
-
+        $value = sprintf('%s,', implode(',',$this->productIdsArray));
         $this->productIdsArray = [];
         return $value;
     }
