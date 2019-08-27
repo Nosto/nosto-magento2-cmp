@@ -36,7 +36,7 @@
 
 namespace Nosto\Cmp\Helper;
 
-class TimeHelper
+class Time
 {
     /**
      * @var array holds measurements for each request
@@ -44,7 +44,7 @@ class TimeHelper
     private $times = [];
 
     /**
-     * @var TimeHelper singleton
+     * @var Time singleton
      */
     private static $instance;
 
@@ -86,12 +86,12 @@ class TimeHelper
 
     /**
      * Returns singleton instance
-     * @return TimeHelper
+     * @return Time
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new TimeHelper();
+            self::$instance = new Time();
         }
         return self::$instance;
     }

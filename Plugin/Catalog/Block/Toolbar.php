@@ -49,7 +49,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\ProductDebug;
-use Nosto\Cmp\Helper\TimeHelper;
+use Nosto\Cmp\Helper\Time;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
@@ -186,7 +186,7 @@ class Toolbar extends Template
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         $limit = $collection->getSize();
         $personalizationResult = null;
-        TimeHelper::getInstance()->instrument(
+        Time::getInstance()->instrument(
             function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
