@@ -34,7 +34,7 @@
  *
  */
 
-namespace Nosto\Cmp\Service\Debug;
+namespace Nosto\Cmp\Utils\Debug;
 
 class Product
 {

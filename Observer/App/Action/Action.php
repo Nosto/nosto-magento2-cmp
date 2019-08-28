@@ -39,8 +39,8 @@ namespace Nosto\Cmp\Observer\App\Action;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Nosto\Cmp\Service\Debug\ServerTiming;
-use Nosto\Cmp\Service\Debug\Product;
+use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\Cmp\Utils\Debug\Product;
 
 class Action implements ObserverInterface
 {
