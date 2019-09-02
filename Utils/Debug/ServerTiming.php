@@ -38,6 +38,8 @@ namespace Nosto\Cmp\Utils\Debug;
 
 class ServerTiming
 {
+    public const HEADER_NAME = 'X-Server-Timing';
+
     /**
      * @var array holds measurements for each request
      */
@@ -75,13 +77,12 @@ class ServerTiming
      */
     public function build()
     {
-        $value = '';
+        $headers = [];
         foreach ($this->times as $key => $time) {
-            $value .= sprintf('%s;dur=%d,', $key, $time);
+            $headers[] = sprintf('%s;dur=%d', $key, $time);
         }
-
         $this->times = [];
-        return $value;
+        return implode(',', $headers);
     }
 
     /**

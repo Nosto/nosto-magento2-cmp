@@ -38,6 +38,8 @@ namespace Nosto\Cmp\Utils\Debug;
 
 class Product
 {
+    public const HEADER_NAME = 'X-Nosto-Product-Ids';
+
     /**
      * @var array Products ID's
      */
@@ -69,7 +71,7 @@ class Product
      */
     public function build()
     {
-        $value = sprintf('%s,', implode(',',$this->productIdsArray));
+        $value = implode(',', $this->productIdsArray);
         $this->productIdsArray = [];
         return $value;
     }
