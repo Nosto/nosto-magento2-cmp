@@ -36,11 +36,11 @@
 
 namespace Nosto\Cmp\Observer\App\Action;
 
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Utils\Debug\Product;
+use Nosto\Cmp\Utils\Debug\ServerTiming;
 
 class Action implements ObserverInterface
 {
@@ -65,7 +65,7 @@ class Action implements ObserverInterface
     {
         if (!ServerTiming::getInstance()->isEmpty()) {
             $this->response->setHeader(
-                'X-Server-Timing',
+                ServerTiming::HEADER_NAME,
                 ServerTiming::getInstance()->build(),
                 true
             );
@@ -73,7 +73,7 @@ class Action implements ObserverInterface
 
         if (!Product::getInstance()->isEmpty()) {
             $this->response->setHeader(
-                'X-Nosto-Product-Ids',
+                Product::HEADER_NAME,
                 Product::getInstance()->build(),
                 true
             );
