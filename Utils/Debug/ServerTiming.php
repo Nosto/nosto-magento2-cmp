@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Utils\Debug;
 
 class ServerTiming
 {
-    public const HEADER_NAME = 'X-Server-Timing';
+    public const HEADER_NAME = 'Server-Timing';
 
     /**
      * @var array holds measurements for each request
