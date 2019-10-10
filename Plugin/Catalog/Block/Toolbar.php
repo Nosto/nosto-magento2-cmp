@@ -61,6 +61,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Magento\LayeredNavigation\Block\Navigation\State;
 use Zend_Db_Expr;
 
 class Toolbar extends Template
@@ -85,6 +86,9 @@ class Toolbar extends Template
     /** @var CookieManagerInterface */
     private $cookieManager;
 
+    /** @var State */
+    private $state;
+
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
@@ -103,6 +107,7 @@ class Toolbar extends Template
      * @param CookieManagerInterface $cookieManager
      * @param NostoLogger $logger
      * @param Registry $registry
+     * @param State $state
      * @param array $data
      */
     public function __construct(
@@ -114,6 +119,7 @@ class Toolbar extends Template
         CookieManagerInterface $cookieManager,
         NostoLogger $logger,
         Registry $registry,
+        State $state,
         array $data = []
     ) {
         $this->nostoCmpHelperData = $nostoCmpHelperData;
@@ -124,6 +130,7 @@ class Toolbar extends Template
         $this->categoryRecommendation = $categoryRecommendation;
         $this->logger = $logger;
         $this->registry = $registry;
+        $this->state = $state;
         parent::__construct($context, $data);
     }
 
@@ -191,10 +198,21 @@ class Toolbar extends Template
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         $limit = $collection->getSize();
         $personalizationResult = null;
+
+        // Get filters used
+        $nostoFilterMapper = new \Nosto\Cmp\Helper\FilterMapper();
+        $nostoFilterMapper->init();
+        $selectedFilters = $this->state->getActiveFilters();
+        foreach($selectedFilters as $filter){
+            $nostoFilterMapper->mapFilter($filter);
+        }
+        $cmpFilters = $nostoFilterMapper->getFilters();
+
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
+            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, $cmpFilters, &$personalizationResult) {
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
+                    $cmpFilters,
                     $nostoCustomer,
                     $categoryString,
                     $limit
