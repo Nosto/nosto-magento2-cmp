@@ -37,35 +37,104 @@
 namespace Nosto\Cmp\Helper;
 
 use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
 use Nosto\Operation\Recommendation\Filters;
+use Nosto\Tagging\Helper\Data as NostoHelperData;
 
 class FilterMapper
 {
     /** @var Filters */
     private $filters;
 
-    public function init()
+    /** @var NostoHelperData */
+    private $nostoHelperData;
+
+    /** @var string */
+    private $brand;
+
+    /**
+     * FilterMapper constructor.
+     * @param Filters $filters
+     * @param NostoHelperData $nostoHelperData
+     */
+    public function __construct(Filters $filters, NostoHelperData $nostoHelperData)
     {
-        $this->filters = new Filters();
+        $this->filters = $filters;
+        $this->nostoHelperData = $nostoHelperData;
+    }
+
+    /**
+     * @param Store $store
+     */
+    public function init(Store $store): void
+    {
+        $this->brand = $this->nostoHelperData->getBrandAttribute($store);
     }
 
     /**
      * @param Item $item
+     * @throws LocalizedException
      */
-    public function mapFilter(Item $item)
+    public function mapFilter(Item $item): void
     {
-        $filterName = strtolower($item->getName());
-        switch ($filterName) {
+        /** @var string $frontendInput */
+        $frontendInput = $item->getFilter()->getData('attribute_model')
+            ->getData('frontend_input');
+
+        $filterName = $item->getName();
+        switch ($frontendInput) {
             case 'price':
-                $values = $item->getData('value');
-                $this->filters->setPrice(['min' => min($values), 'max' => max($values)]);
+                $value = $item->getData('value');
+                break;
+            case 'select':
+                $value = $item->getData('label');
+                break;
+            case 'multiselect':
+                $value = $item->getData('label');
+                break;
+            case 'date':
+                break;
+            case 'boolean':
+                $value = $item->getData('value') === '1';
+                break;
+        }
+        $this->setValue($filterName, $value);
+    }
+
+    /**
+     * @param string $name
+     * @param string|array $value
+     */
+    private function setValue(string $name, $value)
+    {
+        if ($this->brand === $name) {
+            $this->filters->setBrands($value);
+        }
+
+        switch (strtolower($name)) {
+            case 'price':
+                $this->filters->setPrice(min($value), max($value));
+                break;
+            case 'new':
+                $this->filters->setFresh($value);
+                break;
+            case 'manufacturer':
+                $this->filters->setBrands($value);
+                break;
+            default:
+                if (is_string($value)) {
+                    $value = [$value];
+                }
+                $this->filters->setCustomFields($name, $value);
+                break;
         }
     }
 
     /**
      * @return Filters
      */
-    public function getFilters()
+    public function getFilters(): Filters
     {
         return $this->filters;
     }

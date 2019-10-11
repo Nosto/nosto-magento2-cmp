@@ -61,6 +61,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Cmp\Helper\FilterMapper as NostoFilterMapper;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Zend_Db_Expr;
 
@@ -92,6 +93,9 @@ class Toolbar extends Template
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
+    /** @var NostoFilterMapper  */
+    private $nostoFilterMapper;
+
     /** @var NostoLogger */
     private $logger;
 
@@ -118,6 +122,7 @@ class Toolbar extends Template
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
         NostoLogger $logger,
+        NostoFilterMapper $nostoFilterMapper,
         Registry $registry,
         State $state,
         array $data = []
@@ -129,6 +134,7 @@ class Toolbar extends Template
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
         $this->logger = $logger;
+        $this->nostoFilterMapper = $nostoFilterMapper;
         $this->registry = $registry;
         $this->state = $state;
         parent::__construct($context, $data);
@@ -200,13 +206,12 @@ class Toolbar extends Template
         $personalizationResult = null;
 
         // Get filters used
-        $nostoFilterMapper = new \Nosto\Cmp\Helper\FilterMapper();
-        $nostoFilterMapper->init();
+        $this->nostoFilterMapper->init($store);
         $selectedFilters = $this->state->getActiveFilters();
         foreach($selectedFilters as $filter){
-            $nostoFilterMapper->mapFilter($filter);
+            $this->nostoFilterMapper->mapFilter($filter);
         }
-        $cmpFilters = $nostoFilterMapper->getFilters();
+        $cmpFilters = $this->nostoFilterMapper->getFilters();
 
         ServerTiming::getInstance()->instrument(
             function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, $cmpFilters, &$personalizationResult) {
