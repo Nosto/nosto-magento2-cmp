@@ -83,6 +83,7 @@ class FilterMapper
             ->getData('frontend_input');
 
         $filterName = $item->getName();
+        $value = '';
         switch ($frontendInput) {
             case 'price':
                 $value = $item->getData('value');
@@ -109,7 +110,8 @@ class FilterMapper
     private function setValue(string $name, $value)
     {
         if ($this->brand === $name) {
-            $this->filters->setBrands($value);
+            $this->filters->setBrands($this->getArray($value));
+            return;
         }
 
         switch (strtolower($name)) {
@@ -119,14 +121,8 @@ class FilterMapper
             case 'new':
                 $this->filters->setFresh($value);
                 break;
-            case 'manufacturer':
-                $this->filters->setBrands($value);
-                break;
             default:
-                if (is_string($value)) {
-                    $value = [$value];
-                }
-                $this->filters->setCustomFields($name, $value);
+                $this->filters->setCustomFields($name, $this->getArray($value));
                 break;
         }
     }
@@ -137,5 +133,17 @@ class FilterMapper
     public function getFilters(): Filters
     {
         return $this->filters;
+    }
+
+    /**
+     * @param string|array $value
+     * @return array
+     */
+    private function getArray($value)
+    {
+        if (is_string($value)) {
+            $value = [$value];
+        }
+        return $value;
     }
 }
