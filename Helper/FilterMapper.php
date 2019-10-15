@@ -39,13 +39,17 @@ namespace Nosto\Cmp\Helper;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
-use Nosto\Operation\Recommendation\Filters;
+use Nosto\Operation\Recommendation\IncludeFilters;
+use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 
 class FilterMapper
 {
-    /** @var Filters */
-    private $filters;
+    /** @var IncludeFilters */
+    private $includeFilters;
+
+    /** @var ExcludeFilters */
+    private $excludeFilters;
 
     /** @var NostoHelperData */
     private $nostoHelperData;
@@ -55,12 +59,16 @@ class FilterMapper
 
     /**
      * FilterMapper constructor.
-     * @param Filters $filters
+     * @param IncludeFilters $includeFilters
      * @param NostoHelperData $nostoHelperData
      */
-    public function __construct(Filters $filters, NostoHelperData $nostoHelperData)
-    {
-        $this->filters = $filters;
+    public function __construct(
+        IncludeFilters $includeFilters,
+        ExcludeFilters $excludeFilters,
+        NostoHelperData $nostoHelperData
+    ) {
+        $this->includeFilters = $includeFilters;
+        $this->excludeFilters = $excludeFilters;
         $this->nostoHelperData = $nostoHelperData;
     }
 
@@ -76,7 +84,7 @@ class FilterMapper
      * @param Item $item
      * @throws LocalizedException
      */
-    public function mapFilter(Item $item): void
+    public function mapIncludeFilter(Item $item): void
     {
         /** @var string $frontendInput */
         $frontendInput = $item->getFilter()->getData('attribute_model')
@@ -110,29 +118,37 @@ class FilterMapper
     private function setValue(string $name, $value)
     {
         if ($this->brand === $name) {
-            $this->filters->setBrands($this->getArray($value));
+            $this->includeFilters->setBrands($this->getArray($value));
             return;
         }
 
         switch (strtolower($name)) {
             case 'price':
-                $this->filters->setPrice(min($value), max($value));
+                $this->includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $this->filters->setFresh($value);
+                $this->includeFilters->setFresh($value);
                 break;
             default:
-                $this->filters->setCustomFields($name, $this->getArray($value));
+                $this->includeFilters->setCustomFields($name, $this->getArray($value));
                 break;
         }
     }
 
     /**
-     * @return Filters
+     * @return IncludeFilters
      */
-    public function getFilters(): Filters
+    public function getIncludeFilters(): IncludeFilters
     {
-        return $this->filters;
+        return $this->includeFilters;
+    }
+
+    /**
+     * @return ExcludeFilters
+     */
+    public function getExcludeFilters(): ExcludeFilters
+    {
+        return $this->excludeFilters;
     }
 
     /**

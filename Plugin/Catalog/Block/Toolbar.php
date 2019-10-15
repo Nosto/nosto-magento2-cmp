@@ -209,15 +209,15 @@ class Toolbar extends Template
         $this->nostoFilterMapper->init($store);
         $selectedFilters = $this->state->getActiveFilters();
         foreach($selectedFilters as $filter){
-            $this->nostoFilterMapper->mapFilter($filter);
+            $this->nostoFilterMapper->mapIncludeFilter($filter);
         }
-        $cmpFilters = $this->nostoFilterMapper->getFilters();
+        $filters = $this->nostoFilterMapper;
 
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, $cmpFilters, &$personalizationResult) {
+            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, $filters, &$personalizationResult) {
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
-                    $cmpFilters,
+                    $filters,
                     $nostoCustomer,
                     $categoryString,
                     $limit
