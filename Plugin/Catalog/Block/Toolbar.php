@@ -61,7 +61,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Cmp\Helper\FilterMapper as NostoFilterMapper;
+use Nosto\Cmp\Helper\FilterBuilder as NostoFilterBuilder;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Zend_Db_Expr;
 
@@ -93,8 +93,8 @@ class Toolbar extends Template
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
-    /** @var NostoFilterMapper  */
-    private $nostoFilterMapper;
+    /** @var NostoFilterBuilder  */
+    private $nostoFilterBuilder;
 
     /** @var NostoLogger */
     private $logger;
@@ -110,6 +110,7 @@ class Toolbar extends Template
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
      * @param NostoLogger $logger
+     * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
      * @param array $data
@@ -122,7 +123,7 @@ class Toolbar extends Template
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
         NostoLogger $logger,
-        NostoFilterMapper $nostoFilterMapper,
+        NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
         State $state,
         array $data = []
@@ -134,7 +135,7 @@ class Toolbar extends Template
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
         $this->logger = $logger;
-        $this->nostoFilterMapper = $nostoFilterMapper;
+        $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
         parent::__construct($context, $data);
@@ -189,8 +190,9 @@ class Toolbar extends Template
     /**
      * @param Store $store
      * @param FulltextCollection $collection
-     * @return CategoryMerchandisingResult|null
+     * @return null|mixed
      * @throws NostoException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getCmpResult(Store $store, FulltextCollection $collection)
     {
@@ -205,13 +207,12 @@ class Toolbar extends Template
         $limit = $collection->getSize();
         $personalizationResult = null;
 
-        // Get filters used
-        $this->nostoFilterMapper->init($store);
-        $selectedFilters = $this->state->getActiveFilters();
-        foreach($selectedFilters as $filter){
-            $this->nostoFilterMapper->mapIncludeFilter($filter);
-        }
-        $filters = $this->nostoFilterMapper;
+        // Build filters
+        $this->nostoFilterBuilder->init($store);
+        $this->nostoFilterBuilder->buildFromSelectedFilters(
+            $this->state->getActiveFilters()
+        );
+        $filters = $this->nostoFilterBuilder;
 
         ServerTiming::getInstance()->instrument(
             function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, $filters, &$personalizationResult) {

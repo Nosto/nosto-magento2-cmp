@@ -43,7 +43,7 @@ use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 
-class FilterMapper
+class FilterBuilder
 {
     /** @var IncludeFilters */
     private $includeFilters;
@@ -81,6 +81,17 @@ class FilterMapper
     }
 
     /**
+     * @param Item[] $filters
+     * @throws LocalizedException
+     */
+    public function buildFromSelectedFilters($filters)
+    {
+        foreach ($filters as $filter) {
+            $this->mapIncludeFilter($filter);
+        }
+    }
+
+    /**
      * @param Item $item
      * @throws LocalizedException
      */
@@ -90,6 +101,10 @@ class FilterMapper
         $frontendInput = $item->getFilter()->getData('attribute_model')
             ->getData('frontend_input');
 
+        if ($frontendInput === null) {
+            return;
+        }
+
         $filterName = $item->getName();
         $value = '';
         switch ($frontendInput) {
@@ -97,8 +112,6 @@ class FilterMapper
                 $value = $item->getData('value');
                 break;
             case 'select':
-                $value = $item->getData('label');
-                break;
             case 'multiselect':
                 $value = $item->getData('label');
                 break;
@@ -108,17 +121,17 @@ class FilterMapper
                 $value = $item->getData('value') === '1';
                 break;
         }
-        $this->setValue($filterName, $value);
+        $this->mapValueToFilter($filterName, $value);
     }
 
     /**
      * @param string $name
      * @param string|array $value
      */
-    private function setValue(string $name, $value)
+    private function mapValueToFilter(string $name, $value)
     {
         if ($this->brand === $name) {
-            $this->includeFilters->setBrands($this->getArray($value));
+            $this->includeFilters->setBrands($this->makeArrayFromValue($value));
             return;
         }
 
@@ -130,7 +143,7 @@ class FilterMapper
                 $this->includeFilters->setFresh($value);
                 break;
             default:
-                $this->includeFilters->setCustomFields($name, $this->getArray($value));
+                $this->includeFilters->setCustomFields($name, $this->makeArrayFromValue($value));
                 break;
         }
     }
@@ -155,7 +168,7 @@ class FilterMapper
      * @param string|array $value
      * @return array
      */
-    private function getArray($value)
+    private function makeArrayFromValue($value)
     {
         if (is_string($value)) {
             $value = [$value];
