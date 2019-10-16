@@ -34,7 +34,7 @@
  *
  */
 
-namespace Nosto\Cmp\Helper;
+namespace Nosto\Cmp\Model\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
@@ -42,6 +42,7 @@ use Magento\Store\Model\Store;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\Tagging\Logger\Logger as NostoLogger;
 
 class FilterBuilder
 {
@@ -57,19 +58,26 @@ class FilterBuilder
     /** @var string */
     private $brand;
 
+    /** @var NostoLogger */
+    private $logger;
+
     /**
-     * FilterMapper constructor.
+     * FilterBuilder constructor.
      * @param IncludeFilters $includeFilters
+     * @param ExcludeFilters $excludeFilters
      * @param NostoHelperData $nostoHelperData
+     * @param NostoLogger $logger
      */
     public function __construct(
         IncludeFilters $includeFilters,
         ExcludeFilters $excludeFilters,
-        NostoHelperData $nostoHelperData
+        NostoHelperData $nostoHelperData,
+        NostoLogger $logger
     ) {
         $this->includeFilters = $includeFilters;
         $this->excludeFilters = $excludeFilters;
         $this->nostoHelperData = $nostoHelperData;
+        $this->logger = $logger;
     }
 
     /**
@@ -97,10 +105,14 @@ class FilterBuilder
      */
     public function mapIncludeFilter(Item $item): void
     {
-        /** @var string $frontendInput */
-        $frontendInput = $item->getFilter()->getData('attribute_model')
-            ->getData('frontend_input');
 
+        $attributeModel = $item->getFilter()->getData('attribute_model');
+        if($attributeModel === null) {
+            return;
+        }
+
+        /** @var string $frontendInput */
+        $frontendInput = $attributeModel->getData('frontend_input');
         if ($frontendInput === null) {
             return;
         }
@@ -120,6 +132,12 @@ class FilterBuilder
             case 'boolean':
                 $value = $item->getData('value') === '1';
                 break;
+            default:
+                $this->logger->debug(sprintf(
+                    'Cannot build include filter for "%s" frontend input type',
+                    $frontendInput
+                ));
+                return;
         }
         $this->mapValueToFilter($filterName, $value);
     }

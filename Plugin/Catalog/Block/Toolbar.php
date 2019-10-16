@@ -61,7 +61,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Cmp\Helper\FilterBuilder as NostoFilterBuilder;
+use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Zend_Db_Expr;
 
@@ -190,7 +190,7 @@ class Toolbar extends Template
     /**
      * @param Store $store
      * @param FulltextCollection $collection
-     * @return null|mixed
+     * @return CategoryMerchandisingResult|null
      * @throws NostoException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -212,13 +212,12 @@ class Toolbar extends Template
         $this->nostoFilterBuilder->buildFromSelectedFilters(
             $this->state->getActiveFilters()
         );
-        $filters = $this->nostoFilterBuilder;
 
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, $filters, &$personalizationResult) {
+            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
-                    $filters,
+                    $this->nostoFilterBuilder,
                     $nostoCustomer,
                     $categoryString,
                     $limit

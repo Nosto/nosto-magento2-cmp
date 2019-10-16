@@ -44,8 +44,7 @@ use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Operation\Recommendation\IncludeFilters;
-use Nosto\Cmp\Helper\FilterBuilder;
+use Nosto\Cmp\Model\Filter\FilterBuilder;
 
 class Category
 {
@@ -74,7 +73,7 @@ class Category
      * @param $nostoCustomerId
      * @param $category
      * @param int $limit
-     * @return mixed|null
+     * @return CategoryMerchandisingResult|null
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
