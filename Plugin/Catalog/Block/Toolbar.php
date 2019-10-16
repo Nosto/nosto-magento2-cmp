@@ -176,6 +176,7 @@ class Toolbar extends Template
                         ProductDebug::getInstance()->setProductIds($nostoProductIds);
                         $nostoProductIds = array_reverse($nostoProductIds);
                         $this->sortByProductIds($subjectCollection, $nostoProductIds);
+                        $this->whereInProductIds($subjectCollection, $nostoProductIds);
                         $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
                     }
                 }
@@ -240,6 +241,19 @@ class Toolbar extends Template
             new Zend_Db_Expr($this->getSecondarySort())
         ];
         $select->order($zendExpression);
+    }
+
+    /**
+     * @param FulltextCollection $collection
+     * @param array $nostoProductIds
+     */
+    private function whereInProductIds(FulltextCollection $collection, array $nostoProductIds)
+    {
+        $select = $collection->getSelect();
+        $zendExpression = new Zend_Db_Expr(
+            'e.entity_id IN (' . implode(',', $nostoProductIds ) . ')'
+        );
+        $select->where($zendExpression);
     }
 
     /**
