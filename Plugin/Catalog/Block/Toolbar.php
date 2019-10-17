@@ -63,20 +63,12 @@ use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Framework\App\Request\Http;
 use Zend_Db_Expr;
 
-class Toolbar extends Template
+class Toolbar extends AbstractBlock
 {
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
-
-    /**  @var StoreManagerInterface */
-    private $storeManager;
-
-    /** @var NostoCmpHelperData */
-    private $nostoCmpHelperData;
-
-    /** @var NostoHelperAccount */
-    private $nostoHelperAccount;
 
     /**  @var CategoryBuilder */
     private $categoryBuilder;
@@ -95,9 +87,6 @@ class Toolbar extends Template
 
     /** @var NostoFilterBuilder  */
     private $nostoFilterBuilder;
-
-    /** @var NostoLogger */
-    private $logger;
 
     private static $isProcessed = false;
 
@@ -122,23 +111,21 @@ class Toolbar extends Template
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
+        Http $httpRequest,
         NostoLogger $logger,
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
         State $state,
         array $data = []
     ) {
-        $this->nostoCmpHelperData = $nostoCmpHelperData;
-        $this->nostoHelperAccount = $nostoHelperAccount;
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
-        $this->logger = $logger;
         $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
-        parent::__construct($context, $data);
+        parent::__construct($context, $httpRequest, $nostoCmpHelperData, $nostoHelperAccount, $logger);
     }
 
     /**
@@ -173,6 +160,7 @@ class Toolbar extends Template
                     if (!empty($nostoProductIds)
                         && NostoHelperArray::onlyScalarValues($nostoProductIds)
                     ) {
+                        $this->setTotalProducts(47);
                         ProductDebug::getInstance()->setProductIds($nostoProductIds);
                         $nostoProductIds = array_reverse($nostoProductIds);
                         $this->sortByProductIds($subjectCollection, $nostoProductIds);
@@ -205,7 +193,7 @@ class Toolbar extends Template
         $category = $this->registry->registry('current_category');
         $categoryString = $this->categoryBuilder->build($category, $store);
         $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-        $limit = $collection->getSize();
+        $limit = $collection->getPageSize();
         $personalizationResult = null;
 
         // Build filters
@@ -221,6 +209,7 @@ class Toolbar extends Template
                     $this->nostoFilterBuilder,
                     $nostoCustomer,
                     $categoryString,
+                    $this->getStoreFrontCurrentPage() - 1,
                     $limit
                 );
             },
