@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "941691a46fea307ae97bef7f35f84f08",
+    "content-hash": "d1cabb92095e3b53f132d21c66f9ff0f",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -421,18 +421,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "bcbb52f6f8b28de44b7515519e3d2d9c640d40ab"
+                "reference": "5084d8e9f7721f3b7ab502d501e486becc3671d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/bcbb52f6f8b28de44b7515519e3d2d9c640d40ab",
-                "reference": "bcbb52f6f8b28de44b7515519e3d2d9c640d40ab",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5084d8e9f7721f3b7ab502d501e486becc3671d9",
+                "reference": "5084d8e9f7721f3b7ab502d501e486becc3671d9",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/promises": "^1.0",
-                "guzzlehttp/psr7": "^1.4",
+                "guzzlehttp/psr7": "^1.6.1",
                 "php": ">=5.5"
             },
             "require-dev": {
@@ -479,7 +479,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2019-10-14T09:23:25+00:00"
+            "time": "2019-10-18T10:17:52+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -854,22 +854,22 @@
         },
         {
             "name": "nosto/module-nostotagging",
-            "version": "4.0.0-rc.1",
+            "version": "dev-feature/product-caching-index",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-magento2.git",
-                "reference": "ea3f979fb1aede3ecdfec1219cd90b01e73c4209"
+                "reference": "8ecd633170a26c781625737330e76a5ae03b2df7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/ea3f979fb1aede3ecdfec1219cd90b01e73c4209",
-                "reference": "ea3f979fb1aede3ecdfec1219cd90b01e73c4209",
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/8ecd633170a26c781625737330e76a5ae03b2df7",
+                "reference": "8ecd633170a26c781625737330e76a5ae03b2df7",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "magento/framework": ">=101.0.6|~102.0",
-                "nosto/php-sdk": "4.0.0",
+                "nosto/php-sdk": "~4.0",
                 "php": ">=7.0.0"
             },
             "require-dev": {
@@ -916,20 +916,20 @@
                 "OSL-3.0"
             ],
             "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
-            "time": "2019-10-14T13:14:41+00:00"
+            "time": "2019-10-17T12:44:50+00:00"
         },
         {
             "name": "nosto/php-sdk",
-            "version": "4.0.0",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-php-sdk.git",
-                "reference": "8822b2056b279d8d4627fa12ddd34ae656824004"
+                "reference": "ca4b3a1f7fa1bb07d9a89d453edc2735f0fe5367"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/8822b2056b279d8d4627fa12ddd34ae656824004",
-                "reference": "8822b2056b279d8d4627fa12ddd34ae656824004",
+                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/ca4b3a1f7fa1bb07d9a89d453edc2735f0fe5367",
+                "reference": "ca4b3a1f7fa1bb07d9a89d453edc2735f0fe5367",
                 "shasum": ""
             },
             "require": {
@@ -965,7 +965,7 @@
                 "BSD-3-Clause"
             ],
             "description": "PHP SDK for developing Nosto modules for e-commerce platforms",
-            "time": "2019-08-09T12:20:15+00:00"
+            "time": "2019-10-15T13:55:52+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -2197,12 +2197,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-eventmanager.git",
-                "reference": "8110c6bc0b67c5ab84a4fdae8e89b5abd672b16d"
+                "reference": "3ad808d60d0df54e16440a71fb9c8a33988e4d78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/8110c6bc0b67c5ab84a4fdae8e89b5abd672b16d",
-                "reference": "8110c6bc0b67c5ab84a4fdae8e89b5abd672b16d",
+                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/3ad808d60d0df54e16440a71fb9c8a33988e4d78",
+                "reference": "3ad808d60d0df54e16440a71fb9c8a33988e4d78",
                 "shasum": ""
             },
             "require": {
@@ -2243,7 +2243,7 @@
                 "events",
                 "zf2"
             ],
-            "time": "2019-08-31T14:24:22+00:00"
+            "time": "2019-10-18T07:10:41+00:00"
         },
         {
             "name": "zendframework/zend-filter",
@@ -2394,12 +2394,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-http.git",
-                "reference": "2cf317aebf069b10fb918af7be9a980cde51da9a"
+                "reference": "cd002e8c3f19d17c9f14891b9ebc2a87293268dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/2cf317aebf069b10fb918af7be9a980cde51da9a",
-                "reference": "2cf317aebf069b10fb918af7be9a980cde51da9a",
+                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/cd002e8c3f19d17c9f14891b9ebc2a87293268dd",
+                "reference": "cd002e8c3f19d17c9f14891b9ebc2a87293268dd",
                 "shasum": ""
             },
             "require": {
@@ -2441,7 +2441,7 @@
                 "zend",
                 "zf"
             ],
-            "time": "2019-10-01T14:35:57+00:00"
+            "time": "2019-10-15T19:04:27+00:00"
         },
         {
             "name": "zendframework/zend-hydrator",
@@ -2723,12 +2723,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-mime.git",
-                "reference": "a4368946f5f2c0a71b5050dc6eaeb8df341751f3"
+                "reference": "dcfcfc7edd9486e46402beab2b13341f3e0ac713"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-mime/zipball/a4368946f5f2c0a71b5050dc6eaeb8df341751f3",
-                "reference": "a4368946f5f2c0a71b5050dc6eaeb8df341751f3",
+                "url": "https://api.github.com/repos/zendframework/zend-mime/zipball/dcfcfc7edd9486e46402beab2b13341f3e0ac713",
+                "reference": "dcfcfc7edd9486e46402beab2b13341f3e0ac713",
                 "shasum": ""
             },
             "require": {
@@ -2746,8 +2746,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev",
-                    "dev-develop": "2.8-dev"
+                    "dev-master": "2.7.x-dev",
+                    "dev-develop": "2.8.x-dev"
                 }
             },
             "autoload": {
@@ -2760,13 +2760,12 @@
                 "BSD-3-Clause"
             ],
             "description": "Create and parse MIME messages and parts",
-            "homepage": "https://github.com/zendframework/zend-mime",
             "keywords": [
                 "ZendFramework",
                 "mime",
                 "zf"
             ],
-            "time": "2019-08-08T20:16:49+00:00"
+            "time": "2019-10-16T19:33:14+00:00"
         },
         {
             "name": "zendframework/zend-mvc",
@@ -3150,7 +3149,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "nosto/module-nostotagging": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
