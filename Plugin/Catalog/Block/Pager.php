@@ -49,7 +49,7 @@ class Pager extends AbstractBlock
      */
     public function afterIsPageCurrent(MagentoPager $pager, $result, $param)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $this->getCurrentPageNumber() === $param;
         }
         return $result;
@@ -62,7 +62,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             $start = 0;
             $end = 0;
             $frameLength = $pager->getFrameLength();
@@ -95,7 +95,7 @@ class Pager extends AbstractBlock
      */
     public function afterIsFirstPage(MagentoPager $pager, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $this->getCurrentPageNumber() === 1;
         }
         return $result;
@@ -108,7 +108,7 @@ class Pager extends AbstractBlock
      */
     public function afterIsLastPage(MagentoPager $pager, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber() === $this->getCurrentPageNumber();
         }
         return $result;
@@ -121,7 +121,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetNextPageUrl(MagentoPager $pager, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $pager->getPageUrl($this->getCurrentPageNumber() + 1);
         }
         return $result;
@@ -134,7 +134,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $pager->getPageUrl($this->getCurrentPageNumber() - 1);
         }
         return $result;

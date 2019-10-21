@@ -100,6 +100,9 @@ abstract class AbstractBlock extends Template
     }
 
     /**
+     * Checks if current sorting order is Nosto's `Personalized for you`
+     * and category sorting is enabled
+     *
      * @return bool
      */
     public function isCmpCurrentSortOrder()
@@ -118,6 +121,20 @@ abstract class AbstractBlock extends Template
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * In case CMP is selected as sorting order
+     * and result is not empty
+     *
+     * @return bool
+     */
+    public function isCmpTakingOverCatalog()
+    {
+        if ($this->isCmpCurrentSortOrder() && self::$totalProducts !== null) {
             return true;
         }
         return false;
@@ -154,7 +171,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetFirstNum($block, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
             return $pageSize * ($currentPage - 1) + 1;
@@ -169,7 +186,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetLastNum($block, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
             $totalResultOfPage = $block->getCollection()->count();
@@ -185,7 +202,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetTotalNum($block, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $this->getTotalProducts();
         }
         return $result;
@@ -198,7 +215,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetLastPageNum($block, $result)
     {
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber();
         }
         return $result;
