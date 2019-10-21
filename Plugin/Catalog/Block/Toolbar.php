@@ -200,10 +200,7 @@ class Toolbar extends Template
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-        /** @noinspection PhpDeprecationInspection */
-        $category = $this->registry->registry('current_category');
-        $categoryString = $this->categoryBuilder->build($category, $store);
-        $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+
         $limit = $collection->getSize();
         $personalizationResult = null;
 
@@ -214,11 +211,14 @@ class Toolbar extends Template
         );
 
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
+            function () use ($nostoAccount, $store, $limit, &$personalizationResult) {
+                /** @noinspection PhpDeprecationInspection */
+                $category = $this->registry->registry('current_category');
+                $categoryString = $this->categoryBuilder->build($category, $store);
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
                     $this->nostoFilterBuilder,
-                    $nostoCustomer,
+                    $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $categoryString,
                     $limit
                 );

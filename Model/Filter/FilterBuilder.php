@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Model\Filter;
 
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
@@ -83,7 +84,7 @@ class FilterBuilder
     /**
      * @param Store $store
      */
-    public function init(Store $store): void
+    public function init(Store $store)
     {
         $this->brand = $this->nostoHelperData->getBrandAttribute($store);
     }
@@ -95,7 +96,9 @@ class FilterBuilder
     public function buildFromSelectedFilters($filters)
     {
         foreach ($filters as $filter) {
-            $this->mapIncludeFilter($filter);
+            if ($filter instanceof Item) {
+                $this->mapIncludeFilter($filter);
+            }
         }
     }
 
@@ -103,11 +106,16 @@ class FilterBuilder
      * @param Item $item
      * @throws LocalizedException
      */
-    public function mapIncludeFilter(Item $item): void
+    public function mapIncludeFilter(Item $item)
     {
+        /** @var AbstractFilter $filter */
+        $filter = $item->getFilter();
+        if ($filter === null) {
+            return;
+        }
 
-        $attributeModel = $item->getFilter()->getData('attribute_model');
-        if($attributeModel === null) {
+        $attributeModel = $filter->getData('attribute_model');
+        if ($attributeModel === null) {
             return;
         }
 
@@ -130,7 +138,7 @@ class FilterBuilder
             case 'date':
                 break;
             case 'boolean':
-                $value = $item->getData('value') === '1';
+                $value = (bool) $item->getData('value');
                 break;
             default:
                 $this->logger->debug(sprintf(
@@ -169,7 +177,7 @@ class FilterBuilder
     /**
      * @return IncludeFilters
      */
-    public function getIncludeFilters(): IncludeFilters
+    public function getIncludeFilters()
     {
         return $this->includeFilters;
     }
@@ -177,18 +185,21 @@ class FilterBuilder
     /**
      * @return ExcludeFilters
      */
-    public function getExcludeFilters(): ExcludeFilters
+    public function getExcludeFilters()
     {
         return $this->excludeFilters;
     }
 
     /**
-     * @param string|array $value
+     * @param string|int|array $value
      * @return array
      */
     private function makeArrayFromValue($value)
     {
         if (is_string($value)) {
+            $value = [$value];
+        }
+        if (is_numeric($value)) {
             $value = [$value];
         }
         return $value;
