@@ -42,6 +42,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -181,7 +182,7 @@ class Toolbar extends AbstractBlock
      * @param FulltextCollection $collection
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getCmpResult(Store $store, FulltextCollection $collection)
     {
@@ -189,10 +190,6 @@ class Toolbar extends AbstractBlock
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-        /** @noinspection PhpDeprecationInspection */
-        $category = $this->registry->registry('current_category');
-        $categoryString = $this->categoryBuilder->build($category, $store);
-        $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         $limit = $collection->getPageSize();
         $personalizationResult = null;
 
@@ -203,11 +200,14 @@ class Toolbar extends AbstractBlock
         );
 
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
+            function () use ($nostoAccount, $store, $limit, &$personalizationResult) {
+                /** @noinspection PhpDeprecationInspection */
+                $category = $this->registry->registry('current_category');
+                $categoryString = $this->categoryBuilder->build($category, $store);
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
                     $this->nostoFilterBuilder,
-                    $nostoCustomer,
+                    $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $categoryString,
                     $this->getStoreFrontCurrentPage() - 1,
                     $limit
