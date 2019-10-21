@@ -36,13 +36,17 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-use Magento\Framework\Data\Collection;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 
 class Pager extends AbstractBlock
 {
-    private $lastPageNumber;
 
+    /**
+     * @param MagentoPager $pager
+     * @param $result
+     * @param $param
+     * @return bool
+     */
     public function afterIsPageCurrent(MagentoPager $pager, $result, $param)
     {
         if ($this->isCmpCurrentSortOrder()) {
@@ -51,6 +55,11 @@ class Pager extends AbstractBlock
         return $result;
     }
 
+    /**
+     * @param MagentoPager $pager
+     * @param $result
+     * @return array
+     */
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
         if ($this->isCmpCurrentSortOrder()) {
@@ -58,27 +67,5 @@ class Pager extends AbstractBlock
             return range(1,$lastPage);
         }
         return $result;
-    }
-
-    public function afterGetLastPageNum(MagentoPager $pager, $result)
-    {
-        if ($this->isCmpCurrentSortOrder()) {
-            return $this->getLastPageNumber($pager->getCollection());
-        }
-        return $result;
-    }
-
-    /**
-     * @param Collection $collection
-     * @return int
-     */
-    private function getLastPageNumber(Collection $collection)
-    {
-        if ($this->lastPageNumber !== null) {
-            return $this->lastPageNumber;
-        }
-        $pageSize = (int)$collection->getPageSize();
-        $this->lastPageNumber = (int) ceil(self::$totalProducts/$pageSize);
-        return $this->lastPageNumber;
     }
 }

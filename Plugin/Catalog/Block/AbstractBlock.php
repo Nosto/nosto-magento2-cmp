@@ -37,9 +37,12 @@
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
+use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
@@ -51,6 +54,9 @@ abstract class AbstractBlock extends Template
 {
     /** @var int */
     public static $totalProducts;
+
+    /** @var int */
+    private $lastPageNumber;
 
     /** @var Http */
     public $httpRequest;
@@ -128,6 +134,85 @@ abstract class AbstractBlock extends Template
     public function setTotalProducts($totalProducts)
     {
         self::$totalProducts = $totalProducts;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalProducts()
+    {
+        return self::$totalProducts;
+    }
+
+    /**
+     * @param MagentoToolbar|MagentoPager $block
+     * @param $result
+     * @return float|int
+     */
+    public function afterGetFirstNum($block, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            $pageSize = $block->getCollection()->getPageSize();
+            $currentPage = $this->getStoreFrontCurrentPage();
+            return $pageSize * ($currentPage - 1) + 1;
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoToolbar|MagentoPager $block
+     * @param $result
+     * @return float|int
+     */
+    public function afterGetLastNum($block, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            $pageSize = $block->getCollection()->getPageSize();
+            $currentPage = $this->getStoreFrontCurrentPage();
+            $totalResultOfPage = $block->getCollection()->count();
+            return $pageSize * ($currentPage - 1) + $totalResultOfPage;
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoToolbar|MagentoPager $block
+     * @param $result
+     * @return int
+     */
+    public function afterGetTotalNum($block, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            return $this->getTotalProducts();
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoToolbar|MagentoPager $block
+     * @param $result
+     * @return int
+     */
+    public function afterGetLastPageNum($block, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            return $this->getLastPageNumber($block->getCollection());
+        }
+        return $result;
+    }
+
+    /**
+     * @param Collection $collection
+     * @return int
+     */
+    public function getLastPageNumber(Collection $collection)
+    {
+        if ($this->lastPageNumber !== null) {
+            return $this->lastPageNumber;
+        }
+        $pageSize = (int)$collection->getPageSize();
+        $this->lastPageNumber = (int) ceil(self::$totalProducts/$pageSize);
+        return $this->lastPageNumber;
     }
 
     /**
