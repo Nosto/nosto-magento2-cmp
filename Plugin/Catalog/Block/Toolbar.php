@@ -46,9 +46,7 @@ use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
@@ -99,11 +97,11 @@ class Toolbar extends AbstractBlock
      * @param CategoryBuilder $builder
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
+     * @param Http $httpRequest
      * @param NostoLogger $logger
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
-     * @param array $data
      */
     public function __construct(
         Context $context,
@@ -116,8 +114,7 @@ class Toolbar extends AbstractBlock
         NostoLogger $logger,
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
-        State $state,
-        array $data = []
+        State $state
     ) {
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
@@ -144,11 +141,7 @@ class Toolbar extends AbstractBlock
         }
         /* @var Store $store */
         $store = $this->storeManager->getStore();
-        $currentOrder = $subject->getCurrentOrder();
-        if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
-            && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
-            && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
-        ) {
+        if ($this->isCmpCurrentSortOrder()) {
             try {
                 /* @var FulltextCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
@@ -162,7 +155,7 @@ class Toolbar extends AbstractBlock
                     if (!empty($nostoProductIds)
                         && NostoHelperArray::onlyScalarValues($nostoProductIds)
                     ) {
-                        $this->setTotalProducts(47);
+                        $this->setTotalProducts($result->getTotalPrimaryCount());
                         ProductDebug::getInstance()->setProductIds($nostoProductIds);
                         $nostoProductIds = array_reverse($nostoProductIds);
                         $this->sortByProductIds($subjectCollection, $nostoProductIds);

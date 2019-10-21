@@ -56,6 +56,10 @@ class Pager extends AbstractBlock
     }
 
     /**
+     * Get page number list to display at the user
+     * In case of many pages it will not display all page numbers
+     * but only a limited range
+     *
      * @param MagentoPager $pager
      * @param $result
      * @return array
@@ -67,9 +71,11 @@ class Pager extends AbstractBlock
             $end = 0;
             $frameLength = $pager->getFrameLength();
 
+            // If total number of pages is smaller than frameLength, display them all
             if ($this->getLastPageNumber() <= $frameLength) {
                 $start = 1;
                 $end = $this->getLastPageNumber();
+            //else display only as much as frameLength
             } else {
                 $half = ceil($frameLength / 2);
                 if ($this->getCurrentPageNumber() >= $half && $this->getCurrentPageNumber() <= $this->getLastPageNumber() - $half) {

@@ -165,6 +165,8 @@ abstract class AbstractBlock extends Template
     }
 
     /**
+     * Return order number of first product of the page
+     *
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return float|int
@@ -180,6 +182,8 @@ abstract class AbstractBlock extends Template
     }
 
     /**
+     * Return order number of last product of the page
+     *
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return float|int
@@ -222,7 +226,6 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @param Collection $collection
      * @return int
      */
     public function getLastPageNumber()
