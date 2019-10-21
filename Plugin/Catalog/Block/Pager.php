@@ -50,7 +50,7 @@ class Pager extends AbstractBlock
     public function afterIsPageCurrent(MagentoPager $pager, $result, $param)
     {
         if ($this->isCmpCurrentSortOrder()) {
-            return $this->getStoreFrontCurrentPage() === $param;
+            return $this->getCurrentPageNumber() === $param;
         }
         return $result;
     }
@@ -63,8 +63,79 @@ class Pager extends AbstractBlock
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
         if ($this->isCmpCurrentSortOrder()) {
-            $lastPage = $this->getLastPageNumber($pager->getCollection());
-            return range(1,$lastPage);
+            $start = 0;
+            $end = 0;
+            $frameLength = $pager->getFrameLength();
+
+            if ($this->getLastPageNumber() <= $frameLength) {
+                $start = 1;
+                $end = $this->getLastPageNumber();
+            } else {
+                $half = ceil($frameLength / 2);
+                if ($this->getCurrentPageNumber() >= $half && $this->getCurrentPageNumber() <= $this->getLastPageNumber() - $half) {
+                    $start = $this->getCurrentPageNumber() - $half + 1;
+                    $end = $start + $frameLength - 1;
+                } elseif ($this->getCurrentPageNumber() < $half) {
+                    $start = 1;
+                    $end = $frameLength;
+                } elseif ($this->getCurrentPageNumber() > $this->getLastPageNumber() - $half) {
+                    $end = $this->getLastPageNumber();
+                    $start = $end - $frameLength + 1;
+                }
+            }
+            return range($start,$end);
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoPager $pager
+     * @param $result
+     * @return bool
+     */
+    public function afterIsFirstPage(MagentoPager $pager, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            return $this->getCurrentPageNumber() === 1;
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoPager $pager
+     * @param $result
+     * @return bool
+     */
+    public function afterIsLastPage(MagentoPager $pager, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            return $this->getLastPageNumber() === $this->getCurrentPageNumber();
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoPager $pager
+     * @param $result
+     * @return string
+     */
+    public function afterGetNextPageUrl(MagentoPager $pager, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            return $pager->getPageUrl($this->getCurrentPageNumber() + 1);
+        }
+        return $result;
+    }
+
+    /**
+     * @param MagentoPager $pager
+     * @param $result
+     * @return string
+     */
+    public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
+    {
+        if ($this->isCmpCurrentSortOrder()) {
+            return $pager->getPageUrl($this->getCurrentPageNumber() - 1);
         }
         return $result;
     }

@@ -56,6 +56,9 @@ abstract class AbstractBlock extends Template
     public static $totalProducts;
 
     /** @var int */
+    public static $limit;
+
+    /** @var int */
     private $lastPageNumber;
 
     /** @var Http */
@@ -153,7 +156,7 @@ abstract class AbstractBlock extends Template
     {
         if ($this->isCmpCurrentSortOrder()) {
             $pageSize = $block->getCollection()->getPageSize();
-            $currentPage = $this->getStoreFrontCurrentPage();
+            $currentPage = $this->getCurrentPageNumber();
             return $pageSize * ($currentPage - 1) + 1;
         }
         return $result;
@@ -168,7 +171,7 @@ abstract class AbstractBlock extends Template
     {
         if ($this->isCmpCurrentSortOrder()) {
             $pageSize = $block->getCollection()->getPageSize();
-            $currentPage = $this->getStoreFrontCurrentPage();
+            $currentPage = $this->getCurrentPageNumber();
             $totalResultOfPage = $block->getCollection()->count();
             return $pageSize * ($currentPage - 1) + $totalResultOfPage;
         }
@@ -196,7 +199,7 @@ abstract class AbstractBlock extends Template
     public function afterGetLastPageNum($block, $result)
     {
         if ($this->isCmpCurrentSortOrder()) {
-            return $this->getLastPageNumber($block->getCollection());
+            return $this->getLastPageNumber();
         }
         return $result;
     }
@@ -205,20 +208,35 @@ abstract class AbstractBlock extends Template
      * @param Collection $collection
      * @return int
      */
-    public function getLastPageNumber(Collection $collection)
+    public function getLastPageNumber()
     {
         if ($this->lastPageNumber !== null) {
             return $this->lastPageNumber;
         }
-        $pageSize = (int)$collection->getPageSize();
-        $this->lastPageNumber = (int) ceil(self::$totalProducts/$pageSize);
+        $this->lastPageNumber = (int) ceil(self::$totalProducts/self::$limit);
         return $this->lastPageNumber;
     }
 
     /**
      * @return int
      */
-    public function getStoreFrontCurrentPage()
+    public function getLimit()
+    {
+        return self::$limit;
+    }
+
+    /**
+     * @param int $limit
+     */
+    public function setLimit(int $limit)
+    {
+        self::$limit = $limit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentPageNumber()
     {
         return (int)$this->httpRequest->getParam('p', '1');
     }

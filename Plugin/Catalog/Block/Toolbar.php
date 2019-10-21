@@ -152,6 +152,7 @@ class Toolbar extends AbstractBlock
             try {
                 /* @var FulltextCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
+                $this->setLimit($subjectCollection->getPageSize());
                 $result = $this->getCmpResult($store, $subjectCollection);
                 if ($result instanceof CategoryMerchandisingResult
                     && $subjectCollection instanceof FulltextCollection
@@ -190,7 +191,6 @@ class Toolbar extends AbstractBlock
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-        $limit = $collection->getPageSize();
         $personalizationResult = null;
 
         // Build filters
@@ -200,7 +200,7 @@ class Toolbar extends AbstractBlock
         );
 
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $store, $limit, &$personalizationResult) {
+            function () use ($nostoAccount, $store, &$personalizationResult) {
                 /** @noinspection PhpDeprecationInspection */
                 $category = $this->registry->registry('current_category');
                 $categoryString = $this->categoryBuilder->build($category, $store);
@@ -209,8 +209,8 @@ class Toolbar extends AbstractBlock
                     $this->nostoFilterBuilder,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $categoryString,
-                    $this->getStoreFrontCurrentPage() - 1,
-                    $limit
+                    $this->getCurrentPageNumber() - 1,
+                    $this->getLimit()
                 );
             },
             self::TIME_PROF_GRAPHQL_QUERY
