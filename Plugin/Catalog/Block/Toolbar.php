@@ -42,6 +42,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -61,6 +62,8 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
+use Magento\LayeredNavigation\Block\Navigation\State;
 use Zend_Db_Expr;
 
 class Toolbar extends Template
@@ -85,8 +88,14 @@ class Toolbar extends Template
     /** @var CookieManagerInterface */
     private $cookieManager;
 
+    /** @var State */
+    private $state;
+
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
+
+    /** @var NostoFilterBuilder  */
+    private $nostoFilterBuilder;
 
     /** @var NostoLogger */
     private $logger;
@@ -102,7 +111,9 @@ class Toolbar extends Template
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
      * @param NostoLogger $logger
+     * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
+     * @param State $state
      * @param array $data
      */
     public function __construct(
@@ -113,7 +124,9 @@ class Toolbar extends Template
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
         NostoLogger $logger,
+        NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
+        State $state,
         array $data = []
     ) {
         $this->nostoCmpHelperData = $nostoCmpHelperData;
@@ -123,7 +136,9 @@ class Toolbar extends Template
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
         $this->logger = $logger;
+        $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
+        $this->state = $state;
         parent::__construct($context, $data);
     }
 
@@ -178,6 +193,7 @@ class Toolbar extends Template
      * @param FulltextCollection $collection
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
+     * @throws LocalizedException
      */
     private function getCmpResult(Store $store, FulltextCollection $collection)
     {
@@ -185,17 +201,25 @@ class Toolbar extends Template
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-        /** @noinspection PhpDeprecationInspection */
-        $category = $this->registry->registry('current_category');
-        $categoryString = $this->categoryBuilder->build($category, $store);
-        $nostoCustomer = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+
         $limit = $collection->getSize();
         $personalizationResult = null;
+
+        // Build filters
+        $this->nostoFilterBuilder->init($store);
+        $this->nostoFilterBuilder->buildFromSelectedFilters(
+            $this->state->getActiveFilters()
+        );
+
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $nostoCustomer, $categoryString, $limit, &$personalizationResult) {
+            function () use ($nostoAccount, $store, $limit, &$personalizationResult) {
+                /** @noinspection PhpDeprecationInspection */
+                $category = $this->registry->registry('current_category');
+                $categoryString = $this->categoryBuilder->build($category, $store);
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
-                    $nostoCustomer,
+                    $this->nostoFilterBuilder,
+                    $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $categoryString,
                     $limit
                 );
