@@ -40,6 +40,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
+use Nosto\NostoException;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
@@ -147,12 +148,18 @@ class FilterBuilder
                 ));
                 return;
         }
-        $this->mapValueToFilter($filterName, $value);
+        try {
+            $this->mapValueToFilter($filterName, $value);
+        } catch (NostoException $e) {
+            $this->logger->info($e);
+        }
+
     }
 
     /**
      * @param string $name
      * @param string|array $value
+     * @throws NostoException
      */
     private function mapValueToFilter(string $name, $value)
     {
@@ -193,15 +200,18 @@ class FilterBuilder
     /**
      * @param string|int|array $value
      * @return array
+     * @throws NostoException
      */
     private function makeArrayFromValue($value)
     {
-        if (is_string($value)) {
+        if (is_string($value) || is_numeric($value)) {
             $value = [$value];
         }
-        if (is_numeric($value)) {
-            $value = [$value];
+
+        if (is_array($value)) {
+            return $value;
         }
-        return $value;
+
+        throw new NostoException('Can not map value to filter');
     }
 }
