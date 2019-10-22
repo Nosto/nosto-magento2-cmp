@@ -38,8 +38,31 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 
+use Magento\Backend\Block\Template\Context;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Logger\Logger as NostoLogger;
+
 class Pager extends AbstractBlock
 {
+    /**
+     * Pager constructor.
+     * @param Context $context
+     * @param NostoCmpHelperData $nostoCmpHelperData
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param ParameterResolverInterface $parameterResolver
+     * @param NostoLogger $logger
+     */
+    public function __construct(
+        Context $context,
+        NostoCmpHelperData $nostoCmpHelperData,
+        NostoHelperAccount $nostoHelperAccount,
+        ParameterResolverInterface $parameterResolver,
+        NostoLogger $logger
+    ) {
+        parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
+    }
+
 
     /**
      * @param MagentoPager $pager
@@ -50,7 +73,7 @@ class Pager extends AbstractBlock
     public function afterIsPageCurrent(MagentoPager $pager, $result, $param)
     {
         if ($this->isCmpTakingOverCatalog()) {
-            return $this->getCurrentPageNumber() === $param;
+            return $this->getCurrentPageNumber() === (int) $param;
         }
         return $result;
     }

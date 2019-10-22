@@ -50,4 +50,18 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
+    <type name="Nosto\Cmp\Plugin\Catalog\Block\Pager">
+        <arguments>
+            <argument name="parameterResolver" xsi:type="object">
+                Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver
+            </argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Plugin\Catalog\Block\Toolbar">
+        <arguments>
+            <argument name="parameterResolver" xsi:type="object">
+                Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver
+            </argument>
+        </arguments>
+    </type>
 </config>

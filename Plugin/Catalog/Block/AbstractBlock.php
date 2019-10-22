@@ -38,8 +38,6 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
@@ -61,8 +59,8 @@ abstract class AbstractBlock extends Template
     /** @var int */
     private $lastPageNumber;
 
-    /** @var Http */
-    public $httpRequest;
+    /** @var ParameterResolverInterface */
+    public $paramResolver;
 
     /**  @var StoreManagerInterface */
     public $storeManager;
@@ -79,19 +77,19 @@ abstract class AbstractBlock extends Template
     /**
      * AbstractBlock constructor.
      * @param Context $context
-     * @param Http $httpRequest
+     * @param ParameterResolverInterface $parameterResolver
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoLogger $logger
      */
     public function __construct(
         Context $context,
-        Http $httpRequest,
+        ParameterResolverInterface $parameterResolver,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         NostoLogger $logger
     ) {
-        $this->httpRequest = $httpRequest;
+        $this->paramResolver = $parameterResolver;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->logger = $logger;
@@ -116,8 +114,7 @@ abstract class AbstractBlock extends Template
         }
 
         $currentOrder = $this->getCurrentOrder();
-        if ($currentOrder !== null
-            && $currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
+        if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
@@ -145,7 +142,7 @@ abstract class AbstractBlock extends Template
      */
     private function getCurrentOrder()
     {
-        return $this->httpRequest->getParam('product_list_order');
+        return $this->paramResolver->getSortingOrder();
     }
 
     /**
@@ -258,6 +255,6 @@ abstract class AbstractBlock extends Template
      */
     public function getCurrentPageNumber()
     {
-        return (int)$this->httpRequest->getParam('p', '1');
+        return $this->paramResolver->getCurrentPage();
     }
 }

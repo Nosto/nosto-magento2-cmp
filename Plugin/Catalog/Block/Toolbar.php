@@ -46,8 +46,8 @@ use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
@@ -61,8 +61,6 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
-use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Framework\App\Request\Http;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -97,7 +95,7 @@ class Toolbar extends AbstractBlock
      * @param CategoryBuilder $builder
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
-     * @param Http $httpRequest
+     * @param ParameterResolverInterface $parameterResolver
      * @param NostoLogger $logger
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
@@ -110,7 +108,7 @@ class Toolbar extends AbstractBlock
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
-        Http $httpRequest,
+        ParameterResolverInterface $parameterResolver,
         NostoLogger $logger,
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
@@ -123,7 +121,7 @@ class Toolbar extends AbstractBlock
         $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
-        parent::__construct($context, $httpRequest, $nostoCmpHelperData, $nostoHelperAccount, $logger);
+        parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
     }
 
     /**
