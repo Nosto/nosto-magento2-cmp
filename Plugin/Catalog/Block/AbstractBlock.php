@@ -114,6 +114,10 @@ abstract class AbstractBlock extends Template
         }
 
         $currentOrder = $this->getCurrentOrder();
+        if ($currentOrder === null) {
+            $this->logger->info('Current sorting order can not be null');
+            return false;
+        }
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
@@ -131,14 +135,14 @@ abstract class AbstractBlock extends Template
      */
     public function isCmpTakingOverCatalog()
     {
-        if ($this->isCmpCurrentSortOrder() && self::$totalProducts !== null) {
+        if ($this->isCmpCurrentSortOrder() && self::$totalProducts !== 0) {
             return true;
         }
         return false;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     private function getCurrentOrder()
     {

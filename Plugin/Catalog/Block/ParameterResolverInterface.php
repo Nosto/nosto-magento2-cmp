@@ -39,7 +39,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 interface ParameterResolverInterface
 {
     /**
-     * @return string|null
+     * @return string
      */
     public function getSortingOrder();
 

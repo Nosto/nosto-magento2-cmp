@@ -36,7 +36,10 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
+use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http;
+use /** @noinspection PhpDeprecationInspection */
+    Magento\Framework\Registry;
 
 class DefaultParameterResolver implements ParameterResolverInterface
 {
@@ -47,13 +50,18 @@ class DefaultParameterResolver implements ParameterResolverInterface
     /** @var Http */
     private $httpRequest;
 
+    /** @var Registry */
+    private $registry;
+
     /**
      * DefaultParameterResolver constructor.
      * @param Http $httpRequest
+     * @param Registry $registry
      */
-    public function __construct(Http $httpRequest)
+    public function __construct(Http $httpRequest, Registry $registry)
     {
         $this->httpRequest = $httpRequest;
+        $this->registry = $registry;
     }
 
     /**
@@ -61,7 +69,10 @@ class DefaultParameterResolver implements ParameterResolverInterface
      */
     public function getSortingOrder()
     {
-        return $this->httpRequest->getParam(self::DEFAULT_SORTING_ORDER_PARAM);
+        return $this->httpRequest->getParam(
+            self::DEFAULT_SORTING_ORDER_PARAM,
+            $this->getDefaultCategorySorting()
+        );
     }
 
     /**
@@ -72,4 +83,16 @@ class DefaultParameterResolver implements ParameterResolverInterface
         return (int)$this->httpRequest->getParam(self::DEFAULT_CURRENT_PAGE_PARAM, '1');
     }
 
+    /**
+     * @return string
+     */
+    private function getDefaultCategorySorting()
+    {
+        /**
+         * @var Category $category
+         * @noinspection PhpDeprecationInspection
+         */
+        $category = $this->registry->registry('current_category');
+        return $category->getDefaultSortBy();
+    }
 }
