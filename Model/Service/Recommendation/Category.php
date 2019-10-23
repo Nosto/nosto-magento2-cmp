@@ -72,6 +72,7 @@ class Category
      * @param FilterBuilder $filters
      * @param $nostoCustomerId
      * @param $category
+     * @param int $pageNumber
      * @param int $limit
      * @return CategoryMerchandisingResult|null
      */
@@ -80,6 +81,7 @@ class Category
         FilterBuilder $filters,
         $nostoCustomerId,
         $category,
+        $pageNumber,
         $limit = self::MAX_PRODUCT_AMOUNT
     ) {
         $limit = self::MAX_PRODUCT_AMOUNT < $limit ? self::MAX_PRODUCT_AMOUNT : $limit;
@@ -93,6 +95,7 @@ class Category
             $nostoAccount,
             $nostoCustomerId,
             $category,
+            $pageNumber,
             $filters->getIncludeFilters(),
             $filters->getExcludeFilters(),
             '',

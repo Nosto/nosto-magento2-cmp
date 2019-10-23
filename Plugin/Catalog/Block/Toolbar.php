@@ -46,10 +46,8 @@ use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\View\Element\Template;
+use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
@@ -63,21 +61,11 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
-use Magento\LayeredNavigation\Block\Navigation\State;
 use Zend_Db_Expr;
 
-class Toolbar extends Template
+class Toolbar extends AbstractBlock
 {
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
-
-    /**  @var StoreManagerInterface */
-    private $storeManager;
-
-    /** @var NostoCmpHelperData */
-    private $nostoCmpHelperData;
-
-    /** @var NostoHelperAccount */
-    private $nostoHelperAccount;
 
     /**  @var CategoryBuilder */
     private $categoryBuilder;
@@ -97,9 +85,6 @@ class Toolbar extends Template
     /** @var NostoFilterBuilder  */
     private $nostoFilterBuilder;
 
-    /** @var NostoLogger */
-    private $logger;
-
     private static $isProcessed = false;
 
     /**
@@ -110,11 +95,11 @@ class Toolbar extends Template
      * @param CategoryBuilder $builder
      * @param CategoryRecommendation $categoryRecommendation
      * @param CookieManagerInterface $cookieManager
+     * @param ParameterResolverInterface $parameterResolver
      * @param NostoLogger $logger
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
-     * @param array $data
      */
     public function __construct(
         Context $context,
@@ -123,23 +108,20 @@ class Toolbar extends Template
         CategoryBuilder $builder,
         CategoryRecommendation $categoryRecommendation,
         CookieManagerInterface $cookieManager,
+        ParameterResolverInterface $parameterResolver,
         NostoLogger $logger,
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
-        State $state,
-        array $data = []
+        State $state
     ) {
-        $this->nostoCmpHelperData = $nostoCmpHelperData;
-        $this->nostoHelperAccount = $nostoHelperAccount;
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
         $this->categoryRecommendation = $categoryRecommendation;
-        $this->logger = $logger;
         $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
-        parent::__construct($context, $data);
+        parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
     }
 
     /**
@@ -157,14 +139,11 @@ class Toolbar extends Template
         }
         /* @var Store $store */
         $store = $this->storeManager->getStore();
-        $currentOrder = $subject->getCurrentOrder();
-        if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
-            && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
-            && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
-        ) {
+        if ($this->isCmpCurrentSortOrder()) {
             try {
                 /* @var FulltextCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
+                $this->setLimit($subjectCollection->getPageSize());
                 $result = $this->getCmpResult($store, $subjectCollection);
                 if ($result instanceof CategoryMerchandisingResult
                     && $subjectCollection instanceof FulltextCollection
@@ -174,9 +153,11 @@ class Toolbar extends Template
                     if (!empty($nostoProductIds)
                         && NostoHelperArray::onlyScalarValues($nostoProductIds)
                     ) {
+                        $this->setTotalProducts($result->getTotalPrimaryCount());
                         ProductDebug::getInstance()->setProductIds($nostoProductIds);
                         $nostoProductIds = array_reverse($nostoProductIds);
                         $this->sortByProductIds($subjectCollection, $nostoProductIds);
+                        $this->whereInProductIds($subjectCollection, $nostoProductIds);
                         $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
                     }
                 }
@@ -201,8 +182,6 @@ class Toolbar extends Template
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-
-        $limit = $collection->getSize();
         $personalizationResult = null;
 
         // Build filters
@@ -212,7 +191,7 @@ class Toolbar extends Template
         );
 
         ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $store, $limit, &$personalizationResult) {
+            function () use ($nostoAccount, $store, &$personalizationResult) {
                 /** @noinspection PhpDeprecationInspection */
                 $category = $this->registry->registry('current_category');
                 $categoryString = $this->categoryBuilder->build($category, $store);
@@ -221,7 +200,8 @@ class Toolbar extends Template
                     $this->nostoFilterBuilder,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $categoryString,
-                    $limit
+                    $this->getCurrentPageNumber() - 1,
+                    $this->getLimit()
                 );
             },
             self::TIME_PROF_GRAPHQL_QUERY
@@ -241,6 +221,19 @@ class Toolbar extends Template
             new Zend_Db_Expr($this->getSecondarySort())
         ];
         $select->order($zendExpression);
+    }
+
+    /**
+     * @param FulltextCollection $collection
+     * @param array $nostoProductIds
+     */
+    private function whereInProductIds(FulltextCollection $collection, array $nostoProductIds)
+    {
+        $select = $collection->getSelect();
+        $zendExpression = new Zend_Db_Expr(
+            'e.entity_id IN (' . implode(',', $nostoProductIds ) . ')'
+        );
+        $select->where($zendExpression);
     }
 
     /**
