@@ -2,7 +2,7 @@
   "name": "nosto/module-nostocmp",
   "description": "Personalize category pages",
   "type": "magento2-module",
-  "version": "0.1.0",
+  "version": "1.0.0-rc1",
   "require-dev": {
     "php": ">=7.1.0"
   },
