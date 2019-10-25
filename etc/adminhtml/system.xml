@@ -45,12 +45,12 @@
             <resource>Nosto_Cmp::config_nosto</resource>
             <group id="flags" translate="label" type="text" sortOrder="10" showInDefault="1"
                    showInWebsite="1" showInStore="1">
-                <label>Category Personalisation</label>
+                <label>Category Merchandising and Personalisation</label>
                 <field id="category_sorting" translate="label comment" type="select" sortOrder="120"
                        showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Category sorting (experimental)</label>
+                    <label>Category Merchandising</label>
                     <comment>
-                        <![CDATA[Experimental feature. Might be removed in future releases. Contact Nosto for further details.]]>
+                        <![CDATA[Enable Category Merchandising and Personalisation]]>
                     </comment>
                     <source_model>Nosto\Cmp\Model\Config\Source\CategorySorting</source_model>
                     <frontend_model>Nosto\Cmp\Model\Config\Frontend\CategorySorting</frontend_model>
