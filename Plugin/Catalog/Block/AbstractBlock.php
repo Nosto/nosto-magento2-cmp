@@ -75,7 +75,10 @@ abstract class AbstractBlock extends Template
     public $logger;
 
     /** @var string */
-    private static $currentOrder;
+    public static $currentOrder;
+
+    /** @var bool */
+    public static $catalogTakeover;
 
     /**
      * AbstractBlock constructor.
@@ -136,6 +139,17 @@ abstract class AbstractBlock extends Template
      * @return bool
      */
     public function isCmpTakingOverCatalog()
+    {
+        if (self::$catalogTakeover === null) {
+            self::$catalogTakeover = $this->isCmpResult();
+        }
+        return self::$catalogTakeover;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCmpResult()
     {
         if (!$this->isCmpCurrentSortOrder() ||
             (self::$totalProducts === 0 || self::$totalProducts === null)) {
