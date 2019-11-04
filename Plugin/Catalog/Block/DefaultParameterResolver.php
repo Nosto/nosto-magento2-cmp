@@ -84,7 +84,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function getDefaultCategorySorting()
     {
@@ -93,6 +93,9 @@ class DefaultParameterResolver implements ParameterResolverInterface
          * @noinspection PhpDeprecationInspection
          */
         $category = $this->registry->registry('current_category');
-        return $category->getDefaultSortBy();
+        if ($category instanceof Category) {
+            return $category->getDefaultSortBy();
+        }
+        return null;
     }
 }
