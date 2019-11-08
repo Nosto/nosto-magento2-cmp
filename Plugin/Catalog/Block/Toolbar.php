@@ -58,7 +58,7 @@ use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\CategoryString\Builder as CategoryBuilder;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Zend_Db_Expr;
@@ -194,7 +194,7 @@ class Toolbar extends AbstractBlock
             function () use ($nostoAccount, $store, &$personalizationResult) {
                 /** @noinspection PhpDeprecationInspection */
                 $category = $this->registry->registry('current_category');
-                $categoryString = $this->categoryBuilder->build($category, $store);
+                $categoryString = $this->categoryBuilder->getCategory($category, $store);
                 $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
                     $this->nostoFilterBuilder,
