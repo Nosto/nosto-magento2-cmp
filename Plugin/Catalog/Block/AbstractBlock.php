@@ -152,7 +152,8 @@ abstract class AbstractBlock extends Template
     private function isCmpResult()
     {
         if (!$this->isCmpCurrentSortOrder() ||
-            (self::$totalProducts === 0 || self::$totalProducts === null)) {
+            (self::$totalProducts === 0 || self::$totalProducts === null)
+           ) {
             return false;
         }
         return true;
