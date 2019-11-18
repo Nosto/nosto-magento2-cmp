@@ -74,6 +74,12 @@ abstract class AbstractBlock extends Template
     /** @var NostoLogger */
     public $logger;
 
+    /** @var string */
+    public static $currentOrder;
+
+    /** @var bool */
+    public static $catalogTakeover;
+
     /**
      * AbstractBlock constructor.
      * @param Context $context
@@ -115,7 +121,6 @@ abstract class AbstractBlock extends Template
 
         $currentOrder = $this->getCurrentOrder();
         if ($currentOrder === null) {
-            $this->logger->info('Current sorting order can not be null');
             return false;
         }
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
@@ -135,10 +140,23 @@ abstract class AbstractBlock extends Template
      */
     public function isCmpTakingOverCatalog()
     {
-        if ($this->isCmpCurrentSortOrder() && self::$totalProducts !== 0) {
-            return true;
+        if (self::$catalogTakeover === null) {
+            self::$catalogTakeover = $this->isCmpResult();
         }
-        return false;
+        return self::$catalogTakeover;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCmpResult()
+    {
+        if (!$this->isCmpCurrentSortOrder() ||
+            (self::$totalProducts === 0 || self::$totalProducts === null)
+           ) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -146,7 +164,10 @@ abstract class AbstractBlock extends Template
      */
     private function getCurrentOrder()
     {
-        return $this->paramResolver->getSortingOrder();
+        if (self::$currentOrder === null) {
+            self::$currentOrder = $this->paramResolver->getSortingOrder();
+        }
+        return self::$currentOrder;
     }
 
     /**
