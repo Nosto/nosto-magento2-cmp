@@ -51,4 +51,7 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
+    <type name="Magento\Framework\Search\SearchEngineInterface">
+        <plugin name="nosto_elastic" type="Nosto\Cmp\Plugin\Search\Model\SearchEngine"/>
+    </type>
 </config>
