@@ -1,1 +1,3 @@
-# Nosto CMP extension for Magento 2
+# Category Merchandising extension for Magento 2
+
+With Category Merchandising, you can arm some of your highest trafficked pages with your own customized merchandising rules using our Sorting and Highlighting capabilities. These allow you to simultaneously sequence your category pages according to specific merchandising goals and highlight specific products by heroing them, and placing them in the forefront of your users.
