@@ -38,19 +38,19 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="nosto_cmp" translate="label" type="text" sortOrder="102" showInDefault="1"
+        <section id="nosto_cmp" translate="label" type="text" sortOrder="103" showInDefault="1"
                  showInWebsite="1" showInStore="1">
-            <label>Nosto CMP</label>
+            <label>Nosto Category Merchandising</label>
             <tab>service</tab>
             <resource>Nosto_Cmp::config_nosto</resource>
             <group id="flags" translate="label" type="text" sortOrder="10" showInDefault="1"
                    showInWebsite="1" showInStore="1">
-                <label>Category Merchandising and Personalisation</label>
+                <label>Category Merchandising</label>
                 <field id="category_sorting" translate="label comment" type="select" sortOrder="120"
                        showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Category Merchandising</label>
                     <comment>
-                        <![CDATA[Enable Category Merchandising and Personalisation]]>
+                        <![CDATA[Enable Category Merchandising]]>
                     </comment>
                     <source_model>Nosto\Cmp\Model\Config\Source\CategorySorting</source_model>
                     <frontend_model>Nosto\Cmp\Model\Config\Frontend\CategorySorting</frontend_model>

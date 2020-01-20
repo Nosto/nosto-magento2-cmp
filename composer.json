@@ -1,6 +1,6 @@
 {
   "name": "nosto/module-nostocmp",
-  "description": "Personalize category pages",
+  "description": "Nosto Category Merchandising extension for Magento 2",
   "type": "magento2-module",
   "version": "1.0.0-rc1",
   "require-dev": {

@@ -76,7 +76,7 @@ class CategorySorting extends AbstractHelper
     public static function getNostoSortingOptions()
     {
         return [
-            self::NOSTO_PERSONALIZED_KEY => __('Personalized for you')
+            self::NOSTO_PERSONALIZED_KEY => __('Relevance')
         ];
     }
 
