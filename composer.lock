@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1cabb92095e3b53f132d21c66f9ff0f",
+    "content-hash": "f90c866f37e1c4f3542c134ce2900873",
     "packages": [
         {
             "name": "colinmollenhour/credis",
-            "version": "1.10.1",
+            "version": "1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/credis.git",
-                "reference": "c1cab895f2331a1877738b282d0d8b1ff6d4c92d"
+                "reference": "bd1da4698ab1918477f9e71e5ff0062b9a345008"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/c1cab895f2331a1877738b282d0d8b1ff6d4c92d",
-                "reference": "c1cab895f2331a1877738b282d0d8b1ff6d4c92d",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/bd1da4698ab1918477f9e71e5ff0062b9a345008",
+                "reference": "bd1da4698ab1918477f9e71e5ff0062b9a345008",
                 "shasum": ""
             },
             "require": {
@@ -44,20 +44,20 @@
             ],
             "description": "Credis is a lightweight interface to the Redis key-value store which wraps the phpredis library when available for better performance.",
             "homepage": "https://github.com/colinmollenhour/credis",
-            "time": "2019-03-05T16:29:14+00:00"
+            "time": "2019-11-26T18:09:45+00:00"
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                "reference": "4949ca28b86037abb44984c77bab9d0a4e075643"
+                "reference": "669521218794f125c7b668252f4f576eda65e1e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/4949ca28b86037abb44984c77bab9d0a4e075643",
-                "reference": "4949ca28b86037abb44984c77bab9d0a4e075643",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/669521218794f125c7b668252f4f576eda65e1e4",
+                "reference": "669521218794f125c7b668252f4f576eda65e1e4",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,7 @@
             ],
             "description": "A Redis-based session handler with optimistic locking",
             "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
-            "time": "2019-03-18T14:43:14+00:00"
+            "time": "2020-01-08T17:41:01+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -89,12 +89,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "10bb96592168a0f8e8f6dcde3532d9fa50b0b527"
+                "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/10bb96592168a0f8e8f6dcde3532d9fa50b0b527",
-                "reference": "10bb96592168a0f8e8f6dcde3532d9fa50b0b527",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/47fe531de31fca4a1b997f87308e7d7804348f7e",
+                "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^4.8.35 || ^5.7 || 6.5 - 8",
                 "psr/log": "^1.0",
-                "symfony/process": "^2.5 || ^3.0 || ^4.0"
+                "symfony/process": "^2.5 || ^3.0 || ^4.0 || ^5.0"
             },
             "type": "library",
             "extra": {
@@ -137,7 +137,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2019-08-30T08:44:50+00:00"
+            "time": "2020-01-13T10:02:55+00:00"
         },
         {
             "name": "composer/composer",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "f753c15664c24d95bb64bd99ddc32cb01d1e32b8"
+                "reference": "f4762ef0216ae435ab053f68e5bcdff966cf8d4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/f753c15664c24d95bb64bd99ddc32cb01d1e32b8",
-                "reference": "f753c15664c24d95bb64bd99ddc32cb01d1e32b8",
+                "url": "https://api.github.com/repos/composer/composer/zipball/f4762ef0216ae435ab053f68e5bcdff966cf8d4f",
+                "reference": "f4762ef0216ae435ab053f68e5bcdff966cf8d4f",
                 "shasum": ""
             },
             "require": {
@@ -163,10 +163,10 @@
                 "psr/log": "^1.0",
                 "seld/jsonlint": "^1.4",
                 "seld/phar-utils": "^1.0",
-                "symfony/console": "^2.7 || ^3.0 || ^4.0",
-                "symfony/filesystem": "^2.7 || ^3.0 || ^4.0",
-                "symfony/finder": "^2.7 || ^3.0 || ^4.0",
-                "symfony/process": "^2.7 || ^3.0 || ^4.0"
+                "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "symfony/filesystem": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "symfony/finder": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "symfony/process": "^2.7 || ^3.0 || ^4.0 || ^5.0"
             },
             "conflict": {
                 "symfony/console": "2.8.38"
@@ -217,7 +217,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2019-10-06T20:15:11+00:00"
+            "time": "2020-02-04T11:58:34+00:00"
         },
         {
             "name": "composer/semver",
@@ -225,12 +225,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "37e4db276f38376a63ea67e96b09571d74312779"
+                "reference": "39da74948fd424cf0e8321b96f04c2a1b2480a15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/37e4db276f38376a63ea67e96b09571d74312779",
-                "reference": "37e4db276f38376a63ea67e96b09571d74312779",
+                "url": "https://api.github.com/repos/composer/semver/zipball/39da74948fd424cf0e8321b96f04c2a1b2480a15",
+                "reference": "39da74948fd424cf0e8321b96f04c2a1b2480a15",
                 "shasum": ""
             },
             "require": {
@@ -278,7 +278,7 @@
                 "validation",
                 "versioning"
             ],
-            "time": "2019-04-14T09:35:30+00:00"
+            "time": "2020-01-14T12:12:58+00:00"
         },
         {
             "name": "composer/spdx-licenses",
@@ -286,12 +286,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "7ac1e6aec371357df067f8a688c3d6974df68fa5"
+                "reference": "1aba2771d5ff5f8a41dc41c6ba6cc8e01844b67b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/7ac1e6aec371357df067f8a688c3d6974df68fa5",
-                "reference": "7ac1e6aec371357df067f8a688c3d6974df68fa5",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/1aba2771d5ff5f8a41dc41c6ba6cc8e01844b67b",
+                "reference": "1aba2771d5ff5f8a41dc41c6ba6cc8e01844b67b",
                 "shasum": ""
             },
             "require": {
@@ -338,28 +338,28 @@
                 "spdx",
                 "validator"
             ],
-            "time": "2019-07-29T10:31:59+00:00"
+            "time": "2019-12-20T14:03:39+00:00"
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.3.3",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "46867cbf8ca9fb8d60c506895449eb799db1184f"
+                "reference": "cbe23383749496fe0f373345208b79568e4bc248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/46867cbf8ca9fb8d60c506895449eb799db1184f",
-                "reference": "46867cbf8ca9fb8d60c506895449eb799db1184f",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/cbe23383749496fe0f373345208b79568e4bc248",
+                "reference": "cbe23383749496fe0f373345208b79568e4bc248",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.2 || ^7.0",
+                "php": "^5.3.2 || ^7.0 || ^8.0",
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5"
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || 6.5 - 8"
             },
             "type": "library",
             "autoload": {
@@ -377,12 +377,12 @@
                     "email": "john-stevenson@blueyonder.co.uk"
                 }
             ],
-            "description": "Restarts a process without xdebug.",
+            "description": "Restarts a process without Xdebug.",
             "keywords": [
                 "Xdebug",
                 "performance"
             ],
-            "time": "2019-05-27T17:52:04+00:00"
+            "time": "2019-11-06T16:40:04+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -413,20 +413,21 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "dev-master",
+            "version": "6.5.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "5084d8e9f7721f3b7ab502d501e486becc3671d9"
+                "reference": "400cefd25a23a3098486bfb52685b5367a464171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5084d8e9f7721f3b7ab502d501e486becc3671d9",
-                "reference": "5084d8e9f7721f3b7ab502d501e486becc3671d9",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/400cefd25a23a3098486bfb52685b5367a464171",
+                "reference": "400cefd25a23a3098486bfb52685b5367a464171",
                 "shasum": ""
             },
             "require": {
@@ -441,12 +442,13 @@
                 "psr/log": "^1.1"
             },
             "suggest": {
+                "ext-intl": "Required for Internationalized Domain Name (IDN) support",
                 "psr/log": "Required for using the Log middleware"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.3-dev"
+                    "dev-master": "6.5-dev"
                 }
             },
             "autoload": {
@@ -479,7 +481,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2019-10-18T10:17:52+00:00"
+            "time": "2019-12-30T04:52:42+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -487,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "17d36ed176c998839582c739ce0753381598edf0"
+                "reference": "ac2529fc650684c5cd687e2b462d046cdbed556e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/17d36ed176c998839582c739ce0753381598edf0",
-                "reference": "17d36ed176c998839582c739ce0753381598edf0",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/ac2529fc650684c5cd687e2b462d046cdbed556e",
+                "reference": "ac2529fc650684c5cd687e2b462d046cdbed556e",
                 "shasum": ""
             },
             "require": {
@@ -530,7 +532,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2019-07-02T14:54:06+00:00"
+            "time": "2019-12-17T17:19:17+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -538,12 +540,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "2595b33c1c924889b474d324f3d719fa40b6954e"
+                "reference": "e193ff330a0f28b5e5f65ed3d804f5e2a89376e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/2595b33c1c924889b474d324f3d719fa40b6954e",
-                "reference": "2595b33c1c924889b474d324f3d719fa40b6954e",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/e193ff330a0f28b5e5f65ed3d804f5e2a89376e3",
+                "reference": "e193ff330a0f28b5e5f65ed3d804f5e2a89376e3",
                 "shasum": ""
             },
             "require": {
@@ -601,27 +603,27 @@
                 "uri",
                 "url"
             ],
-            "time": "2019-08-13T16:05:52+00:00"
+            "time": "2020-02-04T14:54:51+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.x-dev",
+            "version": "5.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4"
+                "reference": "44c6787311242a979fa15c704327c20e7221a0e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/dcb6e1006bb5fd1e392b4daa68932880f37550d4",
-                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/44c6787311242a979fa15c704327c20e7221a0e4",
+                "reference": "44c6787311242a979fa15c704327c20e7221a0e4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.2.20",
+                "friendsofphp/php-cs-fixer": "~2.2.20||~2.15.1",
                 "json-schema/json-schema-test-suite": "1.2.0",
                 "phpunit/phpunit": "^4.8.35"
             },
@@ -667,15 +669,16 @@
                 "json",
                 "schema"
             ],
-            "time": "2019-01-14T23:55:14+00:00"
+            "time": "2019-09-25T14:49:45+00:00"
         },
         {
             "name": "magento/framework",
-            "version": "102.0.3",
+            "version": "102.0.4",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/framework/magento-framework-102.0.3.0.zip",
-                "shasum": "32987478cac15913c94f9b9b20935e119b817f5e"
+                "url": "https://repo.magento.com/archives/magento/framework/magento-framework-102.0.4.0.zip",
+                "reference": null,
+                "shasum": "662049662281a5ca25672ea33ad18de875a17390"
             },
             "require": {
                 "colinmollenhour/php-redis-session-abstract": "~1.4.0",
@@ -686,9 +689,9 @@
                 "ext-gd": "*",
                 "ext-hash": "*",
                 "ext-iconv": "*",
+                "ext-intl": "*",
                 "ext-openssl": "*",
                 "ext-simplexml": "*",
-                "ext-spl": "*",
                 "ext-xsl": "*",
                 "guzzlehttp/guzzle": "^6.3.3",
                 "lib-libxml": "*",
@@ -729,16 +732,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.14.2",
+            "version": "1.14.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "8221062d42a198e431d183bbe672e5e1a2f98c5f"
+                "reference": "726855dfb080089dc7bc7b016624129f8e7bc4e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/8221062d42a198e431d183bbe672e5e1a2f98c5f",
-                "reference": "8221062d42a198e431d183bbe672e5e1a2f98c5f",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/726855dfb080089dc7bc7b016624129f8e7bc4e5",
+                "reference": "726855dfb080089dc7bc7b016624129f8e7bc4e5",
                 "shasum": ""
             },
             "require": {
@@ -772,7 +775,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2019-07-26T16:43:11+00:00"
+            "time": "2019-11-26T15:09:40+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -780,12 +783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "bd95e23bd212a96d75f4e6b2a105063a91fa1971"
+                "reference": "fa82921994db851a8becaf3787a9e73c5976b6f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bd95e23bd212a96d75f4e6b2a105063a91fa1971",
-                "reference": "bd95e23bd212a96d75f4e6b2a105063a91fa1971",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fa82921994db851a8becaf3787a9e73c5976b6f1",
+                "reference": "fa82921994db851a8becaf3787a9e73c5976b6f1",
                 "shasum": ""
             },
             "require": {
@@ -850,32 +853,31 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2019-09-09T11:53:32+00:00"
+            "time": "2019-12-20T14:15:16+00:00"
         },
         {
             "name": "nosto/module-nostotagging",
-            "version": "dev-feature/product-caching-index",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-magento2.git",
-                "reference": "8ecd633170a26c781625737330e76a5ae03b2df7"
+                "reference": "3befebfed0f05f5d11140d2d269abc6a0ab07d54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/8ecd633170a26c781625737330e76a5ae03b2df7",
-                "reference": "8ecd633170a26c781625737330e76a5ae03b2df7",
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/3befebfed0f05f5d11140d2d269abc6a0ab07d54",
+                "reference": "3befebfed0f05f5d11140d2d269abc6a0ab07d54",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "magento/framework": ">=101.0.6|~102.0",
-                "nosto/php-sdk": "~4.0",
+                "nosto/php-sdk": "^4.0.5",
                 "php": ">=7.0.0"
             },
             "require-dev": {
                 "magento-ecg/coding-standard": "2.*",
                 "magento/marketplace-eqp": "1.*",
-                "magento/marketplace-tools": "dev-master",
                 "magento/module-bundle": "100.2.0",
                 "magento/module-catalog": "*",
                 "magento/module-catalog-search": "100.2.0",
@@ -916,20 +918,20 @@
                 "OSL-3.0"
             ],
             "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
-            "time": "2019-10-17T12:44:50+00:00"
+            "time": "2020-02-05T10:41:41+00:00"
         },
         {
             "name": "nosto/php-sdk",
-            "version": "4.0.4",
+            "version": "4.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-php-sdk.git",
-                "reference": "ca4b3a1f7fa1bb07d9a89d453edc2735f0fe5367"
+                "reference": "3846a33b7a4db4ab49d3bae56b459ff209af77dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/ca4b3a1f7fa1bb07d9a89d453edc2735f0fe5367",
-                "reference": "ca4b3a1f7fa1bb07d9a89d453edc2735f0fe5367",
+                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/3846a33b7a4db4ab49d3bae56b459ff209af77dc",
+                "reference": "3846a33b7a4db4ab49d3bae56b459ff209af77dc",
                 "shasum": ""
             },
             "require": {
@@ -940,7 +942,7 @@
                 "vlucas/phpdotenv": ">=2.4.0 <=3.0"
             },
             "require-dev": {
-                "codeception/base": "2.2.9",
+                "codeception/base": "3.1.1",
                 "codeception/c3": "^2.0",
                 "codeception/specify": "^0.4.6",
                 "phan/phan": "^1.2",
@@ -948,7 +950,7 @@
                 "phpmd/phpmd": "^2.6",
                 "sebastian/phpcpd": "^3.0",
                 "squizlabs/php_codesniffer": "^2.6",
-                "symfony/console": "3.2.8",
+                "symfony/console": "3.*",
                 "wimg/php-compatibility": "^8.0"
             },
             "type": "library",
@@ -965,47 +967,52 @@
                 "BSD-3-Clause"
             ],
             "description": "PHP SDK for developing Nosto modules for e-commerce platforms",
-            "time": "2019-10-15T13:55:52+00:00"
+            "time": "2020-01-02T14:27:38+00:00"
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.5.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "94e644f7d2051a5f0fcf77d81605f152eecff0ed"
+                "reference": "bb52d61329132b1946981d894de7fcff38122b04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/94e644f7d2051a5f0fcf77d81605f152eecff0ed",
-                "reference": "94e644f7d2051a5f0fcf77d81605f152eecff0ed",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/bb52d61329132b1946981d894de7fcff38122b04",
+                "reference": "bb52d61329132b1946981d894de7fcff38122b04",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^5.5.9 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.7.*"
+                "bamarni/composer-bin-plugin": "^1.3",
+                "phpunit/phpunit": "^4.8.35 || ^5.0 || ^6.0 || ^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "PhpOption\\": "src/"
+                "psr-4": {
+                    "PhpOption\\": "src/PhpOption/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache2"
+                "Apache-2.0"
             ],
             "authors": [
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com"
+                },
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com"
                 }
             ],
             "description": "Option Type for PHP",
@@ -1015,7 +1022,7 @@
                 "php",
                 "type"
             ],
-            "time": "2015-07-25T16:39:46+00:00"
+            "time": "2020-01-13T12:31:33+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -1023,12 +1030,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "cf8a7ef7159c5d06d986e082000ac35fb8b57280"
+                "reference": "40998159a0907cc523e1f2d1904d45765613a617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/cf8a7ef7159c5d06d986e082000ac35fb8b57280",
-                "reference": "cf8a7ef7159c5d06d986e082000ac35fb8b57280",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/40998159a0907cc523e1f2d1904d45765613a617",
+                "reference": "40998159a0907cc523e1f2d1904d45765613a617",
                 "shasum": ""
             },
             "require": {
@@ -1107,7 +1114,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2019-10-06T00:56:28+00:00"
+            "time": "2020-02-04T12:15:04+00:00"
         },
         {
             "name": "psr/container",
@@ -1214,12 +1221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "c4421fcac1edd5a324fda73e589a5cf96e52ffd0"
+                "reference": "5628725d0e4d687e29575eb41f9d5ee7de33a84c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/c4421fcac1edd5a324fda73e589a5cf96e52ffd0",
-                "reference": "c4421fcac1edd5a324fda73e589a5cf96e52ffd0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/5628725d0e4d687e29575eb41f9d5ee7de33a84c",
+                "reference": "5628725d0e4d687e29575eb41f9d5ee7de33a84c",
                 "shasum": ""
             },
             "require": {
@@ -1253,7 +1260,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2018-11-21T13:42:00+00:00"
+            "time": "2019-11-12T16:45:05+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -1297,16 +1304,16 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.7.1",
+            "version": "1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "d15f59a67ff805a44c50ea0516d2341740f81a38"
+                "reference": "e2e5d290e4d2a4f0eb449f510071392e00e10d19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/d15f59a67ff805a44c50ea0516d2341740f81a38",
-                "reference": "d15f59a67ff805a44c50ea0516d2341740f81a38",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/e2e5d290e4d2a4f0eb449f510071392e00e10d19",
+                "reference": "e2e5d290e4d2a4f0eb449f510071392e00e10d19",
                 "shasum": ""
             },
             "require": {
@@ -1342,7 +1349,7 @@
                 "parser",
                 "validator"
             ],
-            "time": "2018-01-24T12:46:19+00:00"
+            "time": "2019-10-24T14:27:39+00:00"
         },
         {
             "name": "seld/phar-utils",
@@ -1350,12 +1357,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/phar-utils.git",
-                "reference": "7009b5139491975ef6486545a39f3e6dad5ac30a"
+                "reference": "6cfd02404ae22b847d5655b75dfd7bdfbc9c2d53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/7009b5139491975ef6486545a39f3e6dad5ac30a",
-                "reference": "7009b5139491975ef6486545a39f3e6dad5ac30a",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/6cfd02404ae22b847d5655b75dfd7bdfbc9c2d53",
+                "reference": "6cfd02404ae22b847d5655b75dfd7bdfbc9c2d53",
                 "shasum": ""
             },
             "require": {
@@ -1384,9 +1391,9 @@
             ],
             "description": "PHAR file format utilities, for when PHP phars you up",
             "keywords": [
-                "phra"
+                "phar"
             ],
-            "time": "2015-10-13T18:44:15+00:00"
+            "time": "2020-01-13T12:32:57+00:00"
         },
         {
             "name": "symfony/console",
@@ -1465,12 +1472,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "f903e39aca6b4a4a2dbc473a1287b79b6c41cfb8"
+                "reference": "266c9540b475f26122b61ef8b23dd9198f5d1cfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/f903e39aca6b4a4a2dbc473a1287b79b6c41cfb8",
-                "reference": "f903e39aca6b4a4a2dbc473a1287b79b6c41cfb8",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/266c9540b475f26122b61ef8b23dd9198f5d1cfd",
+                "reference": "266c9540b475f26122b61ef8b23dd9198f5d1cfd",
                 "shasum": ""
             },
             "require": {
@@ -1507,7 +1514,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2019-09-16T08:12:51+00:00"
+            "time": "2020-01-21T08:20:44+00:00"
         },
         {
             "name": "symfony/finder",
@@ -1515,12 +1522,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "30898bbac041d71f18862366a7a0987dd5cff7dd"
+                "reference": "d026b07e279342e6233620864927869e3d2b462c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/30898bbac041d71f18862366a7a0987dd5cff7dd",
-                "reference": "30898bbac041d71f18862366a7a0987dd5cff7dd",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/d026b07e279342e6233620864927869e3d2b462c",
+                "reference": "d026b07e279342e6233620864927869e3d2b462c",
                 "shasum": ""
             },
             "require": {
@@ -1556,7 +1563,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2019-09-17T11:12:18+00:00"
+            "time": "2020-02-04T09:32:40+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1564,12 +1571,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "550ebaac289296ce228a706d0867afc34687e3f4"
+                "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/550ebaac289296ce228a706d0867afc34687e3f4",
-                "reference": "550ebaac289296ce228a706d0867afc34687e3f4",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
+                "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
                 "shasum": ""
             },
             "require": {
@@ -1581,7 +1588,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.14-dev"
                 }
             },
             "autoload": {
@@ -1614,7 +1621,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2020-01-13T11:15:53+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1622,12 +1629,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "a874bbf9135bd76175baa2c26d14312c9ef25543"
+                "reference": "34094cfa9abe1f0f14f48f490772db7a775559f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/a874bbf9135bd76175baa2c26d14312c9ef25543",
-                "reference": "a874bbf9135bd76175baa2c26d14312c9ef25543",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/34094cfa9abe1f0f14f48f490772db7a775559f2",
+                "reference": "34094cfa9abe1f0f14f48f490772db7a775559f2",
                 "shasum": ""
             },
             "require": {
@@ -1639,7 +1646,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.14-dev"
                 }
             },
             "autoload": {
@@ -1673,7 +1680,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-09-17T10:46:08+00:00"
+            "time": "2020-01-13T11:15:53+00:00"
         },
         {
             "name": "symfony/process",
@@ -1979,6 +1986,7 @@
                 "code",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2019-08-31T14:14:34+00:00"
         },
         {
@@ -1987,12 +1995,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-console.git",
-                "reference": "8a96783cb25f1504b55d33190702db8e9bef58af"
+                "reference": "215ac6b39c406d463899c33d29239f2ebd849155"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-console/zipball/8a96783cb25f1504b55d33190702db8e9bef58af",
-                "reference": "8a96783cb25f1504b55d33190702db8e9bef58af",
+                "url": "https://api.github.com/repos/zendframework/zend-console/zipball/215ac6b39c406d463899c33d29239f2ebd849155",
+                "reference": "215ac6b39c406d463899c33d29239f2ebd849155",
                 "shasum": ""
             },
             "require": {
@@ -2032,7 +2040,8 @@
                 "console",
                 "zf"
             ],
-            "time": "2019-02-04T19:49:26+00:00"
+            "abandoned": "laminas/laminas-console",
+            "time": "2019-11-03T09:03:33+00:00"
         },
         {
             "name": "zendframework/zend-crypt",
@@ -2082,6 +2091,7 @@
                 "crypt",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-crypt",
             "time": "2016-02-03T23:46:30+00:00"
         },
         {
@@ -2090,17 +2100,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "e03f49042677da6a9c7a6699cf7e6025ec234603"
+                "reference": "437ea324cc7e096a395d989b6bd65e3554000d3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/e03f49042677da6a9c7a6699cf7e6025ec234603",
-                "reference": "e03f49042677da6a9c7a6699cf7e6025ec234603",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/437ea324cc7e096a395d989b6bd65e3554000d3d",
+                "reference": "437ea324cc7e096a395d989b6bd65e3554000d3d",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "psr/http-message": "^1.0"
+            },
+            "conflict": {
+                "phpspec/prophecy": "<1.9.0"
             },
             "provide": {
                 "psr/http-message-implementation": "1.0"
@@ -2144,7 +2157,8 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2019-08-06T17:55:50+00:00"
+            "abandoned": "laminas/laminas-diactoros",
+            "time": "2019-12-07T17:56:35+00:00"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -2189,6 +2203,7 @@
                 "escaper",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-escaper",
             "time": "2019-09-05T20:05:53+00:00"
         },
         {
@@ -2243,6 +2258,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2019-10-18T07:10:41+00:00"
         },
         {
@@ -2251,12 +2267,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-filter.git",
-                "reference": "8754055b8ea0057d03c800cc365fad9ec16e5202"
+                "reference": "1a372040067e177fdec4612e375e526b663681e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-filter/zipball/8754055b8ea0057d03c800cc365fad9ec16e5202",
-                "reference": "8754055b8ea0057d03c800cc365fad9ec16e5202",
+                "url": "https://api.github.com/repos/zendframework/zend-filter/zipball/1a372040067e177fdec4612e375e526b663681e3",
+                "reference": "1a372040067e177fdec4612e375e526b663681e3",
                 "shasum": ""
             },
             "require": {
@@ -2308,7 +2324,8 @@
                 "filter",
                 "zf"
             ],
-            "time": "2019-08-19T07:32:45+00:00"
+            "abandoned": "laminas/laminas-filter",
+            "time": "2019-10-24T21:14:36+00:00"
         },
         {
             "name": "zendframework/zend-form",
@@ -2386,6 +2403,7 @@
                 "form",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-form",
             "time": "2019-10-04T11:05:33+00:00"
         },
         {
@@ -2394,12 +2412,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-http.git",
-                "reference": "cd002e8c3f19d17c9f14891b9ebc2a87293268dd"
+                "reference": "1fd8c560bd05fcf7f7ca0139a91bd1fd83bac9ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/cd002e8c3f19d17c9f14891b9ebc2a87293268dd",
-                "reference": "cd002e8c3f19d17c9f14891b9ebc2a87293268dd",
+                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/1fd8c560bd05fcf7f7ca0139a91bd1fd83bac9ca",
+                "reference": "1fd8c560bd05fcf7f7ca0139a91bd1fd83bac9ca",
                 "shasum": ""
             },
             "require": {
@@ -2420,8 +2438,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.10.x-dev",
-                    "dev-develop": "2.11.x-dev"
+                    "dev-master": "2.11.x-dev",
+                    "dev-develop": "2.12.x-dev"
                 }
             },
             "autoload": {
@@ -2441,7 +2459,8 @@
                 "zend",
                 "zf"
             ],
-            "time": "2019-10-15T19:04:27+00:00"
+            "abandoned": "laminas/laminas-http",
+            "time": "2019-12-30T20:50:39+00:00"
         },
         {
             "name": "zendframework/zend-hydrator",
@@ -2501,6 +2520,7 @@
                 "hydrator",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-hydrator",
             "time": "2019-10-04T11:17:36+00:00"
         },
         {
@@ -2509,12 +2529,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-inputfilter.git",
-                "reference": "6a925266dd5f10021fe2de9f398469caa8d2b84d"
+                "reference": "2ac6caae2742a31fe482b952182515923ca1d1e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-inputfilter/zipball/6a925266dd5f10021fe2de9f398469caa8d2b84d",
-                "reference": "6a925266dd5f10021fe2de9f398469caa8d2b84d",
+                "url": "https://api.github.com/repos/zendframework/zend-inputfilter/zipball/2ac6caae2742a31fe482b952182515923ca1d1e7",
+                "reference": "2ac6caae2742a31fe482b952182515923ca1d1e7",
                 "shasum": ""
             },
             "require": {
@@ -2558,7 +2578,8 @@
                 "inputfilter",
                 "zf"
             ],
-            "time": "2019-08-28T19:50:02+00:00"
+            "abandoned": "laminas/laminas-inputfilter",
+            "time": "2019-11-05T20:10:06+00:00"
         },
         {
             "name": "zendframework/zend-loader",
@@ -2566,12 +2587,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-loader.git",
-                "reference": "35748b3618e833808c2ebb0fcef02e5482f157a9"
+                "reference": "322aea16161fcdaa61b3a293145742f46c715b51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/35748b3618e833808c2ebb0fcef02e5482f157a9",
-                "reference": "35748b3618e833808c2ebb0fcef02e5482f157a9",
+                "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/322aea16161fcdaa61b3a293145742f46c715b51",
+                "reference": "322aea16161fcdaa61b3a293145742f46c715b51",
                 "shasum": ""
             },
             "require": {
@@ -2603,7 +2624,8 @@
                 "loader",
                 "zf"
             ],
-            "time": "2019-09-04T19:43:14+00:00"
+            "abandoned": "laminas/laminas-loader",
+            "time": "2019-11-08T14:25:39+00:00"
         },
         {
             "name": "zendframework/zend-mail",
@@ -2611,12 +2633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-mail.git",
-                "reference": "1b9ecd2805e953632ab974d183a92bcd679c827c"
+                "reference": "b6eac9d7e3356994b6643bdcc6092a9ca4301bf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-mail/zipball/1b9ecd2805e953632ab974d183a92bcd679c827c",
-                "reference": "1b9ecd2805e953632ab974d183a92bcd679c827c",
+                "url": "https://api.github.com/repos/zendframework/zend-mail/zipball/b6eac9d7e3356994b6643bdcc6092a9ca4301bf0",
+                "reference": "b6eac9d7e3356994b6643bdcc6092a9ca4301bf0",
                 "shasum": ""
             },
             "require": {
@@ -2665,7 +2687,8 @@
                 "mail",
                 "zf"
             ],
-            "time": "2018-06-07T13:38:38+00:00"
+            "abandoned": "laminas/laminas-mail",
+            "time": "2019-10-18T17:31:25+00:00"
         },
         {
             "name": "zendframework/zend-math",
@@ -2715,6 +2738,7 @@
                 "math",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-math",
             "time": "2018-12-04T15:34:17+00:00"
         },
         {
@@ -2765,6 +2789,7 @@
                 "mime",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-mime",
             "time": "2019-10-16T19:33:14+00:00"
         },
         {
@@ -2860,6 +2885,7 @@
                 "mvc",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-mvc",
             "time": "2018-05-03T13:13:41+00:00"
         },
         {
@@ -2909,6 +2935,7 @@
                 "psr",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-psr7bridge",
             "time": "2016-05-10T21:44:39+00:00"
         },
         {
@@ -2977,6 +3004,7 @@
                 "servicemanager",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-servicemanager",
             "time": "2018-12-22T06:05:09+00:00"
         },
         {
@@ -3023,6 +3051,7 @@
                 "stdlib",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-stdlib",
             "time": "2019-02-07T05:36:36+00:00"
         },
         {
@@ -3070,6 +3099,7 @@
                 "uri",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-uri",
             "time": "2019-10-07T13:39:44+00:00"
         },
         {
@@ -3078,21 +3108,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-validator.git",
-                "reference": "d6fa5c62472f6023c7f3de1ba5edf4fec35241b2"
+                "reference": "13f1d29ab20b10a3885b8d861c2f77d031942eb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/d6fa5c62472f6023c7f3de1ba5edf4fec35241b2",
-                "reference": "d6fa5c62472f6023c7f3de1ba5edf4fec35241b2",
+                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/13f1d29ab20b10a3885b8d861c2f77d031942eb3",
+                "reference": "13f1d29ab20b10a3885b8d861c2f77d031942eb3",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "^1.1",
-                "php": "^5.6 || ^7.0",
+                "php": "^7.1",
                 "zendframework/zend-stdlib": "^3.2.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.0.8 || ^5.7.15",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-coding-standard": "~1.0.0",
@@ -3120,8 +3152,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.12.x-dev",
-                    "dev-develop": "2.13.x-dev"
+                    "dev-master": "2.13.x-dev",
+                    "dev-develop": "2.14.x-dev"
                 },
                 "zf": {
                     "component": "Zend\\Validator",
@@ -3143,15 +3175,14 @@
                 "validator",
                 "zf"
             ],
-            "time": "2019-10-12T12:18:25+00:00"
+            "abandoned": "laminas/laminas-validator",
+            "time": "2019-12-28T04:06:22+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "nosto/module-nostotagging": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
