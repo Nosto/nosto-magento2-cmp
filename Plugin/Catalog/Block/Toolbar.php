@@ -143,23 +143,29 @@ class Toolbar extends AbstractBlock
             try {
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
+                if (!$subjectCollection instanceof ProductCollection) {
+                    throw new NostoException(
+                        "Collection is not instanceof ProductCollection"
+                    );
+                }
                 $this->setLimit($subjectCollection->getPageSize());
-                $result = $this->getCmpResult($store, $subjectCollection);
-                if ($result instanceof CategoryMerchandisingResult
-                    && $subjectCollection instanceof ProductCollection
+                $result = $this->getCmpResult($store);
+                if (!$result instanceof CategoryMerchandisingResult) {
+                    throw new NostoException(
+                        "Cmp result is not instanceof CategoryMerchandisingResult"
+                    );
+                }
+                //Get ids of products to order
+                $nostoProductIds = $this->parseProductIds($result);
+                if (!empty($nostoProductIds)
+                    && NostoHelperArray::onlyScalarValues($nostoProductIds)
                 ) {
-                    //Get ids of products to order
-                    $nostoProductIds = $this->parseProductIds($result);
-                    if (!empty($nostoProductIds)
-                        && NostoHelperArray::onlyScalarValues($nostoProductIds)
-                    ) {
-                        $this->setTotalProducts($result->getTotalPrimaryCount());
-                        ProductDebug::getInstance()->setProductIds($nostoProductIds);
-                        $nostoProductIds = array_reverse($nostoProductIds);
-                        $this->sortByProductIds($subjectCollection, $nostoProductIds);
-                        $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                        $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
-                    }
+                    $this->setTotalProducts($result->getTotalPrimaryCount());
+                    ProductDebug::getInstance()->setProductIds($nostoProductIds);
+                    $nostoProductIds = array_reverse($nostoProductIds);
+                    $this->sortByProductIds($subjectCollection, $nostoProductIds);
+                    $this->whereInProductIds($subjectCollection, $nostoProductIds);
+                    $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
                 }
             } catch (Exception $e) {
                 $this->logger->exception($e);
@@ -171,12 +177,11 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param Store $store
-     * @param ProductCollection $collection
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
      * @throws LocalizedException
      */
-    private function getCmpResult(Store $store, ProductCollection $collection)
+    private function getCmpResult(Store $store)
     {
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
