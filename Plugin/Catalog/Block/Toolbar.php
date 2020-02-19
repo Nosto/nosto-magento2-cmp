@@ -40,7 +40,7 @@ use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection as FulltextCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
@@ -141,12 +141,12 @@ class Toolbar extends AbstractBlock
         $store = $this->storeManager->getStore();
         if ($this->isCmpCurrentSortOrder()) {
             try {
-                /* @var FulltextCollection $subjectCollection */
+                /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 $this->setLimit($subjectCollection->getPageSize());
                 $result = $this->getCmpResult($store, $subjectCollection);
                 if ($result instanceof CategoryMerchandisingResult
-                    && $subjectCollection instanceof FulltextCollection
+                    && $subjectCollection instanceof ProductCollection
                 ) {
                     //Get ids of products to order
                     $nostoProductIds = $this->parseProductIds($result);
@@ -171,12 +171,12 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param Store $store
-     * @param FulltextCollection $collection
+     * @param ProductCollection $collection
      * @return CategoryMerchandisingResult|null
      * @throws NostoException
      * @throws LocalizedException
      */
-    private function getCmpResult(Store $store, FulltextCollection $collection)
+    private function getCmpResult(Store $store, ProductCollection $collection)
     {
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
@@ -210,10 +210,10 @@ class Toolbar extends AbstractBlock
     }
 
     /**
-     * @param FulltextCollection $collection
+     * @param ProductCollection $collection
      * @param array $nostoProductIds
      */
-    private function sortByProductIds(FulltextCollection $collection, array $nostoProductIds)
+    private function sortByProductIds(ProductCollection $collection, array $nostoProductIds)
     {
         $select = $collection->getSelect();
         $zendExpression = [
@@ -224,10 +224,10 @@ class Toolbar extends AbstractBlock
     }
 
     /**
-     * @param FulltextCollection $collection
+     * @param ProductCollection $collection
      * @param array $nostoProductIds
      */
-    private function whereInProductIds(FulltextCollection $collection, array $nostoProductIds)
+    private function whereInProductIds(ProductCollection $collection, array $nostoProductIds)
     {
         $select = $collection->getSelect();
         $zendExpression = new Zend_Db_Expr(
@@ -257,11 +257,11 @@ class Toolbar extends AbstractBlock
     }
 
     /**
-     * @param FulltextCollection $collection
+     * @param ProductCollection $collection
      * @param $trackCode
      * @param array $nostoProductIds
      */
-    private function addTrackParamToProduct(FulltextCollection $collection, $trackCode, array $nostoProductIds)
+    private function addTrackParamToProduct(ProductCollection $collection, $trackCode, array $nostoProductIds)
     {
         $collection->each(static function ($product) use ($nostoProductIds, $trackCode) {
             /* @var Product $product */
