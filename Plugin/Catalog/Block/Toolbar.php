@@ -53,6 +53,7 @@ use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Exception\TokenException\MissingAppsTokenException;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
@@ -150,11 +151,6 @@ class Toolbar extends AbstractBlock
                 }
                 $this->setLimit($subjectCollection->getPageSize());
                 $result = $this->getCmpResult($store);
-                if (!$result instanceof CategoryMerchandisingResult) {
-                    throw new NostoException(
-                        "Cmp result is not instanceof CategoryMerchandisingResult"
-                    );
-                }
                 //Get ids of products to order
                 $nostoProductIds = $this->parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -166,6 +162,11 @@ class Toolbar extends AbstractBlock
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
                     $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
+                } else {
+                    $this->logger->info(sprintf(
+                        "CMP result is empty for category: %s",
+                        $this->getCurrentCategory($store)
+                    ));
                 }
             } catch (Exception $e) {
                 $this->logger->exception($e);
@@ -177,8 +178,9 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param Store $store
-     * @return CategoryMerchandisingResult|null
+     * @return CategoryMerchandisingResult
      * @throws NostoException
+     * @throws MissingAppsTokenException
      * @throws LocalizedException
      */
     private function getCmpResult(Store $store)
@@ -187,7 +189,6 @@ class Toolbar extends AbstractBlock
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-        $personalizationResult = null;
 
         // Build filters
         $this->nostoFilterBuilder->init($store);
@@ -195,23 +196,29 @@ class Toolbar extends AbstractBlock
             $this->state->getActiveFilters()
         );
 
-        ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $store, &$personalizationResult) {
-                /** @noinspection PhpDeprecationInspection */
-                $category = $this->registry->registry('current_category');
-                $categoryString = $this->categoryBuilder->getCategory($category, $store);
-                $personalizationResult = $this->categoryRecommendation->getPersonalisationResult(
+        return ServerTiming::getInstance()->instrument(
+            function () use ($nostoAccount, $store) {
+                return $this->categoryRecommendation->getPersonalisationResult(
                     $nostoAccount,
                     $this->nostoFilterBuilder,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
-                    $categoryString,
+                    $this->getCurrentCategory($store),
                     $this->getCurrentPageNumber() - 1,
                     $this->getLimit()
                 );
             },
             self::TIME_PROF_GRAPHQL_QUERY
         );
-        return $personalizationResult;
+    }
+
+    /**
+     * Get the current category
+     * @return null|string
+     */
+    private function getCurrentCategory(Store $store) {
+        /** @noinspection PhpDeprecationInspection */
+        $category = $this->registry->registry('current_category');
+        return $this->categoryBuilder->getCategory($category, $store);
     }
 
     /**

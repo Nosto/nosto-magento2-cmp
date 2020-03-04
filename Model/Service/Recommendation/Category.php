@@ -45,6 +45,8 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Exception\TokenException\MissingAppsTokenException;
+use Nosto\NostoException;
 
 class Category
 {
@@ -74,7 +76,9 @@ class Category
      * @param $category
      * @param int $pageNumber
      * @param int $limit
-     * @return CategoryMerchandisingResult|null
+     * @return CategoryMerchandisingResult
+     * @throws MissingAppsTokenException
+     * @throws NostoException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
@@ -85,10 +89,9 @@ class Category
         $limit = self::MAX_PRODUCT_AMOUNT
     ) {
         $limit = self::MAX_PRODUCT_AMOUNT < $limit ? self::MAX_PRODUCT_AMOUNT : $limit;
-        $result = null;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            return null;
+            throw new MissingAppsTokenException();
         }
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $categoryMerchandising = new CategoryMerchandising(
@@ -104,11 +107,6 @@ class Category
             $limit
         );
 
-        try {
-            $result = $categoryMerchandising->execute();
-        } catch (Exception $e) {
-            $this->logger->exception($e);
-        }
-        return $result;
+        return $categoryMerchandising->execute();
     }
 }
