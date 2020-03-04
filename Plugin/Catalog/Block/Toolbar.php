@@ -163,7 +163,7 @@ class Toolbar extends AbstractBlock
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
                     $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
                 } else {
-                    $this->logger->debug(sprintf(
+                    $this->logger->info(sprintf(
                         "CMP result is empty for category: %s",
                         $this->getCurrentCategory($store)
                     ));

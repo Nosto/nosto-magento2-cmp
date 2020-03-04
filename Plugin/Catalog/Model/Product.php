@@ -56,8 +56,7 @@ class Product
             $existingParams = $this->parseExistingQueryParams($url);
             $nostoParam = [
                 self::NOSTO_TRACKING_PARAMETER_NAME => $product->getData(self::NOSTO_TRACKING_PARAMETER_NAME),
-                self::NOSTO_SOURCE_PARAMETER_NAME => self::NOSTO_SOURCE_PARAMETER_VALUE,
-                self::NOSTO_PRODUCT_ID_PARAMETER_VALUE => $product->getId()
+                self::NOSTO_SOURCE_PARAMETER_NAME => self::NOSTO_SOURCE_PARAMETER_VALUE
             ];
             $params = array_merge($existingParams, $nostoParam);
             $url = $product->getUrlModel()->getUrl($product, ['_query' => $params]);
