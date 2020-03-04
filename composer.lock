@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f90c866f37e1c4f3542c134ce2900873",
+    "content-hash": "25991e94dc9a07ae359ca35b4b8b3618",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "f4762ef0216ae435ab053f68e5bcdff966cf8d4f"
+                "reference": "98af0fdf85aca36f84690ecbb66f79ff51b8772f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/f4762ef0216ae435ab053f68e5bcdff966cf8d4f",
-                "reference": "f4762ef0216ae435ab053f68e5bcdff966cf8d4f",
+                "url": "https://api.github.com/repos/composer/composer/zipball/98af0fdf85aca36f84690ecbb66f79ff51b8772f",
+                "reference": "98af0fdf85aca36f84690ecbb66f79ff51b8772f",
                 "shasum": ""
             },
             "require": {
@@ -172,8 +172,8 @@
                 "symfony/console": "2.8.38"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7",
-                "phpunit/phpunit-mock-objects": "^2.3 || ^3.0"
+                "phpspec/prophecy": "^1.10",
+                "symfony/phpunit-bridge": "^3.4"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
@@ -217,7 +217,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-02-04T11:58:34+00:00"
+            "time": "2020-03-03T08:00:46+00:00"
         },
         {
             "name": "composer/semver",
@@ -286,12 +286,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "1aba2771d5ff5f8a41dc41c6ba6cc8e01844b67b"
+                "reference": "1f989fe43d4579a28b2c6461f54b24461666a09c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/1aba2771d5ff5f8a41dc41c6ba6cc8e01844b67b",
-                "reference": "1aba2771d5ff5f8a41dc41c6ba6cc8e01844b67b",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/1f989fe43d4579a28b2c6461f54b24461666a09c",
+                "reference": "1f989fe43d4579a28b2c6461f54b24461666a09c",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +338,7 @@
                 "spdx",
                 "validator"
             ],
-            "time": "2019-12-20T14:03:39+00:00"
+            "time": "2020-02-14T07:54:42+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -489,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "ac2529fc650684c5cd687e2b462d046cdbed556e"
+                "reference": "89b1a76b7fda5853401297dc4b2a093cba1fda23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/ac2529fc650684c5cd687e2b462d046cdbed556e",
-                "reference": "ac2529fc650684c5cd687e2b462d046cdbed556e",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/89b1a76b7fda5853401297dc4b2a093cba1fda23",
+                "reference": "89b1a76b7fda5853401297dc4b2a093cba1fda23",
                 "shasum": ""
             },
             "require": {
@@ -532,7 +532,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2019-12-17T17:19:17+00:00"
+            "time": "2020-02-15T23:33:03+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -540,12 +540,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "e193ff330a0f28b5e5f65ed3d804f5e2a89376e3"
+                "reference": "c73b502efd02beb2602500aa36793fb405e383ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/e193ff330a0f28b5e5f65ed3d804f5e2a89376e3",
-                "reference": "e193ff330a0f28b5e5f65ed3d804f5e2a89376e3",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/c73b502efd02beb2602500aa36793fb405e383ac",
+                "reference": "c73b502efd02beb2602500aa36793fb405e383ac",
                 "shasum": ""
             },
             "require": {
@@ -561,7 +561,7 @@
                 "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.8"
             },
             "suggest": {
-                "zendframework/zend-httphandlerrunner": "Emit PSR-7 responses"
+                "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
             "type": "library",
             "extra": {
@@ -603,7 +603,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2020-02-04T14:54:51+00:00"
+            "time": "2020-02-12T23:13:46+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -783,12 +783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fa82921994db851a8becaf3787a9e73c5976b6f1"
+                "reference": "cc6d6c3a0d365d6407111942d7e2016889598183"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fa82921994db851a8becaf3787a9e73c5976b6f1",
-                "reference": "fa82921994db851a8becaf3787a9e73c5976b6f1",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/cc6d6c3a0d365d6407111942d7e2016889598183",
+                "reference": "cc6d6c3a0d365d6407111942d7e2016889598183",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +853,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2019-12-20T14:15:16+00:00"
+            "time": "2020-02-14T17:17:22+00:00"
         },
         {
             "name": "nosto/module-nostotagging",
@@ -861,12 +861,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-magento2.git",
-                "reference": "3befebfed0f05f5d11140d2d269abc6a0ab07d54"
+                "reference": "704fdcbaf3d696557cdc870818dae2f31e43999e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/3befebfed0f05f5d11140d2d269abc6a0ab07d54",
-                "reference": "3befebfed0f05f5d11140d2d269abc6a0ab07d54",
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/704fdcbaf3d696557cdc870818dae2f31e43999e",
+                "reference": "704fdcbaf3d696557cdc870818dae2f31e43999e",
                 "shasum": ""
             },
             "require": {
@@ -918,20 +918,20 @@
                 "OSL-3.0"
             ],
             "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
-            "time": "2020-02-05T10:41:41+00:00"
+            "time": "2020-02-28T08:23:53+00:00"
         },
         {
             "name": "nosto/php-sdk",
-            "version": "4.0.10",
+            "version": "4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-php-sdk.git",
-                "reference": "3846a33b7a4db4ab49d3bae56b459ff209af77dc"
+                "reference": "b665202874d9da0f2b5d40c908bcd8536dbaf15a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/3846a33b7a4db4ab49d3bae56b459ff209af77dc",
-                "reference": "3846a33b7a4db4ab49d3bae56b459ff209af77dc",
+                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/b665202874d9da0f2b5d40c908bcd8536dbaf15a",
+                "reference": "b665202874d9da0f2b5d40c908bcd8536dbaf15a",
                 "shasum": ""
             },
             "require": {
@@ -967,7 +967,7 @@
                 "BSD-3-Clause"
             ],
             "description": "PHP SDK for developing Nosto modules for e-commerce platforms",
-            "time": "2020-01-02T14:27:38+00:00"
+            "time": "2020-03-04T13:50:22+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -1030,12 +1030,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "40998159a0907cc523e1f2d1904d45765613a617"
+                "reference": "0cdae704b6f6ab81d4da13c47698529be1ad5041"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/40998159a0907cc523e1f2d1904d45765613a617",
-                "reference": "40998159a0907cc523e1f2d1904d45765613a617",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/0cdae704b6f6ab81d4da13c47698529be1ad5041",
+                "reference": "0cdae704b6f6ab81d4da13c47698529be1ad5041",
                 "shasum": ""
             },
             "require": {
@@ -1114,7 +1114,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2020-02-04T12:15:04+00:00"
+            "time": "2020-03-02T16:34:52+00:00"
         },
         {
             "name": "psr/container",
@@ -1221,12 +1221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5628725d0e4d687e29575eb41f9d5ee7de33a84c"
+                "reference": "e1cb6eca27ccfd46567a2837eeba62bc5fecdee2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5628725d0e4d687e29575eb41f9d5ee7de33a84c",
-                "reference": "5628725d0e4d687e29575eb41f9d5ee7de33a84c",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/e1cb6eca27ccfd46567a2837eeba62bc5fecdee2",
+                "reference": "e1cb6eca27ccfd46567a2837eeba62bc5fecdee2",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2019-11-12T16:45:05+00:00"
+            "time": "2020-02-28T08:38:25+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -1357,12 +1357,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/phar-utils.git",
-                "reference": "6cfd02404ae22b847d5655b75dfd7bdfbc9c2d53"
+                "reference": "8800503d56b9867d43d9c303b9cbcc26016e82f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/6cfd02404ae22b847d5655b75dfd7bdfbc9c2d53",
-                "reference": "6cfd02404ae22b847d5655b75dfd7bdfbc9c2d53",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/8800503d56b9867d43d9c303b9cbcc26016e82f0",
+                "reference": "8800503d56b9867d43d9c303b9cbcc26016e82f0",
                 "shasum": ""
             },
             "require": {
@@ -1393,7 +1393,7 @@
             "keywords": [
                 "phar"
             ],
-            "time": "2020-01-13T12:32:57+00:00"
+            "time": "2020-02-14T15:25:33+00:00"
         },
         {
             "name": "symfony/console",
@@ -1522,12 +1522,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "d026b07e279342e6233620864927869e3d2b462c"
+                "reference": "ea69c129aed9fdeca781d4b77eb20b62cf5d5357"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/d026b07e279342e6233620864927869e3d2b462c",
-                "reference": "d026b07e279342e6233620864927869e3d2b462c",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/ea69c129aed9fdeca781d4b77eb20b62cf5d5357",
+                "reference": "ea69c129aed9fdeca781d4b77eb20b62cf5d5357",
                 "shasum": ""
             },
             "require": {
@@ -1563,7 +1563,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2020-02-04T09:32:40+00:00"
+            "time": "2020-02-14T07:42:58+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
