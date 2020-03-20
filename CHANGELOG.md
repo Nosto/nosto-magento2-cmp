@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
-### 1.04
+### 1.0.4
 * Fix issue where cache was disabled for every page 
 
 ### 1.0.3
