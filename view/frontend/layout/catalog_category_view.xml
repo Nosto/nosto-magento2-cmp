@@ -37,5 +37,10 @@
 <!--suppress XmlUnboundNsPrefix -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <block class="Nosto\Cmp\Plugin\Catalog\Block\Toolbar" name="nosto_toolbar" cacheable="false" />
+    <referenceBlock name="category.products" remove="true"/>
+    <referenceContainer name="content">
+        <block class="Nosto\Cmp\Block\CategoryMerchandising"
+               name="nosto.catalog.cmp"
+               template="Nosto_Cmp::category_merchandising.phtml" />
+    </referenceContainer>
 </page>
