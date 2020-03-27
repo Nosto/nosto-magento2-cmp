@@ -34,8 +34,13 @@
  *
  */
 
-
-/**
- * @var Nosto\Cmp\Block\CategoryMerchandising $block
- */
 echo $block->sayHello();
+?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Nosto_Cmp/js/cmp": {}
+        }
+    }
+</script>

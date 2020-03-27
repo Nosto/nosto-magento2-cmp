@@ -36,19 +36,16 @@
 
 namespace Nosto\Cmp\Block;
 
-use Magento\Catalog\Block\Product\ListProduct;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 
-class CategoryMerchandising extends ListProduct
+class PlainBlock extends \Magento\Framework\View\Element\Template
 {
-
-    public function getLoadedProductCollection()
+    public function __construct(\Magento\Framework\View\Element\Template\Context $context)
     {
-        return $this->_productCollection;
+        parent::__construct($context);
     }
 
-    public function setProductCollection(AbstractCollection $collection)
+    public function sayHello()
     {
-        $this->_productCollection = $collection;
+        return __('Hello World');
     }
 }

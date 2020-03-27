@@ -1,6 +1,5 @@
-<?php
-/**
- * Copyright (c) 2019, Nosto Solutions Ltd
+/*
+ * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,26 +28,26 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2019 Nosto Solutions Ltd
+ * @copyright 2020 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Block;
-
-use Magento\Catalog\Block\Product\ListProduct;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
-
-class CategoryMerchandising extends ListProduct
-{
-
-    public function getLoadedProductCollection()
-    {
-        return $this->_productCollection;
+require(['jquery'], function($){
+    if (getSortingOrder() === "nosto-personalized"){
+        $.get("http://magento2.dev.nos.to/nostocmp", function (data) {
+            $(".column.main > .products").remove();
+            $(".column.main > .toolbar").remove();
+            $(".column.main").append(data.template);
+        })
     }
+});
 
-    public function setProductCollection(AbstractCollection $collection)
-    {
-        $this->_productCollection = $collection;
-    }
+function getSortingOrder() {
+    return getQueryParams(['product_list_order'])[0];
+}
+
+function getQueryParams(...keys) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return keys.map(key => urlParams.get(key));
 }
