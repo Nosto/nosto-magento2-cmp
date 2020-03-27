@@ -36,16 +36,22 @@
 
 namespace Nosto\Cmp\Controller\Index;
 
-use Magento\Framework\View\LayoutFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Nosto\Cmp\Block\CategoryMerchandising;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Action\Action;
 use Nosto\Cmp\Model\Service\Merchandising\Result;
 use Nosto\Cmp\Model\Service\Merchandising\ResultBuilder;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
+use Nosto\Helper\ArrayHelper as NostoHelperArray;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Zend_Db_Expr;
 
 class Index extends Action
 {
@@ -67,6 +73,9 @@ class Index extends Action
     /** @var ResultBuilder */
     private $resultBuilder;
 
+    /** @var NostoLogger */
+    private $logger;
+
     /**
      * Index constructor.
      * @param Context $context
@@ -75,6 +84,7 @@ class Index extends Action
      * @param JsonFactory $jsonFactory
      * @param Http $request
      * @param ResultBuilder $resultBuilder
+     * @param NostoLogger $logger
      */
     public function __construct(
         Context $context,
@@ -82,7 +92,8 @@ class Index extends Action
         CollectionFactory $collectionFactory,
         JsonFactory $jsonFactory,
         Http $request,
-        ResultBuilder $resultBuilder
+        ResultBuilder $resultBuilder,
+        NostoLogger $logger
     ) {
         parent::__construct($context);
         $this->pageFactory = $pageFactory;
@@ -90,18 +101,19 @@ class Index extends Action
         $this->productCollection = $collectionFactory->create();
         $this->request = $request;
         $this->resultBuilder = $resultBuilder;
+        $this->logger = $logger;
     }
 
     public function execute()
     {
-        $this->resultBuilder
-            ->setNostoCustomerId($this->request->get('customer'))
-            ->setLimit($this->request->get('limit'))
-            ->setCurrentPage($this->request->get('curPage'))
-            ->setCategory($this->request->get('category'));
-        $ids = $this->getResults($this->resultBuilder->build());
+        $this->resultBuilder->setNostoCustomerId($this->request->get('customer'));
+        $this->resultBuilder->setLimit($this->request->get('limit'));
+        $this->resultBuilder->setCurrentPage($this->request->get('currPage'));
+        $this->resultBuilder->setCategory($this->request->get('category'));
+        $merchResult = $this->getResults($this->resultBuilder->build());
 
-        $this->alterCollection();
+
+        $this->alterCollection($merchResult);
         // get the custom list block and add our collection to it
         /** @var CategoryMerchandising $list */
         $list = $this->pageFactory->create()
@@ -111,15 +123,6 @@ class Index extends Action
 
         $result = $this->jsonFactory->create();
         return $result->setData(['template' => $list->toHtml()]);
-    }
-
-    /**
-     * @param array $ids
-     */
-    private function alterCollection($ids){
-        // obtain product collection.
-        $this->productCollection->addIdFilter(14); // do some filtering
-        $this->productCollection->addFieldToSelect('*');
     }
 
     /**
@@ -136,6 +139,103 @@ class Index extends Action
 
     public function getResults(Result $result) {
         //Fetch CMP results
-        return $result->getSortingOrderResults($this->dummyStore());
+        return $result->getCmpResult($this->dummyStore());
+    }
+
+    /**
+     * @param array $ids
+     */
+    private function alterCollection(CategoryMerchandisingResult $result){
+        // obtain product collection.
+        $this->productCollection->addFieldToSelect('*');
+
+        $nostoProductIds = $this->parseProductIds($result);
+        if (!empty($nostoProductIds)
+            && NostoHelperArray::onlyScalarValues($nostoProductIds)
+        ) {
+            $this->setTotalProducts($result->getTotalPrimaryCount());
+            ProductDebug::getInstance()->setProductIds($nostoProductIds);
+            $nostoProductIds = array_reverse($nostoProductIds);
+            $this->sortByProductIds($this->productCollection, $nostoProductIds);
+            $this->whereInProductIds($this->productCollection, $nostoProductIds);
+            $this->addTrackParamToProduct($this->productCollection, $result->getTrackingCode(), $nostoProductIds);
+        } else {
+            $this->logger->info(sprintf(
+                "CMP result is empty for category: %s",
+                $this->getCurrentCategory($store)
+            ));
+        }
+    }
+
+    /**
+     * @param ProductCollection $collection
+     * @param array $nostoProductIds
+     */
+    private function sortByProductIds(ProductCollection $collection, array $nostoProductIds)
+    {
+        $select = $collection->getSelect();
+        $zendExpression = [
+            new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC'),
+            new Zend_Db_Expr($this->getSecondarySort())
+        ];
+        $select->order($zendExpression);
+    }
+
+    /**
+     * @param ProductCollection $collection
+     * @param array $nostoProductIds
+     */
+    private function whereInProductIds(ProductCollection $collection, array $nostoProductIds)
+    {
+        $select = $collection->getSelect();
+        $zendExpression = new Zend_Db_Expr(
+            'e.entity_id IN (' . implode(',', $nostoProductIds ) . ')'
+        );
+        $select->where($zendExpression);
+    }
+
+    /**
+     * @param CategoryMerchandisingResult $result
+     * @return array
+     */
+    private function parseProductIds(CategoryMerchandisingResult $result)
+    {
+        $productIds = [];
+        try {
+            foreach ($result->getResultSet() as $item) {
+                if ($item->getProductId() && is_numeric($item->getProductId())) {
+                    $productIds[] = $item->getProductId();
+                }
+            }
+        } catch (Exception $e) {
+            $this->logger->exception($e);
+        }
+
+        return $productIds;
+    }
+
+    /**
+     * @param ProductCollection $collection
+     * @param $trackCode
+     * @param array $nostoProductIds
+     */
+    private function addTrackParamToProduct(ProductCollection $collection, $trackCode, array $nostoProductIds)
+    {
+        $collection->each(static function ($product) use ($nostoProductIds, $trackCode) {
+            /* @var Product $product */
+            if (in_array($product->getId(), $nostoProductIds, true)) {
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
+            }
+        });
+    }
+
+    /**
+     * Returns the secondary sort defined by the merchant
+     *
+     * @return string
+     */
+    private function getSecondarySort()
+    {
+        return 'cat_index_position ASC'; // ToDo - must be selectable by the merchant
     }
 }

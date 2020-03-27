@@ -35,16 +35,46 @@
 
 require(['jquery'], function($){
     if (getSortingOrder() === "nosto-personalized"){
-        $.get("http://magento2.dev.nos.to/nostocmp", function (data) {
-            $(".column.main > .products").remove();
-            $(".column.main > .toolbar").remove();
-            $(".column.main").append(data.template);
-        })
+        $.get("http://magento2.dev.nos.to/nostocmp", )
+
+
+        $.ajax({
+            url: "http://magento2.dev.nos.to/nostocmp",
+            type: "GET", //send it through get method
+            data: {
+                customer: getCustomerId(),
+                category: getCategory(),
+                currPage: 1,
+                limit: 10
+            },
+            success: function (data) {
+                $(".column.main > .products").remove();
+                $(".column.main > .toolbar").remove();
+                $(".column.main").append(data.template);
+            },
+            error: function(xhr) {
+                console.error("Something went wrong")
+            }
+        });
     }
 });
 
+/**
+ * Returns the value of 2c.cId cookie
+ * @returns {string}
+ */
+function getCustomerId() {
+    const cookieName = '2c.cId';
+    const b = document.cookie.match(`(^|[^;]+)\\s*${cookieName}\\s*=\\s*([^;]+)`);
+    return b ? b.pop() : '';
+}
+
 function getSortingOrder() {
     return getQueryParams(['product_list_order'])[0];
+}
+
+function getCategory() {
+    return document.querySelector(".nosto_category .category_string").innerText;
 }
 
 function getQueryParams(...keys) {

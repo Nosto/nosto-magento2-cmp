@@ -103,14 +103,6 @@ class Result
         $this->limit = $limit;
     }
 
-    /**
-     * @param Store $store
-     * @return array
-     */
-    public function getSortingOrderResults(Store $store) {
-        $cmpResults = $this->getCmpResult($store);
-        return $this->parseProductIds($cmpResults);
-    }
 
     /**
      * @param Store $store
@@ -119,7 +111,7 @@ class Result
      * @throws MissingAppsTokenException
      * @throws LocalizedException
      */
-    private function getCmpResult(Store $store)
+    public function getCmpResult(Store $store)
     {
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
@@ -147,23 +139,5 @@ class Result
         );
     }
 
-    /**
-     * @param CategoryMerchandisingResult $result
-     * @return array
-     */
-    private function parseProductIds(CategoryMerchandisingResult $result)
-    {
-        $productIds = [];
-        try {
-            foreach ($result->getResultSet() as $item) {
-                if ($item->getProductId() && is_numeric($item->getProductId())) {
-                    $productIds[] = $item->getProductId();
-                }
-            }
-        } catch (Exception $e) {
-            $this->logger->exception($e);
-        }
 
-        return $productIds;
-    }
 }
