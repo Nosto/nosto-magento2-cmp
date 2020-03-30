@@ -51,6 +51,7 @@ use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Zend_Db_Expr;
 
 class Index extends Action
@@ -153,7 +154,7 @@ class Index extends Action
         if (!empty($nostoProductIds)
             && NostoHelperArray::onlyScalarValues($nostoProductIds)
         ) {
-            $this->setTotalProducts($result->getTotalPrimaryCount());
+//            $this->setTotalProducts($result->getTotalPrimaryCount());
             ProductDebug::getInstance()->setProductIds($nostoProductIds);
             $nostoProductIds = array_reverse($nostoProductIds);
             $this->sortByProductIds($this->productCollection, $nostoProductIds);
@@ -176,7 +177,6 @@ class Index extends Action
         $select = $collection->getSelect();
         $zendExpression = [
             new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC'),
-            new Zend_Db_Expr($this->getSecondarySort())
         ];
         $select->order($zendExpression);
     }
@@ -227,15 +227,5 @@ class Index extends Action
                 $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
             }
         });
-    }
-
-    /**
-     * Returns the secondary sort defined by the merchant
-     *
-     * @return string
-     */
-    private function getSecondarySort()
-    {
-        return 'cat_index_position ASC'; // ToDo - must be selectable by the merchant
     }
 }
