@@ -41,6 +41,10 @@ use Magento\Framework\App\Http\Context as MagentoContext;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Request\Http;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Category;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Context
 {
@@ -50,13 +54,31 @@ class Context
     /** @var Http  */
     private $request;
 
+    /** @var CategoryFactory  */
+    private $categoryFactory;
+
+    /** @var String */
+    private $categoryString;
+
+    /** @var CategoryBuilder  */
+    private $categoryBuilder;
+
+    /** @var StoreManagerInterface  */
+    private $storeManager;
+
     public function __construct(
         Session $customerSession,
         CookieManagerInterface $cookieManager,
+        CategoryFactory $categoryFactory,
+        CategoryBuilder $categoryBuilder,
+        StoreManagerInterface $storeManager,
         Http $request
     ) {
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
+        $this->categoryFactory = $categoryFactory;
+        $this->categoryBuilder = $categoryBuilder;
+        $this->storeManager = $storeManager;
         $this->request = $request;
     }
     /**
@@ -65,19 +87,60 @@ class Context
      */
     function beforeGetVaryString(MagentoContext $subject)
     {
-        if ($this->request->getParam('product_list_order') &&
+        if ($this->isCategoryPage() &&
+            $this->request->getParam('product_list_order') &&
             $this->request->getParam('product_list_order') === 'nosto-personalized') {
+
             $variation = $this->getForcedSegmentsFromCookie();
             $subject->setValue('CONTEXT_NOSTO', $variation, $defaultValue = "");
         }
             return $subject;
     }
 
-    function getForcedSegmentsFromCookie() {
+    private function getForcedSegmentsFromCookie() {
         $cookie = $this->cookieManager->getCookie('nosto_debug');
         $decoded = json_decode($cookie);
         if ($decoded->fs && is_array($decoded->fs)) {
             return implode("-", $decoded->fs);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCategoryPage() {
+        $category = $this->getCategory();
+        if ($category) {
+            $this->categoryString = $this->categoryBuilder->getCategory($category, $this->storeManager->getStore());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|Category
+     */
+    private function getCategory() {
+        $categoryFactory = $this->categoryFactory->create();
+        $urlPath = $this->getUrlPAth();
+        if (!is_string($urlPath)) {
+            return false;
+        }
+        return $categoryFactory->loadByAttribute('url_path', $urlPath);
+    }
+
+    /**
+     * @return string
+     */
+    private function getUrlPAth() {
+        $path = $this->request->getUri()->getPath();
+
+        //Remove leading slash
+        $path = substr($path, 1);
+
+        //Remove . ending
+        $path = explode(".", $path)[0];
+
+        return $path;
     }
 }
