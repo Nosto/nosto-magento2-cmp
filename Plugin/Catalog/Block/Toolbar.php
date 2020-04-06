@@ -143,10 +143,6 @@ class Toolbar extends AbstractBlock
         if ($this->isCmpCurrentSortOrder()) {
             try {
 
-                //ToDO remove this piece of code
-                $this->testScope($subject->getCollection());
-                return $subject;
-
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 if (!$subjectCollection instanceof ProductCollection) {
@@ -179,15 +175,6 @@ class Toolbar extends AbstractBlock
         }
         self::$isProcessed = true;
         return $subject;
-    }
-
-    private function testScope(ProductCollection $collection) {
-        $productIds = [436, 420, 276, 292];
-        $decoded = json_decode($this->cookieManager->getCookie('nosto_debug'));
-        $fsLength = count($decoded->fs);
-        $array = array_slice($productIds, 0, $fsLength);
-        $this->whereInProductIds($collection, $array);
-        return;
     }
 
     /**
