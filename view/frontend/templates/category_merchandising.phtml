@@ -1,0 +1,15 @@
+<?php
+/**  @var \Nosto\Cmp\Block\SegmentMapping $block */
+?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Nosto_Cmp/js/cmp": {
+                "merchant": "<?php echo $block->getNostoAccount(); ?>",
+                "cid": "<?php echo $block->getCustomerId(); ?>",
+                "cookieName": "<?php echo $block->getCookieName(); ?>"
+            }
+        }
+    }
+</script>

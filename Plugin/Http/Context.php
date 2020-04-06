@@ -36,15 +36,15 @@
 
 namespace Nosto\Cmp\Plugin\Http;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Http\Context as MagentoContext;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\Registry;
 use Magento\Framework\App\Request\Http;
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\Category;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Block\SegmentMapping;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class Context
 {
@@ -81,9 +81,10 @@ class Context
         $this->storeManager = $storeManager;
         $this->request = $request;
     }
+
     /**
-     * \Magento\Framework\App\Http\Context::getVaryString is used by Magento to retrieve unique identifier for selected context,
-     * so this is a best place to declare custom context variables
+     * @param MagentoContext $subject
+     * @return MagentoContext
      */
     function beforeGetVaryString(MagentoContext $subject)
     {
@@ -91,18 +92,34 @@ class Context
             $this->request->getParam('product_list_order') &&
             $this->request->getParam('product_list_order') === 'nosto-personalized') {
 
-            $variation = $this->getForcedSegmentsFromCookie();
+            $variation = $this->getSegmentFromCookie();
             $subject->setValue('CONTEXT_NOSTO', $variation, $defaultValue = "");
         }
             return $subject;
     }
 
-    private function getForcedSegmentsFromCookie() {
-        $cookie = $this->cookieManager->getCookie('nosto_debug');
-        $decoded = json_decode($cookie);
-        if ($decoded->fs && is_array($decoded->fs)) {
-            return implode("-", $decoded->fs);
+    /**
+     * Get segment id from cookie
+     * @return string
+     */
+    private function getSegmentFromCookie() {
+        //Read cookie
+        $cookie = $this->cookieManager->getCookie(SegmentMapping::COOKIE_NAME);
+
+        //Parse value
+        $stdClass = json_decode($cookie);
+        $segmentMap = get_object_vars($stdClass);
+
+        //Check if current category is part of segment mapping
+        if (array_key_exists($this->categoryString, $segmentMap) &&
+            property_exists($segmentMap[$this->categoryString] ,'segmentId')) {
+            $segment = $segmentMap[$this->categoryString];
+            if (property_exists($segment, 'variation')) {
+                return $segment->segmentId . '-' . $segment->variation;
+            }
+            return $segment->segmentId;
         }
+        return '';
     }
 
     /**
@@ -111,7 +128,9 @@ class Context
     private function isCategoryPage() {
         $category = $this->getCategory();
         if ($category) {
-            $this->categoryString = $this->categoryBuilder->getCategory($category, $this->storeManager->getStore());
+            $this->categoryString = strtolower(
+                $this->categoryBuilder->getCategory($category, $this->storeManager->getStore())
+            );
             return true;
         }
         return false;
