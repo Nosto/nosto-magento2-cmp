@@ -37,7 +37,18 @@
 define(['jquery'], function ($) {
 
     return function (config) {
-        getMapping(config.merchant, config.cid, config.cookieName)
+        if (config.merchant === "") {
+            console.warn("Nosto merchant id is missing. Segment mapping cannot be fetched")
+            return;
+        } else if (config.cid === "") {
+            console.warn("Nosto cid is missing. Segment mapping cannot be fetched")
+            return;
+        } else if (config.cookieName === "") {
+            console.warn("Nosto mapping cookie name is missing. Segment mapping cannot be fetched")
+        } else if (config.baseUrl === "") {
+            console.warn("Nosto base url is missing. Segment mapping cannot be fetched")
+        }
+        getMapping(config.merchant, config.cid, config.cookieName, config.baseUrl)
     }
 
     /**
@@ -45,24 +56,30 @@ define(['jquery'], function ($) {
      * @param {string} merchant
      * @param {string} cid
      * @param {string} cookieName
+     * @param {string} domain
      */
-    function getMapping(merchant, cid, cookieName) {
-        var domain = "http://localhost:9000";
-        var url = getRequestUrl(domain) + "?m=" + merchant + "&cid=" + cid;
-        console.log(url);
-        $.get(url, function (data) {
-            var stringData = JSON.stringify(data);
-            createCookie(stringData, cookieName)
-        })
+    function getMapping(merchant, cid, cookieName, domain) {
+        var url = getRequestUrl(domain, merchant, cid)
+        $.get(url)
+            .done(function (data) {
+                var stringData = JSON.stringify(data);
+                createCookie(stringData, cookieName)
+            })
+            .fail(function (error) {
+                console.warn("Something went wrong trying to fetch segment mapping. Error code: "
+                    + error.status)
+            })
     }
 
     /**
      *
      * @param {string} domain
+     * @param {string} merchant
+     * @param {string} cid
      * @returns {string}
      */
-    function getRequestUrl(domain) {
-        return domain + "/cmp-mapping/metadata";
+    function getRequestUrl(domain, merchant, cid) {
+        return domain + "/cmp-mapping/metadata?m=" + merchant + "&cid=" + cid;;
     }
 
     /**

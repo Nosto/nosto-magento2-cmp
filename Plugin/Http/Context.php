@@ -42,8 +42,13 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Http\Context as MagentoContext;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Block\SegmentMapping;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver as ParamResolver;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class Context
@@ -66,12 +71,23 @@ class Context
     /** @var StoreManagerInterface  */
     private $storeManager;
 
+    /** @var NostoHelperAccount  */
+    private $nostoHelperAccount;
+
+    /** @var NostoCmpHelperData  */
+    private $nostoCmpHelperData;
+
+    /** @var Store */
+    private $store;
+
     public function __construct(
         Session $customerSession,
         CookieManagerInterface $cookieManager,
         CategoryFactory $categoryFactory,
         CategoryBuilder $categoryBuilder,
         StoreManagerInterface $storeManager,
+        NostoHelperAccount $nostoHelperAccount,
+        NostoCmpHelperData $nostoCmpHelperData,
         Http $request
     ) {
         $this->customerSession = $customerSession;
@@ -79,6 +95,8 @@ class Context
         $this->categoryFactory = $categoryFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->storeManager = $storeManager;
+        $this->nostoHelperAccount = $nostoHelperAccount;
+        $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->request = $request;
     }
 
@@ -89,8 +107,10 @@ class Context
     function beforeGetVaryString(MagentoContext $subject)
     {
         if ($this->isCategoryPage() &&
-            $this->request->getParam('product_list_order') &&
-            $this->request->getParam('product_list_order') === 'nosto-personalized') {
+            $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM) &&
+            $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM) === NostoHelperSorting::NOSTO_PERSONALIZED_KEY &&
+            $this->nostoHelperAccount->nostoInstalledAndEnabled($this->store) &&
+            $this->nostoCmpHelperData->isCategorySortingEnabled($this->store)) {
 
             $variation = $this->getSegmentFromCookie();
             $subject->setValue('CONTEXT_NOSTO', $variation, $defaultValue = "");
@@ -123,13 +143,15 @@ class Context
     }
 
     /**
+     * Checks if the current page is a category page
      * @return bool
      */
     private function isCategoryPage() {
         $category = $this->getCategory();
         if ($category) {
+            $this->store = $this->storeManager->getStore();
             $this->categoryString = strtolower(
-                $this->categoryBuilder->getCategory($category, $this->storeManager->getStore())
+                $this->categoryBuilder->getCategory($category, $this->store)
             );
             return true;
         }
@@ -137,6 +159,7 @@ class Context
     }
 
     /**
+     * Return category object or false if not found
      * @return bool|Category
      */
     private function getCategory() {

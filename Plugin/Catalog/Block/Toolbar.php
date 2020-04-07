@@ -142,7 +142,6 @@ class Toolbar extends AbstractBlock
         $store = $this->storeManager->getStore();
         if ($this->isCmpCurrentSortOrder()) {
             try {
-
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 if (!$subjectCollection instanceof ProductCollection) {

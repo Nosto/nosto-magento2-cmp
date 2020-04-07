@@ -43,6 +43,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Nosto;
 
 class SegmentMapping extends Template
 {
@@ -102,5 +103,13 @@ class SegmentMapping extends Template
      */
     public function getCookieName() {
         return self::COOKIE_NAME;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNostoBaseUrl()
+    {
+        return Nosto::getBaseUrl();
     }
 }
