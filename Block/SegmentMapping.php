@@ -83,7 +83,7 @@ class SegmentMapping extends Template
         try {
             $store = $this->storeManager->getStore();
         } catch (\Exception $e) {
-            $this->logger->exception("Could not get Nosto account name");
+            $this->logger->exception("Could not get Nosto account ID");
             return null;
         }
         return $this->nostoHelperAccount->getAccountName($store);

@@ -36,11 +36,13 @@
 
 namespace Nosto\Cmp\Plugin\Http;
 
+use Exception;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Http\Context as MagentoContext;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -49,6 +51,7 @@ use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver as ParamResolver;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class Context
@@ -80,6 +83,9 @@ class Context
     /** @var Store */
     private $store;
 
+    /** @var NostoLogger  */
+    private $logger;
+
     public function __construct(
         Session $customerSession,
         CookieManagerInterface $cookieManager,
@@ -88,7 +94,8 @@ class Context
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
         NostoCmpHelperData $nostoCmpHelperData,
-        Http $request
+        Http $request,
+        NostoLogger $logger
     ) {
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
@@ -98,14 +105,21 @@ class Context
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->request = $request;
+        $this->logger = $logger;
     }
 
     /**
      * @param MagentoContext $subject
      * @return MagentoContext
      */
-    function beforeGetVaryString(MagentoContext $subject)
+    public function beforeGetVaryString(MagentoContext $subject)
     {
+        try {
+            $this->setCategoryAndStore();
+        } catch (Exception $e) {
+            $this->logger->exception($e);
+        }
+
         if ($this->isCategoryPage() &&
             $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM) &&
             $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM) === NostoHelperSorting::NOSTO_PERSONALIZED_KEY &&
@@ -113,9 +127,13 @@ class Context
             $this->nostoCmpHelperData->isCategorySortingEnabled($this->store)) {
 
             $variation = $this->getSegmentFromCookie();
+            if ($variation === '') {
+                $this->logger->debug('Variation key is empty');
+            }
             $subject->setValue('CONTEXT_NOSTO', $variation, $defaultValue = "");
         }
-            return $subject;
+
+        return $subject;
     }
 
     /**
@@ -125,13 +143,23 @@ class Context
     private function getSegmentFromCookie() {
         //Read cookie
         $cookie = $this->cookieManager->getCookie(SegmentMapping::COOKIE_NAME);
-
         if ($cookie === null) {
+            $this->logger->debug(sprintf(
+                'Cookie %s is not present',
+                SegmentMapping::COOKIE_NAME
+            ));
             return '';
         }
 
         //Parse value
         $stdClass = json_decode($cookie);
+        if ($stdClass === null) {
+            $this->logger->debug(sprintf(
+                'Cookie %s has no value',
+                SegmentMapping::COOKIE_NAME
+            ));
+            return '';
+        }
         $segmentMap = get_object_vars($stdClass);
 
         //Check if current category is part of segment mapping
@@ -147,16 +175,24 @@ class Context
     }
 
     /**
-     * Checks if the current page is a category page
-     * @return bool
+     * @throws NoSuchEntityException
      */
-    private function isCategoryPage() {
+    private function setCategoryAndStore() {
         $category = $this->getCategory();
         if ($category) {
             $this->store = $this->storeManager->getStore();
             $this->categoryString = strtolower(
                 $this->categoryBuilder->getCategory($category, $this->store)
             );
+        }
+    }
+
+    /**
+     * Checks if the current page is a category page
+     * @return bool
+     */
+    private function isCategoryPage() {
+        if (is_string($this->categoryString)) {
             return true;
         }
         return false;
@@ -164,25 +200,32 @@ class Context
 
     /**
      * Return category object or false if not found
-     * @return bool|Category
+     * @return null|Category
      */
     private function getCategory() {
         $categoryFactory = $this->categoryFactory->create();
-        $urlPath = $this->getUrlPAth();
+        $urlPath = $this->getUrlPath();
         if (!is_string($urlPath)) {
-            return false;
+            return null;
         }
         return $categoryFactory->loadByAttribute('url_path', $urlPath);
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    private function getUrlPAth() {
+    private function getUrlPath() {
         $path = $this->request->getUri()->getPath();
+        if ($path === null) {
+            return null;
+        }
 
         //Remove leading slash
         $path = substr($path, 1);
+        if (!is_string($path)) {
+            return null;
+        }
+
 
         //Remove . ending
         $path = explode(".", $path)[0];
