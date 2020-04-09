@@ -37,10 +37,11 @@
 define(['jquery'], function ($) {
 
     return function (config) {
+        var cid = getCookie("2c.cId");
         if (config.merchant === "") {
             console.warn("Nosto merchant id is missing. Segment mapping cannot be fetched")
             return;
-        } else if (config.cid === "") {
+        } else if (cid === "") {
             console.warn("Nosto cid is missing. Segment mapping cannot be fetched")
             return;
         } else if (config.cookieName === "") {
@@ -48,7 +49,7 @@ define(['jquery'], function ($) {
         } else if (config.baseUrl === "") {
             console.warn("Nosto base url is missing. Segment mapping cannot be fetched")
         }
-        getMapping(config.merchant, config.cid, config.cookieName, config.baseUrl)
+        getMapping(config.merchant, cid, config.cookieName, config.baseUrl)
     }
 
     /**
@@ -88,5 +89,26 @@ define(['jquery'], function ($) {
      */
     function createCookie(data, cookieName) {
         document.cookie = cookieName + "=" + data;
+    }
+
+    /**
+     *
+     * @param {string} cname
+     * @returns {string}
+     */
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     }
 })

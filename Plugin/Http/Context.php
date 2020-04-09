@@ -126,6 +126,10 @@ class Context
         //Read cookie
         $cookie = $this->cookieManager->getCookie(SegmentMapping::COOKIE_NAME);
 
+        if ($cookie === null) {
+            return '';
+        }
+
         //Parse value
         $stdClass = json_decode($cookie);
         $segmentMap = get_object_vars($stdClass);
