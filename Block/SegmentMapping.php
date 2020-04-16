@@ -47,7 +47,9 @@ use Nosto\Nosto;
 
 class SegmentMapping extends Template
 {
-    const COOKIE_NAME = "nosto_mapping";
+    const COOKIE_CATEGORY_MAP = "n_cat_mapping";
+
+    const COOKIE_SEGMENT_MAP = "n_segment_mapping";
 
     /** @var NostoHelperAccount  */
     private $nostoHelperAccount;
@@ -101,8 +103,16 @@ class SegmentMapping extends Template
      * Return the mapping cookie name
      * @return string
      */
-    public function getCookieName() {
-        return self::COOKIE_NAME;
+    public function getCategoryMappingCookieName() {
+        return self::COOKIE_CATEGORY_MAP;
+    }
+
+    /**
+     * Return the mapping cookie name
+     * @return string
+     */
+    public function getSegmentMappingCookieName() {
+        return self::COOKIE_SEGMENT_MAP;
     }
 
     /**

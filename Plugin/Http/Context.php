@@ -142,11 +142,11 @@ class Context
      */
     private function getSegmentFromCookie() {
         //Read cookie
-        $cookie = $this->cookieManager->getCookie(SegmentMapping::COOKIE_NAME);
+        $cookie = $this->cookieManager->getCookie(SegmentMapping::COOKIE_CATEGORY_MAP);
         if ($cookie === null) {
             $this->logger->debug(sprintf(
                 'Cookie %s is not present',
-                SegmentMapping::COOKIE_NAME
+                SegmentMapping::COOKIE_CATEGORY_MAP
             ));
             return '';
         }
@@ -156,7 +156,7 @@ class Context
         if ($stdClass === null) {
             $this->logger->debug(sprintf(
                 'Cookie %s has no value',
-                SegmentMapping::COOKIE_NAME
+                SegmentMapping::COOKIE_CATEGORY_MAP
             ));
             return '';
         }
@@ -164,12 +164,18 @@ class Context
 
         //Check if current category is part of segment mapping
         if (array_key_exists($this->categoryString, $segmentMap) &&
-            property_exists($segmentMap[$this->categoryString] ,'segmentId')) {
-            $segment = $segmentMap[$this->categoryString];
-            if (property_exists($segment, 'variation')) {
-                return $segment->segmentId . '-' . $segment->variation;
+            is_array($segmentMap[$this->categoryString])) {
+
+            $key = '';
+            $segmentIds = $this->cookieManager->getCookie(SegmentMapping::COOKIE_SEGMENT_MAP);
+            if ($segmentIds === null || $segmentIds === '') {
+                return '';
             }
-            return $segment->segmentId;
+            $segmentIds = json_decode($segmentIds);
+            foreach ($segmentMap[$this->categoryString] as $id) {
+                $key .= $segmentIds[$id];
+            }
+            return $key;
         }
         return '';
     }
