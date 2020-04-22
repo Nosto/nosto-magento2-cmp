@@ -162,20 +162,19 @@ class Context
         }
         $segmentMap = get_object_vars($stdClass);
 
-        //Check if current category is part of segment mapping
-        if (array_key_exists($this->categoryString, $segmentMap) &&
-            is_array($segmentMap[$this->categoryString])) {
+        $hashedCategory = crc32($this->categoryString);
 
-            $key = '';
-            $segmentIds = $this->cookieManager->getCookie(SegmentMapping::COOKIE_SEGMENT_MAP);
-            if ($segmentIds === null || $segmentIds === '') {
+        //Check if current category is part of segment mapping
+        if (array_key_exists($hashedCategory, $segmentMap) &&
+            is_numeric($segmentMap[$hashedCategory])) {
+
+            $index = $segmentMap[$hashedCategory];
+            $indexedIds = $this->cookieManager->getCookie(SegmentMapping::COOKIE_SEGMENT_MAP);
+            if ($indexedIds === null || $indexedIds === '') {
                 return '';
             }
-            $segmentIds = json_decode($segmentIds);
-            foreach ($segmentMap[$this->categoryString] as $id) {
-                $key .= $segmentIds[$id];
-            }
-            return $key;
+            $indexedIds = json_decode($indexedIds);
+            return $indexedIds[$index];
         }
         return '';
     }

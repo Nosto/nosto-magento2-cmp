@@ -90,15 +90,9 @@ define(['jquery'], function ($) {
         var categoryMapping = {};
 
         for (const property in data) {
-            console.log(`${property}: ${data[property]}`);
-            if (data[property].segmentId) {
-                pushInUniqueValue(segmentMapping, data[property].segmentId)
-                categoryMapping[property] = [segmentMapping.indexOf(data[property].segmentId)]
-
-                if (data[property].variation) {
-                    pushInUniqueValue(segmentMapping, data[property].variation)
-                    categoryMapping[property] = [segmentMapping.indexOf(data[property].variation)]
-                }
+            if (data[property]) {
+                pushInUniqueValue(segmentMapping, data[property])
+                categoryMapping[property] = segmentMapping.indexOf(data[property]);
             }
         }
 
@@ -128,7 +122,7 @@ define(['jquery'], function ($) {
      * @returns {string}
      */
     function getRequestUrl(domain, merchant, cid) {
-        return domain + "/cmp-mapping/metadata?m=" + merchant + "&cid=" + cid;;
+        return domain + "/cmp-mapping/magento?m=" + merchant + "&cid=" + cid;;
     }
 
     /**
