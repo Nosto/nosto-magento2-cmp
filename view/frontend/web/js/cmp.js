@@ -130,9 +130,21 @@ define(['jquery'], function ($) {
      * @param {string} cookieName
      */
     function createCookie(data, cookieName) {
-        document.cookie = cookieName + "=" + data;
+        document.cookie = cookieName + "=" + data + "; expires=" + getExpireDate() + "; path=/";
     }
 
+    /**
+     *
+     * @returns {string}
+     */
+    function getExpireDate() {
+        var date = new Date();
+        var time = date.getTime();
+        var expireTime = time + 1000*86400;
+        date.setTime(expireTime);
+        return date.toGMTString()
+    }
+    
     /**
      *
      * @param {string} cname
