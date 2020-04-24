@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 1.1.0
+* Enable support for Full Page Cache using cache variation
+
 ### 1.0.4
 * Fix issue where cache was disabled for every page 
 
