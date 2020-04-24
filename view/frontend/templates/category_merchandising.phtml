@@ -41,9 +41,10 @@
     {
         "*": {
             "Nosto_Cmp/js/cmp": {
-                "merchant": "<?php echo $block->getNostoAccount(); ?>",
-                "cookieName": "<?php echo $block->getCookieName(); ?>",
-                "baseUrl": "<?php echo $block->getNostoBaseUrl(); ?>"
+                "merchant": "<?= $block->getNostoAccount(); ?>",
+                "categoryCookie": "<?= $block->getCategoryMappingCookieName(); ?>",
+                "segmentCookie": "<?= $block->getSegmentMappingCookieName(); ?>",
+                "baseUrl": "<?= $block->getNostoBaseUrl(); ?>"
             }
         }
     }

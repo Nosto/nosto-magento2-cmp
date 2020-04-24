@@ -44,32 +44,74 @@ define(['jquery'], function ($) {
         } else if (cid === "") {
             console.warn("Nosto cid is missing. Segment mapping cannot be fetched")
             return;
-        } else if (config.cookieName === "") {
-            console.warn("Nosto mapping cookie name is missing. Segment mapping cannot be fetched")
+        } else if (config.categoryCookie === "") {
+            console.warn("Nosto category mapping cookie name is missing. Segment mapping cannot be fetched")
+        } else if (config.segmentCookie === "") {
+            console.warn("Nosto segment mapping cookie name is missing. Segment mapping cannot be fetched")
         } else if (config.baseUrl === "") {
             console.warn("Nosto base url is missing. Segment mapping cannot be fetched")
         }
-        getMapping(config.merchant, cid, config.cookieName, config.baseUrl)
+
+        getMapping(config.merchant,
+            cid,
+            config.categoryCookie,
+            config.segmentCookie,
+            config.baseUrl
+        );
     }
 
     /**
      *
      * @param {string} merchant
      * @param {string} cid
-     * @param {string} cookieName
+     * @param {string} categoryCookie
+     * @param {string} segmentCookie
      * @param {string} domain
      */
-    function getMapping(merchant, cid, cookieName, domain) {
+    function getMapping(merchant, cid, categoryCookie, segmentCookie, domain) {
         var url = getRequestUrl(domain, merchant, cid)
         $.get(url)
             .done(function (data) {
-                var stringData = JSON.stringify(data);
-                createCookie(stringData, cookieName)
+                handleData(data, categoryCookie, segmentCookie);
             })
             .fail(function (error) {
                 console.warn("Something went wrong trying to fetch segment mapping. Error code: "
                     + error.status)
             })
+    }
+
+    /**
+     * @param {object} data
+     * @param {string} categoryCookie
+     * @param {string} segmentCookie
+     */
+    function handleData(data, categoryCookie, segmentCookie) {
+        var segmentMapping = [];
+        var categoryMapping = {};
+
+        for (const property in data) {
+            if (data[property]) {
+                pushInUniqueValue(segmentMapping, data[property])
+                categoryMapping[property] = segmentMapping.indexOf(data[property]);
+            }
+        }
+
+        var categoryMapValue = JSON.stringify(categoryMapping);
+        createCookie(categoryMapValue, categoryCookie)
+
+        var segmentMapping = JSON.stringify(segmentMapping);
+        createCookie(segmentMapping, segmentCookie)
+    }
+
+    /**
+     *
+     * @param {array} arr
+     * @param {string} item
+     */
+    function pushInUniqueValue(arr, item) {
+        if(arr.indexOf(item) === -1) {
+            arr.push(item);
+        }
     }
 
     /**
@@ -80,7 +122,7 @@ define(['jquery'], function ($) {
      * @returns {string}
      */
     function getRequestUrl(domain, merchant, cid) {
-        return domain + "/cmp-mapping/metadata?m=" + merchant + "&cid=" + cid;;
+        return domain + "/cmp-mapping/magento?m=" + merchant + "&cid=" + cid;;
     }
 
     /**
