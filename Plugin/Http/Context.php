@@ -162,7 +162,9 @@ class Context
         }
         $segmentMap = get_object_vars($stdClass);
 
-        $hashedCategory = crc32($this->categoryString);
+        $signedInteger = crc32($this->categoryString);
+        $unsignedInteger = (int) sprintf("%u", $signedInteger);
+        $hashedCategory = dechex($unsignedInteger);
 
         //Check if current category is part of segment mapping
         if (array_key_exists($hashedCategory, $segmentMap) &&
