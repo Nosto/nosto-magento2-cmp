@@ -4,7 +4,16 @@
   "type": "magento2-module",
   "version": "1.0.4",
   "require-dev": {
-    "php": ">=7.1.0"
+    "php": ">=7.1.0",
+    "mridang/pmd-annotations": "^0.0.2",
+    "phan/phan": "2.6",
+    "drenso/phan-extensions": "^2.5",
+    "staabm/annotate-pull-request-from-checkstyle": "^1.1",
+    "phpmd/phpmd": "^2.5",
+    "squizlabs/php_codesniffer": "3.*",
+    "magento-ecg/coding-standard": "3.*",
+    "magento/framework": ">=101.0.6|~102.0",
+    "magento/magento-coding-standard": "^5.0"
   },
   "license": [
     "OSL-3.0"
