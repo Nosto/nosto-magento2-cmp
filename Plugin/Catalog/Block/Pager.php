@@ -63,14 +63,13 @@ class Pager extends AbstractBlock
         parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
     }
 
-
     /**
      * @param MagentoPager $pager
      * @param $result
      * @param $param
      * @return bool
      */
-    public function afterIsPageCurrent(MagentoPager $pager, $result, $param)
+    public function afterIsPageCurrent(MagentoPager $pager, $result, $param) // phpcs:ignore
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getCurrentPageNumber() === (int) $param;
@@ -95,24 +94,27 @@ class Pager extends AbstractBlock
             $frameLength = $pager->getFrameLength();
 
             // If total number of pages is smaller than frameLength, display them all
-            if ($this->getLastPageNumber() <= $frameLength) {
+            $lastPageNum = $this->getLastPageNumber();
+            if ($lastPageNum <= $frameLength) {
                 $start = 1;
-                $end = $this->getLastPageNumber();
+                $end = $lastPageNum;
             //else display only as much as frameLength
             } else {
                 $half = ceil($frameLength / 2);
-                if ($this->getCurrentPageNumber() >= $half && $this->getCurrentPageNumber() <= $this->getLastPageNumber() - $half) {
-                    $start = $this->getCurrentPageNumber() - $half + 1;
+                $curPageNum = $this->getCurrentPageNumber();
+                if ($curPageNum >= $half
+                    && $curPageNum <= $lastPageNum - $half) {
+                    $start = $curPageNum - $half + 1;
                     $end = $start + $frameLength - 1;
-                } elseif ($this->getCurrentPageNumber() < $half) {
+                } elseif ($curPageNum < $half) {
                     $start = 1;
                     $end = $frameLength;
-                } elseif ($this->getCurrentPageNumber() > $this->getLastPageNumber() - $half) {
-                    $end = $this->getLastPageNumber();
+                } elseif ($curPageNum > $lastPageNum - $half) {
+                    $end = $lastPageNum;
                     $start = $end - $frameLength + 1;
                 }
             }
-            return range($start,$end);
+            return range($start, $end);
         }
         return $result;
     }
@@ -122,7 +124,7 @@ class Pager extends AbstractBlock
      * @param $result
      * @return bool
      */
-    public function afterIsFirstPage(MagentoPager $pager, $result)
+    public function afterIsFirstPage(MagentoPager $pager, $result) // phpcs:ignore
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getCurrentPageNumber() === 1;
@@ -135,7 +137,7 @@ class Pager extends AbstractBlock
      * @param $result
      * @return bool
      */
-    public function afterIsLastPage(MagentoPager $pager, $result)
+    public function afterIsLastPage(MagentoPager $pager, $result) // phpcs:ignore
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber() === $this->getCurrentPageNumber();

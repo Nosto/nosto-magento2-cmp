@@ -215,7 +215,7 @@ abstract class AbstractBlock extends Template
         if ($this->isCmpTakingOverCatalog()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
-            $totalResultOfPage = $block->getCollection()->count();
+            $totalResultOfPage = $block->getCollection()->getSize();
             return $pageSize * ($currentPage - 1) + $totalResultOfPage;
         }
         return $result;
@@ -226,7 +226,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      */
-    public function afterGetTotalNum($block, $result)
+    public function afterGetTotalNum($block, $result) // phpcs:ignore
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getTotalProducts();
@@ -239,7 +239,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      */
-    public function afterGetLastPageNum($block, $result)
+    public function afterGetLastPageNum($block, $result) // phpcs:ignore
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber();

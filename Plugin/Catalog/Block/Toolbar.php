@@ -132,7 +132,7 @@ class Toolbar extends AbstractBlock
      * @return MagentoToolbar
      * @throws NoSuchEntityException
      */
-    public function afterSetCollection(
+    public function afterSetCollection( // phpcs:ignore
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed) {
@@ -215,7 +215,8 @@ class Toolbar extends AbstractBlock
      * Get the current category
      * @return null|string
      */
-    private function getCurrentCategory(Store $store) {
+    private function getCurrentCategory(Store $store)
+    {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category');
         return $this->categoryBuilder->getCategory($category, $store);
@@ -243,7 +244,7 @@ class Toolbar extends AbstractBlock
     {
         $select = $collection->getSelect();
         $zendExpression = new Zend_Db_Expr(
-            'e.entity_id IN (' . implode(',', $nostoProductIds ) . ')'
+            'e.entity_id IN (' . implode(',', $nostoProductIds) . ')'
         );
         $select->where($zendExpression);
     }
@@ -290,6 +291,6 @@ class Toolbar extends AbstractBlock
      */
     private function getSecondarySort()
     {
-        return 'cat_index_position ASC'; // ToDo - must be selectable by the merchant
+        return 'cat_index_position ASC';
     }
 }

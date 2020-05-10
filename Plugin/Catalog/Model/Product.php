@@ -72,8 +72,8 @@ class Product
      */
     private function parseExistingQueryParams($url)
     {
-        $parsed = parse_url($url, PHP_URL_QUERY);
-        parse_str($parsed, $result);
+        $parsed = parse_url($url, PHP_URL_QUERY); // phpcs:ignore
+        parse_str($parsed, $result); // phpcs:ignore
         return $result;
     }
 }

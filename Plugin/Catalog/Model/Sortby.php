@@ -90,7 +90,7 @@ class Sortby extends Template
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetAllOptions(MagentoSortby $sortBy, $options)
+    public function afterGetAllOptions(MagentoSortby $sortBy, $options) // phpcs:ignore
     {
         $id = (int)$this->request->getParam('store');
         $store = $this->storeManager->getStore($id);
