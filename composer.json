@@ -7,6 +7,8 @@
     "php": ">=7.1.0",
     "phing/phing": "2.*",
     "magento-ecg/coding-standard": "3.*",
+    "magento/module-store": "101.0.4",
+    "magento/zendframework1": "1.14.3",
     "mridang/pmd-annotations": "^0.0.2",
     "staabm/annotate-pull-request-from-checkstyle": "^1.1",
     "magento/magento-coding-standard": "^5.0",
