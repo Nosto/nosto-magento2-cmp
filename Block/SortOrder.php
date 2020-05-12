@@ -34,81 +34,65 @@
  *
  */
 
-namespace Nosto\Cmp\Helper;
+namespace Nosto\Cmp\Block;
 
-use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Module\ModuleListInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Nosto\Cmp\Helper\CategorySorting;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Object\SortOrder as NostoSortOrder;
+use Nosto\Tagging\Block\TaggingTrait;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
-class Data extends AbstractHelper
+class SortOrder extends Template
 {
-    const MODULE_NAME = 'Nosto_Cmp';
 
-    /** @var NostoHelperScope */
-    private $nostoHelperScope;
+    use TaggingTrait {
+        TaggingTrait::__construct as taggingConstruct; // @codingStandardsIgnoreLine
+    }
 
-    /**
-     * Path to the configuration object that stores category sorting
-     */
-    const XML_PATH_CATEGORY_SORTING = 'nosto_cmp/flags/category_sorting';
-
-    /** @var ModuleListInterface */
-    private $moduleList;
+    /** @var ParameterResolverInterface */
+    private $parameterResolver;
 
     /**
-     * Data constructor.
+     * SortOrder constructor.
      * @param Context $context
+     * @param ParameterResolverInterface $parameterResolver
+     * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
-     * @param ModuleListInterface $moduleList
      */
     public function __construct(
         Context $context,
-        NostoHelperScope $nostoHelperScope,
-        ModuleListInterface $moduleList
+        ParameterResolverInterface $parameterResolver,
+        NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope
     ) {
         parent::__construct($context);
-        $this->nostoHelperScope = $nostoHelperScope;
-        $this->moduleList = $moduleList;
+        $this->taggingConstruct($nostoHelperAccount, $nostoHelperScope);
+        $this->parameterResolver = $parameterResolver;
     }
 
     /**
-     * Returns if category sorting is enabled
+     * Returns the current sorting order
      *
-     * @param StoreInterface|null $store the store model or null.
-     * @return bool the configuration value
+     * @return string|null the current sorting order
      */
-    public function isCategorySortingEnabled(StoreInterface $store = null)
+    private function getSortOrder()
     {
-        return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_SORTING, $store);
-    }
-
-    /**
-     * @param string $path
-     * @param StoreInterface|Store|null $store
-     * @return mixed|null
-     */
-    public function getStoreConfig($path, StoreInterface $store = null)
-    {
-        if ($store === null) {
-            $store = $this->nostoHelperScope->getStore(true);
+        if ($this->parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+            return NostoSortOrder::CMP_VALUE;
         }
-        return $store->getConfig($path);
+        return $this->parameterResolver->getSortingOrder();
     }
 
     /**
-     * Returns the module version number of the Nosto CMP module.
+     * Returns the abstract object for parent serializer
      *
-     * @return string the module's version
+     * @return NostoSortOrder
      */
-    public function getModuleVersion()
+    public function getAbstractObject()
     {
-        $nostoCmpModule = $this->moduleList->getOne(self::MODULE_NAME);
-        if (!empty($nostoCmpModule['setup_version'])) {
-            return $nostoCmpModule['setup_version'];
-        }
-        return 'unknown';
+        return new NostoSortOrder($this->getSortOrder());
     }
 }
