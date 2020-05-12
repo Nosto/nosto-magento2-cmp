@@ -5,7 +5,6 @@
   "version": "1.1.0",
   "require-dev": {
     "php": ">=7.1.0",
-    "phing/phing": "2.*",
     "magento-ecg/coding-standard": "3.*",
     "magento/module-store": "101.0.4",
     "magento/zendframework1": "1.14.3",
@@ -13,12 +12,12 @@
     "staabm/annotate-pull-request-from-checkstyle": "^1.1",
     "magento/magento-coding-standard": "^5.0",
     "phan/phan": "2.6",
-    "squizlabs/php_codesniffer": "^3.5",
     "phpmd/phpmd": "^2.6",
     "sebastian/phpcpd": "4.1.0",
     "drenso/phan-extensions": "^2.5",
     "phing/phing": "2.*",
-    "squizlabs/php_codesniffer": "^3.5"
+    "squizlabs/php_codesniffer": "^3.5",
+    "magento/module-layered-navigation": "100.3.1"
   },
   "license": [
     "OSL-3.0"

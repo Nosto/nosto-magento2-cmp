@@ -53,7 +53,7 @@ return [
         'Model',
         'Observer',
         'Plugin',
-        'Util',
+        'Utils',
         'vendor/nosto',
         'vendor/vlucas',
         'vendor/phpseclib',

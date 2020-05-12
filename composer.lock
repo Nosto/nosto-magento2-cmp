@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1643319843b6ee40e7e29beeda833f22",
+    "content-hash": "3e6a5a8e7a7c31c4b3ada60fa7ff4ec8",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -4983,6 +4983,35 @@
                 ],
                 "psr-4": {
                     "Magento\\Integration\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
+        },
+        {
+            "name": "magento/module-layered-navigation",
+            "version": "100.3.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-layered-navigation/magento-module-layered-navigation-100.3.1.0.zip",
+                "shasum": "32c5d1e9d21dd98adabe7083ddb3b39ab49d2bde"
+            },
+            "require": {
+                "magento/framework": "102.0.*",
+                "magento/module-catalog": "103.0.*",
+                "magento/module-config": "101.1.*",
+                "php": "~7.1.3||~7.2.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\LayeredNavigation\\": ""
                 }
             },
             "license": [
