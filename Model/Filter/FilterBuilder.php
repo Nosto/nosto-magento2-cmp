@@ -153,7 +153,6 @@ class FilterBuilder
         } catch (NostoException $e) {
             $this->logger->info($e);
         }
-
     }
 
     /**

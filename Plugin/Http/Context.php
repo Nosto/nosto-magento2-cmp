@@ -140,7 +140,8 @@ class Context
      * Get segment id from cookie
      * @return string
      */
-    private function getSegmentFromCookie() {
+    private function getSegmentFromCookie()
+    {
         //Read cookie
         $cookie = $this->cookieManager->getCookie(SegmentMapping::COOKIE_CATEGORY_MAP);
         if ($cookie === null) {
@@ -184,7 +185,8 @@ class Context
     /**
      * @throws NoSuchEntityException
      */
-    private function setCategoryAndStore() {
+    private function setCategoryAndStore()
+    {
         $category = $this->getCategory();
         if ($category) {
             $this->store = $this->storeManager->getStore();
@@ -198,7 +200,8 @@ class Context
      * Checks if the current page is a category page
      * @return bool
      */
-    private function isCategoryPage() {
+    private function isCategoryPage()
+    {
         if (is_string($this->categoryString)) {
             return true;
         }
@@ -209,7 +212,8 @@ class Context
      * Return category object or false if not found
      * @return null|Category
      */
-    private function getCategory() {
+    private function getCategory()
+    {
         $categoryFactory = $this->categoryFactory->create();
         $urlPath = $this->getUrlPath();
         if (!is_string($urlPath)) {
@@ -221,7 +225,8 @@ class Context
     /**
      * @return null|string
      */
-    private function getUrlPath() {
+    private function getUrlPath()
+    {
         $path = $this->request->getUri()->getPath();
         if ($path === null) {
             return null;

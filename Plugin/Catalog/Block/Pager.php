@@ -112,7 +112,7 @@ class Pager extends AbstractBlock
                     $start = $end - $frameLength + 1;
                 }
             }
-            return range($start,$end);
+            return range($start, $end);
         }
         return $result;
     }

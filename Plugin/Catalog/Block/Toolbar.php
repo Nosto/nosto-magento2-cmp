@@ -215,7 +215,8 @@ class Toolbar extends AbstractBlock
      * Get the current category
      * @return null|string
      */
-    private function getCurrentCategory(Store $store) {
+    private function getCurrentCategory(Store $store)
+    {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category');
         return $this->categoryBuilder->getCategory($category, $store);
@@ -243,7 +244,7 @@ class Toolbar extends AbstractBlock
     {
         $select = $collection->getSelect();
         $zendExpression = new Zend_Db_Expr(
-            'e.entity_id IN (' . implode(',', $nostoProductIds ) . ')'
+            'e.entity_id IN (' . implode(',', $nostoProductIds) . ')'
         );
         $select->where($zendExpression);
     }
