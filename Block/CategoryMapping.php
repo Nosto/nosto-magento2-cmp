@@ -37,12 +37,15 @@
 namespace Nosto\Cmp\Block;
 
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Catalog\Model\Category;
+use Magento\Framework\Exception\LocalizedException;
 
 class CategoryMapping extends Template
 {
@@ -75,17 +78,31 @@ class CategoryMapping extends Template
         $this->logger = $logger;
     }
 
+    /**
+     * @return false|string
+     */
     public function getCategoryMap() {
 
         $array = [];
-        $store = $this->storeManager->getStore();
-        if ($store instanceof Store) {
-            $array = $this->getMagentoCategories($store);
+        try {
+            $store = $this->storeManager->getStore();
+            if ($store instanceof Store) {
+                $array = $this->getMagentoCategories($store);
+            }
+        } catch (NoSuchEntityException $e) {
+            $this->logger->exception('Could not get store');
+        } catch (LocalizedException $e) {
+            $this->logger->exception('Could not build category JSON map');
         }
 
         return json_encode((object) $array, JSON_UNESCAPED_SLASHES);
     }
 
+    /**
+     * @param Store $store
+     * @return array
+     * @throws LocalizedException
+     */
     private function getMagentoCategories(Store $store) {
 
         $baseUrl = '';
@@ -104,9 +121,7 @@ class CategoryMapping extends Template
             ->addAttributeToFilter('include_in_menu', array('eq' => 1))
             ->setStore($store);
 
-
-
-        /** @var \Magento\Catalog\Model\Category $item */
+        /** @var Category $category $item */
         foreach ($categories->getItems() as $category) {
             $nostoCategoryString = strtolower(
                 $this->categoryBuilder->getCategory($category, $store)
