@@ -189,7 +189,7 @@ class Context
                 return '';
             }
             $indexedIds = json_decode($indexedIds);
-            return $indexedIds[$index];
+            return $indexedIds[$index]; //@phan-suppress-current-line PhanTypeArraySuspiciousNullable
         }
         return '';
     }
@@ -239,7 +239,7 @@ class Context
      */
     private function getUrlPath()
     {
-        $path = $this->request->getUri()->getPath();
+        $path = $this->request->getUri()->getPath(); //@phan-suppress-current-line PhanUndeclaredMethod
         if ($path === null) {
             return null;
         }

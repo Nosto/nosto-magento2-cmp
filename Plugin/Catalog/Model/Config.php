@@ -89,6 +89,7 @@ class Config extends Template
     {
         /* @var Store $store */
         $store = $this->storeManager->getStore();
+        //@phan-suppress-next-line PhanTypeMismatchArgument
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
