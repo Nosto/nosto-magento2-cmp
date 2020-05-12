@@ -85,7 +85,23 @@ class Context
 
     /** @var NostoLogger  */
     private $logger;
+    /**
+     * @var Session
+     */
+    private $customerSession;
 
+    /**
+     * Context constructor.
+     * @param Session $customerSession
+     * @param CookieManagerInterface $cookieManager
+     * @param CategoryFactory $categoryFactory
+     * @param CategoryBuilder $categoryBuilder
+     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoCmpHelperData $nostoCmpHelperData
+     * @param Http $request
+     * @param NostoLogger $logger
+     */
     public function __construct(
         Session $customerSession,
         CookieManagerInterface $cookieManager,
@@ -112,6 +128,7 @@ class Context
      * @param MagentoContext $subject
      * @return MagentoContext
      */
+    // phpcs:ignore EcgM2.Plugins.Plugin
     public function beforeGetVaryString(MagentoContext $subject)
     {
         try {
@@ -119,10 +136,10 @@ class Context
         } catch (Exception $e) {
             $this->logger->exception($e);
         }
-
+        $sortingParameter = $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM);
         if ($this->isCategoryPage() &&
-            $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM) &&
-            $this->request->getParam(ParamResolver::DEFAULT_SORTING_ORDER_PARAM) === NostoHelperSorting::NOSTO_PERSONALIZED_KEY &&
+            $sortingParameter &&
+            $sortingParameter === NostoHelperSorting::NOSTO_PERSONALIZED_KEY &&
             $this->nostoHelperAccount->nostoInstalledAndEnabled($this->store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($this->store)) {
 
@@ -132,7 +149,6 @@ class Context
             }
             $subject->setValue('CONTEXT_NOSTO', $variation, $defaultValue = "");
         }
-
         return $subject;
     }
 
@@ -151,7 +167,6 @@ class Context
             ));
             return '';
         }
-
         //Parse value
         $stdClass = json_decode($cookie);
         if ($stdClass === null) {
@@ -162,15 +177,12 @@ class Context
             return '';
         }
         $segmentMap = get_object_vars($stdClass);
-
         $signedInteger = crc32($this->categoryString);
         $unsignedInteger = (int) sprintf("%u", $signedInteger);
         $hashedCategory = dechex($unsignedInteger);
-
         //Check if current category is part of segment mapping
         if (array_key_exists($hashedCategory, $segmentMap) &&
             is_numeric($segmentMap[$hashedCategory])) {
-
             $index = $segmentMap[$hashedCategory];
             $indexedIds = $this->cookieManager->getCookie(SegmentMapping::COOKIE_SEGMENT_MAP);
             if ($indexedIds === null || $indexedIds === '') {
@@ -231,17 +243,13 @@ class Context
         if ($path === null) {
             return null;
         }
-
         //Remove leading slash
         $path = substr($path, 1);
         if (!is_string($path)) {
             return null;
         }
-
-
         //Remove . ending
         $path = explode(".", $path)[0];
-
         return $path;
     }
 }

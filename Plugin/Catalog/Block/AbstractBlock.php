@@ -121,7 +121,8 @@ abstract class AbstractBlock extends Template
             return false;
         }
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
-            && $this->nostoHelperAccount->nostoInstalledAndEnabled($store) //@phan-suppress-current-line PhanTypeMismatchArgument
+            //@phan-suppress-next-line PhanTypeMismatchArgument
+            && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             return true;

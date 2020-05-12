@@ -41,10 +41,10 @@
     {
         "*": {
             "Nosto_Cmp/js/cmp": {
-                "merchant": "<?= $block->getNostoAccount(); ?>",
-                "categoryCookie": "<?= $block->getCategoryMappingCookieName(); ?>",
-                "segmentCookie": "<?= $block->getSegmentMappingCookieName(); ?>",
-                "baseUrl": "<?= $block->getNostoBaseUrl(); ?>"
+                "merchant": "<?= $block->escapeHtml($block->getNostoAccount()); ?>",
+                "categoryCookie": "<?= $block->escapeHtml($block->getCategoryMappingCookieName()); ?>",
+                "segmentCookie": "<?= $block->escapeHtml($block->getSegmentMappingCookieName()); ?>",
+                "baseUrl": "<?= $block->escapeHtml($block->getNostoBaseUrl()); ?>"
             }
         }
     }
