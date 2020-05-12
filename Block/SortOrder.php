@@ -36,90 +36,63 @@
 
 namespace Nosto\Cmp\Block;
 
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Nosto;
+use Nosto\Cmp\Helper\CategorySorting;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Object\SortOrder as NostoSortOrder;
+use Nosto\Tagging\Block\TaggingTrait;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
-class SegmentMapping extends Template
+class SortOrder extends Template
 {
-    const COOKIE_CATEGORY_MAP = "n_cmp_mapping";
 
-    const COOKIE_SEGMENT_MAP = "n_cmp_indexes";
+    use TaggingTrait {
+        TaggingTrait::__construct as taggingConstruct; // @codingStandardsIgnoreLine
+    }
 
-    /** @var NostoHelperAccount  */
-    private $nostoHelperAccount;
+    /** @var ParameterResolverInterface */
+    private $parameterResolver;
 
-    /** @var CookieManagerInterface  */
-    private $cookieManager;
-
-    /** @var StoreManagerInterface  */
-    private $storeManager;
-
-    /** @var NostoLogger */
-    private $logger;
-
+    /**
+     * SortOrder constructor.
+     * @param Context $context
+     * @param ParameterResolverInterface $parameterResolver
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
+     */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        NostoHelperAccount $nostoHelperAccount,
-        CookieManagerInterface $cookieManager,
         Context $context,
-        NostoLogger $logger
+        ParameterResolverInterface $parameterResolver,
+        NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope
     ) {
         parent::__construct($context);
-        $this->storeManager = $storeManager;
-        $this->nostoHelperAccount = $nostoHelperAccount;
-        $this->cookieManager = $cookieManager;
-        $this->logger = $logger;
+        $this->taggingConstruct($nostoHelperAccount, $nostoHelperScope);
+        $this->parameterResolver = $parameterResolver;
     }
 
     /**
-     * Return Nosto merchant id
-     * @return null|string
+     * Returns the current sorting order
+     *
+     * @return string|null the current sorting order
      */
-    public function getNostoAccount() {
-        try {
-            $store = $this->storeManager->getStore();
-        } catch (\Exception $e) {
-            $this->logger->exception("Could not get Nosto account ID");
-            return null;
-        }
-        return $this->nostoHelperAccount->getAccountName($store);
-    }
-
-    /**
-     * Return customer id
-     * @return null|string
-     */
-    public function getCustomerId() {
-        return $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-    }
-
-    /**
-     * Return the mapping cookie name
-     * @return string
-     */
-    public function getCategoryMappingCookieName() {
-        return self::COOKIE_CATEGORY_MAP;
-    }
-
-    /**
-     * Return the mapping cookie name
-     * @return string
-     */
-    public function getSegmentMappingCookieName() {
-        return self::COOKIE_SEGMENT_MAP;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNostoBaseUrl()
+    private function getSortOrder()
     {
-        return Nosto::getBaseUrl();
+        if ($this->parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+            return NostoSortOrder::CMP_VALUE;
+        }
+        return $this->parameterResolver->getSortingOrder();
+    }
+
+    /**
+     * Returns the abstract object for parent serializer
+     *
+     * @return NostoSortOrder
+     */
+    public function getAbstractObject()
+    {
+        return new NostoSortOrder($this->getSortOrder());
     }
 }
