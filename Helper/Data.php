@@ -38,12 +38,15 @@ namespace Nosto\Cmp\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Module\ModuleListInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class Data extends AbstractHelper
 {
+    const MODULE_NAME = 'Nosto_Cmp';
+
     /** @var NostoHelperScope */
     private $nostoHelperScope;
 
@@ -52,17 +55,23 @@ class Data extends AbstractHelper
      */
     const XML_PATH_CATEGORY_SORTING = 'nosto_cmp/flags/category_sorting';
 
+    /** @var ModuleListInterface */
+    private $moduleList;
+
     /**
      * Data constructor.
      * @param Context $context
      * @param NostoHelperScope $nostoHelperScope
+     * @param ModuleListInterface $moduleList
      */
     public function __construct(
         Context $context,
-        NostoHelperScope $nostoHelperScope
+        NostoHelperScope $nostoHelperScope,
+        ModuleListInterface $moduleList
     ) {
         parent::__construct($context);
         $this->nostoHelperScope = $nostoHelperScope;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -87,5 +96,19 @@ class Data extends AbstractHelper
             $store = $this->nostoHelperScope->getStore(true);
         }
         return $store->getConfig($path);
+    }
+
+    /**
+     * Returns the module version number of the Nosto CMP module.
+     *
+     * @return string the module's version
+     */
+    public function getModuleVersion()
+    {
+        $nostoCmpModule = $this->moduleList->getOne(self::MODULE_NAME);
+        if (!empty($nostoCmpModule['setup_version'])) {
+            return $nostoCmpModule['setup_version'];
+        }
+        return 'unknown';
     }
 }

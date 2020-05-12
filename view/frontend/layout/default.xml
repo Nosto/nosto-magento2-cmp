@@ -1,6 +1,10 @@
 <!--suppress XmlUnboundNsPrefix -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="head.additional">
+        <block class="Nosto\Cmp\Block\Meta" name="nosto.cmp.meta" after="nosto.meta"
+               template="Nosto_Cmp::meta.phtml"/>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Nosto\Cmp\Block\SegmentMapping"
             name="nosto.catalog.cmp"

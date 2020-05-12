@@ -40,10 +40,10 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Nosto;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Nosto;
 
 class SegmentMapping extends Template
 {
@@ -81,7 +81,8 @@ class SegmentMapping extends Template
      * Return Nosto merchant id
      * @return null|string
      */
-    public function getNostoAccount() {
+    public function getNostoAccount()
+    {
         try {
             $store = $this->storeManager->getStore();
         } catch (\Exception $e) {
@@ -95,7 +96,8 @@ class SegmentMapping extends Template
      * Return customer id
      * @return null|string
      */
-    public function getCustomerId() {
+    public function getCustomerId()
+    {
         return $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
     }
 
@@ -103,7 +105,8 @@ class SegmentMapping extends Template
      * Return the mapping cookie name
      * @return string
      */
-    public function getCategoryMappingCookieName() {
+    public function getCategoryMappingCookieName()
+    {
         return self::COOKIE_CATEGORY_MAP;
     }
 
@@ -111,7 +114,8 @@ class SegmentMapping extends Template
      * Return the mapping cookie name
      * @return string
      */
-    public function getSegmentMappingCookieName() {
+    public function getSegmentMappingCookieName()
+    {
         return self::COOKIE_SEGMENT_MAP;
     }
 
