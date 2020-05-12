@@ -132,7 +132,7 @@ class Toolbar extends AbstractBlock
      * @return MagentoToolbar
      * @throws NoSuchEntityException
      */
-    public function afterSetCollection(
+    public function afterSetCollection( // phpcs:ignore
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed) {
@@ -291,6 +291,6 @@ class Toolbar extends AbstractBlock
      */
     private function getSecondarySort()
     {
-        return 'cat_index_position ASC'; // ToDo - must be selectable by the merchant
+        return 'cat_index_position ASC';
     }
 }

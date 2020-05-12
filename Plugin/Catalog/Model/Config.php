@@ -85,7 +85,7 @@ class Config extends Template
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws NoSuchEntityException
      */
-    public function afterGetAttributeUsedForSortByArray(MagentoConfig $catalogConfig, $options)
+    public function afterGetAttributeUsedForSortByArray(MagentoConfig $catalogConfig, $options) // phpcs:ignore
     {
         /* @var Store $store */
         $store = $this->storeManager->getStore();

@@ -61,7 +61,7 @@ class Action implements ObserverInterface
     /**
      * @param Observer $observer
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer) // phpcs:ignore
     {
         if (!ServerTiming::getInstance()->isEmpty()) {
             $this->response->setHeader(

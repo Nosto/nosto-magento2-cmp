@@ -53,7 +53,7 @@ class ServerTiming
     /**
      * ServerTiming constructor.
      */
-    private function __construct()
+    private function __construct() // phpcs:ignore
     {
         // Private
     }
