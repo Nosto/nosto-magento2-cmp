@@ -72,8 +72,10 @@ class Product
      */
     private function parseExistingQueryParams($url)
     {
-        $parsed = parse_url($url, PHP_URL_QUERY); // phpcs:ignore
-        parse_str($parsed, $result); // phpcs:ignore
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
+        $parsed = parse_url($url, PHP_URL_QUERY);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
+        parse_str($parsed, $result);
         return $result;
     }
 }

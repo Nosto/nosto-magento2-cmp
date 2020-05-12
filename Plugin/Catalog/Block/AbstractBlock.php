@@ -224,7 +224,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      */
-    public function afterGetTotalNum($block, $result) // phpcs:ignore
+    public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getTotalProducts();
@@ -237,7 +237,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      */
-    public function afterGetLastPageNum($block, $result) // phpcs:ignore
+    public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber();

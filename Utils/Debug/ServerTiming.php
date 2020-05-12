@@ -53,7 +53,7 @@ class ServerTiming
     /**
      * ServerTiming constructor.
      */
-    private function __construct() // phpcs:ignore
+    private function __construct() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
     {
         // Private
     }
