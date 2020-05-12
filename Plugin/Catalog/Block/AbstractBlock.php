@@ -41,7 +41,6 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -112,19 +111,17 @@ abstract class AbstractBlock extends Template
     public function isCmpCurrentSortOrder()
     {
         try {
-            /* @var Store $store */
             $store = $this->storeManager->getStore();
         } catch (NoSuchEntityException $e) {
             $this->logger->info('Cannot get store');
             return false;
         }
-
         $currentOrder = $this->getCurrentOrder();
         if ($currentOrder === null) {
             return false;
         }
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
-            && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
+            && $this->nostoHelperAccount->nostoInstalledAndEnabled($store) //@phan-suppress-current-line PhanTypeMismatchArgument
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             return true;

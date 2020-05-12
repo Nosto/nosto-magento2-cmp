@@ -36,12 +36,10 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Exception;
 use Nosto\Object\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
 use Nosto\Operation\Recommendation\CategoryMerchandising;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
@@ -53,20 +51,16 @@ class Category
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
     const MAX_PRODUCT_AMOUNT = 100;
 
-    private $logger;
     private $cookieManager;
 
     /**
      * Category constructor.
      * @param CookieManagerInterface $cookieManager
-     * @param NostoLogger $logger
      */
     public function __construct(
-        CookieManagerInterface $cookieManager,
-        NostoLogger $logger
+        CookieManagerInterface $cookieManager
     ) {
         $this->cookieManager = $cookieManager;
-        $this->logger = $logger;
     }
 
     /**

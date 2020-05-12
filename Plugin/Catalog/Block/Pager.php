@@ -153,7 +153,7 @@ class Pager extends AbstractBlock
     public function afterGetNextPageUrl(MagentoPager $pager, $result)
     {
         if ($this->isCmpTakingOverCatalog()) {
-            return $pager->getPageUrl($this->getCurrentPageNumber() + 1);
+            return $pager->getPageUrl((string)($this->getCurrentPageNumber() + 1));
         }
         return $result;
     }
@@ -166,7 +166,7 @@ class Pager extends AbstractBlock
     public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
     {
         if ($this->isCmpTakingOverCatalog()) {
-            return $pager->getPageUrl($this->getCurrentPageNumber() - 1);
+            return $pager->getPageUrl((string)($this->getCurrentPageNumber() - 1));
         }
         return $result;
     }

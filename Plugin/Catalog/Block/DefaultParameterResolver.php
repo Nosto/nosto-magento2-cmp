@@ -92,7 +92,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
          * @var Category $category
          * @noinspection PhpDeprecationInspection
          */
-        $category = $this->registry->registry('current_category');
+        $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         if ($category instanceof Category) {
             return $category->getDefaultSortBy();
         }
