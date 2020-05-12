@@ -62,7 +62,7 @@ class ServerTiming
      * Call user function, measure how long it takes and add time to array
      * @param callable $fn
      * @param string $name
-     * @return mixed;
+     * @return mixed
      */
     public function instrument(callable $fn, $name)
     {
