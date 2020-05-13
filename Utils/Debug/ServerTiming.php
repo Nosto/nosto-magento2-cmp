@@ -53,7 +53,7 @@ class ServerTiming
     /**
      * ServerTiming constructor.
      */
-    private function __construct()
+    private function __construct() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
     {
         // Private
     }
@@ -62,7 +62,7 @@ class ServerTiming
      * Call user function, measure how long it takes and add time to array
      * @param callable $fn
      * @param string $name
-     * @return mixed;
+     * @return mixed
      */
     public function instrument(callable $fn, $name)
     {

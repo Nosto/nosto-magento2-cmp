@@ -151,9 +151,8 @@ class FilterBuilder
         try {
             $this->mapValueToFilter($filterName, $value);
         } catch (NostoException $e) {
-            $this->logger->info($e);
+            $this->logger->info($e->getMessage());
         }
-
     }
 
     /**
@@ -173,7 +172,7 @@ class FilterBuilder
                 $this->includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $this->includeFilters->setFresh($value);
+                $this->includeFilters->setFresh((bool)$value);
                 break;
             default:
                 $this->includeFilters->setCustomFields($name, $this->makeArrayFromValue($value));

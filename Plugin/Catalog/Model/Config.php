@@ -85,10 +85,13 @@ class Config extends Template
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws NoSuchEntityException
      */
-    public function afterGetAttributeUsedForSortByArray(MagentoConfig $catalogConfig, $options)
-    {
+    public function afterGetAttributeUsedForSortByArray( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        MagentoConfig $catalogConfig,
+        $options
+    ) {
         /* @var Store $store */
         $store = $this->storeManager->getStore();
+        //@phan-suppress-next-line PhanTypeMismatchArgument
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
