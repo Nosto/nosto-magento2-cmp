@@ -119,6 +119,7 @@ class CategoryMapping extends Template
         $categories = $this->collectionFactory->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('include_in_menu', array('eq' => 1))
+            ->addIsActiveFilter()
             ->setStore($store);
 
         /** @var Category $category $item */

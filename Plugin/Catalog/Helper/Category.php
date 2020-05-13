@@ -36,27 +36,22 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Helper;
 
-use Magento\Catalog\Helper\Category as MagentoCategory;
+use Magento\Catalog\Helper\Category as CategoryHelper;
 use Nosto\Cmp\Utils\Url as NostoUtilsUrl;
+use Purl\Url;
 
 class Category
 {
     /**
-     * @param MagentoCategory $navigation
+     * @param CategoryHelper $navigation
      * @param $categoryString
      * @return string
      */
-    public function afterGetCategoryUrl(MagentoCategory $navigation, $categoryString)
+    public function afterGetCategoryUrl(CategoryHelper $categoryHelper, $categoryUrl)
     {
-        $parsedUrl = parse_url($categoryString);
-        if (is_array($parsedUrl)) {
-            if (isset($parsedUrl['fragment'])) {
-                $parsedUrl['fragment'] .= '&nosto_cmp';
-            } else {
-                $parsedUrl['fragment'] = 'nosto_cmp';
-            }
-            return NostoUtilsUrl::buildUrl($parsedUrl);
-        }
-        return $categoryString;
+        $url = new Url($categoryUrl);
+        $fragment = $url->getFragment()->setFragment('nosto_cmp');
+        $url->setFragment($fragment);
+        return $url->get();
     }
 }
