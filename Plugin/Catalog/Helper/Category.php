@@ -42,6 +42,9 @@ use Purl\Url;
 
 class Category
 {
+
+    const NOSTO_CMP_FRAGMENT = 'nosto_cmp';
+
     /**
      * @param CategoryHelper $navigation
      * @param $categoryString
@@ -49,9 +52,9 @@ class Category
      */
     public function afterGetCategoryUrl(CategoryHelper $categoryHelper, $categoryUrl)
     {
-        $url = new Url($categoryUrl);
-        $fragment = $url->getFragment()->setFragment('nosto_cmp');
-        $url->setFragment($fragment);
-        return $url->get();
+        $url = (new Url($categoryUrl))
+        ->set('fragment', self::NOSTO_CMP_FRAGMENT);
+
+        return $url->getUrl();
     }
 }
