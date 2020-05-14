@@ -81,7 +81,8 @@ class CategoryMapping extends Template
     /**
      * @return false|string
      */
-    public function getCategoryMap() {
+    public function getCategoryMap()
+    {
 
         $array = [];
         try {
@@ -100,7 +101,8 @@ class CategoryMapping extends Template
      * @param Store $store
      * @return array
      */
-    private function getMagentoCategories(Store $store) {
+    private function getMagentoCategories(Store $store)
+    {
 
         $baseUrl = '';
         $categoriesArray = [];
@@ -110,7 +112,7 @@ class CategoryMapping extends Template
 
             $categories = $this->collectionFactory->create()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('include_in_menu', array('eq' => 1))
+                ->addAttributeToFilter('include_in_menu', ['eq' => 1])
                 ->addIsActiveFilter()
                 ->setStore($store);
 
