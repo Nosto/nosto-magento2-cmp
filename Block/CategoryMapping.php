@@ -91,8 +91,6 @@ class CategoryMapping extends Template
             }
         } catch (NoSuchEntityException $e) {
             $this->logger->exception('Could not get store');
-        } catch (LocalizedException $e) {
-            $this->logger->exception('Could not build category JSON map');
         }
 
         return json_encode((object) $array, JSON_UNESCAPED_SLASHES);
@@ -110,28 +108,31 @@ class CategoryMapping extends Template
 
         try {
             $baseUrl = $store->getBaseUrl();
+
+            $categories = $this->collectionFactory->create()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('include_in_menu', array('eq' => 1))
+                ->addIsActiveFilter()
+                ->setStore($store);
+
+            /** @var Category $category $item */
+            foreach ($categories->getItems() as $category) {
+                $nostoCategoryString = strtolower(
+                    $this->categoryBuilder->getCategory($category, $store)
+                );
+                $categoryUrl = $baseUrl . '' . $category->getUrlPath();
+                if ($nostoCategoryString) {
+                    $categoriesArray[$nostoCategoryString] = $categoryUrl;
+                }
+            }
         } catch (\Exception $e) {
             $this->logger->exception(sprintf("Could not fetch base url for store %s",
                 $store->getName())
             );
+        } catch (LocalizedException $e) {
+            $this->logger->exception('Could not filter category collection');
         }
 
-        $categories = $this->collectionFactory->create()
-            ->addAttributeToSelect('*')
-            ->addAttributeToFilter('include_in_menu', array('eq' => 1))
-            ->addIsActiveFilter()
-            ->setStore($store);
-
-        /** @var Category $category $item */
-        foreach ($categories->getItems() as $category) {
-            $nostoCategoryString = strtolower(
-                $this->categoryBuilder->getCategory($category, $store)
-            );
-            $categoryUrl = $baseUrl . '' . $category->getUrlPath();
-            if ($nostoCategoryString) {
-                $categoriesArray[$nostoCategoryString] = $categoryUrl;
-            }
-        }
         return $categoriesArray;
     }
 }

@@ -53,7 +53,7 @@ class Category
     public function afterGetCategoryUrl(CategoryHelper $categoryHelper, $categoryUrl)
     {
         $url = (new Url($categoryUrl))
-        ->set('fragment', self::NOSTO_CMP_FRAGMENT);
+            ->set('fragment', self::NOSTO_CMP_FRAGMENT);
 
         return $url->getUrl();
     }
