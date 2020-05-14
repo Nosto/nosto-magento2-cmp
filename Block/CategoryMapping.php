@@ -99,7 +99,6 @@ class CategoryMapping extends Template
     /**
      * @param Store $store
      * @return array
-     * @throws LocalizedException
      */
     private function getMagentoCategories(Store $store) {
 
