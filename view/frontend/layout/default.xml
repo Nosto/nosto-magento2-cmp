@@ -10,5 +10,8 @@
         <block class="Nosto\Cmp\Block\SegmentMapping"
             name="nosto.catalog.cmp"
             template="Nosto_Cmp::category_merchandising.phtml" />
+        <block class="Nosto\Cmp\Block\CategoryMapping"
+            name="nosto.catalog.mapping"
+            template="Nosto_Cmp::category_mapping.phtml" />
     </referenceContainer>
 </page>

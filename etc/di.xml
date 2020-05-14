@@ -54,4 +54,7 @@
     <type name="Magento\Framework\App\Http\Context">
         <plugin name="nosto_segmented_context" type="Nosto\Cmp\Plugin\Http\Context" />
     </type>
+    <type name="Magento\Catalog\Helper\Category">
+        <plugin name="nosto_catalog_helper_category" type="Nosto\Cmp\Plugin\Catalog\Helper\Category" />
+    </type>
 </config>
