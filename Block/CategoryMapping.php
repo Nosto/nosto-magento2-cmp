@@ -100,6 +100,7 @@ class CategoryMapping extends Template
     /**
      * @param Store $store
      * @return array
+     * @suppress PhanTypeMismatchArgument
      */
     private function getMagentoCategories(Store $store)
     {
