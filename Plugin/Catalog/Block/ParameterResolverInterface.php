@@ -43,7 +43,6 @@ interface ParameterResolverInterface
      */
     public function getSortingOrder();
 
-
     /**
      * @return int
      */

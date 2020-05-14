@@ -44,6 +44,7 @@ class Product
     const NOSTO_SOURCE_PARAMETER_NAME = 'nosto_source';
     const NOSTO_PRODUCT_ID_PARAMETER_VALUE = 'nosto_pid';
     const NOSTO_SOURCE_PARAMETER_VALUE = 'cmp';
+    const NOSTO_OVERRIDABLE_ATTR_PARAM = 'nosto_cmp';
 
     /**
      * @param MagentoProduct $product
@@ -59,7 +60,13 @@ class Product
                 self::NOSTO_SOURCE_PARAMETER_NAME => self::NOSTO_SOURCE_PARAMETER_VALUE
             ];
             $params = array_merge($existingParams, $nostoParam);
-            $url = $product->getUrlModel()->getUrl($product, ['_query' => $params]);
+            $url = $product->getUrlModel()->getUrl(
+                $product,
+                [
+                    '_query' => $params,
+                    '_fragment' => self::NOSTO_OVERRIDABLE_ATTR_PARAM
+                ]
+            );
         }
         return $url;
     }
@@ -72,7 +79,9 @@ class Product
      */
     private function parseExistingQueryParams($url)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
         $parsed = parse_url($url, PHP_URL_QUERY);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
         parse_str($parsed, $result);
         return $result;
     }

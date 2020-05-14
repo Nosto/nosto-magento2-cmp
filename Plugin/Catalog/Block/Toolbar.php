@@ -53,7 +53,6 @@ use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Exception\TokenException\MissingAppsTokenException;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
@@ -132,7 +131,7 @@ class Toolbar extends AbstractBlock
      * @return MagentoToolbar
      * @throws NoSuchEntityException
      */
-    public function afterSetCollection(
+    public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed) {
@@ -150,7 +149,7 @@ class Toolbar extends AbstractBlock
                     );
                 }
                 $this->setLimit($subjectCollection->getPageSize());
-                $result = $this->getCmpResult($store);
+                $result = $this->getCmpResult($store); //@phan-suppress-current-line PhanTypeMismatchArgument
                 //Get ids of products to order
                 $nostoProductIds = $this->parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -165,7 +164,7 @@ class Toolbar extends AbstractBlock
                 } else {
                     $this->logger->info(sprintf(
                         "CMP result is empty for category: %s",
-                        $this->getCurrentCategory($store)
+                        $this->getCurrentCategory($store) //@phan-suppress-current-line PhanTypeMismatchArgument
                     ));
                 }
             } catch (Exception $e) {
@@ -180,7 +179,6 @@ class Toolbar extends AbstractBlock
      * @param Store $store
      * @return CategoryMerchandisingResult
      * @throws NostoException
-     * @throws MissingAppsTokenException
      * @throws LocalizedException
      */
     private function getCmpResult(Store $store)
@@ -215,9 +213,10 @@ class Toolbar extends AbstractBlock
      * Get the current category
      * @return null|string
      */
-    private function getCurrentCategory(Store $store) {
+    private function getCurrentCategory(Store $store)
+    {
         /** @noinspection PhpDeprecationInspection */
-        $category = $this->registry->registry('current_category');
+        $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         return $this->categoryBuilder->getCategory($category, $store);
     }
 
@@ -243,7 +242,7 @@ class Toolbar extends AbstractBlock
     {
         $select = $collection->getSelect();
         $zendExpression = new Zend_Db_Expr(
-            'e.entity_id IN (' . implode(',', $nostoProductIds ) . ')'
+            'e.entity_id IN (' . implode(',', $nostoProductIds) . ')'
         );
         $select->where($zendExpression);
     }
@@ -290,6 +289,6 @@ class Toolbar extends AbstractBlock
      */
     private function getSecondarySort()
     {
-        return 'cat_index_position ASC'; // ToDo - must be selectable by the merchant
+        return 'cat_index_position ASC';
     }
 }

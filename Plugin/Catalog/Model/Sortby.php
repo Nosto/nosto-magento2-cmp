@@ -90,8 +90,10 @@ class Sortby extends Template
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetAllOptions(MagentoSortby $sortBy, $options)
-    {
+    public function afterGetAllOptions( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        MagentoSortby $sortBy,
+        $options
+    ) {
         $id = (int)$this->request->getParam('store');
         $store = $this->storeManager->getStore($id);
 
@@ -100,7 +102,7 @@ class Sortby extends Template
         ) {
             // new option
             $customOption = [
-              ['label' => __('Relevance'), 'value' => NostoHelperSorting::NOSTO_PERSONALIZED_KEY]
+              ['label' => __(['Relevance']), 'value' => NostoHelperSorting::NOSTO_PERSONALIZED_KEY]
             ];
 
             // merge default sorting options with custom options

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2019, Nosto Solutions Ltd
+ * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,54 +29,59 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2019 Nosto Solutions Ltd
+ * @copyright 2020 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
-
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Utils\Debug\Product;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
-
-class Action implements ObserverInterface
-{
-    /**
-     * @var HttpResponse $response
-     */
-    private $response;
-
-    /**
-     * Action constructor.
-     * @param HttpResponse $response
-     */
-    public function __construct(HttpResponse $response)
-    {
-        $this->response = $response;
-    }
-
-    /**
-     * @param Observer $observer
-     */
-    public function execute(Observer $observer) // phpcs:ignore
-    {
-        if (!ServerTiming::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                ServerTiming::HEADER_NAME,
-                ServerTiming::getInstance()->build(),
-                true
-            );
-        }
-
-        if (!Product::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                Product::HEADER_NAME,
-                Product::getInstance()->build(),
-                true
-            );
-        }
-    }
-}
+return [
+    'backward_compatibility_checks' => false,
+    'signature-compatibility' => true,
+    'progress-bar' => true,
+    'simplify_ast' => false,
+    'dead_code_detection' => false,
+    'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
+    'directory_list' => [
+        'Api',
+        'Block',
+        'Console',
+        'Controller',
+        'Cron',
+        'CustomerData',
+        'Helper',
+        'Logger',
+        'Model',
+        'Observer',
+        'Plugin',
+        'Utils',
+        'vendor/nosto',
+        'vendor/vlucas',
+        'vendor/phpseclib',
+        'vendor/magento',
+        'vendor/monolog',
+        'vendor/zendframework',
+        'vendor/psr',
+        'vendor/symfony/console',
+        'magento/generated',
+        '../../../generated',
+        'vendor/jwage'
+    ],
+    'exclude_file_list' => [
+        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
+        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Cn.php',
+        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Com.php',
+        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Jp.php',
+    ],
+    'exclude_analysis_directory_list' => [
+      'vendor/',
+      'magento',
+      '../../../generated'
+    ],
+    'suppress_issue_types' => [
+        'PhanParamSignatureMismatch',
+    ],
+    "color_issue_messages_if_supported" => true,
+    'plugins' => [
+      'vendor/drenso/phan-extensions/Plugin/DocComment/InlineVarPlugin.php'
+    ]
+];

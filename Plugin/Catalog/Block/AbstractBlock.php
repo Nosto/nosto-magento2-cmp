@@ -41,7 +41,6 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -112,18 +111,17 @@ abstract class AbstractBlock extends Template
     public function isCmpCurrentSortOrder()
     {
         try {
-            /* @var Store $store */
             $store = $this->storeManager->getStore();
         } catch (NoSuchEntityException $e) {
             $this->logger->info('Cannot get store');
             return false;
         }
-
         $currentOrder = $this->getCurrentOrder();
         if ($currentOrder === null) {
             return false;
         }
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
+            //@phan-suppress-next-line PhanTypeMismatchArgument
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
@@ -215,7 +213,7 @@ abstract class AbstractBlock extends Template
         if ($this->isCmpTakingOverCatalog()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
-            $totalResultOfPage = $block->getCollection()->count();
+            $totalResultOfPage = $block->getCollection()->getSize();
             return $pageSize * ($currentPage - 1) + $totalResultOfPage;
         }
         return $result;
@@ -226,7 +224,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      */
-    public function afterGetTotalNum($block, $result)
+    public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getTotalProducts();
@@ -239,7 +237,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      */
-    public function afterGetLastPageNum($block, $result)
+    public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber();

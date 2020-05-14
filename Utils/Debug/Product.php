@@ -53,7 +53,7 @@ class Product
     /**
      * Product constructor.
      */
-    private function __construct()
+    private function __construct() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
     {
         // Private
     }

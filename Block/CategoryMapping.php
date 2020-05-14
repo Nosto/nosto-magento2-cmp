@@ -36,6 +36,8 @@
 
 namespace Nosto\Cmp\Block;
 
+use Exception;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
@@ -44,8 +46,6 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Magento\Catalog\Model\Category;
-use Magento\Framework\Exception\LocalizedException;
 
 class CategoryMapping extends Template
 {
@@ -81,7 +81,8 @@ class CategoryMapping extends Template
     /**
      * @return false|string
      */
-    public function getCategoryMap() {
+    public function getCategoryMap()
+    {
 
         $array = [];
         try {
@@ -90,7 +91,7 @@ class CategoryMapping extends Template
                 $array = $this->getMagentoCategories($store);
             }
         } catch (NoSuchEntityException $e) {
-            $this->logger->exception('Could not get store');
+            $this->logger->exception($e);
         }
 
         return json_encode((object) $array, JSON_UNESCAPED_SLASHES);
@@ -99,8 +100,10 @@ class CategoryMapping extends Template
     /**
      * @param Store $store
      * @return array
+     * @suppress PhanTypeMismatchArgument
      */
-    private function getMagentoCategories(Store $store) {
+    private function getMagentoCategories(Store $store)
+    {
 
         $baseUrl = '';
         $categoriesArray = [];
@@ -110,7 +113,7 @@ class CategoryMapping extends Template
 
             $categories = $this->collectionFactory->create()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('include_in_menu', array('eq' => 1))
+                ->addAttributeToFilter('include_in_menu', ['eq' => 1])
                 ->addIsActiveFilter()
                 ->setStore($store);
 
@@ -124,12 +127,8 @@ class CategoryMapping extends Template
                     $categoriesArray[$nostoCategoryString] = $categoryUrl;
                 }
             }
-        } catch (\Exception $e) {
-            $this->logger->exception(sprintf("Could not fetch base url for store %s",
-                $store->getName())
-            );
-        } catch (LocalizedException $e) {
-            $this->logger->exception('Could not filter category collection');
+        } catch (Exception $e) {
+            $this->logger->exception($e);
         }
 
         return $categoriesArray;

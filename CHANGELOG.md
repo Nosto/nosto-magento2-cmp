@@ -1,5 +1,12 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 1.2.0
+* Add tagging for module version
+* Add fragment to product urls served by CMP
+* Add fragment to category urls
+* Add block for categories mapping
+* Add sort order tagging
+
 ### 1.1.0
 * Enable support for Full Page Cache using cache variation
 

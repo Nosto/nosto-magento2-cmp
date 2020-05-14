@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright (c) 2019, Nosto Solutions Ltd
+  ~ Copyright (c) 2020, Nosto Solutions Ltd
   ~ All rights reserved.
   ~
   ~ Redistribution and use in source and binary forms, with or without modification,
@@ -29,17 +29,29 @@
   ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   ~
   ~ @author Nosto Solutions Ltd <contact@nosto.com>
-  ~ @copyright 2019 Nosto Solutions Ltd
+  ~ @copyright 2020 Nosto Solutions Ltd
   ~ @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
   ~
   -->
 
 <!--suppress XmlUnboundNsPrefix -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Nosto_Cmp" setup_version="1.2.0">
-        <sequence>
-            <module name="Nosto_Tagging"/>
-        </sequence>
-    </module>
-</config>
+<ruleset name="Magento">
+    <file>./Block</file>
+    <file>./Helper</file>
+    <file>./Model</file>
+    <file>./Observer</file>
+    <file>./Plugin</file>
+    <file>./Utils</file>
+    <file>./view</file>
+    <exclude-pattern>*.js</exclude-pattern>
+    <exclude-pattern>*.css</exclude-pattern>
+    <config name="installed_paths"
+            value="./vendor/magento-ecg/coding-standard/EcgM2,./vendor/magento/magento-coding-standard/Magento2"/>
+    <description>The Magento coding standard.</description>
+    <rule ref="./vendor/magento-ecg/coding-standard/EcgM2">
+    </rule>
+    <rule ref="./vendor/magento/magento-coding-standard/Magento2">
+        <exclude name="Magento2.Functions.StaticFunction"/>
+        <exclude name="Generic.Metrics.CyclomaticComplexity"/>
+    </rule>
+</ruleset>

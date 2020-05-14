@@ -44,6 +44,7 @@ use Nosto\Nosto;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Magento\Store\Model\Store;
 
 class SegmentMapping extends Template
 {
@@ -86,10 +87,11 @@ class SegmentMapping extends Template
         try {
             $store = $this->storeManager->getStore();
         } catch (\Exception $e) {
-            $this->logger->exception("Could not get Nosto account ID");
+            $this->logger->error($e->getMessage() . 'Could not get Nosto account ID');
             return null;
         }
-        return $this->nostoHelperAccount->getAccountName($store);
+        /** @var Store $store */
+        return $this->nostoHelperAccount->getAccountName($store); //@phan-suppress-current-line PhanTypeMismatchArgument
     }
 
     /**
