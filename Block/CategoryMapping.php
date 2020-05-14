@@ -46,6 +46,7 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Exception\LocalizedException;
+use Exception;
 
 class CategoryMapping extends Template
 {
@@ -124,12 +125,12 @@ class CategoryMapping extends Template
                     $categoriesArray[$nostoCategoryString] = $categoryUrl;
                 }
             }
-        } catch (\Exception $e) {
-            $this->logger->exception(sprintf("Could not fetch base url for store %s",
-                $store->getName())
-            );
         } catch (LocalizedException $e) {
             $this->logger->exception('Could not filter category collection');
+        } catch (Exception $e) {
+            $this->logger->exception(sprintf("Could not fetch base url for store %s",
+                    $store->getName())
+            );
         }
 
         return $categoriesArray;
