@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Plugin\Catalog\Helper;
 
 use Magento\Catalog\Helper\Category as CategoryHelper;
-use Nosto\Cmp\Utils\Url as NostoUtilsUrl;
 use Purl\Url;
 
 class Category
@@ -46,12 +45,17 @@ class Category
     const NOSTO_CMP_FRAGMENT = 'nosto_cmp';
 
     /**
-     * @param CategoryHelper $navigation
-     * @param $categoryString
+     * @param CategoryHelper $categoryHelper
+     * @param $categoryUrl
      * @return string
+     * @suppress PhanUndeclaredMethod
      */
-    public function afterGetCategoryUrl(CategoryHelper $categoryHelper, $categoryUrl)
-    {
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter -- unused $categoryHelper
+    public function afterGetCategoryUrl(
+        CategoryHelper $categoryHelper,
+        $categoryUrl
+    ) {
+        /** @var Url $url */
         $url = (new Url($categoryUrl))
             ->set('fragment', self::NOSTO_CMP_FRAGMENT);
 
