@@ -62,7 +62,9 @@ return [
         'vendor/zendframework',
         'vendor/psr',
         'vendor/symfony/console',
-        'magento/generated'
+        'magento/generated',
+        '../../../generated',
+        'vendor/jwage'
     ],
     'exclude_file_list' => [
         'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
@@ -72,7 +74,8 @@ return [
     ],
     'exclude_analysis_directory_list' => [
       'vendor/',
-      'magento'
+      'magento',
+      '../../../generated'
     ],
     'suppress_issue_types' => [
         'PhanParamSignatureMismatch',
