@@ -1,5 +1,10 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 1.2.1
+* Fix URL fragment on every category page
+* Fix sorting key parameter type that prevented category page to load
+* Remove secondary sorting query 
+
 ### 1.2.0
 * Add tagging for module version
 * Add fragment to product urls served by CMP
