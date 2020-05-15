@@ -228,8 +228,7 @@ class Toolbar extends AbstractBlock
     {
         $select = $collection->getSelect();
         $zendExpression = [
-            new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC'),
-            new Zend_Db_Expr($this->getSecondarySort())
+            new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC')
         ];
         $select->order($zendExpression);
     }
@@ -280,15 +279,5 @@ class Toolbar extends AbstractBlock
                 $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
             }
         });
-    }
-
-    /**
-     * Returns the secondary sort defined by the merchant
-     *
-     * @return string
-     */
-    private function getSecondarySort()
-    {
-        return 'cat_index_position ASC';
     }
 }
