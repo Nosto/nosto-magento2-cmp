@@ -119,12 +119,12 @@ class CategoryMapping extends Template
 
             /** @var Category $category $item */
             foreach ($categories->getItems() as $category) {
-                $nostoCategoryString = strtolower(
+                $hashedCategoryString = $this->hashCategoryString(strtolower(
                     $this->categoryBuilder->getCategory($category, $store)
-                );
+                ));
                 $categoryUrl = $baseUrl . '' . $category->getUrlPath();
-                if ($nostoCategoryString) {
-                    $categoriesArray[$nostoCategoryString] = $categoryUrl;
+                if ($hashedCategoryString) {
+                    $categoriesArray[$hashedCategoryString] = $categoryUrl;
                 }
             }
         } catch (Exception $e) {
@@ -132,5 +132,16 @@ class CategoryMapping extends Template
         }
 
         return $categoriesArray;
+    }
+
+    /**
+     * @param String $categoryString
+     * @return string
+     */
+    private function hashCategoryString($categoryString)
+    {
+        $signedInteger = crc32($categoryString);
+        $unsignedInteger = (int) sprintf("%u", $signedInteger);
+        return dechex($unsignedInteger);
     }
 }

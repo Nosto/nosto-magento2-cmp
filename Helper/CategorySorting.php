@@ -72,11 +72,12 @@ class CategorySorting extends AbstractHelper
      * Return array that contains all sorting options offered by Nosto
      *
      * @return array
+     * @suppress PhanTypeMismatchArgument
      */
     public static function getNostoSortingOptions()
     {
         return [
-            self::NOSTO_PERSONALIZED_KEY => __(['Relevance'])
+            self::NOSTO_PERSONALIZED_KEY => __('Relevance')
         ];
     }
 

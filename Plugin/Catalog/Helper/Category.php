@@ -37,6 +37,9 @@
 namespace Nosto\Cmp\Plugin\Catalog\Helper;
 
 use Magento\Catalog\Helper\Category as CategoryHelper;
+use Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver;
+use Magento\Framework\UrlInterface;
+use Nosto\Cmp\Helper\CategorySorting;
 use Purl\Url;
 
 class Category
@@ -44,21 +47,33 @@ class Category
 
     const NOSTO_CMP_FRAGMENT = 'nosto_cmp';
 
+    /** @var UrlInterface */
+    private $url;
+
+    public function __construct(UrlInterface $url)
+    {
+        $this->url = $url;
+    }
     /**
      * @param CategoryHelper $categoryHelper
      * @param $categoryUrl
      * @return string
      * @suppress PhanUndeclaredMethod
      */
-    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter -- unused $categoryHelper
-    public function afterGetCategoryUrl(
+    public function afterGetCategoryUrl( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         CategoryHelper $categoryHelper,
         $categoryUrl
     ) {
-        /** @var Url $url */
-        $url = (new Url($categoryUrl))
-            ->set('fragment', self::NOSTO_CMP_FRAGMENT);
-
-        return $url->getUrl();
+        $currentUrl = $this->url->getCurrentUrl();
+        $nostoSortParam = sprintf(
+            '%s=%s',
+            DefaultParameterResolver::DEFAULT_SORTING_ORDER_PARAM,
+            CategorySorting::NOSTO_PERSONALIZED_KEY
+        );
+        // phpcs:ignore Ecg.Strings.StringPosition.ImproperValueTesting,Magento2.PHP.ReturnValueCheck.ImproperValueTesting
+        if (strpos($currentUrl, $nostoSortParam)) {
+            return (new Url($categoryUrl))->set('fragment', self::NOSTO_CMP_FRAGMENT);
+        }
+        return new Url($categoryUrl);
     }
 }
