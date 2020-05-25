@@ -122,9 +122,8 @@ class CategoryMapping extends Template
                 $hashedCategoryString = $this->hashCategoryString(strtolower(
                     $this->categoryBuilder->getCategory($category, $store)
                 ));
-                $categoryUrl = $baseUrl . '' . $category->getUrlPath();
                 if ($hashedCategoryString) {
-                    $categoriesArray[$hashedCategoryString] = $categoryUrl;
+                    $categoriesArray[$hashedCategoryString] = $category->getUrl();
                 }
             }
         } catch (Exception $e) {
