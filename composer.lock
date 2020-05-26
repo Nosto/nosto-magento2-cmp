@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2239640cae9b17c1678b13da5a449173",
+    "content-hash": "34464cde6496d62d250efda434b2f36e",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "42fc372e5208522fc8bafafde916a455c53807d6"
+                "reference": "2332b60f351f3e9a0e651149b7a067b61148c97c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/42fc372e5208522fc8bafafde916a455c53807d6",
-                "reference": "42fc372e5208522fc8bafafde916a455c53807d6",
+                "url": "https://api.github.com/repos/composer/composer/zipball/2332b60f351f3e9a0e651149b7a067b61148c97c",
+                "reference": "2332b60f351f3e9a0e651149b7a067b61148c97c",
                 "shasum": ""
             },
             "require": {
@@ -218,7 +218,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-05-08T18:53:43+00:00"
+            "time": "2020-05-22T08:23:47+00:00"
         },
         {
             "name": "composer/semver",
@@ -287,12 +287,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "960a9f51c10bf73dd16c21a24223ef7ed29271b5"
+                "reference": "5a22999026e9d9bddbb2bc51d838b1efa48d627c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/960a9f51c10bf73dd16c21a24223ef7ed29271b5",
-                "reference": "960a9f51c10bf73dd16c21a24223ef7ed29271b5",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/5a22999026e9d9bddbb2bc51d838b1efa48d627c",
+                "reference": "5a22999026e9d9bddbb2bc51d838b1efa48d627c",
                 "shasum": ""
             },
             "require": {
@@ -339,7 +339,7 @@
                 "spdx",
                 "validator"
             ],
-            "time": "2020-05-03T18:45:12+00:00"
+            "time": "2020-05-20T14:05:41+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -423,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "aab4ebd862aa7d04f01a4b51849d657db56d882e"
+                "reference": "a4a1b6930528a8f7ee03518e6442ec7a44155d9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/aab4ebd862aa7d04f01a4b51849d657db56d882e",
-                "reference": "aab4ebd862aa7d04f01a4b51849d657db56d882e",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/a4a1b6930528a8f7ee03518e6442ec7a44155d9d",
+                "reference": "a4a1b6930528a8f7ee03518e6442ec7a44155d9d",
                 "shasum": ""
             },
             "require": {
@@ -436,7 +436,7 @@
                 "guzzlehttp/promises": "^1.0",
                 "guzzlehttp/psr7": "^1.6.1",
                 "php": ">=5.5",
-                "symfony/polyfill-intl-idn": "^1.11"
+                "symfony/polyfill-intl-idn": "1.17.0"
             },
             "require-dev": {
                 "ext-curl": "*",
@@ -482,7 +482,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2020-04-18T10:38:46+00:00"
+            "time": "2020-05-25T19:35:05+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -541,12 +541,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "c247bf84e343f0b95927fa86cf23b7ffc9af04f3"
+                "reference": "188cc82398f157483976ccf61bd04ee80afcf29c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/c247bf84e343f0b95927fa86cf23b7ffc9af04f3",
-                "reference": "c247bf84e343f0b95927fa86cf23b7ffc9af04f3",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/188cc82398f157483976ccf61bd04ee80afcf29c",
+                "reference": "188cc82398f157483976ccf61bd04ee80afcf29c",
                 "shasum": ""
             },
             "require": {
@@ -604,7 +604,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2020-05-13T14:56:52+00:00"
+            "time": "2020-05-17T20:05:25+00:00"
         },
         {
             "name": "jeremykendall/php-domain-parser",
@@ -1198,12 +1198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-form.git",
-                "reference": "9325df32a09b1b6a49e02c3dfdbf46152abffbb0"
+                "reference": "f7aed79d037debab5a47a01d5f90c645c25d89da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-form/zipball/9325df32a09b1b6a49e02c3dfdbf46152abffbb0",
-                "reference": "9325df32a09b1b6a49e02c3dfdbf46152abffbb0",
+                "url": "https://api.github.com/repos/laminas/laminas-form/zipball/f7aed79d037debab5a47a01d5f90c645c25d89da",
+                "reference": "f7aed79d037debab5a47a01d5f90c645c25d89da",
                 "shasum": ""
             },
             "require": {
@@ -1272,7 +1272,7 @@
                 "form",
                 "laminas"
             ],
-            "time": "2020-05-07T06:34:48+00:00"
+            "time": "2020-05-18T13:39:37+00:00"
         },
         {
             "name": "laminas/laminas-http",
@@ -2088,12 +2088,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "9c9c3bfd86f3d496cc1cc4e4d4bbb72b50ed09c3"
+                "reference": "881b3786014058a7c7a9926bbad376bac8f9375a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/9c9c3bfd86f3d496cc1cc4e4d4bbb72b50ed09c3",
-                "reference": "9c9c3bfd86f3d496cc1cc4e4d4bbb72b50ed09c3",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/881b3786014058a7c7a9926bbad376bac8f9375a",
+                "reference": "881b3786014058a7c7a9926bbad376bac8f9375a",
                 "shasum": ""
             },
             "require": {
@@ -2132,7 +2132,7 @@
                 "laminas",
                 "zf"
             ],
-            "time": "2020-04-15T19:17:48+00:00"
+            "time": "2020-05-20T16:49:09+00:00"
         },
         {
             "name": "magento/framework",
@@ -2246,12 +2246,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "74f92ea154eed179700960111970234f00b1a56b"
+                "reference": "3022efff205e2448b560c833c6fbbf91c3139168"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/74f92ea154eed179700960111970234f00b1a56b",
-                "reference": "74f92ea154eed179700960111970234f00b1a56b",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/3022efff205e2448b560c833c6fbbf91c3139168",
+                "reference": "3022efff205e2448b560c833c6fbbf91c3139168",
                 "shasum": ""
             },
             "require": {
@@ -2315,7 +2315,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2020-05-11T19:42:25+00:00"
+            "time": "2020-05-22T07:31:27+00:00"
         },
         {
             "name": "mridang/pmd-annotations",
@@ -2362,16 +2362,16 @@
         },
         {
             "name": "nosto/module-nostotagging",
-            "version": "dev-master",
+            "version": "4.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-magento2.git",
-                "reference": "351e64a38a4752aab9361bd73ca805b14749fc65"
+                "reference": "28fef12a1a44c9382a9439ea14be63ca2f5fce23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/351e64a38a4752aab9361bd73ca805b14749fc65",
-                "reference": "351e64a38a4752aab9361bd73ca805b14749fc65",
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/28fef12a1a44c9382a9439ea14be63ca2f5fce23",
+                "reference": "28fef12a1a44c9382a9439ea14be63ca2f5fce23",
                 "shasum": ""
             },
             "require": {
@@ -2423,7 +2423,7 @@
                 "OSL-3.0"
             ],
             "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
-            "time": "2020-03-31T13:17:01+00:00"
+            "time": "2020-05-22T07:27:03+00:00"
         },
         {
             "name": "nosto/php-sdk",
@@ -2909,18 +2909,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "01b7bd3b00401f03bcd88525dc5940d23f83a15c"
+                "reference": "6b456a744a1f92cc016fba7e6b1f4056e4953661"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/01b7bd3b00401f03bcd88525dc5940d23f83a15c",
-                "reference": "01b7bd3b00401f03bcd88525dc5940d23f83a15c",
+                "url": "https://api.github.com/repos/symfony/console/zipball/6b456a744a1f92cc016fba7e6b1f4056e4953661",
+                "reference": "6b456a744a1f92cc016fba7e6b1f4056e4953661",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
+                "php": ">=7.1.3",
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/polyfill-php73": "^1.8",
+                "symfony/polyfill-php80": "^1.15",
                 "symfony/service-contracts": "^1.1|^2"
             },
             "conflict": {
@@ -2977,7 +2978,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-08T10:54:34+00:00"
+            "time": "2020-05-24T08:33:35+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2985,16 +2986,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "835ca5e2692d3baf424b6db3a1a85d56abf8725d"
+                "reference": "31f0a3601a6fd6570cd7038d3a38f80f4e2cb820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/835ca5e2692d3baf424b6db3a1a85d56abf8725d",
-                "reference": "835ca5e2692d3baf424b6db3a1a85d56abf8725d",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/31f0a3601a6fd6570cd7038d3a38f80f4e2cb820",
+                "reference": "31f0a3601a6fd6570cd7038d3a38f80f4e2cb820",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
+                "php": ">=7.1.3",
                 "symfony/polyfill-ctype": "~1.8"
             },
             "type": "library",
@@ -3027,7 +3028,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-04T14:02:18+00:00"
+            "time": "2020-05-20T08:37:50+00:00"
         },
         {
             "name": "symfony/finder",
@@ -3138,7 +3139,7 @@
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "dev-master",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
@@ -3371,17 +3372,79 @@
             "time": "2020-05-12T16:47:27+00:00"
         },
         {
+            "name": "symfony/polyfill-php80",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php80.git",
+                "reference": "5e30b2799bc1ad68f7feb62b60a73743589438dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/5e30b2799bc1ad68f7feb62b60a73743589438dd",
+                "reference": "5e30b2799bc1ad68f7feb62b60a73743589438dd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.17-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php80\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ],
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ion Bazan",
+                    "email": "ion.bazan@gmail.com"
+                },
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2020-05-12T16:47:27+00:00"
+        },
+        {
             "name": "symfony/process",
             "version": "4.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "4b6a9a4013baa65d409153cbb5a895bf093dc7f4"
+                "reference": "3bc410c407cba1ef8a03ca46de69a08c8b04f54a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/4b6a9a4013baa65d409153cbb5a895bf093dc7f4",
-                "reference": "4b6a9a4013baa65d409153cbb5a895bf093dc7f4",
+                "url": "https://api.github.com/repos/symfony/process/zipball/3bc410c407cba1ef8a03ca46de69a08c8b04f54a",
+                "reference": "3bc410c407cba1ef8a03ca46de69a08c8b04f54a",
                 "shasum": ""
             },
             "require": {
@@ -3417,7 +3480,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2020-04-15T15:56:18+00:00"
+            "time": "2020-05-23T19:47:49+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -3898,12 +3961,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-session.git",
-                "reference": "9207c4e6a875e4e76be3d801e8c4ba60a0295127"
+                "reference": "3b7181caa8770a3886b83a8859569765d8b16c0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/9207c4e6a875e4e76be3d801e8c4ba60a0295127",
-                "reference": "9207c4e6a875e4e76be3d801e8c4ba60a0295127",
+                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/3b7181caa8770a3886b83a8859569765d8b16c0d",
+                "reference": "3b7181caa8770a3886b83a8859569765d8b16c0d",
                 "shasum": ""
             },
             "require": {
@@ -3961,7 +4024,7 @@
                 "laminas",
                 "session"
             ],
-            "time": "2020-04-15T19:32:59+00:00"
+            "time": "2020-05-19T19:29:02+00:00"
         },
         {
             "name": "magento-ecg/coding-standard",
@@ -6268,12 +6331,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "24b0636bcc8b77709ffe1b78d351e31e3187c4b3"
+                "reference": "1aa2302c2185357f026e91c0fb9cf48af5bec39e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/24b0636bcc8b77709ffe1b78d351e31e3187c4b3",
-                "reference": "24b0636bcc8b77709ffe1b78d351e31e3187c4b3",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/1aa2302c2185357f026e91c0fb9cf48af5bec39e",
+                "reference": "1aa2302c2185357f026e91c0fb9cf48af5bec39e",
                 "shasum": ""
             },
             "require": {
@@ -6307,7 +6370,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2020-04-04T12:17:19+00:00"
+            "time": "2020-05-25T12:19:20+00:00"
         },
         {
             "name": "phan/phan",
@@ -6944,12 +7007,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "ce62dee92da3b038a399a99353fc055b39d2853e"
+                "reference": "75ff420b23c0866c99c350099381a93b8602ebe6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/ce62dee92da3b038a399a99353fc055b39d2853e",
-                "reference": "ce62dee92da3b038a399a99353fc055b39d2853e",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/75ff420b23c0866c99c350099381a93b8602ebe6",
+                "reference": "75ff420b23c0866c99c350099381a93b8602ebe6",
                 "shasum": ""
             },
             "require": {
@@ -6987,7 +7050,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-05-01T04:18:46+00:00"
+            "time": "2020-05-21T06:41:29+00:00"
         },
         {
             "name": "staabm/annotate-pull-request-from-checkstyle",
@@ -7031,16 +7094,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "929993f48470dd06543a6398ba549fb9b414096d"
+                "reference": "395f6e09e1dc6ac9c1a5eea3b7f44f7a820a5504"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/929993f48470dd06543a6398ba549fb9b414096d",
-                "reference": "929993f48470dd06543a6398ba549fb9b414096d",
+                "url": "https://api.github.com/repos/symfony/config/zipball/395f6e09e1dc6ac9c1a5eea3b7f44f7a820a5504",
+                "reference": "395f6e09e1dc6ac9c1a5eea3b7f44f7a820a5504",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
+                "php": ">=7.1.3",
                 "symfony/filesystem": "^3.4|^4.0|^5.0",
                 "symfony/polyfill-ctype": "~1.8"
             },
@@ -7087,7 +7150,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-08T10:54:34+00:00"
+            "time": "2020-05-23T09:11:46+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -7095,16 +7158,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "ef5bab90fda309de5da35e12b4e5d181b0600a0b"
+                "reference": "81ebfa04da818d708ca40ab933fbc749a3b9a048"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/ef5bab90fda309de5da35e12b4e5d181b0600a0b",
-                "reference": "ef5bab90fda309de5da35e12b4e5d181b0600a0b",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/81ebfa04da818d708ca40ab933fbc749a3b9a048",
+                "reference": "81ebfa04da818d708ca40ab933fbc749a3b9a048",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
+                "php": ">=7.1.3",
                 "psr/container": "^1.0",
                 "symfony/service-contracts": "^1.1.6|^2"
             },
@@ -7160,7 +7223,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-04T15:32:48+00:00"
+            "time": "2020-05-23T17:20:05+00:00"
         },
         {
             "name": "theseer/fdomdocument",
