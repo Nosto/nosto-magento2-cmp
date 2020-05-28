@@ -37,7 +37,6 @@
 /**  @var \Nosto\Cmp\Block\CategoryMapping $block */
 ?>
 
-<script id="nosto-cmp-mapping" type="application/json">
-    nostoCmpUrl = <?= /* @noEscape */ $block->getCategoryMap(); ?>
+<script id="nosto-cmp-mapping" type="application/ld+json">
+    <?= /* @noEscape */ $block->getCategoryMap(); ?>
 </script>
-
