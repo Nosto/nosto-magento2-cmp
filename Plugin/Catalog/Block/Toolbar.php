@@ -160,7 +160,7 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->addTrackParamToProduct($subjectCollection, $result->getTrackingCode(), $nostoProductIds);
+                    $this->addTrackParamToProduct($subjectCollection, $nostoProductIds);
                 } else {
                     $this->logger->info(sprintf(
                         "CMP result is empty for category: %s",
@@ -268,15 +268,14 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param ProductCollection $collection
-     * @param $trackCode
      * @param array $nostoProductIds
      */
-    private function addTrackParamToProduct(ProductCollection $collection, $trackCode, array $nostoProductIds)
+    private function addTrackParamToProduct(ProductCollection $collection, array $nostoProductIds)
     {
-        $collection->each(static function ($product) use ($nostoProductIds, $trackCode) {
+        $collection->each(static function ($product) use ($nostoProductIds) {
             /* @var Product $product */
             if (in_array($product->getId(), $nostoProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, $trackCode);
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
             }
         });
     }

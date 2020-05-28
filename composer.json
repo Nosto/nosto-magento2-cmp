@@ -26,7 +26,6 @@
   "require": {
     "nosto/module-nostotagging": "4.0.*",
     "nosto/php-sdk": "4.1.*",
-    "jwage/purl": "0.0.9",
     "php": ">=7.0.0"
   },
   "repositories": [
