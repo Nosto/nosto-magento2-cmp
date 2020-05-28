@@ -3,9 +3,9 @@ All notable changes to this project will be documented in this file. This projec
 ### 1.2.0
 * Add tagging for module version
 * Add fragment to product urls served by CMP
-* Add fragment to category urls
 * Add block for hashed categories mapping
 * Add sort order tagging
+* Remove attribution from product url
 * Remove secondary sorting query 
 
 ### 1.1.0
