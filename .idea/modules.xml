@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/nosto-magento2-cmp.iml" filepath="$PROJECT_DIR$/.idea/nosto-magento2-cmp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nosto-magento2-cmp.iml" filepath="$PROJECT_DIR$/nosto-magento2-cmp.iml" />
     </modules>
   </component>
 </project>

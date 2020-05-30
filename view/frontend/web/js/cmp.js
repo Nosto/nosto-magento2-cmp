@@ -34,135 +34,152 @@
  */
 
 
+/**
+ * @typedef {Object} CMPConfig
+ * @type Object
+ * @property {String} merchant
+ * @property {String} categoryCookie
+ * @property {String} segmentCookie
+ * @property {String} baseUrl
+*/
+
 define(['jquery'], function ($) {
 
-    return function (config) {
-        var cid = getCookie("2c.cId");
-        if (config.merchant === "") {
-            console.warn("Nosto merchant id is missing. Segment mapping cannot be fetched")
-            return;
-        } else if (cid === "") {
-            console.warn("Nosto cid is missing. Segment mapping cannot be fetched")
-            return;
-        } else if (config.categoryCookie === "") {
-            console.warn("Nosto category mapping cookie name is missing. Segment mapping cannot be fetched")
-        } else if (config.segmentCookie === "") {
-            console.warn("Nosto segment mapping cookie name is missing. Segment mapping cannot be fetched")
-        } else if (config.baseUrl === "") {
-            console.warn("Nosto base url is missing. Segment mapping cannot be fetched")
-        }
+	/**
+	 *
+	 * @param {string} merchant
+	 * @param {string} cid
+	 * @param {string} categoryCookie
+	 * @param {string} segmentCookie
+	 * @param {string} domain
+	 */
+	function getMapping(merchant, cid, categoryCookie, segmentCookie, domain) {
+		const url = getRequestUrl(domain, merchant, cid);
+		$.get(url)
+			.done(function (data) {
+				handleData(data, categoryCookie, segmentCookie);
+			})
+			.fail(function (error) {
+				console.warn("Something went wrong trying to fetch segment mapping. Error code: "
+					+ error.status)
+			})
+	}
 
-        getMapping(config.merchant,
-            cid,
-            config.categoryCookie,
-            config.segmentCookie,
-            config.baseUrl
-        );
-    }
+	/**
+	 * @param {object} data
+	 * @param {string} categoryCookie
+	 * @param {string} segmentCookie
+	 */
+	function handleData(data, categoryCookie, segmentCookie) {
+		const segmentMapping = [];
+		const categoryMapping = {};
 
-    /**
-     *
-     * @param {string} merchant
-     * @param {string} cid
-     * @param {string} categoryCookie
-     * @param {string} segmentCookie
-     * @param {string} domain
-     */
-    function getMapping(merchant, cid, categoryCookie, segmentCookie, domain) {
-        var url = getRequestUrl(domain, merchant, cid)
-        $.get(url)
-            .done(function (data) {
-                handleData(data, categoryCookie, segmentCookie);
-            })
-            .fail(function (error) {
-                console.warn("Something went wrong trying to fetch segment mapping. Error code: "
-                    + error.status)
-            })
-    }
+		for (const property in data) {
+			if (data[property]) {
+				pushInUniqueValue(segmentMapping, data[property])
+				categoryMapping[property] = segmentMapping.indexOf(data[property]);
+			}
+		}
 
-    /**
-     * @param {object} data
-     * @param {string} categoryCookie
-     * @param {string} segmentCookie
-     */
-    function handleData(data, categoryCookie, segmentCookie) {
-        var segmentMapping = [];
-        var categoryMapping = {};
+		const categoryMapValue = JSON.stringify(categoryMapping);
+		createCookie(categoryMapValue, categoryCookie)
 
-        for (const property in data) {
-            if (data[property]) {
-                pushInUniqueValue(segmentMapping, data[property])
-                categoryMapping[property] = segmentMapping.indexOf(data[property]);
-            }
-        }
+		const segmentMappingJSON = JSON.stringify(segmentMapping);
+		createCookie(segmentMappingJSON, segmentCookie)
+	}
 
-        var categoryMapValue = JSON.stringify(categoryMapping);
-        createCookie(categoryMapValue, categoryCookie)
+	/**
+	 *
+	 * @param {array} arr
+	 * @param {string} item
+	 */
+	function pushInUniqueValue(arr, item) {
+		if (arr.indexOf(item) === -1) {
+			arr.push(item);
+		}
+	}
 
-        var segmentMapping = JSON.stringify(segmentMapping);
-        createCookie(segmentMapping, segmentCookie)
-    }
+	/**
+	 *
+	 * @param {string} domain
+	 * @param {string} merchant
+	 * @param {string} cid
+	 * @returns {string}
+	 */
+	function getRequestUrl(domain, merchant, cid) {
+		return domain + "/cmp-mapping/magento?m=" + merchant + "&cid=" + cid;
+	}
 
-    /**
-     *
-     * @param {array} arr
-     * @param {string} item
-     */
-    function pushInUniqueValue(arr, item) {
-        if(arr.indexOf(item) === -1) {
-            arr.push(item);
-        }
-    }
+	/**
+	 * @param {string} data
+	 * @param {string} cookieName
+	 */
+	function createCookie(data, cookieName) {
+		document.cookie = cookieName + "=" + data + "; expires=" + getExpireDate() + "; path=/";
+	}
 
-    /**
-     *
-     * @param {string} domain
-     * @param {string} merchant
-     * @param {string} cid
-     * @returns {string}
-     */
-    function getRequestUrl(domain, merchant, cid) {
-        return domain + "/cmp-mapping/magento?m=" + merchant + "&cid=" + cid;
-    }
+	/**
+	 *
+	 * @returns {string}
+	 */
+	function getExpireDate() {
+		const date = new Date();
+		const time = date.getTime();
+		const expireTime = time + 1000 * 86400;
+		date.setTime(expireTime);
+		// noinspection JSUnresolvedFunction
+		return date.toGMTString()
+	}
 
-    /**
-     * @param {string} data
-     * @param {string} cookieName
-     */
-    function createCookie(data, cookieName) {
-        document.cookie = cookieName + "=" + data + "; expires=" + getExpireDate() + "; path=/";
-    }
+	/**
+	 *
+	 * @param {string} cname
+	 * @returns {string}
+	 */
+	function getCookie(cname) {
+		const name = cname + "=";
+		const decodedCookie = decodeURIComponent(document.cookie);
+		const ca = decodedCookie.split(';');
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) === ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) === 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
 
-    /**
-     *
-     * @returns {string}
-     */
-    function getExpireDate() {
-        var date = new Date();
-        var time = date.getTime();
-        var expireTime = time + 1000*86400;
-        date.setTime(expireTime);
-        return date.toGMTString()
-    }
+	// noinspection JSUnusedLocalSymbols
+	/**
+	 * @param {typeof CMPConfig} config
+	 */
+	function init(config) {
+		const cid = getCookie("2c.cId");
+		if (config.merchant === "") {
+			console.warn("Nosto merchant id is missing. Segment mapping cannot be fetched")
+			return;
+		} else if (cid === "") {
+			console.warn("Nosto cid is missing. Segment mapping cannot be fetched")
+			return;
+		} else if (config.categoryCookie === "") {
+			console.warn("Nosto category mapping cookie name is missing. Segment mapping cannot be fetched")
+		} else if (config.segmentCookie === "") {
+			console.warn("Nosto segment mapping cookie name is missing. Segment mapping cannot be fetched")
+		} else if (config.baseUrl === "") {
+			console.warn("Nosto base url is missing. Segment mapping cannot be fetched")
+		}
 
-    /**
-     *
-     * @param {string} cname
-     * @returns {string}
-     */
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
+		getMapping(config.merchant,
+			cid,
+			config.categoryCookie,
+			config.segmentCookie,
+			config.baseUrl
+		);
+
+		return init;
+	}
+
 })

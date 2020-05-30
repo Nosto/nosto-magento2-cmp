@@ -120,7 +120,8 @@ abstract class AbstractBlock extends Template
         if ($currentOrder === null) {
             return false;
         }
-        if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
+		/** @noinspection PhpParamsInspection */
+		if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             //@phan-suppress-next-line PhanTypeMismatchArgument
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
             && $this->nostoCmpHelperData->isCategorySortingEnabled($store)
@@ -223,7 +224,8 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return int
-     */
+	 * @noinspection PhpUnusedParameterInspection
+	 */
     public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if ($this->isCmpTakingOverCatalog()) {
@@ -236,7 +238,8 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return int
-     */
+	 * @noinspection PhpUnusedParameterInspection
+	 */
     public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if ($this->isCmpTakingOverCatalog()) {

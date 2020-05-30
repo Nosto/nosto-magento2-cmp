@@ -43,7 +43,6 @@ use /** @noinspection PhpDeprecationInspection */
 
 class DefaultParameterResolver implements ParameterResolverInterface
 {
-    const DEFAULT_PAGE_SIZE_PARAM = 'product_list_limit';
     const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
     const DEFAULT_CURRENT_PAGE_PARAM = 'p';
 
@@ -57,7 +56,8 @@ class DefaultParameterResolver implements ParameterResolverInterface
      * DefaultParameterResolver constructor.
      * @param Http $httpRequest
      * @param Registry $registry
-     */
+	 * @noinspection PhpDeprecationInspection
+	 */
     public function __construct(Http $httpRequest, Registry $registry)
     {
         $this->httpRequest = $httpRequest;

@@ -127,7 +127,8 @@ class Context
     /**
      * @param MagentoContext $subject
      * @return MagentoContext
-     */
+	 * @noinspection PhpUnused
+	 */
     // phpcs:ignore EcgM2.Plugins.Plugin
     public function beforeGetVaryString(MagentoContext $subject)
     {

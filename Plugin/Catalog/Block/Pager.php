@@ -68,7 +68,8 @@ class Pager extends AbstractBlock
      * @param $result
      * @param $param
      * @return bool
-     */
+	 * @noinspection PhpUnusedParameterInspection
+	 */
     public function afterIsPageCurrent( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result,
@@ -126,7 +127,8 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return bool
-     */
+	 * @noinspection PhpUnusedParameterInspection
+	 */
     public function afterIsFirstPage( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result
@@ -141,7 +143,8 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return bool
-     */
+	 * @noinspection PhpUnusedParameterInspection
+	 */
     public function afterIsLastPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result

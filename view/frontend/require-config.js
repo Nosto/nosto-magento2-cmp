@@ -33,10 +33,10 @@
  *
  */
 
-var config = {
-    map: {
-        '*': {
-            cmp: 'Nosto_Cmp/js/cmp'
-        }
+const config = {
+  map: {
+    '*': {
+      cmp: 'Nosto_Cmp/js/cmp'
     }
-}
+  }
+};

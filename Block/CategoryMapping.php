@@ -61,9 +61,14 @@ class CategoryMapping extends Template
     /** @var NostoLogger */
     private $logger;
 
-    /**
-     * CategoryMapping constructor.
-     */
+	/**
+	 * CategoryMapping constructor.
+	 * @param StoreManagerInterface $storeManager
+	 * @param CollectionFactory $collectionFactory
+	 * @param CategoryBuilder $categoryBuilder
+	 * @param Context $context
+	 * @param NostoLogger $logger
+	 */
     public function __construct(
         StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
@@ -105,12 +110,9 @@ class CategoryMapping extends Template
     private function getMagentoCategories(Store $store)
     {
 
-        $baseUrl = '';
         $categoriesArray = [];
 
         try {
-            $baseUrl = $store->getBaseUrl();
-
             $categories = $this->collectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addAttributeToFilter('include_in_menu', ['eq' => 1])

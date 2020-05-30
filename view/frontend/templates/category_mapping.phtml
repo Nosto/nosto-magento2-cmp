@@ -39,6 +39,4 @@ use Nosto\Cmp\Block\CategoryMapping;
 /**  @var CategoryMapping $block */
 ?>
 
-<script id="nosto-cmp-mapping" type="application/ld+json">
-    <?= /* @noEscape */ $block->getCategoryMap(); ?>
-</script>
+<script id="nosto-cmp-mapping" type="application/json"><?= /* @noEscape */ $block->getCategoryMap(); ?></script>

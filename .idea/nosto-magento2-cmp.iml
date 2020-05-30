@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" packagePrefix="Nosto\Cmp\" />
       <excludeFolder url="file://$MODULE_DIR$/.github" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/colinmollenhour/credis" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/colinmollenhour/php-redis-session-abstract" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />

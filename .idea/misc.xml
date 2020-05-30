@@ -3,6 +3,49 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="PhpEntryPointsManager">
+    <entry_point>
+      <entry_point TYPE="phpNamespace" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetFirstNum" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterGetFramePages" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetLastNum" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetLastPageNum" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterGetNextPageUrl" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterGetPreviousPageUrl" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetTotalNum" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterIsFirstPage" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterIsLastPage" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterIsPageCurrent" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar afterSetCollection" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver __construct" />
+    </entry_point>
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetFirstNum" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterGetFramePages" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetLastNum" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetLastPageNum" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterGetNextPageUrl" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterGetPreviousPageUrl" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetTotalNum" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterIsFirstPage" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterIsLastPage" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterIsPageCurrent" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar" member="afterSetCollection" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" member="__construct" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

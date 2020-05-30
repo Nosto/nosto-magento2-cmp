@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Model\Filter;
 
-use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
@@ -109,8 +108,7 @@ class FilterBuilder
      */
     public function mapIncludeFilter(Item $item)
     {
-        /** @var AbstractFilter $filter */
-        $filter = $item->getFilter();
+		$filter = $item->getFilter();
         if ($filter === null) {
             return;
         }
