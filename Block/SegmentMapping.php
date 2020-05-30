@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Block;
 
+use Exception;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -86,7 +87,7 @@ class SegmentMapping extends Template
     {
         try {
             $store = $this->storeManager->getStore();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage() . 'Could not get Nosto account ID');
             return null;
         }

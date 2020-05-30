@@ -122,7 +122,7 @@ define(['jquery'], function ($) {
      * @returns {string}
      */
     function getRequestUrl(domain, merchant, cid) {
-        return domain + "/cmp-mapping/magento?m=" + merchant + "&cid=" + cid;;
+        return domain + "/cmp-mapping/magento?m=" + merchant + "&cid=" + cid;
     }
 
     /**
@@ -144,7 +144,7 @@ define(['jquery'], function ($) {
         date.setTime(expireTime);
         return date.toGMTString()
     }
-    
+
     /**
      *
      * @param {string} cname

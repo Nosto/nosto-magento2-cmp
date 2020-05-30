@@ -7,6 +7,7 @@
       <option name="CODING_STANDARD" value="Ecg" />
       <option name="USE_INSTALLED_PATHS" value="true" />
       <option name="INSTALLED_PATHS" value="$PROJECT_DIR$/vendor/magento-ecg/coding-standard" />
+      <option name="EXTENSIONS" value="php,js,css,inc" />
     </inspection_tool>
     <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
       <option name="processCode" value="true" />
