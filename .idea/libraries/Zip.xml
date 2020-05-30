@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Zip">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/folder.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/root.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/nojson.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/multiple.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/subfolder.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/empty.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

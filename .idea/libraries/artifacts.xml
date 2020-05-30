@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="artifacts">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/package2.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/package0.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/composer-1.0.0-alpha6.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/not-a-zip-with-zip-extension.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/jsonInSecondLevel.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/jsonInRoot.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/jsonInFirstLevel.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/not-an-artifact.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
