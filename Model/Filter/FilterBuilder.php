@@ -40,8 +40,8 @@ use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Nosto\NostoException;
-use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 
@@ -74,7 +74,8 @@ class FilterBuilder
         ExcludeFilters $excludeFilters,
         NostoHelperData $nostoHelperData,
         NostoLogger $logger
-    ) {
+    )
+    {
         $this->includeFilters = $includeFilters;
         $this->excludeFilters = $excludeFilters;
         $this->nostoHelperData = $nostoHelperData;
@@ -108,7 +109,7 @@ class FilterBuilder
      */
     public function mapIncludeFilter(Item $item)
     {
-		$filter = $item->getFilter();
+        $filter = $item->getFilter();
         if ($filter === null) {
             return;
         }
@@ -137,7 +138,7 @@ class FilterBuilder
             case 'date':
                 break;
             case 'boolean':
-                $value = (bool) $item->getData('value');
+                $value = (bool)$item->getData('value');
                 break;
             default:
                 $this->logger->debug(sprintf(

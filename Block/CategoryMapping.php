@@ -61,21 +61,22 @@ class CategoryMapping extends Template
     /** @var NostoLogger */
     private $logger;
 
-	/**
-	 * CategoryMapping constructor.
-	 * @param StoreManagerInterface $storeManager
-	 * @param CollectionFactory $collectionFactory
-	 * @param CategoryBuilder $categoryBuilder
-	 * @param Context $context
-	 * @param NostoLogger $logger
-	 */
+    /**
+     * CategoryMapping constructor.
+     * @param StoreManagerInterface $storeManager
+     * @param CollectionFactory $collectionFactory
+     * @param CategoryBuilder $categoryBuilder
+     * @param Context $context
+     * @param NostoLogger $logger
+     */
     public function __construct(
         StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
         Context $context,
         NostoLogger $logger
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
@@ -99,7 +100,7 @@ class CategoryMapping extends Template
             $this->logger->exception($e);
         }
 
-        return json_encode((object) $array, JSON_UNESCAPED_SLASHES);
+        return json_encode((object)$array, JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -142,7 +143,7 @@ class CategoryMapping extends Template
     private function hashCategoryString($categoryString)
     {
         $signedInteger = crc32($categoryString);
-        $unsignedInteger = (int) sprintf("%u", $signedInteger);
+        $unsignedInteger = (int)sprintf("%u", $signedInteger);
         return dechex($unsignedInteger);
     }
 }

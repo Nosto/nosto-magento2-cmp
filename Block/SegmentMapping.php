@@ -40,12 +40,12 @@ use Exception;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Nosto;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Magento\Store\Model\Store;
 
 class SegmentMapping extends Template
 {
@@ -53,13 +53,13 @@ class SegmentMapping extends Template
 
     const COOKIE_SEGMENT_MAP = "n_cmp_indexes";
 
-    /** @var NostoHelperAccount  */
+    /** @var NostoHelperAccount */
     private $nostoHelperAccount;
 
-    /** @var CookieManagerInterface  */
+    /** @var CookieManagerInterface */
     private $cookieManager;
 
-    /** @var StoreManagerInterface  */
+    /** @var StoreManagerInterface */
     private $storeManager;
 
     /** @var NostoLogger */
@@ -71,7 +71,8 @@ class SegmentMapping extends Template
         CookieManagerInterface $cookieManager,
         Context $context,
         NostoLogger $logger
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->nostoHelperAccount = $nostoHelperAccount;

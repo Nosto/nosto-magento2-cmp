@@ -38,8 +38,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http;
-use /** @noinspection PhpDeprecationInspection */
-    Magento\Framework\Registry;
+use Magento\Framework\Registry;
 
 class DefaultParameterResolver implements ParameterResolverInterface
 {
@@ -56,8 +55,8 @@ class DefaultParameterResolver implements ParameterResolverInterface
      * DefaultParameterResolver constructor.
      * @param Http $httpRequest
      * @param Registry $registry
-	 * @noinspection PhpDeprecationInspection
-	 */
+     * @noinspection PhpDeprecationInspection
+     */
     public function __construct(Http $httpRequest, Registry $registry)
     {
         $this->httpRequest = $httpRequest;

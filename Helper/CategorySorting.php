@@ -36,11 +36,11 @@
 
 namespace Nosto\Cmp\Helper;
 
-use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Helper\Scope as NostoHelperScope;
-use Nosto\Service\FeatureAccess;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Nosto\Service\FeatureAccess;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class CategorySorting extends AbstractHelper
 {
@@ -62,7 +62,8 @@ class CategorySorting extends AbstractHelper
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         Context $context
-    ) {
+    )
+    {
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
         parent::__construct($context);

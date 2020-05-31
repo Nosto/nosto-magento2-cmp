@@ -68,7 +68,8 @@ class Data extends AbstractHelper
         Context $context,
         NostoHelperScope $nostoHelperScope,
         ModuleListInterface $moduleList
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->nostoHelperScope = $nostoHelperScope;
         $this->moduleList = $moduleList;

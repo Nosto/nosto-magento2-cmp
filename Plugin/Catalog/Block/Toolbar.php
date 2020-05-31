@@ -41,26 +41,25 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
-use /** @noinspection PhpDeprecationInspection */
-    Magento\Framework\Registry;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
+use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -82,7 +81,7 @@ class Toolbar extends AbstractBlock
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
-    /** @var NostoFilterBuilder  */
+    /** @var NostoFilterBuilder */
     private $nostoFilterBuilder;
 
     private static $isProcessed = false;
@@ -100,8 +99,8 @@ class Toolbar extends AbstractBlock
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
-	 * @noinspection PhpDeprecationInspection
-	 */
+     * @noinspection PhpDeprecationInspection
+     */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
@@ -114,7 +113,8 @@ class Toolbar extends AbstractBlock
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
         State $state
-    ) {
+    )
+    {
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
@@ -134,7 +134,8 @@ class Toolbar extends AbstractBlock
      */
     public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
-    ) {
+    )
+    {
         if (self::$isProcessed) {
             return $subject;
         }
@@ -210,11 +211,11 @@ class Toolbar extends AbstractBlock
         );
     }
 
-	/**
-	 * Get the current category
-	 * @param Store $store
-	 * @return null|string
-	 */
+    /**
+     * Get the current category
+     * @param Store $store
+     * @return null|string
+     */
     private function getCurrentCategory(Store $store)
     {
         /** @noinspection PhpDeprecationInspection */

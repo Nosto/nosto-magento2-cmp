@@ -46,8 +46,8 @@ class Product
      * @param MagentoProduct $product
      * @param string $url
      * @return string
-	 * @noinspection PhpUnused
-	 */
+     * @noinspection PhpUnused
+     */
     public function afterGetProductUrl(MagentoProduct $product, $url)
     {
         if ($product->getData(self::NOSTO_TRACKING_PARAMETER_NAME) !== null) {

@@ -56,34 +56,34 @@ use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as Categ
 
 class Context
 {
-    /** @var CookieManagerInterface  */
+    /** @var CookieManagerInterface */
     private $cookieManager;
 
-    /** @var Http  */
+    /** @var Http */
     private $request;
 
-    /** @var CategoryFactory  */
+    /** @var CategoryFactory */
     private $categoryFactory;
 
     /** @var String */
     private $categoryString;
 
-    /** @var CategoryBuilder  */
+    /** @var CategoryBuilder */
     private $categoryBuilder;
 
-    /** @var StoreManagerInterface  */
+    /** @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var NostoHelperAccount  */
+    /** @var NostoHelperAccount */
     private $nostoHelperAccount;
 
-    /** @var NostoCmpHelperData  */
+    /** @var NostoCmpHelperData */
     private $nostoCmpHelperData;
 
     /** @var Store */
     private $store;
 
-    /** @var NostoLogger  */
+    /** @var NostoLogger */
     private $logger;
     /**
      * @var Session
@@ -112,7 +112,8 @@ class Context
         NostoCmpHelperData $nostoCmpHelperData,
         Http $request,
         NostoLogger $logger
-    ) {
+    )
+    {
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
         $this->categoryFactory = $categoryFactory;
@@ -127,8 +128,8 @@ class Context
     /**
      * @param MagentoContext $subject
      * @return MagentoContext
-	 * @noinspection PhpUnused
-	 */
+     * @noinspection PhpUnused
+     */
     // phpcs:ignore EcgM2.Plugins.Plugin
     public function beforeGetVaryString(MagentoContext $subject)
     {
@@ -179,7 +180,7 @@ class Context
         }
         $segmentMap = get_object_vars($stdClass);
         $signedInteger = crc32($this->categoryString);
-        $unsignedInteger = (int) sprintf("%u", $signedInteger);
+        $unsignedInteger = (int)sprintf("%u", $signedInteger);
         $hashedCategory = dechex($unsignedInteger);
         //Check if current category is part of segment mapping
         if (array_key_exists($hashedCategory, $segmentMap) &&

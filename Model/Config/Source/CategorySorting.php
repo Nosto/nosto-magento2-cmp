@@ -36,12 +36,12 @@
 
 namespace Nosto\Cmp\Model\Config\Source;
 
-use Magento\Framework\Phrase;
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\App\Request\Http;
 use Magento\Config\Block\System\Config\Form\Field;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Phrase;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 
 class CategorySorting extends Field implements OptionSourceInterface
 {
@@ -64,7 +64,8 @@ class CategorySorting extends Field implements OptionSourceInterface
         NostoHelperSorting $nostoHelperSorting,
         Context $context,
         array $data = []
-    ) {
+    )
+    {
         $this->nostoHelperSorting = $nostoHelperSorting;
         $this->request = $request;
         parent::__construct($context, $data);

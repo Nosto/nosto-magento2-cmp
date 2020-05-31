@@ -36,15 +36,15 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Object\Signup\Account as NostoAccount;
-use Nosto\Operation\AbstractGraphQLOperation;
-use Nosto\Service\FeatureAccess;
-use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Exception\TokenException\MissingAppsTokenException;
 use Nosto\NostoException;
+use Nosto\Object\Signup\Account as NostoAccount;
+use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Operation\Recommendation\CategoryMerchandising;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Nosto\Service\FeatureAccess;
 
 class Category
 {
@@ -59,7 +59,8 @@ class Category
      */
     public function __construct(
         CookieManagerInterface $cookieManager
-    ) {
+    )
+    {
         $this->cookieManager = $cookieManager;
     }
 
@@ -81,7 +82,8 @@ class Category
         $category,
         $pageNumber,
         $limit = self::MAX_PRODUCT_AMOUNT
-    ) {
+    )
+    {
         $limit = self::MAX_PRODUCT_AMOUNT < $limit ? self::MAX_PRODUCT_AMOUNT : $limit;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {

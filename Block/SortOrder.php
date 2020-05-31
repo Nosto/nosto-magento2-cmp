@@ -67,7 +67,8 @@ class SortOrder extends Template
         ParameterResolverInterface $parameterResolver,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->taggingConstruct($nostoHelperAccount, $nostoHelperScope);
         $this->parameterResolver = $parameterResolver;

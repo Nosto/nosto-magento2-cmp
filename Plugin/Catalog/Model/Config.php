@@ -34,17 +34,17 @@
  *
  */
 
-namespace  Nosto\Cmp\Plugin\Catalog\Model;
+namespace Nosto\Cmp\Plugin\Catalog\Model;
 
-use Magento\Catalog\Model\Config as MagentoConfig;
-use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Magento\Backend\Block\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\View\Element\Template;
+use Magento\Catalog\Model\Config as MagentoConfig;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 
 class Config extends Template
 {
@@ -69,7 +69,8 @@ class Config extends Template
         NostoHelperAccount $nostoHelperAccount,
         Context $context,
         array $data = []
-    ) {
+    )
+    {
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->storeManager = $context->getStoreManager();
@@ -84,13 +85,14 @@ class Config extends Template
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws NoSuchEntityException
-	 * @noinspection PhpUnused
-	 * @noinspection PhpUnusedParameterInspection
-	 */
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
+     */
     public function afterGetAttributeUsedForSortByArray( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,
         $options
-    ) {
+    )
+    {
         /* @var Store $store */
         $store = $this->storeManager->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
