@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="975b7e08-aefb-406d-9dee-fae923f93f4d" name="Default Changelist" comment="" />
+    <list default="true" id="975b7e08-aefb-406d-9dee-fae923f93f4d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -203,7 +205,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2275" />
     <property name="run.code.analysis.last.selected.profile" value="pCI" />
-    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.PHP" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -218,7 +220,7 @@
       <workItem from="1590855310345" duration="1138000" />
       <workItem from="1590872268779" duration="2030000" />
       <workItem from="1590923751108" duration="184000" />
-      <workItem from="1590924336005" duration="329000" />
+      <workItem from="1590924336005" duration="2321000" />
     </task>
     <servers />
   </component>
@@ -250,10 +252,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="349" y="156" width="761" height="587" key="NewModule_or_Project.wizard/0.0.1440.900@0.0.1440.900" timestamp="1590846966974" />
-    <state x="229" y="110" key="SettingsEditor" timestamp="1590874005718">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="229" y="89" key="SettingsEditor" timestamp="1590924859782">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1590854496516" />
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1590924859782" />
     <state x="229" y="110" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1590874005718" />
     <state x="0" y="160" key="com.intellij.javaee.MapExternalResourceDialog" timestamp="1590873661238">
       <screen x="0" y="23" width="1440" height="877" />
@@ -264,5 +266,9 @@
     </state>
     <state x="420" y="207" width="600" height="486" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1590854950342" />
     <state x="268" y="78" width="846" height="744" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1590873850396" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1590927992963">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1590927992963" />
   </component>
 </project>
