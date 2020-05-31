@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="975b7e08-aefb-406d-9dee-fae923f93f4d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution>
+      <executable path="composer" />
+    </execution>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBowerSettings">
+    <node-interpreter value="project" />
+    <bower-package value="" />
+    <bower.json value="" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="NamedScopeManager">
+    <scope name="Inspection" pattern="file[nosto-magento2-cmp]:Block//*||file[nosto-magento2-cmp]:etc//*||file[nosto-magento2-cmp]:Helper//*||file[nosto-magento2-cmp]:i18n//*||file[nosto-magento2-cmp]:Model//*||file[nosto-magento2-cmp]:Observer//*||file[nosto-magento2-cmp]:Plugin//*||file[nosto-magento2-cmp]:Utils//*||file[nosto-magento2-cmp]:view//*" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/true/punycode" />
+      <path value="$PROJECT_DIR$/vendor/magento/zendframework1" />
+      <path value="$PROJECT_DIR$/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/vendor/magento/framework" />
+      <path value="$PROJECT_DIR$/vendor/container-interop/container-interop" />
+      <path value="$PROJECT_DIR$/vendor/seld/phar-utils" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/colinmollenhour/php-redis-session-abstract" />
+      <path value="$PROJECT_DIR$/vendor/colinmollenhour/credis" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/vendor/seld/jsonlint" />
+      <path value="$PROJECT_DIR$/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/vendor/justinrainbow/json-schema" />
+      <path value="$PROJECT_DIR$/vendor/tedivm/jshrink" />
+      <path value="$PROJECT_DIR$/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/vendor/wikimedia/less.php" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/vendor/nosto/php-sdk" />
+      <path value="$PROJECT_DIR$/vendor/nosto/module-nostotagging" />
+      <path value="$PROJECT_DIR$/vendor/phpseclib/phpseclib" />
+      <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-stdlib" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-code" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-eventmanager" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-math" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-crypt" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-diactoros" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-hydrator" />
+      <path value="$PROJECT_DIR$/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-session" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-db" />
+      <path value="$PROJECT_DIR$/vendor/mridang/pmd-annotations" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-captcha" />
+      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/vendor/webonyx/graphql-php" />
+      <path value="$PROJECT_DIR$/vendor/phan/phan" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/vendor/theseer/fdomdocument" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/vendor/squizlabs/php_codesniffer" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-contact" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-msrp" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-page-cache" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-bundle" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-rss" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-catalog-import-export" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-product-alert" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-rule" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-integration" />
+      <path value="$PROJECT_DIR$/vendor/magento/framework-bulk" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-reports" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-catalog-inventory" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-asynchronous-operations" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-downloadable" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-layered-navigation" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-indexer" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-backup" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-catalog-rule" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-cron" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-review" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-import-export" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-directory" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-gift-message" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-cms-url-rewrite" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-catalog" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-sales-sequence" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-quote" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-catalog-url-rewrite" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-deploy" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-payment" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-checkout" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-ui" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/phpcpd" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-url-rewrite" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-variable" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-require-js" />
+      <path value="$PROJECT_DIR$/vendor/magento/magento-coding-standard" />
+      <path value="$PROJECT_DIR$/vendor/microsoft/tolerant-php-parser" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-authorization" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-config" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/finder-facade" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-email" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-user" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-sales-rule" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-wishlist" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-media-storage" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-developer" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-store" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-translation" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-customer" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-sales" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-cms" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-captcha" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-newsletter" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-eav" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-widget" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-shipping" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-theme" />
+      <path value="$PROJECT_DIR$/vendor/sabre/event" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-tax" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-security" />
+      <path value="$PROJECT_DIR$/vendor/magento/module-backend" />
+      <path value="$PROJECT_DIR$/vendor/netresearch/jsonmapper" />
+      <path value="$PROJECT_DIR$/vendor/drenso/phan-extensions" />
+      <path value="$PROJECT_DIR$/vendor/staabm/annotate-pull-request-from-checkstyle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/config" />
+      <path value="$PROJECT_DIR$/vendor/felixfbecker/advanced-json-rpc" />
+      <path value="$PROJECT_DIR$/vendor/pdepend/pdepend" />
+      <path value="$PROJECT_DIR$/vendor/phing/phing" />
+      <path value="$PROJECT_DIR$/vendor/phpmd/phpmd" />
+      <path value="$PROJECT_DIR$/vendor/magento-ecg/coding-standard" />
+      <path value="$PROJECT_DIR$/vendor/symfony/dependency-injection" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-mvc" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-loader" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-escaper" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-uri" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-validator" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-console" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-filter" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-servicemanager" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-mail" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-form" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-mime" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-psr7bridge" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-inputfilter" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-http" />
+    </include_path>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1cdP0juNGoUBuJip0dgJUcOIJDp" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2275" />
+    <property name="run.code.analysis.last.selected.profile" value="pCI" />
+    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="975b7e08-aefb-406d-9dee-fae923f93f4d" name="Default Changelist" comment="" />
+      <created>1590855275579</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1590855275579</updated>
+      <workItem from="1590855310345" duration="1138000" />
+      <workItem from="1590872268779" duration="2030000" />
+      <workItem from="1590923751108" duration="184000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="308" y="112" key="#CLI_Interpreters" timestamp="1590838310189">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="308" y="112" key="#CLI_Interpreters/0.0.1440.900@0.0.1440.900" timestamp="1590838310189" />
+    <state x="208" y="31" key="#Project_Structure" timestamp="1590854383784">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="208" y="31" key="#Project_Structure/0.0.1440.900@0.0.1440.900" timestamp="1590854383784" />
+    <state x="479" y="327" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1590923913925">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="479" y="327" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1440.900@0.0.1440.900" timestamp="1590923913925" />
+    <state x="479" y="342" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.23.1440.877@0.23.1440.877" timestamp="1590872284823" />
+    <state x="500" y="339" width="439" height="249" key="ComposerInitDialogKey" timestamp="1590838683016">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="500" y="339" width="439" height="249" key="ComposerInitDialogKey/0.0.1440.900@0.0.1440.900" timestamp="1590838683016" />
+    <state x="349" y="156" width="761" height="587" key="NewModule_or_Project.wizard" timestamp="1590846966974">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="349" y="156" width="761" height="587" key="NewModule_or_Project.wizard/0.0.1440.900@0.0.1440.900" timestamp="1590846966974" />
+    <state x="229" y="110" key="SettingsEditor" timestamp="1590874005718">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1590854496516" />
+    <state x="229" y="110" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1590874005718" />
+    <state x="0" y="160" key="com.intellij.javaee.MapExternalResourceDialog" timestamp="1590873661238">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="0" y="160" key="com.intellij.javaee.MapExternalResourceDialog/0.23.1440.877@0.23.1440.877" timestamp="1590873661238" />
+    <state x="268" y="78" width="846" height="744" key="find.popup" timestamp="1590873850396">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="420" y="207" width="600" height="486" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1590854950342" />
+    <state x="268" y="78" width="846" height="744" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1590873850396" />
+  </component>
+</project>
