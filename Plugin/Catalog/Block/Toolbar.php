@@ -113,8 +113,7 @@ class Toolbar extends AbstractBlock
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
         State $state
-    )
-    {
+    ) {
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
@@ -134,8 +133,7 @@ class Toolbar extends AbstractBlock
      */
     public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
-    )
-    {
+    ) {
         if (self::$isProcessed) {
             return $subject;
         }

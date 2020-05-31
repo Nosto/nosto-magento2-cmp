@@ -63,8 +63,7 @@ class CategorySorting extends Field
         NostoHelperSorting $nostoHelperSorting,
         Context $context,
         array $data = []
-    )
-    {
+    ) {
         $this->request = $request;
         $this->nostoHelperSorting = $nostoHelperSorting;
         parent::__construct($context, $data);

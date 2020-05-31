@@ -74,8 +74,7 @@ class FilterBuilder
         ExcludeFilters $excludeFilters,
         NostoHelperData $nostoHelperData,
         NostoLogger $logger
-    )
-    {
+    ) {
         $this->includeFilters = $includeFilters;
         $this->excludeFilters = $excludeFilters;
         $this->nostoHelperData = $nostoHelperData;

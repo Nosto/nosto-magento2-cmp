@@ -75,8 +75,7 @@ class CategoryMapping extends Template
         CategoryBuilder $categoryBuilder,
         Context $context,
         NostoLogger $logger
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;

@@ -75,8 +75,7 @@ class Sortby extends Template
         Context $context,
         Http $request,
         array $data = []
-    )
-    {
+    ) {
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperSorting = $nostoHelperSorting;
         $this->storeManager = $context->getStoreManager();
@@ -96,8 +95,7 @@ class Sortby extends Template
     public function afterGetAllOptions( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoSortby $sortBy,
         $options
-    )
-    {
+    ) {
         $id = (int)$this->request->getParam('store');
         $store = $this->storeManager->getStore($id);
 

@@ -57,8 +57,7 @@ class Meta extends Template
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoHelperData
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->nostoHelperData = $nostoHelperData;
     }

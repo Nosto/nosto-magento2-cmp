@@ -58,8 +58,7 @@ class Pager extends AbstractBlock
         NostoHelperAccount $nostoHelperAccount,
         ParameterResolverInterface $parameterResolver,
         NostoLogger $logger
-    )
-    {
+    ) {
         parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
     }
 
@@ -74,8 +73,7 @@ class Pager extends AbstractBlock
         MagentoPager $pager,
         $result,
         $param
-    )
-    {
+    ) {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getCurrentPageNumber() === (int)$param;
         }
@@ -133,8 +131,7 @@ class Pager extends AbstractBlock
     public function afterIsFirstPage( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result
-    )
-    {
+    ) {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getCurrentPageNumber() === 1;
         }
@@ -150,8 +147,7 @@ class Pager extends AbstractBlock
     public function afterIsLastPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result
-    )
-    {
+    ) {
         if ($this->isCmpTakingOverCatalog()) {
             return $this->getLastPageNumber() === $this->getCurrentPageNumber();
         }

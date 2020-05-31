@@ -59,8 +59,7 @@ class Category
      */
     public function __construct(
         CookieManagerInterface $cookieManager
-    )
-    {
+    ) {
         $this->cookieManager = $cookieManager;
     }
 
@@ -82,8 +81,7 @@ class Category
         $category,
         $pageNumber,
         $limit = self::MAX_PRODUCT_AMOUNT
-    )
-    {
+    ) {
         $limit = self::MAX_PRODUCT_AMOUNT < $limit ? self::MAX_PRODUCT_AMOUNT : $limit;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {

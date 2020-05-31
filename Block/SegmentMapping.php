@@ -71,8 +71,7 @@ class SegmentMapping extends Template
         CookieManagerInterface $cookieManager,
         Context $context,
         NostoLogger $logger
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->nostoHelperAccount = $nostoHelperAccount;

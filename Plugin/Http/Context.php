@@ -112,8 +112,7 @@ class Context
         NostoCmpHelperData $nostoCmpHelperData,
         Http $request,
         NostoLogger $logger
-    )
-    {
+    ) {
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
         $this->categoryFactory = $categoryFactory;

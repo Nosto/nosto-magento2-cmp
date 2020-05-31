@@ -62,8 +62,7 @@ class CategorySorting extends AbstractHelper
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         Context $context
-    )
-    {
+    ) {
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
         parent::__construct($context);

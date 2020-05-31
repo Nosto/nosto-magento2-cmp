@@ -64,8 +64,7 @@ class CategorySorting extends Field implements OptionSourceInterface
         NostoHelperSorting $nostoHelperSorting,
         Context $context,
         array $data = []
-    )
-    {
+    ) {
         $this->nostoHelperSorting = $nostoHelperSorting;
         $this->request = $request;
         parent::__construct($context, $data);

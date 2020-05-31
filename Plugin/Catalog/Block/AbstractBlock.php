@@ -93,8 +93,7 @@ abstract class AbstractBlock extends Template
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         NostoLogger $logger
-    )
-    {
+    ) {
         $this->paramResolver = $parameterResolver;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;

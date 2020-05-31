@@ -69,8 +69,7 @@ class Config extends Template
         NostoHelperAccount $nostoHelperAccount,
         Context $context,
         array $data = []
-    )
-    {
+    ) {
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->storeManager = $context->getStoreManager();
@@ -91,8 +90,7 @@ class Config extends Template
     public function afterGetAttributeUsedForSortByArray( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,
         $options
-    )
-    {
+    ) {
         /* @var Store $store */
         $store = $this->storeManager->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
