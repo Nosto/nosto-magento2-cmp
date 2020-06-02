@@ -56,8 +56,6 @@ jobs:
       run: |
         composer create-project magento/community-edition=2.3.2 magento
         cd magento
-        composer config repositories.0 composer https://repo.magento.com
-        composer config http-basic.repo.magento.com "$REPO_USR" "$REPO_PSW"
         composer config minimum-stability dev
         composer config prefer-stable true
         composer require --no-update nosto/module-nostotagging-cmp:dev-${GITHUB_REF#refs/heads/}#${GITHUB_SHA}
