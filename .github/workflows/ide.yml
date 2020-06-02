@@ -67,6 +67,8 @@ jobs:
         rm -rf magento
       env:
         GITHUB_BRANCH: ${{ github.base_ref }}
+        REPO_USR: ${{ secrets.REPO_USR }}
+        REPO_PSW: ${{ secrets.REPO_PSW }}
 
     - name: Run PHPStorm
       uses: mridang/action-phpstorm@master
