@@ -33,7 +33,9 @@
     <auto-save>true</auto-save>
   </component>
   <component name="NamedScopeManager">
-    <scope name="Inspection" pattern="file[nosto-magento2-cmp]:Block//*||file[nosto-magento2-cmp]:etc//*||file[nosto-magento2-cmp]:Helper//*||file[nosto-magento2-cmp]:i18n//*||file[nosto-magento2-cmp]:Model//*||file[nosto-magento2-cmp]:Observer//*||file[nosto-magento2-cmp]:Plugin//*||file[nosto-magento2-cmp]:Utils//*||file[nosto-magento2-cmp]:view//*" />
+    <order>
+      <scope name="Inspection" />
+    </order>
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -205,7 +207,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2275" />
     <property name="run.code.analysis.last.selected.profile" value="pCI" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.PHP" />
+    <property name="settings.editor.selected.configurable" value="project.scopes" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -235,10 +237,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="308" y="112" key="#CLI_Interpreters/0.0.1440.900@0.0.1440.900" timestamp="1590838310189" />
-    <state x="208" y="31" key="#Project_Structure" timestamp="1590854383784">
+    <state x="208" y="31" key="#Project_Structure" timestamp="1591088422630">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="208" y="31" key="#Project_Structure/0.0.1440.900@0.0.1440.900" timestamp="1590854383784" />
+    <state x="208" y="31" key="#Project_Structure/0.0.1440.900@0.0.1440.900" timestamp="1591088422630" />
     <state x="479" y="327" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1590923913925">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -252,10 +254,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="349" y="156" width="761" height="587" key="NewModule_or_Project.wizard/0.0.1440.900@0.0.1440.900" timestamp="1590846966974" />
-    <state x="229" y="89" key="SettingsEditor" timestamp="1590924859782">
+    <state x="229" y="89" key="SettingsEditor" timestamp="1591088437140">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1590924859782" />
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1591088437140" />
     <state x="229" y="110" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1590874005718" />
     <state x="0" y="160" key="com.intellij.javaee.MapExternalResourceDialog" timestamp="1590873661238">
       <screen x="0" y="23" width="1440" height="877" />

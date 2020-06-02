@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Inspection" pattern="file[nosto-magento2-cmp]:Block//*||file[nosto-magento2-cmp]:etc//*||file[nosto-magento2-cmp]:Helper//*||file[nosto-magento2-cmp]:i18n//*||file[nosto-magento2-cmp]:Model//*||file[nosto-magento2-cmp]:Observer//*||file[nosto-magento2-cmp]:Plugin//*||file[nosto-magento2-cmp]:Utils//*||file[nosto-magento2-cmp]:view//*" />
+</component>
