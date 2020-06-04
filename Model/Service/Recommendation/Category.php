@@ -36,7 +36,7 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Object\Signup\Account as NostoAccount;
+use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Service\FeatureAccess;
 use Nosto\Operation\Recommendation\CategoryMerchandising;

@@ -40,7 +40,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Helper\CategorySorting;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
-use Nosto\Object\SortOrder as NostoSortOrder;
+use Nosto\Model\SortOrder as NostoSortOrder;
 use Nosto\Tagging\Block\TaggingTrait;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
