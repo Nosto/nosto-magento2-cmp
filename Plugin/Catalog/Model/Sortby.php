@@ -102,6 +102,7 @@ class Sortby extends Template
         ) {
             // new option
             $customOption = [
+                //@phan-suppress-next-line PhanTypeMismatchArgument
               ['label' => __('Relevance'), 'value' => NostoHelperSorting::NOSTO_PERSONALIZED_KEY]
             ];
 
