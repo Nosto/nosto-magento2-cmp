@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 1.2.2
+* Fix [PHP SDK](https://github.com/Nosto/nosto-php-sdk) version constraint clash with [Nosto's Magento 2 base module](https://github.com/Nosto/nosto-magento2)
+
 ### 1.2.1
 * Fix bug related to Nosto sorting option in admin category page
 
