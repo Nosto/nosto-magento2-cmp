@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5bbc67ebc3801826c6919632d59b1208",
+    "content-hash": "cb416e7c056403510eb9f567a346bed1",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "f7abfc9d7fb8437f1dee87f00c037d13279a6d16"
+                "reference": "81c6fe987b955f525704b3097853c86a661a026b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/f7abfc9d7fb8437f1dee87f00c037d13279a6d16",
-                "reference": "f7abfc9d7fb8437f1dee87f00c037d13279a6d16",
+                "url": "https://api.github.com/repos/composer/composer/zipball/81c6fe987b955f525704b3097853c86a661a026b",
+                "reference": "81c6fe987b955f525704b3097853c86a661a026b",
                 "shasum": ""
             },
             "require": {
@@ -169,12 +169,11 @@
                 "symfony/process": "^2.7 || ^3.0 || ^4.0 || ^5.0"
             },
             "conflict": {
-                "symfony/console": "2.8.38",
-                "symfony/phpunit-bridge": "3.4.40"
+                "symfony/console": "2.8.38"
             },
             "require-dev": {
                 "phpspec/prophecy": "^1.10",
-                "symfony/phpunit-bridge": "^3.4"
+                "symfony/phpunit-bridge": "^4.2"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
@@ -218,7 +217,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-05-27T20:07:55+00:00"
+            "time": "2020-06-03T08:26:56+00:00"
         },
         {
             "name": "composer/semver",
@@ -2437,12 +2436,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "ceaffa8fa9fcd34d5c91c8053f113a4ad07cdd12"
+                "reference": "51f2a9386b320b203369957305b71e000a96dde8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ceaffa8fa9fcd34d5c91c8053f113a4ad07cdd12",
-                "reference": "ceaffa8fa9fcd34d5c91c8053f113a4ad07cdd12",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/51f2a9386b320b203369957305b71e000a96dde8",
+                "reference": "51f2a9386b320b203369957305b71e000a96dde8",
                 "shasum": ""
             },
             "require": {
@@ -2521,7 +2520,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2020-05-11T04:52:20+00:00"
+            "time": "2020-05-31T17:22:35+00:00"
         },
         {
             "name": "psr/container",
@@ -2808,12 +2807,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "6b456a744a1f92cc016fba7e6b1f4056e4953661"
+                "reference": "326b064d804043005526f5a0494cfb49edb59bb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/6b456a744a1f92cc016fba7e6b1f4056e4953661",
-                "reference": "6b456a744a1f92cc016fba7e6b1f4056e4953661",
+                "url": "https://api.github.com/repos/symfony/console/zipball/326b064d804043005526f5a0494cfb49edb59bb0",
+                "reference": "326b064d804043005526f5a0494cfb49edb59bb0",
                 "shasum": ""
             },
             "require": {
@@ -2877,7 +2876,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-24T08:33:35+00:00"
+            "time": "2020-05-30T20:06:45+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2885,12 +2884,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "31f0a3601a6fd6570cd7038d3a38f80f4e2cb820"
+                "reference": "b27f491309db5757816db672b256ea2e03677d30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/31f0a3601a6fd6570cd7038d3a38f80f4e2cb820",
-                "reference": "31f0a3601a6fd6570cd7038d3a38f80f4e2cb820",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/b27f491309db5757816db672b256ea2e03677d30",
+                "reference": "b27f491309db5757816db672b256ea2e03677d30",
                 "shasum": ""
             },
             "require": {
@@ -2927,7 +2926,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-20T08:37:50+00:00"
+            "time": "2020-05-30T18:50:54+00:00"
         },
         {
             "name": "symfony/finder",
@@ -3338,12 +3337,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "3bc410c407cba1ef8a03ca46de69a08c8b04f54a"
+                "reference": "c714958428a85c86ab97e3a0c96db4c4f381b7f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/3bc410c407cba1ef8a03ca46de69a08c8b04f54a",
-                "reference": "3bc410c407cba1ef8a03ca46de69a08c8b04f54a",
+                "url": "https://api.github.com/repos/symfony/process/zipball/c714958428a85c86ab97e3a0c96db4c4f381b7f5",
+                "reference": "c714958428a85c86ab97e3a0c96db4c4f381b7f5",
                 "shasum": ""
             },
             "require": {
@@ -3379,7 +3378,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-23T19:47:49+00:00"
+            "time": "2020-05-30T20:06:45+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -6230,12 +6229,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "1aa2302c2185357f026e91c0fb9cf48af5bec39e"
+                "reference": "fe8265391c42c1e5a570256d019a19e7cefe3df1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/1aa2302c2185357f026e91c0fb9cf48af5bec39e",
-                "reference": "1aa2302c2185357f026e91c0fb9cf48af5bec39e",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/fe8265391c42c1e5a570256d019a19e7cefe3df1",
+                "reference": "fe8265391c42c1e5a570256d019a19e7cefe3df1",
                 "shasum": ""
             },
             "require": {
@@ -6269,7 +6268,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2020-05-25T12:19:20+00:00"
+            "time": "2020-06-03T20:35:30+00:00"
         },
         {
             "name": "phan/phan",
@@ -7057,12 +7056,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "81ebfa04da818d708ca40ab933fbc749a3b9a048"
+                "reference": "6a2cecd7011aec38b5fb2270abf0de120e7679b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/81ebfa04da818d708ca40ab933fbc749a3b9a048",
-                "reference": "81ebfa04da818d708ca40ab933fbc749a3b9a048",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/6a2cecd7011aec38b5fb2270abf0de120e7679b1",
+                "reference": "6a2cecd7011aec38b5fb2270abf0de120e7679b1",
                 "shasum": ""
             },
             "require": {
@@ -7122,7 +7121,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-23T17:20:05+00:00"
+            "time": "2020-05-30T20:06:45+00:00"
         },
         {
             "name": "theseer/fdomdocument",
