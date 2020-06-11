@@ -1,11 +1,17 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 1.2.2
+* Fix [PHP SDK](https://github.com/Nosto/nosto-php-sdk) version constraint clash with [Nosto's Magento 2 base module](https://github.com/Nosto/nosto-magento2)
+
+### 1.2.1
+* Fix bug related to Nosto sorting option in admin category page
+
 ### 1.2.0
 * Add tagging for module version
 * Add fragment to product urls served by CMP
-* Add fragment to category urls
 * Add block for hashed categories mapping
 * Add sort order tagging
+* Remove attribution from product url
 * Remove secondary sorting query 
 
 ### 1.1.0
