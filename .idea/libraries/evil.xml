@@ -3,7 +3,6 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/vendor/zendframework/zend-filter/test/_files/evil.zip!/" />
     </CLASSES>
-    <JAVADOC />
     <SOURCES />
   </library>
 </component>

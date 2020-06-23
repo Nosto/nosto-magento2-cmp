@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="975b7e08-aefb-406d-9dee-fae923f93f4d" name="Default Changelist" comment="" />
+    <list default="true" id="975b7e08-aefb-406d-9dee-fae923f93f4d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/CI.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/CI.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Zip.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Zip.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/_files.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/_files.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/artifacts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/artifacts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/evil.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/evil.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/subfolder.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/subfolder.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/test.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/test.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,6 +188,24 @@
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-psr7bridge" />
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-inputfilter" />
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-http" />
+      <path value="$PROJECT_DIR$/vendor/magento/generated" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php73" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-loader" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-mail" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-escaper" />
+      <path value="$PROJECT_DIR$/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-servicemanager" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-uri" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-filter" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-inputfilter" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-form" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-mime" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-mvc" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-psr7bridge" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-validator" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-http" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-console" />
     </include_path>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -223,6 +250,7 @@
       <workItem from="1590924336005" duration="2321000" />
       <workItem from="1591091043412" duration="559000" />
       <workItem from="1591853513861" duration="499000" />
+      <workItem from="1592916952382" duration="326000" />
     </task>
     <servers />
   </component>
