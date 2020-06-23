@@ -40,7 +40,7 @@ use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\NostoException;
-use Nosto\Object\Signup\Account as NostoAccount;
+use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
