@@ -89,6 +89,7 @@ class Sortby extends Template
      * @return array
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @suppress PhanTypeMismatchArgument
      */
     public function afterGetAllOptions( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoSortby $sortBy,
