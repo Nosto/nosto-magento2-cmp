@@ -1,5 +1,9 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 2.0.0
+* Update Nosto PHP-SDK dependency to 5.0.0
+* Update compatibility with NostoTagging Module 5.0
+
 ### 1.2.2
 * Fix [PHP SDK](https://github.com/Nosto/nosto-php-sdk) version constraint clash with [Nosto's Magento 2 base module](https://github.com/Nosto/nosto-magento2)
 

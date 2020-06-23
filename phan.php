@@ -42,14 +42,8 @@ return [
     'dead_code_detection' => false,
     'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
     'directory_list' => [
-        'Api',
         'Block',
-        'Console',
-        'Controller',
-        'Cron',
-        'CustomerData',
         'Helper',
-        'Logger',
         'Model',
         'Observer',
         'Plugin',
@@ -59,12 +53,8 @@ return [
         'vendor/phpseclib',
         'vendor/magento',
         'vendor/monolog',
-        'vendor/zendframework',
         'vendor/psr',
-        'vendor/symfony/console',
-        'magento/generated',
-        '../../../generated',
-        'vendor/jwage'
+        'vendor/symfony/console'
     ],
     'exclude_file_list' => [
         'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
