@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e76849fff38f7645f2c5d6d8b5139ab",
+    "content-hash": "f2a434e890fd258595b8363ef640158a",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "cbdee533e3f0af5a7fa4f799ef4376a525610d97"
+                "reference": "95a176c87c29b0e44c05b0a685af9d217cabb053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/cbdee533e3f0af5a7fa4f799ef4376a525610d97",
-                "reference": "cbdee533e3f0af5a7fa4f799ef4376a525610d97",
+                "url": "https://api.github.com/repos/composer/composer/zipball/95a176c87c29b0e44c05b0a685af9d217cabb053",
+                "reference": "95a176c87c29b0e44c05b0a685af9d217cabb053",
                 "shasum": ""
             },
             "require": {
@@ -217,7 +217,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-06-19T16:25:02+00:00"
+            "time": "2020-06-24T19:23:12+00:00"
         },
         {
             "name": "composer/semver",
@@ -1178,12 +1178,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-http.git",
-                "reference": "d0916b1466c0db02f3482c57be9cfcebdd363cc6"
+                "reference": "65de4ae2978a691f822c16daaaf6f4c38c27590d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-http/zipball/d0916b1466c0db02f3482c57be9cfcebdd363cc6",
-                "reference": "d0916b1466c0db02f3482c57be9cfcebdd363cc6",
+                "url": "https://api.github.com/repos/laminas/laminas-http/zipball/65de4ae2978a691f822c16daaaf6f4c38c27590d",
+                "reference": "65de4ae2978a691f822c16daaaf6f4c38c27590d",
                 "shasum": ""
             },
             "require": {
@@ -1208,8 +1208,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.11.x-dev",
-                    "dev-develop": "2.12.x-dev"
+                    "dev-master": "2.12.x-dev",
+                    "dev-develop": "2.13.x-dev"
                 }
             },
             "autoload": {
@@ -1228,7 +1228,7 @@
                 "http client",
                 "laminas"
             ],
-            "time": "2020-04-15T19:25:01+00:00"
+            "time": "2020-06-23T15:16:46+00:00"
         },
         {
             "name": "laminas/laminas-hydrator",
@@ -2810,12 +2810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a3660e1c74be6d5a02b884f57e80a4e440a705ef"
+                "reference": "fb66fad45b5f3647b948417ae5ab3b992ede76bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a3660e1c74be6d5a02b884f57e80a4e440a705ef",
-                "reference": "a3660e1c74be6d5a02b884f57e80a4e440a705ef",
+                "url": "https://api.github.com/repos/symfony/console/zipball/fb66fad45b5f3647b948417ae5ab3b992ede76bc",
+                "reference": "fb66fad45b5f3647b948417ae5ab3b992ede76bc",
                 "shasum": ""
             },
             "require": {
@@ -2879,7 +2879,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-06-15T12:37:55+00:00"
+            "time": "2020-06-24T13:34:53+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -7035,12 +7035,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "93123c0f564828ee0df027fbf98ad0b084f0966d"
+                "reference": "52b347ecec24ece2ca6a9fb143f5c27e8bef88be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/93123c0f564828ee0df027fbf98ad0b084f0966d",
-                "reference": "93123c0f564828ee0df027fbf98ad0b084f0966d",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/52b347ecec24ece2ca6a9fb143f5c27e8bef88be",
+                "reference": "52b347ecec24ece2ca6a9fb143f5c27e8bef88be",
                 "shasum": ""
             },
             "require": {
@@ -7102,7 +7102,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2020-06-22T08:12:56+00:00"
+            "time": "2020-06-24T13:36:31+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -7302,10 +7302,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "ext-json": "*"
     },
-    "platform-dev": {
-        "php": ">=7.1.0"
-    }
+    "platform-dev": []
 }
