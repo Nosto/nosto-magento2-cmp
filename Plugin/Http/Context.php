@@ -37,6 +37,7 @@
 namespace Nosto\Cmp\Plugin\Http;
 
 use Exception;
+use Magento\Catalog\Model\AbstractModel;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Customer\Model\Session;
@@ -223,7 +224,7 @@ class Context
 
     /**
      * Return category object or false if not found
-     * @return null|Category
+     * @return bool|AbstractModel|Category|null
      */
     private function getCategory()
     {
@@ -240,6 +241,7 @@ class Context
      */
     private function getUrlPath()
     {
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $path = $this->request->getUri()->getPath(); //@phan-suppress-current-line PhanUndeclaredMethod
         if ($path === null) {
             return null;
