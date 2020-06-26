@@ -57,6 +57,7 @@ class CategorySorting extends AbstractHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param Context $context
+     * @noinspection PhpUnused
      */
     public function __construct(
         NostoHelperAccount $nostoHelperAccount,

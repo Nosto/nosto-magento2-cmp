@@ -68,6 +68,7 @@ class FilterBuilder
      * @param ExcludeFilters $excludeFilters
      * @param NostoHelperData $nostoHelperData
      * @param NostoLogger $logger
+     * @noinspection PhpUnused
      */
     public function __construct(
         IncludeFilters $includeFilters,

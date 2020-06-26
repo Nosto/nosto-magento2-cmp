@@ -43,6 +43,7 @@
  * @property {String} baseUrl
  */
 
+// noinspection JSUnresolvedFunction
 define(['jquery'], function ($) {
 
   /**

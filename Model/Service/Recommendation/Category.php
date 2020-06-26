@@ -55,6 +55,7 @@ class Category
     /**
      * Category constructor.
      * @param CookieManagerInterface $cookieManager
+     * @noinspection PhpUnused
      */
     public function __construct(
         CookieManagerInterface $cookieManager
