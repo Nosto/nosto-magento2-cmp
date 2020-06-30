@@ -10,7 +10,6 @@
       <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/jsonInFirstLevel.zip!/" />
       <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/not-an-artifact.zip!/" />
     </CLASSES>
-    <JAVADOC />
     <SOURCES />
   </library>
 </component>

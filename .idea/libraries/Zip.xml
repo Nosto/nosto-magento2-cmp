@@ -8,7 +8,6 @@
       <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/subfolder.zip!/" />
       <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Util/Fixtures/Zip/empty.zip!/" />
     </CLASSES>
-    <JAVADOC />
     <SOURCES />
   </library>
 </component>
