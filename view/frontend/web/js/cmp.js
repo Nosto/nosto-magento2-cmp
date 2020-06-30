@@ -60,7 +60,8 @@ define(['jquery'], function ($) {
       .done(function (data) {
         handleData(data, categoryCookie, segmentCookie);
       })
-      .fail(function (error) {
+		// noinspection JSUnresolvedFunction
+		.fail(function (error) {
         console.warn("Something went wrong trying to fetch segment mapping. Error code: "
           + error.status)
       })
