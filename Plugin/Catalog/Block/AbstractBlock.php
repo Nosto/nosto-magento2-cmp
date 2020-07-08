@@ -191,6 +191,7 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return float|int
+     * @noinspection PhpUnused
      */
     public function afterGetFirstNum($block, $result)
     {
@@ -208,6 +209,7 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return float|int
+     * @noinspection PhpUnused
      */
     public function afterGetLastNum($block, $result)
     {
@@ -225,6 +227,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
@@ -239,6 +242,7 @@ abstract class AbstractBlock extends Template
      * @param $result
      * @return int
      * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {

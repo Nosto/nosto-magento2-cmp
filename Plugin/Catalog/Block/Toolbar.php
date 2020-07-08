@@ -101,6 +101,7 @@ class Toolbar extends AbstractBlock
      * @param Registry $registry
      * @param State $state
      * @noinspection PhpDeprecationInspection
+     * @noinspection PhpUnused
      */
     public function __construct(
         Context $context,
@@ -131,6 +132,7 @@ class Toolbar extends AbstractBlock
      * @param MagentoToolbar $subject
      * @return MagentoToolbar
      * @throws NoSuchEntityException
+     * @noinspection PhpUnused
      */
     public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject

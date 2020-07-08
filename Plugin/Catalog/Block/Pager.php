@@ -42,6 +42,7 @@ use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 
+/** @noinspection PhpUnused */
 class Pager extends AbstractBlock
 {
     /**
@@ -51,6 +52,7 @@ class Pager extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param ParameterResolverInterface $parameterResolver
      * @param NostoLogger $logger
+     * @noinspection PhpUnused
      */
     public function __construct(
         Context $context,
@@ -68,6 +70,7 @@ class Pager extends AbstractBlock
      * @param $param
      * @return bool
      * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public function afterIsPageCurrent( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
@@ -88,6 +91,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return array
+     * @noinspection PhpUnused
      */
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
@@ -143,6 +147,7 @@ class Pager extends AbstractBlock
      * @param $result
      * @return bool
      * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public function afterIsLastPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
@@ -158,6 +163,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return string
+     * @noinspection PhpUnused
      */
     public function afterGetNextPageUrl(MagentoPager $pager, $result)
     {
@@ -171,6 +177,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return string
+     * @noinspection PhpUnused
      */
     public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
     {

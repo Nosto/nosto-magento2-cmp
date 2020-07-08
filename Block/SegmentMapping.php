@@ -65,6 +65,15 @@ class SegmentMapping extends Template
     /** @var NostoLogger */
     private $logger;
 
+    /**
+     * SegmentMapping constructor.
+     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param CookieManagerInterface $cookieManager
+     * @param Context $context
+     * @param NostoLogger $logger
+     * @noinspection PhpUnused
+     */
     public function __construct(
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
@@ -82,6 +91,7 @@ class SegmentMapping extends Template
     /**
      * Return Nosto merchant id
      * @return null|string
+     * @noinspection PhpUnused
      */
     public function getNostoAccount()
     {
@@ -98,6 +108,7 @@ class SegmentMapping extends Template
     /**
      * Return customer id
      * @return null|string
+     * @noinspection PhpUnused
      */
     public function getCustomerId()
     {
@@ -107,6 +118,7 @@ class SegmentMapping extends Template
     /**
      * Return the mapping cookie name
      * @return string
+     * @noinspection PhpUnused
      */
     public function getCategoryMappingCookieName()
     {
@@ -116,6 +128,7 @@ class SegmentMapping extends Template
     /**
      * Return the mapping cookie name
      * @return string
+     * @noinspection PhpUnused
      */
     public function getSegmentMappingCookieName()
     {
@@ -124,6 +137,7 @@ class SegmentMapping extends Template
 
     /**
      * @return mixed
+     * @noinspection PhpUnused
      */
     public function getNostoBaseUrl()
     {

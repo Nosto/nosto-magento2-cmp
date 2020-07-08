@@ -55,6 +55,7 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
+/** @noinspection PhpUnused */
 class Context
 {
     /** @var CookieManagerInterface */
@@ -102,6 +103,7 @@ class Context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param Http $request
      * @param NostoLogger $logger
+     * @noinspection PhpUnused
      */
     public function __construct(
         Session $customerSession,

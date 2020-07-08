@@ -57,6 +57,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
      * @param Http $httpRequest
      * @param Registry $registry
      * @noinspection PhpDeprecationInspection
+     * @noinspection PhpUnused
      */
     public function __construct(Http $httpRequest, Registry $registry)
     {
@@ -66,6 +67,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
 
     /**
      * @inheritdoc
+     * @noinspection PhpUnused
      */
     public function getSortingOrder()
     {
@@ -77,6 +79,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
 
     /**
      * @inheritdoc
+     * @noinspection PhpUnused
      */
     public function getCurrentPage()
     {
