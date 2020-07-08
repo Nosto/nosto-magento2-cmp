@@ -56,12 +56,13 @@ define(['jquery'], function ($) {
    */
   function getMapping(merchant, cid, categoryCookie, segmentCookie, domain) {
     const url = getRequestUrl(domain, merchant, cid);
+    // noinspection JSUnresolvedFunction
     $.get(url)
       .done(function (data) {
         handleData(data, categoryCookie, segmentCookie);
       })
-		// noinspection JSUnresolvedFunction
-		.fail(function (error) {
+        // noinspection JSUnresolvedFunction
+        .fail(function (error) {
         console.warn("Something went wrong trying to fetch segment mapping. Error code: "
           + error.status)
       })
