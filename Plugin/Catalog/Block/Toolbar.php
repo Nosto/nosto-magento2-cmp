@@ -44,7 +44,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
+use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;

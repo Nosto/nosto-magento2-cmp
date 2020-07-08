@@ -39,7 +39,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\Registry;
+use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
 
 class DefaultParameterResolver implements ParameterResolverInterface
 {
