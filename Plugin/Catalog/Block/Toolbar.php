@@ -49,6 +49,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
@@ -85,6 +86,9 @@ class Toolbar extends AbstractBlock
     /** @var NostoFilterBuilder  */
     private $nostoFilterBuilder;
 
+    /** @var SearchEngine */
+    private $searchEngineHelper;
+
     private static $isProcessed = false;
 
     /**
@@ -100,6 +104,7 @@ class Toolbar extends AbstractBlock
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
+     * @param SearchEngine $searchEngineHelper
      */
     public function __construct(
         Context $context,
@@ -112,7 +117,8 @@ class Toolbar extends AbstractBlock
         NostoLogger $logger,
         NostoFilterBuilder $nostoFilterBuilder,
         Registry $registry,
-        State $state
+        State $state,
+        SearchEngine $searchEngineHelper
     ) {
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
@@ -121,6 +127,7 @@ class Toolbar extends AbstractBlock
         $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
+        $this->searchEngineHelper = $searchEngineHelper;
         parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
     }
 
@@ -134,6 +141,9 @@ class Toolbar extends AbstractBlock
     public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
+        if (!$this->searchEngineHelper->isMysql()) {
+            return $subject;
+        }
         if (self::$isProcessed) {
             return $subject;
         }

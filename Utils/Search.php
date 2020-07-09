@@ -34,18 +34,46 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Utils;
 
-//TODO - move under helper or somewhere else. It's not necessarily related to any block.
-interface ParameterResolverInterface
+use Nosto\Cmp\Helper\CategorySorting;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+
+class Search
 {
     /**
-     * @return string
+     * @param array $requestData
+     * @return bool
      */
-    public function getSortingOrder();
+    public static function isNostoSorting(array $requestData)
+    {
+        return self::findNostoSortingIndex($requestData) !== null;
+    }
 
     /**
-     * @return int
+     * @param ParameterResolverInterface $parameterResolver
+     * @return bool
      */
-    public function getCurrentPage();
+    public static function isNostoSortingByResolver(ParameterResolverInterface $parameterResolver)
+    {
+        return $parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY;
+    }
+
+    /**
+     * @param array $requestData
+     * @return int|string|null
+     */
+    public static function findNostoSortingIndex(array $requestData)
+    {
+        if (empty($requestData['sort'])) {
+            return null;
+        }
+        $sorting = $requestData['sort'];
+        foreach ($sorting as $index => $sort) {
+            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+                return $index;
+            }
+        }
+        return null;
+    }
 }

@@ -34,18 +34,49 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-//TODO - move under helper or somewhere else. It's not necessarily related to any block.
-interface ParameterResolverInterface
+use Magento\Framework\Search\Request\Cleaner;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Cmp\Utils\Search;
+
+class RequestCleaner
 {
     /**
-     * @return string
+     * @var ParameterResolverInterface
      */
-    public function getSortingOrder();
+    private $parameterResolver;
 
     /**
-     * @return int
+     * @param ParameterResolverInterface $parameterResolver
      */
-    public function getCurrentPage();
+    public function __construct(ParameterResolverInterface $parameterResolver)
+    {
+        $this->parameterResolver = $parameterResolver;
+    }
+
+    /**
+     * Cleans non persisted sorting parameters etc. for the request data
+     *
+     * @param Cleaner $cleaner
+     * @param array $requestData
+     * @return array
+     */
+    public function afterClean(Cleaner $cleaner, array $requestData)
+    {
+        return $this->cleanNostoSorting($requestData);
+    }
+
+    /**
+     * @param array $requestData
+     * @return array
+     */
+    private function cleanNostoSorting(array $requestData)
+    {
+        if (!Search::isNostoSorting($requestData)) {
+            return $requestData;
+        }
+        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return $requestData;
+    }
 }

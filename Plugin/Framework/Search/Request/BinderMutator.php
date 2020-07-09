@@ -34,18 +34,43 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-//TODO - move under helper or somewhere else. It's not necessarily related to any block.
-interface ParameterResolverInterface
+use Magento\Framework\Search\Request\Binder;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Cmp\Utils\Search;
+
+class BinderMutator
 {
     /**
-     * @return string
+     * @var ParameterResolverInterface
      */
-    public function getSortingOrder();
+    private $parameterResolver;
 
     /**
-     * @return int
+     * @param ParameterResolverInterface $parameterResolver
      */
-    public function getCurrentPage();
+    public function __construct(ParameterResolverInterface $parameterResolver)
+    {
+        $this->parameterResolver = $parameterResolver;
+    }
+
+    /**
+     * Calls Nosto's API to get CMP result & sets product ids returned by Nosto to the bind data
+     *
+     * @param Binder $binder
+     * @param array $data
+     * @return array
+     */
+    public function afterBind(Binder $binder, array $data)
+    {
+        if (!Search::isNostoSortingByResolver($this->parameterResolver)) {
+            return $data;
+        }
+        // TODO
+        // - fetch Nosto data from Graphql
+        // - add the product ids to the data & return
+        // - double check if we should remove some of the existing bindings
+        return $data;
+    }
 }
