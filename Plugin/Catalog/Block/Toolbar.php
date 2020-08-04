@@ -160,6 +160,10 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
+                    $this->logger->debug(
+                        $subjectCollection->getSelectSql()->__toString(),
+                        ['nosto' => 'cmp']
+                    );
                     $this->addTrackParamToProduct($subjectCollection, $nostoProductIds);
                 } else {
                     $this->logger->info(sprintf(
