@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file. This projec
 ### not released
 * Change the script type to `application/json` for category mapping
 * Add possibility to debug the category query via Magento's debug logging 
+* Remove redundant Magento's internal full page cache busting logic
 
 ### 2.0.0
 * Update Nosto PHP-SDK dependency to 5.0.0
