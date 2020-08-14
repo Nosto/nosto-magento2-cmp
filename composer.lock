@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c87b9f8b4c875d8907992cca000daa2a",
+    "content-hash": "73cff3befbaa3cd192ec7141faffb4ad",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -136,6 +136,16 @@
                 "certificate",
                 "ssl",
                 "tls"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-08T08:27:21+00:00"
         },
@@ -291,6 +301,16 @@
                 "semver",
                 "validation",
                 "versioning"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-21T08:26:55+00:00"
         },
@@ -847,6 +867,12 @@
                 "console",
                 "laminas"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-04-15T19:21:25+00:00"
         },
         {
@@ -1025,6 +1051,12 @@
                 "escaper",
                 "laminas"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-04-15T19:23:31+00:00"
         },
         {
@@ -1082,6 +1114,12 @@
                 "eventmanager",
                 "events",
                 "laminas"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-04-15T19:23:44+00:00"
         },
@@ -1956,6 +1994,12 @@
                 "laminas",
                 "stdlib"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-04-15T19:33:34+00:00"
         },
         {
@@ -2149,6 +2193,12 @@
                 "autoloading",
                 "laminas",
                 "zf"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-05-20T16:49:09+00:00"
         },
@@ -2395,16 +2445,16 @@
         },
         {
             "name": "nosto/module-nostotagging",
-            "version": "dev-hotfix/5.0.3",
+            "version": "5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-magento2.git",
-                "reference": "c939b9b1c2d6933354acc78292a6c7e896e5523d"
+                "reference": "b7cb5e7219765f1542ab4012108143248ef49923"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/c939b9b1c2d6933354acc78292a6c7e896e5523d",
-                "reference": "c939b9b1c2d6933354acc78292a6c7e896e5523d",
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/b7cb5e7219765f1542ab4012108143248ef49923",
+                "reference": "b7cb5e7219765f1542ab4012108143248ef49923",
                 "shasum": ""
             },
             "require": {
@@ -2460,7 +2510,7 @@
                 "OSL-3.0"
             ],
             "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
-            "time": "2020-08-13T13:06:48+00:00"
+            "time": "2020-08-14T07:43:19+00:00"
         },
         {
             "name": "nosto/php-sdk",
@@ -7917,9 +7967,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "nosto/module-nostotagging": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
