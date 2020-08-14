@@ -1,5 +1,11 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 2.0.1
+* Change the script type to `application/json` for category mapping
+* Add possibility to debug the category query via Magento's debug logging 
+* Remove redundant Magento's internal full page cache busting logic
+* Fix the category page sorting issue when additional / default category sorting is in use 
+
 ### 2.0.0
 * Update Nosto PHP-SDK dependency to 5.0.0
 * Update compatibility with NostoTagging Module 5.0

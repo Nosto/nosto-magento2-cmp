@@ -41,6 +41,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
@@ -160,11 +161,15 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
+                    $this->logger->debug(
+                        $subjectCollection->getSelectSql()->__toString(),
+                        ['nosto' => 'cmp']
+                    );
                     $this->addTrackParamToProduct($subjectCollection, $nostoProductIds);
                 } else {
                     $this->logger->info(sprintf(
                         "CMP result is empty for category: %s",
-                        $this->getCurrentCategory($store) //@phan-suppress-current-line PhanTypeMismatchArgument
+                        $this->getCurrentCategoryString($store) //@phan-suppress-current-line PhanTypeMismatchArgument
                     ));
                 }
             } catch (Exception $e) {
@@ -200,7 +205,7 @@ class Toolbar extends AbstractBlock
                     $nostoAccount,
                     $this->nostoFilterBuilder,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
-                    $this->getCurrentCategory($store),
+                    $this->getCurrentCategoryString($store),
                     $this->getCurrentPageNumber() - 1,
                     $this->getLimit()
                 );
@@ -213,7 +218,7 @@ class Toolbar extends AbstractBlock
      * Get the current category
      * @return null|string
      */
-    private function getCurrentCategory(Store $store)
+    private function getCurrentCategoryString(Store $store)
     {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
@@ -227,6 +232,7 @@ class Toolbar extends AbstractBlock
     private function sortByProductIds(ProductCollection $collection, array $nostoProductIds)
     {
         $select = $collection->getSelect();
+        $select->reset(Select::ORDER);
         $zendExpression = [
             new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC')
         ];

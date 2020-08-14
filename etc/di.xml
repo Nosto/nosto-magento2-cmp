@@ -51,7 +51,4 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
-    <type name="Magento\Framework\App\Http\Context">
-        <plugin name="nosto_segmented_context" type="Nosto\Cmp\Plugin\Http\Context" />
-    </type>
 </config>
