@@ -2,7 +2,7 @@
   "name": "nosto/module-nostocmp",
   "description": "Nosto Category Merchandising extension for Magento 2",
   "type": "magento2-module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "require-dev": {
     "php": ">=7.1.0",
     "magento-ecg/coding-standard": "3.*",
@@ -24,8 +24,8 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "nosto/module-nostotagging": "^5.0.0",
-    "nosto/php-sdk": "^5.0.0",
+    "nosto/module-nostotagging": "^5.0.3",
+    "nosto/php-sdk": "^5.1.1",
     "php": ">=7.0.0"
   },
   "repositories": [
