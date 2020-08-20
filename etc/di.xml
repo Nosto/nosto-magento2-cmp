@@ -57,7 +57,4 @@
     <type name="Magento\Framework\Search\Request\Cleaner">
         <plugin name="nosto_search_results_cleaner" type="Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner"/>
     </type>
-    <type name="Magento\Framework\Search\Request\Binder">
-        <plugin name="nosto_search_results_mutator" type="Nosto\Cmp\Plugin\Framework\Search\Request\BinderMutator"/>
-    </type>
 </config>
