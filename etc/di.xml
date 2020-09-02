@@ -57,4 +57,7 @@
     <type name="Magento\Framework\Search\Request\Cleaner">
         <plugin name="nosto_search_results_cleaner" type="Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner"/>
     </type>
+    <type name="Magento\Framework\Api\Search\SearchResult">
+        <plugin name="nosto_search_result_sort" type="Nosto\Cmp\Plugin\Api\Search\SearchResultSorter"/>
+    </type>
 </config>

@@ -42,12 +42,9 @@ use Magento\TestFramework\Store\StoreManager;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Utils\Search;
-use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger;
-use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 
 class RequestCleaner
 {
@@ -57,6 +54,8 @@ class RequestCleaner
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
     const KEY_CMP = 'nosto_cmp_id_search';
+
+    public static $nostoTmpSort = [5, 11, 401, 2023, 1];
 
     /**
      * @var ParameterResolverInterface
@@ -141,7 +140,7 @@ class RequestCleaner
             $origData = $requestData; //TODO - remove me, only for debugging purposes
             $this->resetRequestData($requestData);
             $this->applyCmpFilter($requestData, $this->getCmpProductIds());
-            $this->applyCmpSort($requestData, $this->getCmpProductIds());
+            $this->cleanUpCmpSort($requestData, $this->getCmpProductIds());
         } catch (\Exception $e) {
             $this->logger->debugWithSource(
                 'Failed to apply CMP - see exception log(s) for datails',
@@ -161,11 +160,9 @@ class RequestCleaner
      * @param array $requestData
      * @param $productIds
      */
-    private function applyCmpSort(array &$requestData, $productIds)
+    private function cleanUpCmpSort(array &$requestData, $productIds)
     {
         unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
-
-        //TODO: check if we can use script for sorting the results
     }
 
     /**
@@ -213,11 +210,13 @@ class RequestCleaner
      */
     private function getCmpProductIds()
     {
+
         // TODO
-        // - inject CMP operation
+        // - inject CMP service
         // - build the filters
         // - fetch the product ids from Nosto
-        return [5, 11, 401, 2023, 1];
+        // - pagination?
+        return self::$nostoTmpSort;
     }
 
     /**
