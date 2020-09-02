@@ -38,10 +38,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <nosto>
+        <nosto_cmp>
             <flags>
                 <category_sorting>0</category_sorting>
             </flags>
-        </nosto>
+        </nosto_cmp>
     </default>
 </config>
