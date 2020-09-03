@@ -55,6 +55,14 @@
                     <source_model>Nosto\Cmp\Model\Config\Source\CategorySorting</source_model>
                     <frontend_model>Nosto\Cmp\Model\Config\Frontend\CategorySorting</frontend_model>
                 </field>
+                <field id="category_map" translate="label comment" type="select" sortOrder="120"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category mapping</label>
+                    <comment>
+                        <![CDATA[Add all categories to category mapping]]>
+                    </comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>
