@@ -41,7 +41,7 @@
         <nosto_cmp>
             <flags>
                 <category_sorting>0</category_sorting>
-                <category_map>0</category_map>
+                <map_all_categories>0</map_all_categories>
             </flags>
         </nosto_cmp>
     </default>

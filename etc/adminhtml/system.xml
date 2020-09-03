@@ -55,7 +55,7 @@
                     <source_model>Nosto\Cmp\Model\Config\Source\CategorySorting</source_model>
                     <frontend_model>Nosto\Cmp\Model\Config\Frontend\CategorySorting</frontend_model>
                 </field>
-                <field id="category_map" translate="label comment" type="select" sortOrder="120"
+                <field id="map_all_categories" translate="label comment" type="select" sortOrder="120"
                        showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Map all categories</label>
                     <comment>

@@ -58,7 +58,7 @@ class Data extends AbstractHelper
     /**
      * Path to the configuration object that stores category sorting
      */
-    const XML_PATH_CATEGORY_MAPPING = 'nosto_cmp/flags/category_map';
+    const XML_PATH_CATEGORY_MAPPING = 'nosto_cmp/flags/map_all_categories';
 
     /** @var ModuleListInterface */
     private $moduleList;
