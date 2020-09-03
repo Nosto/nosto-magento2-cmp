@@ -57,9 +57,9 @@
                 </field>
                 <field id="category_map" translate="label comment" type="select" sortOrder="120"
                        showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Category mapping</label>
+                    <label>Map all categories</label>
                     <comment>
-                        <![CDATA[Add all categories to category mapping]]>
+                        <![CDATA[Add all categories in the script mapping]]>
                     </comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
