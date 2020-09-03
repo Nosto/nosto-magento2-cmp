@@ -46,6 +46,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Nosto\Cmp\Helper\Data as NostoHelperData;
 
 class CategoryMapping extends Template
 {
@@ -58,6 +59,9 @@ class CategoryMapping extends Template
     /** @var CategoryBuilder */
     private $categoryBuilder;
 
+    /** @var NostoHelperData */
+    private $nostoHelperData;
+
     /** @var NostoLogger */
     private $logger;
 
@@ -68,6 +72,7 @@ class CategoryMapping extends Template
         StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
+        NostoHelperData $nostoHelperData,
         Context $context,
         NostoLogger $logger
     ) {
@@ -75,6 +80,7 @@ class CategoryMapping extends Template
         $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
+        $this->nostoHelperData = $nostoHelperData;
         $this->logger = $logger;
     }
 
@@ -113,9 +119,12 @@ class CategoryMapping extends Template
 
             $categories = $this->collectionFactory->create()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('include_in_menu', ['eq' => 1])
                 ->addIsActiveFilter()
                 ->setStore($store);
+
+            if (!$this->nostoHelperData->isAllCategoriesMapEnabled($store)) {
+                $categories->addAttributeToFilter('include_in_menu', ['eq' => 1]);
+            }
 
             /** @var Category $category $item */
             foreach ($categories->getItems() as $category) {
