@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright (c) 2020, Nosto Solutions Ltd
+  ~ Copyright (c) 2019, Nosto Solutions Ltd
   ~ All rights reserved.
   ~
   ~ Redistribution and use in source and binary forms, with or without modification,
@@ -29,7 +29,7 @@
   ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   ~
   ~ @author Nosto Solutions Ltd <contact@nosto.com>
-  ~ @copyright 2020 Nosto Solutions Ltd
+  ~ @copyright 2019 Nosto Solutions Ltd
   ~ @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
   ~
   -->
@@ -37,21 +37,18 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface" type="Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver"/>
     <type name="Magento\Catalog\Model\Config">
-        <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config"/>
+        <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config" />
     </type>
     <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
-        <plugin name="sortby_extend_default_sort_filters" type="Nosto\Cmp\Plugin\Catalog\Block\Toolbar"/>
+        <plugin name="sortby_extend_default_sort_filters" type="Nosto\Cmp\Plugin\Catalog\Block\Toolbar" />
     </type>
     <type name="Magento\Theme\Block\Html\Pager">
-        <plugin name="nosto_cmp_pager" type="Nosto\Cmp\Plugin\Catalog\Block\Pager"/>
+        <plugin name="nosto_cmp_pager" type="Nosto\Cmp\Plugin\Catalog\Block\Pager" />
     </type>
     <type name="Magento\Catalog\Model\Category\Attribute\Source\Sortby">
-        <plugin name="sortby_add_default_nosto_option" type="Nosto\Cmp\Plugin\Catalog\Model\Sortby"/>
+        <plugin name="sortby_add_default_nosto_option" type="Nosto\Cmp\Plugin\Catalog\Model\Sortby" />
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product"/>
-    </type>
-    <type name="Magento\Framework\App\Http\Context">
-        <plugin name="nosto_segmented_context" type="Nosto\Cmp\Plugin\Http\Context"/>
+        <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
 </config>

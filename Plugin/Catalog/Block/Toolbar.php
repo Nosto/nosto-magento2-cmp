@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2019, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -30,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2019 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
@@ -42,25 +41,27 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
-use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
+use Magento\Framework\Exception\LocalizedException;
+use /** @noinspection PhpDeprecationInspection */
+    Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
-use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
+use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -82,7 +83,7 @@ class Toolbar extends AbstractBlock
     /** @var CategoryRecommendation */
     private $categoryRecommendation;
 
-    /** @var NostoFilterBuilder */
+    /** @var NostoFilterBuilder  */
     private $nostoFilterBuilder;
 
     private static $isProcessed = false;
@@ -100,8 +101,6 @@ class Toolbar extends AbstractBlock
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
-     * @noinspection PhpDeprecationInspection
-     * @noinspection PhpUnused
      */
     public function __construct(
         Context $context,
@@ -132,7 +131,6 @@ class Toolbar extends AbstractBlock
      * @param MagentoToolbar $subject
      * @return MagentoToolbar
      * @throws NoSuchEntityException
-     * @noinspection PhpUnused
      */
     public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
@@ -163,11 +161,15 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
+                    $this->logger->debug(
+                        $subjectCollection->getSelectSql()->__toString(),
+                        ['nosto' => 'cmp']
+                    );
                     $this->addTrackParamToProduct($subjectCollection, $nostoProductIds);
                 } else {
                     $this->logger->info(sprintf(
                         "CMP result is empty for category: %s",
-                        $this->getCurrentCategory($store) //@phan-suppress-current-line PhanTypeMismatchArgument
+                        $this->getCurrentCategoryString($store) //@phan-suppress-current-line PhanTypeMismatchArgument
                     ));
                 }
             } catch (Exception $e) {
@@ -203,7 +205,7 @@ class Toolbar extends AbstractBlock
                     $nostoAccount,
                     $this->nostoFilterBuilder,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
-                    $this->getCurrentCategory($store),
+                    $this->getCurrentCategoryString($store),
                     $this->getCurrentPageNumber() - 1,
                     $this->getLimit()
                 );
@@ -214,10 +216,9 @@ class Toolbar extends AbstractBlock
 
     /**
      * Get the current category
-     * @param Store $store
      * @return null|string
      */
-    private function getCurrentCategory(Store $store)
+    private function getCurrentCategoryString(Store $store)
     {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
@@ -231,6 +232,7 @@ class Toolbar extends AbstractBlock
     private function sortByProductIds(ProductCollection $collection, array $nostoProductIds)
     {
         $select = $collection->getSelect();
+        $select->reset(Select::ORDER);
         $zendExpression = [
             new Zend_Db_Expr('FIELD(e.entity_id,' . implode(',', $nostoProductIds) . ') DESC')
         ];
