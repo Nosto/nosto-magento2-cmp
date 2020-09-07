@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/vendor/zendframework/zend-validator/test/File/_files/test.zip!/" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>
