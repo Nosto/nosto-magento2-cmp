@@ -4,7 +4,6 @@
   "type": "magento2-module",
   "version": "2.0.1",
   "require-dev": {
-    "php": ">=7.1.0",
     "magento-ecg/coding-standard": "3.*",
     "magento/module-store": "101.0.4",
     "magento/zendframework1": "1.14.3",
@@ -26,7 +25,8 @@
   "require": {
     "nosto/module-nostotagging": "^5.0.3",
     "nosto/php-sdk": "^5.1.1",
-    "php": ">=7.0.0"
+    "php": ">=7.1",
+    "ext-json": "*"
   },
   "repositories": [
     {

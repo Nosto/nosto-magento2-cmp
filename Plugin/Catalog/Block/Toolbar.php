@@ -101,6 +101,7 @@ class Toolbar extends AbstractBlock
      * @param NostoFilterBuilder $nostoFilterBuilder
      * @param Registry $registry
      * @param State $state
+     * @noinspection PhpDeprecationInspection
      */
     public function __construct(
         Context $context,
@@ -216,6 +217,7 @@ class Toolbar extends AbstractBlock
 
     /**
      * Get the current category
+     * @param Store $store
      * @return null|string
      */
     private function getCurrentCategoryString(Store $store)
