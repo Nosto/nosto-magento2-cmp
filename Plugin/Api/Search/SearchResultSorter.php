@@ -38,10 +38,25 @@ namespace Nosto\Cmp\Plugin\Api\Search;
 
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResult;
-use Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Utils\CategoryMerchandising;
 
 class SearchResultSorter
 {
+    /**
+     * @var StateAwareCategoryServiceInterface
+     */
+    private $categoryService;
+
+    /**
+     * SearchResultSorter constructor.
+     * @param StateAwareCategoryServiceInterface $categoryService
+     */
+    public function __construct(
+        StateAwareCategoryServiceInterface $categoryService
+    ) {
+        $this->categoryService = $categoryService;
+    }
 
     /**
      * @param SearchResult $subject
@@ -50,7 +65,6 @@ class SearchResultSorter
      */
     public function beforeSetItems(SearchResult $subject, $result)
     {
-
         $cmpSort = $this->getCmpSort();
         if (empty($cmpSort)) {
             return [$result];
@@ -62,6 +76,7 @@ class SearchResultSorter
                 $sorted[] = $document;
             }
         }
+        $subject->setTotalCount($this->getTotalPrimaryCount());
         return [$sorted];
     }
 
@@ -79,13 +94,32 @@ class SearchResultSorter
         }
         return null;
     }
+
     /**
      * Returns the product ids sorted by Nosto
      * @return int[]
      */
     private function getCmpSort()
     {
-        // TODO - use the service
-        return RequestCleaner::$nostoTmpSort;
+        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        if ($categoryMerchandisingResult !== null) {
+            return CategoryMerchandising::parseProductIds(
+                $categoryMerchandisingResult
+            );
+        }
+        return null;
+    }
+
+    /**
+     * Returns the product ids sorted by Nosto
+     * @return int|null
+     */
+    private function getTotalPrimaryCount()
+    {
+        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        if ($categoryMerchandisingResult !== null) {
+            return $categoryMerchandisingResult->getTotalPrimaryCount();
+        }
+        return null;
     }
 }

@@ -36,70 +36,19 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Model\Signup\Account as NostoAccount;
-use Nosto\Operation\AbstractGraphQLOperation;
-use Nosto\Service\FeatureAccess;
-use Nosto\Operation\Recommendation\CategoryMerchandising;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\NostoException;
 
-class Category
+interface StateAwareCategoryServiceInterface
 {
-    const NOSTO_PREVIEW_COOKIE = 'nostopreview';
-    const MAX_PRODUCT_AMOUNT = 100;
-
-    private $cookieManager;
-
     /**
-     * Category constructor.
-     * @param CookieManagerInterface $cookieManager
-     */
-    public function __construct(
-        CookieManagerInterface $cookieManager
-    ) {
-        $this->cookieManager = $cookieManager;
-    }
-
-    /**
-     * @param NostoAccount $nostoAccount
-     * @param FilterBuilder $filters
-     * @param $nostoCustomerId
-     * @param $category
      * @param int $pageNumber
      * @param int $limit
-     * @param bool $previewMode
      * @return CategoryMerchandisingResult
-     * @throws NostoException
-     * @throws \Nosto\Request\Http\Exception\AbstractHttpException
-     * @throws \Nosto\Request\Http\Exception\HttpResponseException
      */
-    public function getPersonalisationResult(
-        NostoAccount $nostoAccount,
-        FilterBuilder $filters,
-        $nostoCustomerId,
-        $category,
-        $pageNumber,
-        $limit,
-        $previewMode = false
-    ) {
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new NostoException('Missing Nosto API_APPS token');
-        }
-        $categoryMerchandising = new CategoryMerchandising(
-            $nostoAccount,
-            $nostoCustomerId,
-            $category,
-            $pageNumber,
-            $filters->getIncludeFilters(),
-            $filters->getExcludeFilters(),
-            '',
-            AbstractGraphQLOperation::IDENTIFIER_BY_CID,
-            $previewMode,
-            $limit
-        );
-        return $categoryMerchandising->execute();
-    }
+    public function getPersonalisationResult($pageNumber, $limit): ?CategoryMerchandisingResult;
+
+    /**
+     * @return CategoryMerchandisingResult|null
+     */
+    public function getLastResult(): ?CategoryMerchandisingResult;
 }

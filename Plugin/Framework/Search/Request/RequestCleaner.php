@@ -41,7 +41,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Store\StoreManager;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Model\Service\Recommendation\Category;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger;
@@ -54,6 +57,8 @@ class RequestCleaner
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
     const KEY_CMP = 'nosto_cmp_id_search';
+    const KEY_RESULTS_FROM = 'from';
+    const KEY_RESULT_SIZE = 'size';
 
     public static $nostoTmpSort = [5, 11, 401, 2023, 1];
 
@@ -88,11 +93,17 @@ class RequestCleaner
     private $filterBuilder;
 
     /**
+     * @var Category
+     */
+    private $categoryService;
+
+    /**
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
      * @param FilterBuilder $filterBuilder
+     * @param StateAwareCategoryServiceInterface $categoryService
      * @param Logger $logger
      */
     public function __construct(
@@ -101,6 +112,7 @@ class RequestCleaner
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
         FilterBuilder $filterBuilder,
+        StateAwareCategoryServiceInterface $categoryService,
         Logger $logger
     ) {
         $this->parameterResolver = $parameterResolver;
@@ -109,6 +121,7 @@ class RequestCleaner
         $this->storeManager = $storeManager;
         $this->accountHelper = $nostoHelperAccount;
         $this->filterBuilder = $filterBuilder;
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -137,10 +150,24 @@ class RequestCleaner
                 );
                 return $requestData;
             }
-            $origData = $requestData; //TODO - remove me, only for debugging purposes
+            $productIds = $this->getCmpProductIds(
+                $this->parsePageNumber($requestData),
+                $this->parseLimit($requestData)
+            );
+            $this->cleanUpCmpSort($requestData, $productIds);
+            if (empty($productIds)) {
+                $this->logger->debugWithSource(
+                    'Nosto did not return products for the request',
+                    $requestData,
+                    $this
+                );
+                return $requestData;
+            }
             $this->resetRequestData($requestData);
-            $this->applyCmpFilter($requestData, $this->getCmpProductIds());
-            $this->cleanUpCmpSort($requestData, $this->getCmpProductIds());
+            $this->applyCmpFilter(
+                $requestData,
+                $productIds
+            );
         } catch (\Exception $e) {
             $this->logger->debugWithSource(
                 'Failed to apply CMP - see exception log(s) for datails',
@@ -152,7 +179,6 @@ class RequestCleaner
             return $requestData;
         }
     }
-
 
     /**
      * Removes the Nosto sorting key as it's not indexed
@@ -174,7 +200,7 @@ class RequestCleaner
     private function applyCmpFilter(array &$requestData, array $productIds)
     {
         $requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'][] = [
-            'clause' =>'must',
+            'clause' => 'must',
             'ref' => 'nosto_cmp_id_search'
         ];
         $requestData[self::KEY_QUERIES][self::KEY_CMP] = [
@@ -206,17 +232,40 @@ class RequestCleaner
     }
 
     /**
+     * @param array $requestData
+     * @return int
+     */
+    private function parsePageNumber(array $requestData)
+    {
+        return $requestData[self::KEY_RESULTS_FROM];
+    }
+
+    /**
+     * @param array $requestData
+     * @return int
+     */
+    private function parseLimit(array $requestData)
+    {
+        return $requestData[self::KEY_RESULT_SIZE];
+    }
+
+    /**
+     * @param $pageNum
+     * @param $limit
      * @return int[]
      */
-    private function getCmpProductIds()
+    private function getCmpProductIds($pageNum, $limit)
     {
-
-        // TODO
-        // - inject CMP service
-        // - build the filters
-        // - fetch the product ids from Nosto
-        // - pagination?
-        return self::$nostoTmpSort;
+        try {
+            $res = $this->categoryService->getPersonalisationResult(
+                $pageNum,
+                $limit
+            );
+            return $res ? CategoryMerchandising::parseProductIds($res) : null;
+        } catch (\Exception $e) {
+            $this->logger->exception($e);
+            return null;
+        }
     }
 
     /**
@@ -258,5 +307,4 @@ class RequestCleaner
             return self::KEY_ES_PRODUCT_ID;
         }
     }
-
 }

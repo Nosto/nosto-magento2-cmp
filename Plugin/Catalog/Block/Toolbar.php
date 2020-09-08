@@ -51,6 +51,9 @@ use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
+use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Utils\CategoryMerchandisingResult as CategoryMerchandisingResultUtil;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
@@ -81,8 +84,8 @@ class Toolbar extends AbstractBlock
     /** @var State */
     private $state;
 
-    /** @var CategoryRecommendation */
-    private $categoryRecommendation;
+    /** @var StateAwareCategoryService */
+    private $categoryService;
 
     /** @var NostoFilterBuilder  */
     private $nostoFilterBuilder;
@@ -98,7 +101,7 @@ class Toolbar extends AbstractBlock
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param CategoryBuilder $builder
-     * @param CategoryRecommendation $categoryRecommendation
+     * @param StateAwareCategoryService $categoryService
      * @param CookieManagerInterface $cookieManager
      * @param ParameterResolverInterface $parameterResolver
      * @param NostoLogger $logger
@@ -112,7 +115,7 @@ class Toolbar extends AbstractBlock
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         CategoryBuilder $builder,
-        CategoryRecommendation $categoryRecommendation,
+        StateAwareCategoryService $categoryService,
         CookieManagerInterface $cookieManager,
         ParameterResolverInterface $parameterResolver,
         NostoLogger $logger,
@@ -124,7 +127,7 @@ class Toolbar extends AbstractBlock
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
-        $this->categoryRecommendation = $categoryRecommendation;
+        $this->categoryService = $categoryService;
         $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
@@ -194,45 +197,15 @@ class Toolbar extends AbstractBlock
      * @param Store $store
      * @return CategoryMerchandisingResult
      * @throws NostoException
-     * @throws LocalizedException
      */
     private function getCmpResult(Store $store)
     {
-        $nostoAccount = $this->nostoHelperAccount->findAccount($store);
-        if ($nostoAccount === null) {
-            throw new NostoException('Account cannot be null');
-        }
-
-        // Build filters
-        $this->nostoFilterBuilder->init($store);
-        $this->nostoFilterBuilder->buildFromSelectedFilters(
-            $this->state->getActiveFilters()
-        );
-
         return ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $store) {
-                return $this->categoryRecommendation->getPersonalisationResult(
-                    $nostoAccount,
-                    $this->nostoFilterBuilder,
-                    $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
-                    $this->getCurrentCategoryString($store),
-                    $this->getCurrentPageNumber() - 1,
-                    $this->getLimit()
-                );
-            },
-            self::TIME_PROF_GRAPHQL_QUERY
+            $this->categoryService->getPersonalisationResult(
+                $this->getCurrentPageNumber() - 1,
+                $this->getLimit()
+            )
         );
-    }
-
-    /**
-     * Get the current category
-     * @return null|string
-     */
-    private function getCurrentCategoryString(Store $store)
-    {
-        /** @noinspection PhpDeprecationInspection */
-        $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
-        return $this->categoryBuilder->getCategory($category, $store);
     }
 
     /**
@@ -268,17 +241,11 @@ class Toolbar extends AbstractBlock
      */
     private function parseProductIds(CategoryMerchandisingResult $result)
     {
-        $productIds = [];
         try {
-            foreach ($result->getResultSet() as $item) {
-                if ($item->getProductId() && is_numeric($item->getProductId())) {
-                    $productIds[] = $item->getProductId();
-                }
-            }
+            return CategoryMerchandising::parseProductIds($result);
         } catch (Exception $e) {
             $this->logger->exception($e);
         }
-
         return $productIds;
     }
 

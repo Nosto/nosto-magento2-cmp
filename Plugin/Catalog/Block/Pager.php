@@ -36,9 +36,9 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-use Magento\Theme\Block\Html\Pager as MagentoPager;
-
 use Magento\Backend\Block\Template\Context;
+
+use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
@@ -69,7 +69,7 @@ class Pager extends AbstractBlock
      * @param $param
      * @return bool
      */
-    public function afterIsPageCurrent( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterIsPageCurrent(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result,
         $param
@@ -127,7 +127,7 @@ class Pager extends AbstractBlock
      * @param $result
      * @return bool
      */
-    public function afterIsFirstPage( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterIsFirstPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result
     ) {
