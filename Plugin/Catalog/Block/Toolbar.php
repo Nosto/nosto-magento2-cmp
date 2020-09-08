@@ -201,10 +201,13 @@ class Toolbar extends AbstractBlock
     private function getCmpResult(Store $store)
     {
         return ServerTiming::getInstance()->instrument(
-            $this->categoryService->getPersonalisationResult(
-                $this->getCurrentPageNumber() - 1,
-                $this->getLimit()
-            )
+            function () {
+                $this->categoryService->getPersonalisationResult(
+                    $this->getCurrentPageNumber() - 1,
+                    $this->getLimit()
+                );
+            },
+            self::TIME_PROF_GRAPHQL_QUERY
         );
     }
 
