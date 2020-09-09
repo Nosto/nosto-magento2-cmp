@@ -100,7 +100,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $registry;
 
     /**
-     * @var Builder
+     * @var CategoryBuilder
      */
     private $categoryBuilder;
 

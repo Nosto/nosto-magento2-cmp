@@ -52,10 +52,7 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 abstract class AbstractBlock extends Template
 {
     /** @var int */
-    public static $totalProducts;
-
-    /** @var int */
-    public static $limit;
+    private $limit;
 
     /** @var int */
     private $lastPageNumber;
@@ -242,7 +239,7 @@ abstract class AbstractBlock extends Template
         if ($this->lastPageNumber !== null) {
             return $this->lastPageNumber;
         }
-        $this->lastPageNumber = (int) ceil($this->getTotalProducts() / $this->getLimit());
+        $this->lastPageNumber = (int) ceil($this->getTotalProducts() / $this->getLastUsedLimit());
         return $this->lastPageNumber;
     }
 
@@ -251,9 +248,16 @@ abstract class AbstractBlock extends Template
      */
     public function getLimit()
     {
-        return $this->getCategoryService()->getLastUsedLimit();
+        return $this->limit;
     }
 
+    /**
+     * @return int|null
+     */
+    private function getLastUsedLimit()
+    {
+        return $this->getCategoryService()->getLastUsedLimit();
+    }
     /**
      * @return int
      */
@@ -268,5 +272,13 @@ abstract class AbstractBlock extends Template
     public function getCategoryService(): StateAwareCategoryService
     {
         return $this->categoryService;
+    }
+
+    /**
+     * @param int $limit
+     */
+    public function setLimit(int $limit): void
+    {
+        $this->limit = $limit;
     }
 }

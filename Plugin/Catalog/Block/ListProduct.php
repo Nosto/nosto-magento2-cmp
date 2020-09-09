@@ -34,47 +34,48 @@
  *
  */
 
-namespace Nosto\Cmp\Helper;
+namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\CategoryMerchandising;
 
-class SearchEngine
+class ListProduct
 {
-    const ENGINE_MYSQL = 'mysql';
-
     /**
-     * @var EngineResolverInterface
+     * @var StateAwareCategoryServiceInterface
      */
-    private $engineResolver;
+    private $categoryService;
 
-    /**
-     * Data constructor.
-     * @param EngineResolverInterface $engineResolver
-     */
     public function __construct(
-        EngineResolverInterface $engineResolver
-
+        StateAwareCategoryServiceInterface $categoryService
     ) {
-        $this->engineResolver = $engineResolver;
+        $this->categoryService = $categoryService;
     }
 
     /**
-     * Returns the current search engine used for catalog search
-     *
-     * @return string
+     * @param MagentoListProduct $listProduct
+     * @param Collection $collection
+     * @return Collection
      */
-    public function getCurrentEngine()
-    {
-        return $this->engineResolver->getCurrentSearchEngine();
-    }
+    public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        MagentoListProduct $listProduct,
+        Collection $collection
+    ) {
+        if ($this->categoryService->getLastResult() == null) {
+            return;
+        }
+        $cmpProductIds = CategoryMerchandising::parseProductIds($this->categoryService->getLastResult());
+        $collection->each(static function ($product) use ($cmpProductIds) {
+            /* @var Product $product */
+            if (in_array($product->getId(), $cmpProductIds, true)) {
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
+            }
+        });
 
-    /**
-     * Shortcut method for determining if the engine is MySQL
-     *
-     * @return boolean
-     */
-    public function isMysql()
-    {
-        return $this->engineResolver->getCurrentSearchEngine() === self::ENGINE_MYSQL;
+        return $collection;
     }
 }
