@@ -44,6 +44,7 @@ use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
@@ -56,6 +57,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
     const MAX_PRODUCT_AMOUNT = 100;
+    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /**
      * @var Category
@@ -106,6 +108,16 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @var CategoryMerchandisingResult|null
      */
     private $lastResult = null;
+
+    /**
+     * @var int
+     */
+    private $lastUsedLimit;
+
+    /**
+     * @var int
+     */
+    private $lastUsedPage;
 
     /**
      * Category constructor.
@@ -180,15 +192,22 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
-        $this->lastResult = $this->categoryService->getPersonalisationResult(
-            $nostoAccount,
-            $this->filterBuilder,
-            $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
-            $category,
-            $pageNumber,
-            $limit,
-            $previewMode
+        $this->lastResult = ServerTiming::getInstance()->instrument(
+            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit) {
+                return $this->categoryService->getPersonalisationResult(
+                    $nostoAccount,
+                    $this->filterBuilder,
+                    $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
+                    $category,
+                    $pageNumber,
+                    $limit,
+                    $previewMode
+                );
+            },
+            self::TIME_PROF_GRAPHQL_QUERY
         );
+        $this->lastUsedLimit = $limit;
+        $this->lastUsedPage = $pageNumber;
         return $this->lastResult;
     }
 
@@ -210,5 +229,21 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         return $this->categoryBuilder->getCategory($category, $store);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastUsedLimit(): int
+    {
+        return $this->lastUsedLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastUsedPage(): int
+    {
+        return $this->lastUsedPage;
     }
 }

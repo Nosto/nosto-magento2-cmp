@@ -38,6 +38,8 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Request\Http\Exception\AbstractHttpException;
+use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Service\FeatureAccess;
 use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -72,8 +74,8 @@ class Category
      * @param bool $previewMode
      * @return CategoryMerchandisingResult
      * @throws NostoException
-     * @throws \Nosto\Request\Http\Exception\AbstractHttpException
-     * @throws \Nosto\Request\Http\Exception\HttpResponseException
+     * @throws AbstractHttpException
+     * @throws HttpResponseException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,

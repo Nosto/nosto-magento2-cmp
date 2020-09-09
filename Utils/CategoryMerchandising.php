@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Utils;
 
-
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class CategoryMerchandising

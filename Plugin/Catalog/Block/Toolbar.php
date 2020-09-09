@@ -43,7 +43,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\LocalizedException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
@@ -51,26 +50,21 @@ use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
-use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Cmp\Utils\CategoryMerchandisingResult as CategoryMerchandisingResultUtil;
-use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
-use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
+use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /**  @var CategoryBuilder */
     private $categoryBuilder;
@@ -83,9 +77,6 @@ class Toolbar extends AbstractBlock
 
     /** @var State */
     private $state;
-
-    /** @var StateAwareCategoryService */
-    private $categoryService;
 
     /** @var NostoFilterBuilder  */
     private $nostoFilterBuilder;
@@ -127,12 +118,18 @@ class Toolbar extends AbstractBlock
         $this->categoryBuilder = $builder;
         $this->storeManager = $context->getStoreManager();
         $this->cookieManager = $cookieManager;
-        $this->categoryService = $categoryService;
         $this->nostoFilterBuilder = $nostoFilterBuilder;
         $this->registry = $registry;
         $this->state = $state;
         $this->searchEngineHelper = $searchEngineHelper;
-        parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
+        parent::__construct(
+            $context,
+            $parameterResolver,
+            $nostoCmpHelperData,
+            $nostoHelperAccount,
+            $categoryService,
+            $logger
+        );
     }
 
     /**
@@ -142,7 +139,7 @@ class Toolbar extends AbstractBlock
      * @return MagentoToolbar
      * @throws NoSuchEntityException
      */
-    public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
+    public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
         if (!$this->searchEngineHelper->isMysql()) {
@@ -153,7 +150,7 @@ class Toolbar extends AbstractBlock
         }
         /* @var Store $store */
         $store = $this->storeManager->getStore();
-        if ($this->isCmpCurrentSortOrder()) {
+        if ($this->isCmpCurrentSortOrder($store)) {
             try {
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
@@ -162,14 +159,12 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
-                $this->setLimit($subjectCollection->getPageSize());
                 $result = $this->getCmpResult($store); //@phan-suppress-current-line PhanTypeMismatchArgument
                 //Get ids of products to order
-                $nostoProductIds = $this->parseProductIds($result);
+                $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
                 ) {
-                    $this->setTotalProducts($result->getTotalPrimaryCount());
                     ProductDebug::getInstance()->setProductIds($nostoProductIds);
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
@@ -194,17 +189,14 @@ class Toolbar extends AbstractBlock
     }
 
     /**
-     * @param Store $store
      * @return CategoryMerchandisingResult
      * @throws NostoException
      */
-    private function getCmpResult(Store $store)
+    private function getCmpResult()
     {
-        return ServerTiming::getInstance()->instrument(
-            $this->categoryService->getPersonalisationResult(
-                $this->getCurrentPageNumber() - 1,
-                $this->getLimit()
-            )
+        return $this->getCategoryService()->getPersonalisationResult(
+            $this->getCurrentPageNumber() - 1,
+            $this->getLimit()
         );
     }
 
@@ -233,20 +225,6 @@ class Toolbar extends AbstractBlock
             'e.entity_id IN (' . implode(',', $nostoProductIds) . ')'
         );
         $select->where($zendExpression);
-    }
-
-    /**
-     * @param CategoryMerchandisingResult $result
-     * @return array
-     */
-    private function parseProductIds(CategoryMerchandisingResult $result)
-    {
-        try {
-            return CategoryMerchandising::parseProductIds($result);
-        } catch (Exception $e) {
-            $this->logger->exception($e);
-        }
-        return $productIds;
     }
 
     /**

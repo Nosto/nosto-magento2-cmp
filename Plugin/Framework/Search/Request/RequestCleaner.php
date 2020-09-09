@@ -38,7 +38,6 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Framework\Search\Request\Cleaner;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Store\StoreManager;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Cmp\Model\Service\Recommendation\Category;
@@ -237,7 +236,11 @@ class RequestCleaner
      */
     private function parsePageNumber(array $requestData)
     {
-        return $requestData[self::KEY_RESULTS_FROM];
+        $from = $requestData[self::KEY_RESULTS_FROM];
+        if ($from < 1) {
+            return 0;
+        }
+        return (int) ceil($from / $this->parseLimit($requestData));
     }
 
     /**
@@ -246,7 +249,7 @@ class RequestCleaner
      */
     private function parseLimit(array $requestData)
     {
-        return $requestData[self::KEY_RESULT_SIZE];
+        return (int) $requestData[self::KEY_RESULT_SIZE];
     }
 
     /**
@@ -292,6 +295,10 @@ class RequestCleaner
             }
         }
         $requestData['filters'] = [];
+
+        // Reset also the start point since Nosto will only use product ids
+        $requestData[self::KEY_RESULTS_FROM] = 0;
+
     }
 
     /**
