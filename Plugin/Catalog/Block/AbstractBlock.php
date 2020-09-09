@@ -239,25 +239,18 @@ abstract class AbstractBlock extends Template
         if ($this->lastPageNumber !== null) {
             return $this->lastPageNumber;
         }
-        $this->lastPageNumber = (int) ceil($this->getTotalProducts() / $this->getLastUsedLimit());
+        $this->lastPageNumber = (int) ceil($this->getTotalProducts() / $this->getLimit());
         return $this->lastPageNumber;
     }
 
     /**
      * @return int
      */
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    /**
-     * @return int|null
-     */
-    private function getLastUsedLimit()
+    private function getLimit()
     {
         return $this->getCategoryService()->getLastUsedLimit();
     }
+
     /**
      * @return int
      */
@@ -272,13 +265,5 @@ abstract class AbstractBlock extends Template
     public function getCategoryService(): StateAwareCategoryService
     {
         return $this->categoryService;
-    }
-
-    /**
-     * @param int $limit
-     */
-    public function setLimit(int $limit): void
-    {
-        $this->limit = $limit;
     }
 }

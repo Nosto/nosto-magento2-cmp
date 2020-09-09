@@ -159,7 +159,10 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
-                $result = $this->getCmpResult($store); //@phan-suppress-current-line PhanTypeMismatchArgument
+                $result = $this->getCmpResult(
+                    $this->getCurrentPageNumber()-1,
+                    $subjectCollection->getPageSize()
+                );
                 //Get ids of products to order
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -173,7 +176,6 @@ class Toolbar extends AbstractBlock
                         $subjectCollection->getSelectSql()->__toString(),
                         ['nosto' => 'cmp']
                     );
-                    $this->addTrackParamToProduct($subjectCollection, $nostoProductIds);
                 } else {
                     $this->logger->info(sprintf(
                         "CMP result is empty for category: %s",
@@ -189,14 +191,16 @@ class Toolbar extends AbstractBlock
     }
 
     /**
+     * @param int $start starting from 0
+     * @param int $limit
      * @return CategoryMerchandisingResult
      * @throws NostoException
      */
-    private function getCmpResult()
+    private function getCmpResult($start, $limit)
     {
         return $this->getCategoryService()->getPersonalisationResult(
-            $this->getCurrentPageNumber() - 1,
-            $this->getLimit()
+            $start,
+            $limit
         );
     }
 
@@ -225,19 +229,5 @@ class Toolbar extends AbstractBlock
             'e.entity_id IN (' . implode(',', $nostoProductIds) . ')'
         );
         $select->where($zendExpression);
-    }
-
-    /**
-     * @param ProductCollection $collection
-     * @param array $nostoProductIds
-     */
-    private function addTrackParamToProduct(ProductCollection $collection, array $nostoProductIds)
-    {
-        $collection->each(static function ($product) use ($nostoProductIds) {
-            /* @var Product $product */
-            if (in_array($product->getId(), $nostoProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
-            }
-        });
     }
 }
