@@ -44,7 +44,7 @@ use Nosto\NostoException;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 
 class FilterBuilder
 {
@@ -60,7 +60,7 @@ class FilterBuilder
     /** @var string */
     private $brand;
 
-    /** @var NostoLogger */
+    /** @var LoggerInterface */
     private $logger;
 
     /**
@@ -68,13 +68,13 @@ class FilterBuilder
      * @param IncludeFilters $includeFilters
      * @param ExcludeFilters $excludeFilters
      * @param NostoHelperData $nostoHelperData
-     * @param NostoLogger $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IncludeFilters $includeFilters,
         ExcludeFilters $excludeFilters,
         NostoHelperData $nostoHelperData,
-        NostoLogger $logger
+        LoggerInterface $logger
     ) {
         $this->includeFilters = $includeFilters;
         $this->excludeFilters = $excludeFilters;

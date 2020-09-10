@@ -51,7 +51,7 @@ use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -69,7 +69,7 @@ class Toolbar extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
-     * @param NostoLogger $logger
+     * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
      */
     public function __construct(
@@ -78,7 +78,7 @@ class Toolbar extends AbstractBlock
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
-        NostoLogger $logger,
+        LoggerInterface $logger,
         SearchEngine $searchEngineHelper
     ) {
         $this->searchEngineHelper = $searchEngineHelper;
@@ -102,10 +102,15 @@ class Toolbar extends AbstractBlock
     public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
-        if (!$this->searchEngineHelper->isMysql()) {
-            return $subject;
-        }
-        if (self::$isProcessed) {
+        if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
+            $this->getLogger()->debugCmp(
+                sprintf(
+                    'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+                    self::$isProcessed,
+                    $this->searchEngineHelper->getCurrentEngine()
+                ),
+                $this
+            );
             return $subject;
         }
         /* @var Store $store */
@@ -131,18 +136,18 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->getLogger()->debug(
+                    $this->getLogger()->debugCmp(
                         $subjectCollection->getSelectSql()->__toString(),
-                        ['nosto' => 'cmp']
+                        $this
                     );
                 } else {
-                    $this->getLogger()->debug(
+                    $this->getLogger()->debugCmp(
                         sprintf(
                             'Got empty CMP result from Nosto for category %s'
                             . ' - possibly no sequence is configured for this category',
                             $this->getCurrentCategoryString($store) //@phan-suppress-current-line PhanTypeMismatchArgument
                         ),
-                        ['nosto' => 'cmp']
+                        $this
                     );
                 }
             } catch (Exception $e) {

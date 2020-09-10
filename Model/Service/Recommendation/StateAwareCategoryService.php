@@ -37,12 +37,12 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
@@ -51,7 +51,6 @@ use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
-use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
@@ -87,7 +86,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $accountHelper;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -131,7 +130,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
@@ -142,7 +141,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         StoreManagerInterface $storeManager,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
-        Logger $logger
+        LoggerInterface $logger
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
@@ -159,20 +158,13 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     /**
      * @inheritDoc
      * @throws NostoException
+     * @throws LocalizedException
      */
     public function getPersonalisationResult(
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
-        //TODO - add the store as a parameter or get it from the state / store manager
-        // build filters & call the unredlying layer
-        // remember to tag this as 3.0.0
-        try {
-            $store = $this->storeManager->getStore();
-        } catch (NoSuchEntityException $e) {
-            $this->logger->exception($e);
-            return null;
-        }
+        $store = $this->storeManager->getStore();
         $category = $this->getCurrentCategoryString($store);
         $nostoAccount = $this->accountHelper->findAccount($store);
         $featureAccess = new FeatureAccess($nostoAccount);
@@ -185,13 +177,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         }
         // Build filters
         $this->filterBuilder->init($store);
-        try {
-            $this->filterBuilder->buildFromSelectedFilters(
-                $this->state->getActiveFilters()
-            );
-        } catch (LocalizedException $e) {
-            $this->logger->exception($e);
-        }
+        $this->filterBuilder->buildFromSelectedFilters(
+            $this->state->getActiveFilters()
+        );
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $this->lastResult = ServerTiming::getInstance()->instrument(
@@ -213,7 +201,17 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         ProductDebug::getInstance()->setProductIds(
             CategoryMerchandising::parseProductIds($this->lastResult)
         );
-
+        $this->logger->debugCmp(
+            sprintf(
+                'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+                $this->lastResult->getResultSet()->count(),
+                $this->lastResult->getTotalPrimaryCount(),
+                $category,
+                $pageNumber,
+                $limit
+            ),
+            $this
+        );
         return $this->lastResult;
     }
 

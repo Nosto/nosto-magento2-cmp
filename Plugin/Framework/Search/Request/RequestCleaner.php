@@ -46,7 +46,7 @@ use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger;
+use Nosto\Cmp\Logger\LoggerInterface;
 
 class RequestCleaner
 {
@@ -67,7 +67,7 @@ class RequestCleaner
     private $parameterResolver;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -103,7 +103,7 @@ class RequestCleaner
      * @param NostoHelperAccount $nostoHelperAccount
      * @param FilterBuilder $filterBuilder
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
@@ -112,7 +112,7 @@ class RequestCleaner
         NostoHelperAccount $nostoHelperAccount,
         FilterBuilder $filterBuilder,
         StateAwareCategoryServiceInterface $categoryService,
-        Logger $logger
+        LoggerInterface $logger
     ) {
         $this->parameterResolver = $parameterResolver;
         $this->logger = $logger;
@@ -133,32 +133,40 @@ class RequestCleaner
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
         if (!Search::isNostoSorting($requestData)) {
+            $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
             return $requestData;
         }
         try {
             if (!isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
                 || !isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'])
             ) {
-                $this->logger->debugWithSource(
+                $this->logger->debugCmp(
                     sprintf(
                         'Could not find %s from ES request data',
                         self::KEY_BIND_TO_QUERY
                     ),
-                    $requestData,
-                    $this
+                    $this,
+                    $requestData
                 );
                 return $requestData;
             }
+            $this->logger->debugCmp(
+                sprintf(
+                    'Using %s as search engine',
+                    $this->searchEngineHelper->getCurrentEngine()
+                ),
+                $this
+            );
             $productIds = $this->getCmpProductIds(
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
             $this->cleanUpCmpSort($requestData, $productIds);
             if (empty($productIds)) {
-                $this->logger->debugWithSource(
+                $this->logger->debugCmp(
                     'Nosto did not return products for the request',
-                    $requestData,
-                    $this
+                    $this,
+                    $requestData
                 );
                 return $requestData;
             }
@@ -168,10 +176,10 @@ class RequestCleaner
                 $productIds
             );
         } catch (\Exception $e) {
-            $this->logger->debugWithSource(
-                'Failed to apply CMP - see exception log(s) for datails',
-                $requestData,
-                $this
+            $this->logger->debugCmp(
+                'Failed to apply CMP - see exception log(s) for details',
+                $this,
+                $requestData
             );
             $this->logger->exception($e);
         } finally {

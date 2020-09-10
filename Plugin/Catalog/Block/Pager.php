@@ -42,7 +42,7 @@ use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 
 class Pager extends AbstractBlock
 {
@@ -53,7 +53,7 @@ class Pager extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param ParameterResolverInterface $parameterResolver
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param NostoLogger $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
@@ -61,7 +61,7 @@ class Pager extends AbstractBlock
         NostoHelperAccount $nostoHelperAccount,
         ParameterResolverInterface $parameterResolver,
         StateAwareCategoryServiceInterface $categoryService,
-        NostoLogger $logger
+        LoggerInterface $logger
     ) {
         parent::__construct(
             $context,
