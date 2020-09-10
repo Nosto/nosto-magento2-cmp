@@ -50,6 +50,13 @@ class Search
         return self::findNostoSortingIndex($requestData) !== null;
     }
 
+    public static function hasCategoryFilter(array $requestData) {
+        if (empty($requestData['filters'])) {
+            return false;
+        }
+        return array_key_exists('category_filter', $requestData['filters']);
+    }
+
     /**
      * @param ParameterResolverInterface $parameterResolver
      * @return bool

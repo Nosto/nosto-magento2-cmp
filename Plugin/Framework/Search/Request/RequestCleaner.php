@@ -132,7 +132,7 @@ class RequestCleaner
      */
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
-        if (!Search::isNostoSorting($requestData)) {
+        if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
             return $requestData;
         }
         try {
