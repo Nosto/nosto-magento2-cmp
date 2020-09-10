@@ -52,31 +52,25 @@ use Nosto\Tagging\Logger\Logger as NostoLogger;
 abstract class AbstractBlock extends Template
 {
     /** @var int */
-    private $limit;
-
-    /** @var int */
     private $lastPageNumber;
 
     /** @var ParameterResolverInterface */
-    public $paramResolver;
+    private $paramResolver;
 
     /**  @var StoreManagerInterface */
-    public $storeManager;
+    private $storeManager;
 
     /** @var NostoCmpHelperData */
-    public $nostoCmpHelperData;
+    private $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
-    public $nostoHelperAccount;
+    private $nostoHelperAccount;
 
     /** @var NostoLogger */
-    public $logger;
+    private $logger;
 
     /** @var string */
     public static $currentOrder;
-
-    /** @var bool */
-    public static $catalogTakeover;
 
     /**
      * @var StateAwareCategoryService
@@ -265,5 +259,21 @@ abstract class AbstractBlock extends Template
     public function getCategoryService(): StateAwareCategoryService
     {
         return $this->categoryService;
+    }
+
+    /**
+     * @return StoreManagerInterface
+     */
+    public function getStoreManager(): StoreManagerInterface
+    {
+        return $this->storeManager;
+    }
+
+    /**
+     * @return NostoLogger
+     */
+    public function getLogger(): NostoLogger
+    {
+        return $this->logger;
     }
 }

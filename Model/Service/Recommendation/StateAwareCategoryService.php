@@ -44,6 +44,8 @@ use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
@@ -208,6 +210,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         );
         $this->lastUsedLimit = $limit;
         $this->lastUsedPage = $pageNumber;
+        ProductDebug::getInstance()->setProductIds(
+            CategoryMerchandising::parseProductIds($this->lastResult)
+        );
+
         return $this->lastResult;
     }
 

@@ -66,7 +66,7 @@ class ListProduct
         Collection $collection
     ) {
         if ($this->categoryService->getLastResult() == null) {
-            return;
+            return $collection;
         }
         $cmpProductIds = CategoryMerchandising::parseProductIds($this->categoryService->getLastResult());
         $collection->each(static function ($product) use ($cmpProductIds) {
