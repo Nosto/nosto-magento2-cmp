@@ -47,36 +47,30 @@ use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 
 abstract class AbstractBlock extends Template
 {
     /** @var int */
-    private $limit;
-
-    /** @var int */
     private $lastPageNumber;
 
     /** @var ParameterResolverInterface */
-    public $paramResolver;
+    private $paramResolver;
 
     /**  @var StoreManagerInterface */
-    public $storeManager;
+    private $storeManager;
 
     /** @var NostoCmpHelperData */
-    public $nostoCmpHelperData;
+    private $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
-    public $nostoHelperAccount;
+    private $nostoHelperAccount;
 
-    /** @var NostoLogger */
-    public $logger;
+    /** @var LoggerInterface */
+    private $logger;
 
     /** @var string */
     public static $currentOrder;
-
-    /** @var bool */
-    public static $catalogTakeover;
 
     /**
      * @var StateAwareCategoryService
@@ -90,7 +84,7 @@ abstract class AbstractBlock extends Template
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param NostoLogger $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
@@ -98,7 +92,7 @@ abstract class AbstractBlock extends Template
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryServiceInterface $categoryService,
-        NostoLogger $logger
+        LoggerInterface $logger
     ) {
         $this->categoryService = $categoryService;
         $this->paramResolver = $parameterResolver;
@@ -146,6 +140,7 @@ abstract class AbstractBlock extends Template
         ) {
             return true;
         }
+        return false;
     }
 
     /**
@@ -265,5 +260,21 @@ abstract class AbstractBlock extends Template
     public function getCategoryService(): StateAwareCategoryService
     {
         return $this->categoryService;
+    }
+
+    /**
+     * @return StoreManagerInterface
+     */
+    public function getStoreManager(): StoreManagerInterface
+    {
+        return $this->storeManager;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 }

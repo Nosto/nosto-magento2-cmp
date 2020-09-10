@@ -34,48 +34,26 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Logger;
 
-use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Throwable;
 
-class ListProduct
+interface LoggerInterface
 {
     /**
-     * @var StateAwareCategoryServiceInterface
+     * Logs a debug level message with given source class info
+     *
+     * @param $message
+     * @param object $sourceClass
+     * @param array $context
+     * @return bool
      */
-    private $categoryService;
-
-    public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
-    ) {
-        $this->categoryService = $categoryService;
-    }
+    public function debugCmp($message, $sourceClass, array $context = []);
 
     /**
-     * @param MagentoListProduct $listProduct
-     * @param Collection $collection
-     * @return Collection
+     * Logs an exception and sends it to New relic if available
+     * @param Throwable $exception
+     * @return bool
      */
-    public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-        MagentoListProduct $listProduct,
-        Collection $collection
-    ) {
-        if ($this->categoryService->getLastResult() == null) {
-            return $collection;
-        }
-        $cmpProductIds = CategoryMerchandising::parseProductIds($this->categoryService->getLastResult());
-        $collection->each(static function ($product) use ($cmpProductIds) {
-            /* @var Product $product */
-            if (in_array($product->getId(), $cmpProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
-            }
-        });
-
-        return $collection;
-    }
+    public function exception(Throwable $exception);
 }

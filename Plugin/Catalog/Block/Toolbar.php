@@ -39,47 +39,23 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
-use /** @noinspection PhpDeprecationInspection */
-    Magento\Framework\Registry;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
-use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-
-    /**  @var CategoryBuilder */
-    private $categoryBuilder;
-
-    /** @var Registry */
-    private $registry;
-
-    /** @var CookieManagerInterface */
-    private $cookieManager;
-
-    /** @var State */
-    private $state;
-
-    /** @var NostoFilterBuilder  */
-    private $nostoFilterBuilder;
 
     /** @var SearchEngine */
     private $searchEngineHelper;
@@ -91,36 +67,20 @@ class Toolbar extends AbstractBlock
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
-     * @param CategoryBuilder $builder
      * @param StateAwareCategoryService $categoryService
-     * @param CookieManagerInterface $cookieManager
      * @param ParameterResolverInterface $parameterResolver
-     * @param NostoLogger $logger
-     * @param NostoFilterBuilder $nostoFilterBuilder
-     * @param Registry $registry
-     * @param State $state
+     * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
      */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
-        CategoryBuilder $builder,
         StateAwareCategoryService $categoryService,
-        CookieManagerInterface $cookieManager,
         ParameterResolverInterface $parameterResolver,
-        NostoLogger $logger,
-        NostoFilterBuilder $nostoFilterBuilder,
-        Registry $registry,
-        State $state,
+        LoggerInterface $logger,
         SearchEngine $searchEngineHelper
     ) {
-        $this->categoryBuilder = $builder;
-        $this->storeManager = $context->getStoreManager();
-        $this->cookieManager = $cookieManager;
-        $this->nostoFilterBuilder = $nostoFilterBuilder;
-        $this->registry = $registry;
-        $this->state = $state;
         $this->searchEngineHelper = $searchEngineHelper;
         parent::__construct(
             $context,
@@ -142,14 +102,19 @@ class Toolbar extends AbstractBlock
     public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
-        if (!$this->searchEngineHelper->isMysql()) {
-            return $subject;
-        }
-        if (self::$isProcessed) {
+        if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
+            $this->getLogger()->debugCmp(
+                sprintf(
+                    'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+                    self::$isProcessed,
+                    $this->searchEngineHelper->getCurrentEngine()
+                ),
+                $this
+            );
             return $subject;
         }
         /* @var Store $store */
-        $store = $this->storeManager->getStore();
+        $store = $this->getStoreManager()->getStore();
         if ($this->isCmpCurrentSortOrder($store)) {
             try {
                 /* @var ProductCollection $subjectCollection */
@@ -168,22 +133,25 @@ class Toolbar extends AbstractBlock
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
                 ) {
-                    ProductDebug::getInstance()->setProductIds($nostoProductIds);
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->logger->debug(
+                    $this->getLogger()->debugCmp(
                         $subjectCollection->getSelectSql()->__toString(),
-                        ['nosto' => 'cmp']
+                        $this
                     );
                 } else {
-                    $this->logger->info(sprintf(
-                        "CMP result is empty for category: %s",
-                        $this->getCurrentCategoryString($store) //@phan-suppress-current-line PhanTypeMismatchArgument
-                    ));
+                    $this->getLogger()->debugCmp(
+                        sprintf(
+                            'Got empty CMP result from Nosto for category %s'
+                            . ' - possibly no sequence is configured for this category',
+                            $this->getCurrentCategoryString($store) //@phan-suppress-current-line PhanTypeMismatchArgument
+                        ),
+                        $this
+                    );
                 }
             } catch (Exception $e) {
-                $this->logger->exception($e);
+                $this->getLogger()->exception($e);
             }
         }
         self::$isProcessed = true;
