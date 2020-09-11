@@ -53,6 +53,7 @@ class RequestCleaner
     const KEY_ES_PRODUCT_ID = '_id';
     const KEY_MYSQL_PRODUCT_ID = 'entity_id';
     const KEY_BIND_TO_QUERY = 'catalog_view_container';
+    const KEY_BIND_TO_GRAPHQL = 'graphql_product_search';
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
     const KEY_CMP = 'nosto_cmp_id_search';
@@ -137,8 +138,10 @@ class RequestCleaner
             return $requestData;
         }
         try {
-            if (!isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
-                || !isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'])
+            if (!(isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
+                && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference']))
+            && !(isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])
+                    && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL]['queryReference']))
             ) {
                 $this->logger->debugCmp(
                     sprintf(
