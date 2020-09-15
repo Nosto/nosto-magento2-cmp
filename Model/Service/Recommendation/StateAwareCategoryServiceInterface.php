@@ -51,4 +51,9 @@ interface StateAwareCategoryServiceInterface
      * @return CategoryMerchandisingResult|null
      */
     public function getLastResult(): ?CategoryMerchandisingResult;
+
+    /**
+     * @param $id
+     */
+    public function setCategoryInRegistry($id): void ;
 }

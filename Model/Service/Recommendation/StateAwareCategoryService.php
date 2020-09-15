@@ -53,6 +53,7 @@ use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -120,6 +121,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     private $lastUsedPage;
 
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
     /**
      * Category constructor.
      * @param CookieManagerInterface $cookieManager
@@ -141,6 +145,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         StoreManagerInterface $storeManager,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
+        CategoryRepositoryInterface $categoryRepository,
         LoggerInterface $logger
     ) {
         $this->cookieManager = $cookieManager;
@@ -153,6 +158,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -233,6 +239,17 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         return $this->categoryBuilder->getCategory($category, $store);
+    }
+
+    /**
+     * @param $id
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setCategoryInRegistry($id): void
+    {
+        $store = $this->storeManager->getStore();
+        $category = $this->categoryRepository->get($id, $store->getId());
+        $this->registry->register('current_category', $category);
     }
 
     /**

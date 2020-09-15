@@ -54,8 +54,10 @@ class RequestCleaner
     const KEY_MYSQL_PRODUCT_ID = 'entity_id';
     const KEY_BIND_TO_QUERY = 'catalog_view_container';
     const KEY_BIND_TO_GRAPHQL = 'graphql_product_search';
+    const KEY_CATEGORY_FILTER = 'category_filter';
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
+    const KEY_VALUE = 'value';
     const KEY_CMP = 'nosto_cmp_id_search';
     const KEY_RESULTS_FROM = 'from';
     const KEY_RESULT_SIZE = 'size';
@@ -141,7 +143,8 @@ class RequestCleaner
             if (!(isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
                 && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference']))
             && !(isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])
-                    && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL]['queryReference']))
+                    && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL]['queryReference'])
+                    && isset($requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER]))
             ) {
                 $this->logger->debugCmp(
                     sprintf(
@@ -152,6 +155,11 @@ class RequestCleaner
                     $requestData
                 );
                 return $requestData;
+            }
+            if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])) {
+                $this->categoryService->setCategoryInRegistry(
+                    $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
+                );
             }
             $this->logger->debugCmp(
                 sprintf(
@@ -209,10 +217,18 @@ class RequestCleaner
      */
     private function applyCmpFilter(array &$requestData, array $productIds)
     {
-        $requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'][] = [
+        $bindKey = '';
+        if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])) {
+            $bindKey = self::KEY_BIND_TO_QUERY;
+        } else if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])) {
+            $bindKey = self::KEY_BIND_TO_GRAPHQL;
+        }
+
+        $requestData[self::KEY_QUERIES][$bindKey]['queryReference'][] = [
             'clause' => 'must',
             'ref' => 'nosto_cmp_id_search'
         ];
+
         $requestData[self::KEY_QUERIES][self::KEY_CMP] = [
             'name' => 'nosto_cmp',
             'filterReference' => [
@@ -291,18 +307,24 @@ class RequestCleaner
     {
         $removedQueries = [];
         foreach ($requestData[self::KEY_QUERIES] as $key => $definition) {
-            if ($key !== self::KEY_BIND_TO_QUERY) {
+            if ($key !== self::KEY_BIND_TO_QUERY && $key !== self::KEY_BIND_TO_GRAPHQL) {
                 $removedQueries[$key] = $key;
                 unset($requestData[self::KEY_QUERIES][$key]);
             }
         }
         $removedRefs = [];
+        $bindKey = '';
+        if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])) {
+            $bindKey = self::KEY_BIND_TO_QUERY;
+        } else if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])) {
+            $bindKey = self::KEY_BIND_TO_GRAPHQL;
+        }
         // Also referencing definitions
-        foreach ($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'] as $refIndex => $ref) {
+        foreach ($requestData[self::KEY_QUERIES][$bindKey]['queryReference'] as $refIndex => $ref) {
             $refStr = $ref['ref'];
             if (isset($removedQueries[$refStr])) {
                 $removedRefs[$refStr] = $refStr;
-                unset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'][$refIndex]);
+                unset($requestData[self::KEY_QUERIES][$bindKey]['queryReference'][$refIndex]);
             }
         }
         $requestData['filters'] = [];
