@@ -48,6 +48,7 @@ return [
         'Observer',
         'Plugin',
         'Utils',
+        'Logger',
         'vendor/nosto',
         'vendor/vlucas',
         'vendor/phpseclib',

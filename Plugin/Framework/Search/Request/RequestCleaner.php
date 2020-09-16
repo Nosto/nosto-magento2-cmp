@@ -129,9 +129,8 @@ class RequestCleaner
      * @param Cleaner $cleaner
      * @param array $requestData
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterClean(Cleaner $cleaner, array $requestData)
+    public function afterClean(Cleaner $cleaner, array $requestData) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
         if (!Search::isNostoSorting($requestData)) {
             $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
