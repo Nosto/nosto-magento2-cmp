@@ -39,6 +39,7 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 use Magento\Framework\Search\Request\Cleaner;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Cmp\Model\Service\Recommendation\Category;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
@@ -46,7 +47,6 @@ use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
 
 class RequestCleaner
 {
@@ -130,8 +130,10 @@ class RequestCleaner
      * @param array $requestData
      * @return array
      */
-    public function afterClean(Cleaner $cleaner, array $requestData) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    {
+    public function afterClean(
+        Cleaner $cleaner, // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        array $requestData
+    ) {
         if (!Search::isNostoSorting($requestData)) {
             $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
             return $requestData;
