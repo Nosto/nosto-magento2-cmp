@@ -129,6 +129,7 @@ class RequestCleaner
      * @param Cleaner $cleaner
      * @param array $requestData
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
@@ -161,7 +162,7 @@ class RequestCleaner
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
-            $this->cleanUpCmpSort($requestData, $productIds);
+            $this->cleanUpCmpSort($requestData);
             if (empty($productIds)) {
                 $this->logger->debugCmp(
                     'Nosto did not return products for the request',
@@ -191,9 +192,8 @@ class RequestCleaner
      * Removes the Nosto sorting key as it's not indexed
      *
      * @param array $requestData
-     * @param $productIds
      */
-    private function cleanUpCmpSort(array &$requestData, $productIds)
+    private function cleanUpCmpSort(array &$requestData)
     {
         unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
     }
@@ -306,7 +306,6 @@ class RequestCleaner
 
         // Reset also the start point since Nosto will only use product ids
         $requestData[self::KEY_RESULTS_FROM] = 0;
-
     }
 
     /**

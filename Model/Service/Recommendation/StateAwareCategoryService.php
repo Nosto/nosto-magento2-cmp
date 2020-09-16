@@ -167,13 +167,12 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $store = $this->storeManager->getStore();
         $category = $this->getCurrentCategoryString($store);
         $nostoAccount = $this->accountHelper->findAccount($store);
+        if ($nostoAccount === null) {
+            throw new NostoException('Account cannot be null');
+        }
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
-        }
-        $nostoAccount = $this->accountHelper->findAccount($store);
-        if ($nostoAccount === null) {
-            throw new NostoException('Account cannot be null');
         }
         // Build filters
         $this->filterBuilder->init($store);
