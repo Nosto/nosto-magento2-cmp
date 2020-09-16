@@ -41,7 +41,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\Cmp\Model\Service\Recommendation\Category;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
@@ -268,7 +267,7 @@ class RequestCleaner
     /**
      * @param int $pageNum
      * @param int $limit
-     * @return int[]
+     * @return array|null
      */
     private function getCmpProductIds($pageNum, $limit)
     {
