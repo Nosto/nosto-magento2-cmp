@@ -107,7 +107,7 @@ class Toolbar extends AbstractBlock
             $this->getLogger()->debugCmp(
                 sprintf(
                     'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
-                    self::$isProcessed,
+                    (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
                 ),
                 $this

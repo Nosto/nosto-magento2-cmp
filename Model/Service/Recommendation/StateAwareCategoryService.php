@@ -166,6 +166,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     ): ?CategoryMerchandisingResult {
         $store = $this->storeManager->getStore();
         $category = $this->getCurrentCategoryString($store);
+        //@phan-suppress-next-line PhanTypeMismatchArgument
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
@@ -175,6 +176,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             throw new NostoException('Missing Nosto API_APPS token');
         }
         // Build filters
+        //@phan-suppress-next-line PhanTypeMismatchArgument
         $this->filterBuilder->init($store);
         $this->filterBuilder->buildFromSelectedFilters(
             $this->state->getActiveFilters()

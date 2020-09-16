@@ -97,7 +97,7 @@ class SearchResultSorter
 
     /**
      * Returns the product ids sorted by Nosto
-     * @return int[]
+     * @return int[]|null
      */
     private function getCmpSort()
     {

@@ -155,7 +155,7 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getTotalProducts()
     {

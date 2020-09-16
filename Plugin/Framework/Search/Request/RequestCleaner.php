@@ -77,7 +77,7 @@ class RequestCleaner
     private $searchEngineHelper;
 
     /**
-     * @var StoreManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -92,7 +92,7 @@ class RequestCleaner
     private $filterBuilder;
 
     /**
-     * @var Category
+     * @var StateAwareCategoryServiceInterface
      */
     private $categoryService;
 
@@ -130,12 +130,16 @@ class RequestCleaner
      * @param array $requestData
      * @return array
      */
-    public function afterClean(
-        Cleaner $cleaner, // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterClean(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        Cleaner $cleaner,
         array $requestData
     ) {
         if (!Search::isNostoSorting($requestData)) {
-            $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
+            $this->logger->debugCmp(
+                'Nosto sorting not used or not found from request data',
+                $this,
+                $requestData
+            );
             return $requestData;
         }
         try {
@@ -262,8 +266,8 @@ class RequestCleaner
     }
 
     /**
-     * @param $pageNum
-     * @param $limit
+     * @param int $pageNum
+     * @param int $limit
      * @return int[]
      */
     private function getCmpProductIds($pageNum, $limit)
