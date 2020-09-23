@@ -41,6 +41,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -106,7 +107,7 @@ class Toolbar extends AbstractBlock
             $this->getLogger()->debugCmp(
                 sprintf(
                     'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
-                    self::$isProcessed,
+                    (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
                 ),
                 $this
@@ -142,11 +143,7 @@ class Toolbar extends AbstractBlock
                     );
                 } else {
                     $this->getLogger()->debugCmp(
-                        sprintf(
-                            'Got empty CMP result from Nosto for category %s'
-                            . ' - possibly no sequence is configured for this category',
-                            $this->getCurrentCategoryString($store) //@phan-suppress-current-line PhanTypeMismatchArgument
-                        ),
+                        'Got an empty CMP result from Nosto for category',
                         $this
                     );
                 }
@@ -163,6 +160,7 @@ class Toolbar extends AbstractBlock
      * @param int $limit
      * @return CategoryMerchandisingResult
      * @throws NostoException
+     * @throws LocalizedException
      */
     private function getCmpResult($start, $limit)
     {

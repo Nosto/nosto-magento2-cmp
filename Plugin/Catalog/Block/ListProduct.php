@@ -65,10 +65,11 @@ class ListProduct
         MagentoListProduct $listProduct,
         Collection $collection
     ) {
-        if ($this->categoryService->getLastResult() == null) {
+        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        if ($categoryMerchandisingResult == null) {
             return $collection;
         }
-        $cmpProductIds = CategoryMerchandising::parseProductIds($this->categoryService->getLastResult());
+        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
         $collection->each(static function ($product) use ($cmpProductIds) {
             /* @var Product $product */
             if (in_array($product->getId(), $cmpProductIds, true)) {

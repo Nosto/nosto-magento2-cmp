@@ -142,16 +142,19 @@ class FilterBuilder
                 $value = (bool) $item->getData('value');
                 break;
             default:
-                $this->logger->debug(sprintf(
-                    'Cannot build include filter for "%s" frontend input type',
-                    $frontendInput
-                ));
+                $this->logger->debugCmp(
+                    sprintf(
+                        'Cannot build include filter for "%s" frontend input type',
+                        $frontendInput
+                    ),
+                    $this
+                );
                 return;
         }
         try {
             $this->mapValueToFilter($filterName, $value);
         } catch (NostoException $e) {
-            $this->logger->info($e->getMessage());
+            $this->logger->exception($e);
         }
     }
 

@@ -53,7 +53,6 @@ class SearchEngine
      */
     public function __construct(
         EngineResolverInterface $engineResolver
-
     ) {
         $this->engineResolver = $engineResolver;
     }

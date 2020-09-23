@@ -39,14 +39,13 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 use Magento\Framework\Search\Request\Cleaner;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\Cmp\Model\Service\Recommendation\Category;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
 
 class RequestCleaner
 {
@@ -80,7 +79,7 @@ class RequestCleaner
     private $searchEngineHelper;
 
     /**
-     * @var StoreManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -95,7 +94,7 @@ class RequestCleaner
     private $filterBuilder;
 
     /**
-     * @var Category
+     * @var StateAwareCategoryServiceInterface
      */
     private $categoryService;
 
@@ -172,7 +171,7 @@ class RequestCleaner
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
-            $this->cleanUpCmpSort($requestData, $productIds);
+            $this->cleanUpCmpSort($requestData);
             if (empty($productIds)) {
                 $this->logger->debugCmp(
                     'Nosto did not return products for the request',
@@ -202,9 +201,8 @@ class RequestCleaner
      * Removes the Nosto sorting key as it's not indexed
      *
      * @param array $requestData
-     * @param $productIds
      */
-    private function cleanUpCmpSort(array &$requestData, $productIds)
+    private function cleanUpCmpSort(array &$requestData)
     {
         unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
     }
@@ -280,9 +278,9 @@ class RequestCleaner
     }
 
     /**
-     * @param $pageNum
-     * @param $limit
-     * @return int[]
+     * @param int $pageNum
+     * @param int $limit
+     * @return array|null
      */
     private function getCmpProductIds($pageNum, $limit)
     {
@@ -331,7 +329,6 @@ class RequestCleaner
 
         // Reset also the start point since Nosto will only use product ids
         $requestData[self::KEY_RESULTS_FROM] = 0;
-
     }
 
     /**

@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-//TODO - move under helper or somewhere else. It's not necessarily related to any block.
 interface ParameterResolverInterface
 {
     /**

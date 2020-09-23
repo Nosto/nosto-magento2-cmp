@@ -43,7 +43,7 @@ interface StateAwareCategoryServiceInterface
     /**
      * @param int $pageNumber
      * @param int $limit
-     * @return CategoryMerchandisingResult
+     * @return CategoryMerchandisingResult|null
      */
     public function getPersonalisationResult($pageNumber, $limit): ?CategoryMerchandisingResult;
 
