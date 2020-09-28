@@ -46,6 +46,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
@@ -60,6 +61,9 @@ class Toolbar extends AbstractBlock
 
     /** @var SearchEngine */
     private $searchEngineHelper;
+
+    /** @var WebFilters */
+    private $filters;
 
     private static $isProcessed = false;
 
@@ -80,9 +84,11 @@ class Toolbar extends AbstractBlock
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
         LoggerInterface $logger,
-        SearchEngine $searchEngineHelper
+        SearchEngine $searchEngineHelper,
+        WebFilters $filters
     ) {
         $this->searchEngineHelper = $searchEngineHelper;
+        $this->filters = $filters;
         parent::__construct(
             $context,
             $parameterResolver,
@@ -165,6 +171,7 @@ class Toolbar extends AbstractBlock
     private function getCmpResult($start, $limit)
     {
         return $this->getCategoryService()->getPersonalisationResult(
+            $this->filters,
             $start,
             $limit
         );

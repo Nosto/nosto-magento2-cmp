@@ -36,8 +36,41 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Model\Filter\GraphQlFilters;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+
 class GraphQlHandler extends AbstractHandler
 {
+
+    /** @var GraphQlFilters */
+    private $filters;
+
+    /**
+     * @param ParameterResolverInterface $parameterResolver
+     * @param SearchEngine $searchEngineHelper
+     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        GraphQlFilters $filters,
+        ParameterResolverInterface $parameterResolver,
+        SearchEngine $searchEngineHelper,
+        StoreManagerInterface $storeManager,
+        NostoHelperAccount $nostoHelperAccount,
+        StateAwareCategoryServiceInterface $categoryService,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($parameterResolver, $searchEngineHelper, $storeManager, $nostoHelperAccount, $categoryService, $logger);
+        $this->filters = $filters;
+    }
+
     /**
      * @inheritDoc
      */
@@ -54,5 +87,23 @@ class GraphQlHandler extends AbstractHandler
         $this->categoryService->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
+        $this->filters->setRequestData($requestData);
+    }
+
+    /**
+     * @param array $requestData
+     * @return int
+     */
+    function parseLimit(array $requestData)
+    {
+        return (int) '20';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function getFilters()
+    {
+        return $this->filters;
     }
 }

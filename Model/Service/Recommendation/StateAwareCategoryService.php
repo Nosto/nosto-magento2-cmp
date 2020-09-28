@@ -43,7 +43,8 @@ use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
@@ -72,12 +73,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $cookieManager;
 
     /**
-     * @var State
-     */
-    private $state;
-
-    /**
-     * @var FilterBuilder
+     * @var WebFilters
      */
     private $filterBuilder;
 
@@ -129,7 +125,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
      * @param State $state
-     * @param FilterBuilder $filterBuilder
+     * @param WebFilters $filterBuilder
      * @param Account $nostoHelperAccount
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
@@ -139,8 +135,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     public function __construct(
         CookieManagerInterface $cookieManager,
         Category $categoryService,
-        State $state,
-        FilterBuilder $filterBuilder,
+        WebFilters $filterBuilder,
         Account $nostoHelperAccount,
         StoreManagerInterface $storeManager,
         Registry $registry,
@@ -150,7 +145,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
-        $this->state = $state;
         $this->filterBuilder = $filterBuilder;
         $this->cookieManager = $cookieManager;
         $this->accountHelper = $nostoHelperAccount;
@@ -167,6 +161,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @throws LocalizedException
      */
     public function getPersonalisationResult(
+        FiltersInterface $filters,
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
@@ -181,19 +176,13 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
         }
-        // Build filters
-        //@phan-suppress-next-line PhanTypeMismatchArgument
-        $this->filterBuilder->init($store);
-        $this->filterBuilder->buildFromSelectedFilters(
-            $this->state->getActiveFilters()
-        );
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $this->lastResult = ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit) {
+            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters) {
                 return $this->categoryService->getPersonalisationResult(
                     $nostoAccount,
-                    $this->filterBuilder,
+                    $filters,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $category,
                     $pageNumber,

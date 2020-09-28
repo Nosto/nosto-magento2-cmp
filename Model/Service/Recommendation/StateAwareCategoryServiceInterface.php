@@ -36,16 +36,18 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 interface StateAwareCategoryServiceInterface
 {
     /**
+     * @param FiltersInterface $filters
      * @param int $pageNumber
      * @param int $limit
      * @return CategoryMerchandisingResult|null
      */
-    public function getPersonalisationResult($pageNumber, $limit): ?CategoryMerchandisingResult;
+    public function getPersonalisationResult(FiltersInterface $filters, $pageNumber, $limit): ?CategoryMerchandisingResult;
 
     /**
      * @return CategoryMerchandisingResult|null

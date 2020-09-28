@@ -37,8 +37,50 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class WebHandler extends AbstractHandler
 {
+
+    /** @var WebFilters */
+    private $filters;
+
+    /** @var State */
+    private $state;
+
+    /**
+     * @param ParameterResolverInterface $parameterResolver
+     * @param SearchEngine $searchEngineHelper
+     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        ParameterResolverInterface $parameterResolver,
+        SearchEngine $searchEngineHelper,
+        StoreManagerInterface $storeManager,
+        NostoHelperAccount $nostoHelperAccount,
+        StateAwareCategoryServiceInterface $categoryService,
+        WebFilters $filters,
+        State $state,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($parameterResolver, $searchEngineHelper, $storeManager, $nostoHelperAccount, $categoryService, $logger);
+        $this->filters = $filters;
+        $this->state  = $state;
+    }
+
 
     /**
      * @inheritDoc
@@ -55,5 +97,31 @@ class WebHandler extends AbstractHandler
     {
         //No necessary operations here
         return;
+    }
+
+    /**
+     * @param array $requestData
+     * @return int
+     */
+    function parseLimit(array $requestData)
+    {
+        return (int) $requestData[self::KEY_RESULT_SIZE];
+    }
+
+    /**
+     * @inheritDoc
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     */
+    function getFilters()
+    {
+        $store = $this->storeManager->getStore();
+        // Build filters
+        //@phan-suppress-next-line PhanTypeMismatchArgument
+        $this->filters->init($store);
+        $this->filters->buildFromSelectedFilters(
+            $this->state->getActiveFilters()
+        );
+        return $this->filters;
     }
 }

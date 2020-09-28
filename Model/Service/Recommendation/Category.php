@@ -44,7 +44,7 @@ use Nosto\Service\FeatureAccess;
 use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\NostoException;
 
 class Category
@@ -66,7 +66,7 @@ class Category
 
     /**
      * @param NostoAccount $nostoAccount
-     * @param FilterBuilder $filters
+     * @param FiltersInterface $filters
      * @param $nostoCustomerId
      * @param $category
      * @param int $pageNumber
@@ -79,7 +79,7 @@ class Category
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
-        FilterBuilder $filters,
+        FiltersInterface $filters,
         $nostoCustomerId,
         $category,
         $pageNumber,

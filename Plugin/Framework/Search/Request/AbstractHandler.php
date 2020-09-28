@@ -40,7 +40,8 @@ use Magento\Framework\Search\Request\Cleaner;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
@@ -81,17 +82,12 @@ abstract class AbstractHandler
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
     /**
      * @var NostoHelperAccount
      */
     private $accountHelper;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
 
     /**
      * @var StateAwareCategoryServiceInterface
@@ -103,7 +99,6 @@ abstract class AbstractHandler
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
-     * @param FilterBuilder $filterBuilder
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param LoggerInterface $logger
      */
@@ -112,7 +107,6 @@ abstract class AbstractHandler
         SearchEngine $searchEngineHelper,
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
-        FilterBuilder $filterBuilder,
         StateAwareCategoryServiceInterface $categoryService,
         LoggerInterface $logger
     ) {
@@ -121,7 +115,6 @@ abstract class AbstractHandler
         $this->searchEngineHelper = $searchEngineHelper;
         $this->storeManager = $storeManager;
         $this->accountHelper = $nostoHelperAccount;
-        $this->filterBuilder = $filterBuilder;
         $this->categoryService = $categoryService;
     }
 
@@ -138,6 +131,8 @@ abstract class AbstractHandler
             ),
             $this
         );
+
+        $this->preFetchOps($requestData);
 
         $productIds = $this->getCmpProductIds(
             $this->parsePageNumber($requestData),
@@ -170,6 +165,11 @@ abstract class AbstractHandler
      * @return void
      */
     abstract function preFetchOps(array $requestData);
+
+    /**
+     * @return FiltersInterface
+     */
+    abstract function getFilters();
 
     /**
      * Removes the Nosto sorting key as it's not indexed
@@ -241,10 +241,7 @@ abstract class AbstractHandler
      * @param array $requestData
      * @return int
      */
-    private function parseLimit(array $requestData)
-    {
-        return (int) $requestData[self::KEY_RESULT_SIZE];
-    }
+    abstract function parseLimit(array $requestData);
 
     /**
      * @param int $pageNum
@@ -255,6 +252,7 @@ abstract class AbstractHandler
     {
         try {
             $res = $this->categoryService->getPersonalisationResult(
+                $this->getFilters(),
                 $pageNum,
                 $limit
             );
