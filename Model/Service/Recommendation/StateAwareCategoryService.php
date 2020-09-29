@@ -36,15 +36,15 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
@@ -54,7 +54,6 @@ use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -121,15 +120,15 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $categoryRepository;
 
     /**
-     * Category constructor.
+     * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
-     * @param State $state
      * @param WebFilters $filterBuilder
      * @param Account $nostoHelperAccount
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -239,7 +238,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     {
         $store = $this->storeManager->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
-        $this->registry->register('current_category', $category);
+        $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**

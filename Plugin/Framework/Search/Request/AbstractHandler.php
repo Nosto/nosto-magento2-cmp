@@ -36,11 +36,9 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Magento\Framework\Search\Request\Cleaner;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
