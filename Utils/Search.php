@@ -50,7 +50,8 @@ class Search
         return self::findNostoSortingIndex($requestData) !== null;
     }
 
-    public static function hasCategoryFilter(array $requestData) {
+    public static function hasCategoryFilter(array $requestData)
+    {
         if (empty($requestData['filters'])) {
             return false;
         }

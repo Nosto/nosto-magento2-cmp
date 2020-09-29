@@ -51,6 +51,8 @@ class GraphQlHandler extends AbstractHandler
     private $filters;
 
     /**
+     * GraphQlHandler constructor.
+     * @param GraphQlFilters $filters
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
@@ -67,14 +69,21 @@ class GraphQlHandler extends AbstractHandler
         StateAwareCategoryServiceInterface $categoryService,
         LoggerInterface $logger
     ) {
-        parent::__construct($parameterResolver, $searchEngineHelper, $storeManager, $nostoHelperAccount, $categoryService, $logger);
+        parent::__construct(
+            $parameterResolver,
+            $searchEngineHelper,
+            $storeManager,
+            $nostoHelperAccount,
+            $categoryService,
+            $logger
+        );
         $this->filters = $filters;
     }
 
     /**
      * @inheritDoc
      */
-    function getBindKey()
+    protected function getBindKey()
     {
         return self::KEY_BIND_TO_GRAPHQL;
     }
@@ -82,7 +91,7 @@ class GraphQlHandler extends AbstractHandler
     /**
      * @inheritDoc
      */
-    function preFetchOps(array $requestData)
+    protected function preFetchOps(array $requestData)
     {
         $this->categoryService->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
@@ -94,15 +103,15 @@ class GraphQlHandler extends AbstractHandler
      * @param array $requestData
      * @return int
      */
-    function parseLimit(array $requestData)
+    public function parseLimit(array $requestData)
     {
-        return (int) '20';
+        return (int) $requestData[self::KEY_RESULT_SIZE];
     }
 
     /**
      * @inheritDoc
      */
-    function getFilters()
+    public function getFilters()
     {
         return $this->filters;
     }

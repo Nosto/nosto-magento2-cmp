@@ -158,18 +158,18 @@ abstract class AbstractHandler
     /**
      * @return string
      */
-    abstract function getBindKey();
+    abstract protected function getBindKey();
 
     /**
      * @param array $requestData
      * @return void
      */
-    abstract function preFetchOps(array $requestData);
+    abstract protected function preFetchOps(array $requestData);
 
     /**
      * @return FiltersInterface
      */
-    abstract function getFilters();
+    abstract protected function getFilters();
 
     /**
      * Removes the Nosto sorting key as it's not indexed
@@ -241,7 +241,7 @@ abstract class AbstractHandler
      * @param array $requestData
      * @return int
      */
-    abstract function parseLimit(array $requestData);
+    abstract public function parseLimit(array $requestData);
 
     /**
      * @param int $pageNum

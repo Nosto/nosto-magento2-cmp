@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
@@ -76,16 +75,22 @@ class WebHandler extends AbstractHandler
         State $state,
         LoggerInterface $logger
     ) {
-        parent::__construct($parameterResolver, $searchEngineHelper, $storeManager, $nostoHelperAccount, $categoryService, $logger);
+        parent::__construct(
+            $parameterResolver,
+            $searchEngineHelper,
+            $storeManager,
+            $nostoHelperAccount,
+            $categoryService,
+            $logger
+        );
         $this->filters = $filters;
         $this->state  = $state;
     }
 
-
     /**
      * @inheritDoc
      */
-    function getBindKey()
+    public function getBindKey()
     {
         return self::KEY_BIND_TO_QUERY;
     }
@@ -93,17 +98,18 @@ class WebHandler extends AbstractHandler
     /**
      * @inheritDoc
      */
-    function preFetchOps(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    protected function preFetchOps(array $requestData)
     {
         //No necessary operations here
-        return;
+        return null;
     }
 
     /**
      * @param array $requestData
      * @return int
      */
-    function parseLimit(array $requestData)
+    public function parseLimit(array $requestData)
     {
         return (int) $requestData[self::KEY_RESULT_SIZE];
     }
@@ -113,7 +119,7 @@ class WebHandler extends AbstractHandler
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    function getFilters()
+    public function getFilters()
     {
         $store = $this->storeManager->getStore();
         // Build filters

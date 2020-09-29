@@ -47,7 +47,11 @@ interface StateAwareCategoryServiceInterface
      * @param int $limit
      * @return CategoryMerchandisingResult|null
      */
-    public function getPersonalisationResult(FiltersInterface $filters, $pageNumber, $limit): ?CategoryMerchandisingResult;
+    public function getPersonalisationResult(
+        FiltersInterface $filters,
+        $pageNumber,
+        $limit
+    ): ?CategoryMerchandisingResult;
 
     /**
      * @return CategoryMerchandisingResult|null
@@ -57,5 +61,5 @@ interface StateAwareCategoryServiceInterface
     /**
      * @param $id
      */
-    public function setCategoryInRegistry($id): void ;
+    public function setCategoryInRegistry($id): void;
 }

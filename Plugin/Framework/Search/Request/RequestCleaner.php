@@ -87,6 +87,7 @@ class RequestCleaner
      * @param array $requestData
      * @return array
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
         if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
@@ -122,7 +123,8 @@ class RequestCleaner
         }
     }
 
-    private function containsCatalogViewQueries(array $requestData) {
+    private function containsCatalogViewQueries(array $requestData)
+    {
         if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
             && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'])) {
             return true;
@@ -130,7 +132,8 @@ class RequestCleaner
         return false;
     }
 
-    private function containsGraphQlProductSearchQueries(array $requestData) {
+    private function containsGraphQlProductSearchQueries(array $requestData)
+    {
         if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])
             && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL]['queryReference'])
             && isset($requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER])) {
