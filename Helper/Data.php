@@ -68,6 +68,7 @@ class Data extends AbstractHelper
      * @param Context $context
      * @param NostoHelperScope $nostoHelperScope
      * @param ModuleListInterface $moduleList
+     * @noinspection PhpUnused
      */
     public function __construct(
         Context $context,

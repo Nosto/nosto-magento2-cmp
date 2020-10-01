@@ -36,16 +36,16 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Model\Signup\Account as NostoAccount;
+use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
-use Nosto\Service\FeatureAccess;
-use Nosto\Operation\Recommendation\CategoryMerchandising;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\NostoException;
+use Nosto\Service\FeatureAccess;
 
 class Category
 {
@@ -57,6 +57,7 @@ class Category
     /**
      * Category constructor.
      * @param CookieManagerInterface $cookieManager
+     * @noinspection PhpUnused
      */
     public function __construct(
         CookieManagerInterface $cookieManager

@@ -46,6 +46,7 @@ class Product
      * @param MagentoProduct $product
      * @param string $url
      * @return string
+     * @noinspection PhpUnused
      */
     public function afterGetProductUrl(MagentoProduct $product, $url)
     {

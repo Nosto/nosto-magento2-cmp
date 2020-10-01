@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,7 +34,7 @@
  *
  */
 
-namespace  Nosto\Cmp\Plugin\Catalog\Model;
+namespace Nosto\Cmp\Plugin\Catalog\Model;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Model\Config as MagentoConfig;
@@ -84,6 +84,8 @@ class Config extends Template
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws NoSuchEntityException
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
      */
     public function afterGetAttributeUsedForSortByArray(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,

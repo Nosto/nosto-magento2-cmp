@@ -52,6 +52,7 @@ class ServerTiming
 
     /**
      * ServerTiming constructor.
+     * @noinspection PhpUnused
      */
     private function __construct() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
     {

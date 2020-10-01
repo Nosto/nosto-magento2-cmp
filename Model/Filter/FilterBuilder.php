@@ -36,13 +36,12 @@
 
 namespace Nosto\Cmp\Model\Filter;
 
-use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Nosto\NostoException;
-use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Logger\LoggerInterface;
 
@@ -109,7 +108,6 @@ class FilterBuilder
      */
     public function mapIncludeFilter(Item $item)
     {
-        /** @var AbstractFilter $filter */
         $filter = $item->getFilter();
         if ($filter === null) {
             return;
@@ -139,7 +137,7 @@ class FilterBuilder
             case 'date':
                 break;
             case 'boolean':
-                $value = (bool) $item->getData('value');
+                $value = (bool)$item->getData('value');
                 break;
             default:
                 $this->logger->debugCmp(
