@@ -34,7 +34,6 @@
  *
  */
 
-
 namespace Nosto\Cmp\Plugin\Catalog\Model;
 
 use Magento\Backend\Block\Template\Context;
@@ -93,7 +92,7 @@ class Sortby extends Template
      * @noinspection PhpUnusedParameterInspection
      * @suppress PhanTypeMismatchArgument
      */
-    public function afterGetAllOptions( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterGetAllOptions(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoSortby $sortBy,
         $options
     ) {

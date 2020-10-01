@@ -34,45 +34,21 @@
  *
  */
 
-return [
-    'backward_compatibility_checks' => false,
-    'signature-compatibility' => true,
-    'progress-bar' => true,
-    'simplify_ast' => false,
-    'dead_code_detection' => false,
-    'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
-    'directory_list' => [
-        'Block',
-        'Helper',
-        'Model',
-        'Observer',
-        'Plugin',
-        'Utils',
-        'Logger',
-        'vendor/nosto',
-        'vendor/vlucas',
-        'vendor/phpseclib',
-        'vendor/magento',
-        'vendor/monolog',
-        'vendor/psr',
-        'vendor/symfony/console'
-    ],
-    'exclude_file_list' => [
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Cn.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Com.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Jp.php',
-    ],
-    'exclude_analysis_directory_list' => [
-      'vendor/',
-      'magento',
-      '../../../generated'
-    ],
-    'suppress_issue_types' => [
-        'PhanParamSignatureMismatch',
-    ],
-    "color_issue_messages_if_supported" => true,
-    'plugins' => [
-      'vendor/drenso/phan-extensions/Plugin/DocComment/InlineVarPlugin.php'
-    ]
-];
+namespace Nosto\Cmp\Model\Service\Recommendation;
+
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+
+interface StateAwareCategoryServiceInterface
+{
+    /**
+     * @param int $pageNumber
+     * @param int $limit
+     * @return CategoryMerchandisingResult|null
+     */
+    public function getPersonalisationResult($pageNumber, $limit): ?CategoryMerchandisingResult;
+
+    /**
+     * @return CategoryMerchandisingResult|null
+     */
+    public function getLastResult(): ?CategoryMerchandisingResult;
+}

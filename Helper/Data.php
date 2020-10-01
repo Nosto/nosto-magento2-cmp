@@ -55,6 +55,11 @@ class Data extends AbstractHelper
      */
     const XML_PATH_CATEGORY_SORTING = 'nosto_cmp/flags/category_sorting';
 
+    /**
+     * Path to the configuration object that stores category sorting
+     */
+    const XML_PATH_CATEGORY_MAPPING = 'nosto_cmp/flags/map_all_categories';
+
     /** @var ModuleListInterface */
     private $moduleList;
 
@@ -84,6 +89,17 @@ class Data extends AbstractHelper
     public function isCategorySortingEnabled(StoreInterface $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_SORTING, $store);
+    }
+
+    /**
+     * Returns if category sorting is enabled
+     *
+     * @param StoreInterface|null $store the store model or null.
+     * @return bool the configuration value
+     */
+    public function isAllCategoriesMapEnabled(StoreInterface $store = null)
+    {
+        return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAPPING, $store);
     }
 
     /**

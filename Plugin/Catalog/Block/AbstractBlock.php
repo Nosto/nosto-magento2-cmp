@@ -38,46 +38,44 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 
 abstract class AbstractBlock extends Template
 {
     /** @var int */
-    public static $totalProducts;
-
-    /** @var int */
-    public static $limit;
-
-    /** @var int */
     private $lastPageNumber;
 
     /** @var ParameterResolverInterface */
-    public $paramResolver;
+    private $paramResolver;
 
     /**  @var StoreManagerInterface */
-    public $storeManager;
+    private $storeManager;
 
     /** @var NostoCmpHelperData */
-    public $nostoCmpHelperData;
+    private $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
-    public $nostoHelperAccount;
+    private $nostoHelperAccount;
 
-    /** @var NostoLogger */
-    public $logger;
+    /** @var LoggerInterface */
+    private $logger;
 
     /** @var string */
     public static $currentOrder;
 
-    /** @var bool */
-    public static $catalogTakeover;
+    /**
+     * @var StateAwareCategoryService
+     */
+    private $categoryService;
 
     /**
      * AbstractBlock constructor.
@@ -85,15 +83,18 @@ abstract class AbstractBlock extends Template
      * @param ParameterResolverInterface $parameterResolver
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
-     * @param NostoLogger $logger
+     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         ParameterResolverInterface $parameterResolver,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
-        NostoLogger $logger
+        StateAwareCategoryServiceInterface $categoryService,
+        LoggerInterface $logger
     ) {
+        $this->categoryService = $categoryService;
         $this->paramResolver = $parameterResolver;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
@@ -106,21 +107,15 @@ abstract class AbstractBlock extends Template
      * Checks if current sorting order is Nosto's `Personalized for you`
      * and category sorting is enabled
      *
+     * @param StoreInterface $store
      * @return bool
      */
-    public function isCmpCurrentSortOrder()
+    public function isCmpCurrentSortOrder(StoreInterface $store)
     {
-        try {
-            $store = $this->storeManager->getStore();
-        } catch (NoSuchEntityException $e) {
-            $this->logger->info('Cannot get store');
-            return false;
-        }
         $currentOrder = $this->getCurrentOrder();
         if ($currentOrder === null) {
             return false;
         }
-        /** @noinspection PhpParamsInspection */
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             //@phan-suppress-next-line PhanTypeMismatchArgument
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
@@ -139,23 +134,13 @@ abstract class AbstractBlock extends Template
      */
     public function isCmpTakingOverCatalog()
     {
-        if (self::$catalogTakeover === null) {
-            self::$catalogTakeover = $this->isCmpResult();
-        }
-        return self::$catalogTakeover;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isCmpResult()
-    {
-        if (!$this->isCmpCurrentSortOrder() ||
-            (self::$totalProducts === 0 || self::$totalProducts === null)
+        $categoryMerchandisingResult = $this->getCategoryService()->getLastResult();
+        if ($categoryMerchandisingResult !== null
+            && !empty($categoryMerchandisingResult->getTrackingCode())
         ) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -170,19 +155,14 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @param int $totalProducts
-     */
-    public function setTotalProducts($totalProducts)
-    {
-        self::$totalProducts = $totalProducts;
-    }
-
-    /**
-     * @return int
+     * @return int|null
      */
     public function getTotalProducts()
     {
-        return self::$totalProducts;
+        if ($this->getCategoryService()->getLastResult() !== null) {
+            return $this->getCategoryService()->getLastResult()->getTotalPrimaryCount();
+        }
+        return null;
     }
 
     /**
@@ -191,7 +171,6 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return float|int
-     * @noinspection PhpUnused
      */
     public function afterGetFirstNum($block, $result)
     {
@@ -209,7 +188,6 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return float|int
-     * @noinspection PhpUnused
      */
     public function afterGetLastNum($block, $result)
     {
@@ -226,8 +204,6 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return int
-     * @noinspection PhpUnusedParameterInspection
-     * @noinspection PhpUnused
      */
     public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
@@ -241,8 +217,6 @@ abstract class AbstractBlock extends Template
      * @param MagentoToolbar|MagentoPager $block
      * @param $result
      * @return int
-     * @noinspection PhpUnusedParameterInspection
-     * @noinspection PhpUnused
      */
     public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
@@ -260,24 +234,16 @@ abstract class AbstractBlock extends Template
         if ($this->lastPageNumber !== null) {
             return $this->lastPageNumber;
         }
-        $this->lastPageNumber = (int)ceil(self::$totalProducts / self::$limit);
+        $this->lastPageNumber = (int) ceil($this->getTotalProducts() / $this->getLimit());
         return $this->lastPageNumber;
     }
 
     /**
      * @return int
      */
-    public function getLimit()
+    private function getLimit()
     {
-        return self::$limit;
-    }
-
-    /**
-     * @param int $limit
-     */
-    public function setLimit(int $limit)
-    {
-        self::$limit = $limit;
+        return $this->getCategoryService()->getLastUsedLimit();
     }
 
     /**
@@ -286,5 +252,29 @@ abstract class AbstractBlock extends Template
     public function getCurrentPageNumber()
     {
         return $this->paramResolver->getCurrentPage();
+    }
+
+    /**
+     * @return StateAwareCategoryService
+     */
+    public function getCategoryService(): StateAwareCategoryService
+    {
+        return $this->categoryService;
+    }
+
+    /**
+     * @return StoreManagerInterface
+     */
+    public function getStoreManager(): StoreManagerInterface
+    {
+        return $this->storeManager;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 }

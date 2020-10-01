@@ -87,7 +87,7 @@ class Config extends Template
      * @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
-    public function afterGetAttributeUsedForSortByArray( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterGetAttributeUsedForSortByArray(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,
         $options
     ) {

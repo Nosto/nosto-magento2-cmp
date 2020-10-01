@@ -39,8 +39,9 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Backend\Block\Template\Context;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
 
 /** @noinspection PhpUnused */
 class Pager extends AbstractBlock
@@ -51,17 +52,25 @@ class Pager extends AbstractBlock
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param ParameterResolverInterface $parameterResolver
-     * @param NostoLogger $logger
-     * @noinspection PhpUnused
+     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         ParameterResolverInterface $parameterResolver,
-        NostoLogger $logger
+        StateAwareCategoryServiceInterface $categoryService,
+        LoggerInterface $logger
     ) {
-        parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
+        parent::__construct(
+            $context,
+            $parameterResolver,
+            $nostoCmpHelperData,
+            $nostoHelperAccount,
+            $categoryService,
+            $logger
+        );
     }
 
     /**
@@ -72,7 +81,7 @@ class Pager extends AbstractBlock
      * @noinspection PhpUnusedParameterInspection
      * @noinspection PhpUnused
      */
-    public function afterIsPageCurrent( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterIsPageCurrent(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result,
         $param
@@ -132,7 +141,7 @@ class Pager extends AbstractBlock
      * @return bool
      * @noinspection PhpUnusedParameterInspection
      */
-    public function afterIsFirstPage( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterIsFirstPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result
     ) {

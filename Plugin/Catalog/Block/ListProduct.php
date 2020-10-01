@@ -34,45 +34,49 @@
  *
  */
 
-return [
-    'backward_compatibility_checks' => false,
-    'signature-compatibility' => true,
-    'progress-bar' => true,
-    'simplify_ast' => false,
-    'dead_code_detection' => false,
-    'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
-    'directory_list' => [
-        'Block',
-        'Helper',
-        'Model',
-        'Observer',
-        'Plugin',
-        'Utils',
-        'Logger',
-        'vendor/nosto',
-        'vendor/vlucas',
-        'vendor/phpseclib',
-        'vendor/magento',
-        'vendor/monolog',
-        'vendor/psr',
-        'vendor/symfony/console'
-    ],
-    'exclude_file_list' => [
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Cn.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Com.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Jp.php',
-    ],
-    'exclude_analysis_directory_list' => [
-      'vendor/',
-      'magento',
-      '../../../generated'
-    ],
-    'suppress_issue_types' => [
-        'PhanParamSignatureMismatch',
-    ],
-    "color_issue_messages_if_supported" => true,
-    'plugins' => [
-      'vendor/drenso/phan-extensions/Plugin/DocComment/InlineVarPlugin.php'
-    ]
-];
+namespace Nosto\Cmp\Plugin\Catalog\Block;
+
+use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\CategoryMerchandising;
+
+class ListProduct
+{
+    /**
+     * @var StateAwareCategoryServiceInterface
+     */
+    private $categoryService;
+
+    public function __construct(
+        StateAwareCategoryServiceInterface $categoryService
+    ) {
+        $this->categoryService = $categoryService;
+    }
+
+    /**
+     * @param MagentoListProduct $listProduct
+     * @param Collection $collection
+     * @return Collection
+     */
+    public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        MagentoListProduct $listProduct,
+        Collection $collection
+    ) {
+        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        if ($categoryMerchandisingResult == null) {
+            return $collection;
+        }
+        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
+        $collection->each(static function ($product) use ($cmpProductIds) {
+            /* @var Product $product */
+            if (in_array($product->getId(), $cmpProductIds, true)) {
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
+            }
+        });
+
+        return $collection;
+    }
+}

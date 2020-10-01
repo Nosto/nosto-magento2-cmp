@@ -45,8 +45,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Nosto\Cmp\Helper\Data as NostoHelperData;
 
 class CategoryMapping extends Template
 {
@@ -59,7 +60,10 @@ class CategoryMapping extends Template
     /** @var CategoryBuilder */
     private $categoryBuilder;
 
-    /** @var NostoLogger */
+    /** @var NostoHelperData */
+    private $nostoHelperData;
+
+    /** @var LoggerInterface */
     private $logger;
 
     /**
@@ -67,20 +71,23 @@ class CategoryMapping extends Template
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $collectionFactory
      * @param CategoryBuilder $categoryBuilder
+     * @param NostoHelperData $nostoHelperData
      * @param Context $context
-     * @param NostoLogger $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
+        NostoHelperData $nostoHelperData,
         Context $context,
-        NostoLogger $logger
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
+        $this->nostoHelperData = $nostoHelperData;
         $this->logger = $logger;
     }
 
@@ -116,9 +123,12 @@ class CategoryMapping extends Template
         try {
             $categories = $this->collectionFactory->create()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('include_in_menu', ['eq' => 1])
                 ->addIsActiveFilter()
                 ->setStore($store);
+
+            if (!$this->nostoHelperData->isAllCategoriesMapEnabled($store)) {
+                $categories->addAttributeToFilter('include_in_menu', ['eq' => 1]);
+            }
 
             /** @var Category $category $item */
             foreach ($categories->getItems() as $category) {

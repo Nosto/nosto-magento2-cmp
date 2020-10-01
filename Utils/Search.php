@@ -34,45 +34,46 @@
  *
  */
 
-return [
-    'backward_compatibility_checks' => false,
-    'signature-compatibility' => true,
-    'progress-bar' => true,
-    'simplify_ast' => false,
-    'dead_code_detection' => false,
-    'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
-    'directory_list' => [
-        'Block',
-        'Helper',
-        'Model',
-        'Observer',
-        'Plugin',
-        'Utils',
-        'Logger',
-        'vendor/nosto',
-        'vendor/vlucas',
-        'vendor/phpseclib',
-        'vendor/magento',
-        'vendor/monolog',
-        'vendor/psr',
-        'vendor/symfony/console'
-    ],
-    'exclude_file_list' => [
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Cn.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Com.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Jp.php',
-    ],
-    'exclude_analysis_directory_list' => [
-      'vendor/',
-      'magento',
-      '../../../generated'
-    ],
-    'suppress_issue_types' => [
-        'PhanParamSignatureMismatch',
-    ],
-    "color_issue_messages_if_supported" => true,
-    'plugins' => [
-      'vendor/drenso/phan-extensions/Plugin/DocComment/InlineVarPlugin.php'
-    ]
-];
+namespace Nosto\Cmp\Utils;
+
+use Nosto\Cmp\Helper\CategorySorting;
+use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+
+class Search
+{
+    /**
+     * @param array $requestData
+     * @return bool
+     */
+    public static function isNostoSorting(array $requestData)
+    {
+        return self::findNostoSortingIndex($requestData) !== null;
+    }
+
+    /**
+     * @param ParameterResolverInterface $parameterResolver
+     * @return bool
+     */
+    public static function isNostoSortingByResolver(ParameterResolverInterface $parameterResolver)
+    {
+        return $parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY;
+    }
+
+    /**
+     * @param array $requestData
+     * @return int|string|null
+     */
+    public static function findNostoSortingIndex(array $requestData)
+    {
+        if (empty($requestData['sort'])) {
+            return null;
+        }
+        $sorting = $requestData['sort'];
+        foreach ($sorting as $index => $sort) {
+            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+                return $index;
+            }
+        }
+        return null;
+    }
+}

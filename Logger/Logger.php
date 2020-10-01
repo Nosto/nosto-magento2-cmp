@@ -34,45 +34,23 @@
  *
  */
 
-return [
-    'backward_compatibility_checks' => false,
-    'signature-compatibility' => true,
-    'progress-bar' => true,
-    'simplify_ast' => false,
-    'dead_code_detection' => false,
-    'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
-    'directory_list' => [
-        'Block',
-        'Helper',
-        'Model',
-        'Observer',
-        'Plugin',
-        'Utils',
-        'Logger',
-        'vendor/nosto',
-        'vendor/vlucas',
-        'vendor/phpseclib',
-        'vendor/magento',
-        'vendor/monolog',
-        'vendor/psr',
-        'vendor/symfony/console'
-    ],
-    'exclude_file_list' => [
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Biz.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Cn.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Com.php',
-        'vendor/magento/zendframework1/library/Zend/Validate/Hostname/Jp.php',
-    ],
-    'exclude_analysis_directory_list' => [
-      'vendor/',
-      'magento',
-      '../../../generated'
-    ],
-    'suppress_issue_types' => [
-        'PhanParamSignatureMismatch',
-    ],
-    "color_issue_messages_if_supported" => true,
-    'plugins' => [
-      'vendor/drenso/phan-extensions/Plugin/DocComment/InlineVarPlugin.php'
-    ]
-];
+namespace Nosto\Cmp\Logger;
+
+use Nosto\Tagging\Logger\Logger as NostoLogger;
+
+class Logger extends NostoLogger implements LoggerInterface
+{
+    /**
+     * Logs a debug level message with given source class info
+     *
+     * @param $message
+     * @param object $sourceClass
+     * @param array $context
+     * @return bool
+     */
+    public function debugCmp($message, $sourceClass, array $context = [])
+    {
+        $mergedContext = array_merge(['nosto' => 'cmp'], $context);
+        return $this->debugWithSource($message, $mergedContext, $sourceClass);
+    }
+}

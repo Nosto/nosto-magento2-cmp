@@ -36,12 +36,14 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\NostoException;
 use Nosto\Model\Signup\Account as NostoAccount;
+use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Operation\Recommendation\CategoryMerchandising;
+use Nosto\Request\Http\Exception\AbstractHttpException;
+use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 
@@ -70,8 +72,11 @@ class Category
      * @param $category
      * @param int $pageNumber
      * @param int $limit
+     * @param bool $previewMode
      * @return CategoryMerchandisingResult
      * @throws NostoException
+     * @throws AbstractHttpException
+     * @throws HttpResponseException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
@@ -79,14 +84,13 @@ class Category
         $nostoCustomerId,
         $category,
         $pageNumber,
-        $limit = self::MAX_PRODUCT_AMOUNT
+        $limit,
+        $previewMode = false
     ) {
-        $limit = self::MAX_PRODUCT_AMOUNT < $limit ? self::MAX_PRODUCT_AMOUNT : $limit;
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
         }
-        $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $categoryMerchandising = new CategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,
@@ -99,7 +103,6 @@ class Category
             $previewMode,
             $limit
         );
-
         return $categoryMerchandising->execute();
     }
 }
