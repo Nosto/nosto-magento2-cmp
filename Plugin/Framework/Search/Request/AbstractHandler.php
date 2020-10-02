@@ -60,8 +60,6 @@ abstract class AbstractHandler
     const KEY_RESULTS_FROM = 'from';
     const KEY_RESULT_SIZE = 'size';
 
-    public static $nostoTmpSort = [5, 11, 401, 2023, 1];
-
     /**
      * @var ParameterResolverInterface
      */

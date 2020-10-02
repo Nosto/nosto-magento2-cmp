@@ -43,12 +43,16 @@ use Nosto\Cmp\Model\Filter\GraphQlFilters;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Magento\Framework\Registry;
 
 class GraphQlHandler extends AbstractHandler
 {
 
     /** @var GraphQlFilters */
     private $filters;
+
+    /** @var Registry */
+    private $registry;
 
     /**
      * GraphQlHandler constructor.
@@ -58,6 +62,7 @@ class GraphQlHandler extends AbstractHandler
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
+     * @param Registry $registry
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -67,6 +72,7 @@ class GraphQlHandler extends AbstractHandler
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryServiceInterface $categoryService,
+        Registry $registry,
         LoggerInterface $logger
     ) {
         parent::__construct(
@@ -78,6 +84,7 @@ class GraphQlHandler extends AbstractHandler
             $logger
         );
         $this->filters = $filters;
+        $this->registry = $registry;
     }
 
     /**
@@ -103,9 +110,10 @@ class GraphQlHandler extends AbstractHandler
      * @param array $requestData
      * @return int
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function parseLimit(array $requestData)
     {
-        return (int) $requestData[self::KEY_RESULT_SIZE];
+        return (int) $this->registry->registry('nosto_page_size');
     }
 
     /**
