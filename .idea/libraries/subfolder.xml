@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="subfolder">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/subfolder/not-an-artifact.zip!/" />
+      <root url="jar://$PROJECT_DIR$/vendor/composer/composer/tests/Composer/Test/Repository/Fixtures/artifacts/subfolder/package1.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

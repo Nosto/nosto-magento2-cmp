@@ -41,19 +41,18 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -76,6 +75,7 @@ class Toolbar extends AbstractBlock
      * @param ParameterResolverInterface $parameterResolver
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
+     * @noinspection PhpDeprecationInspection
      */
     public function __construct(
         Context $context,
@@ -165,8 +165,6 @@ class Toolbar extends AbstractBlock
      * @param int $start starting from 0
      * @param int $limit
      * @return CategoryMerchandisingResult
-     * @throws NostoException
-     * @throws LocalizedException
      */
     private function getCmpResult($start, $limit)
     {

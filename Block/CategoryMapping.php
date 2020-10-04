@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -106,7 +107,7 @@ class CategoryMapping extends Template
             $this->logger->exception($e);
         }
 
-        return json_encode((object) $array, JSON_UNESCAPED_SLASHES);
+        return json_encode((object)$array, JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -117,12 +118,9 @@ class CategoryMapping extends Template
     private function getMagentoCategories(Store $store)
     {
 
-        $baseUrl = '';
         $categoriesArray = [];
 
         try {
-            $baseUrl = $store->getBaseUrl();
-
             $categories = $this->collectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addIsActiveFilter()
@@ -155,7 +153,7 @@ class CategoryMapping extends Template
     private function hashCategoryString($categoryString)
     {
         $signedInteger = crc32($categoryString);
-        $unsignedInteger = (int) sprintf("%u", $signedInteger);
+        $unsignedInteger = (int)sprintf("%u", $signedInteger);
         return dechex($unsignedInteger);
     }
 }

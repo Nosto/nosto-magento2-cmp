@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -38,12 +39,10 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http;
-use /** @noinspection PhpDeprecationInspection */
-    Magento\Framework\Registry;
+use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
 
 class DefaultParameterResolver implements ParameterResolverInterface
 {
-    const DEFAULT_PAGE_SIZE_PARAM = 'product_list_limit';
     const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
     const DEFAULT_CURRENT_PAGE_PARAM = 'p';
 
@@ -57,6 +56,8 @@ class DefaultParameterResolver implements ParameterResolverInterface
      * DefaultParameterResolver constructor.
      * @param Http $httpRequest
      * @param Registry $registry
+     * @noinspection PhpDeprecationInspection
+     * @noinspection PhpUnused
      */
     public function __construct(Http $httpRequest, Registry $registry)
     {
@@ -66,6 +67,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
 
     /**
      * @inheritdoc
+     * @noinspection PhpUnused
      */
     public function getSortingOrder()
     {
@@ -77,6 +79,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
 
     /**
      * @inheritdoc
+     * @noinspection PhpUnused
      */
     public function getCurrentPage()
     {
