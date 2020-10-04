@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;

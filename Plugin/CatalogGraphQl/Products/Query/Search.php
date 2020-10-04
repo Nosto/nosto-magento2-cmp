@@ -68,7 +68,7 @@ class Search
     {
         if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
             $pageSize = $args[self::PAGE_SIZE_KEY];
-            $this->registry->register('nosto_page_size', $pageSize);
+            $this->registry->register('nosto_page_size', $pageSize); //@phan-suppress-current-line PhanDeprecatedFunction
         }
     }
 }

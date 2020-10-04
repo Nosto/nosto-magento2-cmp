@@ -113,7 +113,7 @@ class GraphQlHandler extends AbstractHandler
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function parseLimit(array $requestData)
     {
-        return (int) $this->registry->registry('nosto_page_size');
+        return (int) $this->registry->registry('nosto_page_size'); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**
