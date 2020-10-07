@@ -47,5 +47,9 @@
   },
   "config": {
     "process-timeout":0
+  },
+  "scripts": {
+    "di:compile": "./compile.sh",
+    "ci:inspect": "./inspect.sh"
   }
 }

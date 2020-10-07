@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 BRANCH_NAME=$(git branch --show-current)
 PROJECT_NAME=$(cat composer.json| jq --raw-output .name)
 APP_DIR=$(pwd)
