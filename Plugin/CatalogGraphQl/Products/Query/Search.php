@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -60,6 +61,7 @@ class Search
     }
 
     /**
+     * @param MagentoSearch $search
      * @param array $args
      * @param ResolveInfo $info
      */

@@ -62,6 +62,8 @@ class WebHandler extends AbstractHandler
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
+     * @param WebFilters $filters
+     * @param State $state
      * @param LoggerInterface $logger
      */
     public function __construct(

@@ -75,6 +75,7 @@ class Toolbar extends AbstractBlock
      * @param ParameterResolverInterface $parameterResolver
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
+     * @param WebFilters $filters
      * @noinspection PhpDeprecationInspection
      */
     public function __construct(
@@ -165,6 +166,8 @@ class Toolbar extends AbstractBlock
      * @param int $start starting from 0
      * @param int $limit
      * @return CategoryMerchandisingResult
+     * @throws NostoException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getCmpResult($start, $limit)
     {
