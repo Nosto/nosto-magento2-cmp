@@ -118,7 +118,7 @@ abstract class AbstractHandler
      * @param array $requestData
      * @return array
      */
-    public function handle(array $requestData)
+    public function handle(array &$requestData)
     {
         $this->logger->debugCmp(
             sprintf(
@@ -148,7 +148,6 @@ abstract class AbstractHandler
             $requestData,
             $productIds
         );
-        return $requestData;
     }
 
     /**
