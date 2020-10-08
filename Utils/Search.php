@@ -59,15 +59,6 @@ class Search
     }
 
     /**
-     * @param ParameterResolverInterface $parameterResolver
-     * @return bool
-     */
-    public static function isNostoSortingByResolver(ParameterResolverInterface $parameterResolver)
-    {
-        return $parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY;
-    }
-
-    /**
      * @param array $requestData
      * @return int|string|null
      */
