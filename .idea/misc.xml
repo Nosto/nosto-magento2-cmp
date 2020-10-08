@@ -30,8 +30,6 @@
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Helper\Data __construct" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping getSegmentMappingCookieName" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping getNostoAccount" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping getSegmentMappingCookieName" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping getNostoAccount" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping getCustomerId" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping __construct" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Block\SegmentMapping getCategoryMappingCookieName" />
@@ -41,20 +39,20 @@
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Http\Context __construct" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver getSortingOrder" />
       <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver getCurrentPage" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver __construct" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetLastNum" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetLastPageNum" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetFirstNum" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock afterGetTotalNum" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar __construct" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar afterSetCollection" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterIsPageCurrent" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager __construct" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterIsFirstPage" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterGetPreviousPageUrl" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterGetNextPageUrl" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterGetFramePages" />
-      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\Pager afterIsLastPage" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Api\Search\SearchResultSorter beforeSetItems" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Api\Search\SearchResultSorter" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Api\Search\SearchResultSorter __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\ListProduct afterGetLoadedProductCollection" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\ListProduct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Catalog\Block\ListProduct __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Helper\Data isAllCategoriesMapEnabled" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search beforeGetResult" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner afterClean" />
+      <entry_point TYPE="phpClass" FQNAME="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\Nosto\Cmp\Utils\Search isNostoSortingByResolver" />
     </entry_point>
     <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" />
     <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="__construct" />
@@ -78,33 +76,31 @@
     <pattern value="\Nosto\Cmp\Helper\Data" member="getModuleVersion" />
     <pattern value="\Nosto\Cmp\Helper\Data" />
     <pattern value="\Nosto\Cmp\Helper\Data" member="__construct" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getSegmentMappingCookieName" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getNostoAccount" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getSegmentMappingCookieName" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getNostoAccount" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getCustomerId" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="__construct" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getCategoryMappingCookieName" />
-	<pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getNostoBaseUrl" />
-	<pattern value="\Nosto\Cmp\Utils\Debug\Product" member="__construct" />
-	<pattern value="\Nosto\Cmp\Utils\Debug\ServerTiming" member="__construct" />
-	<pattern value="\Nosto\Cmp\Plugin\Http\Context" member="__construct" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" member="getSortingOrder" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" member="getCurrentPage" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" member="__construct" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetLastNum" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetLastPageNum" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetFirstNum" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\AbstractBlock" member="afterGetTotalNum" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar" member="__construct" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Toolbar" member="afterSetCollection" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterIsPageCurrent" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="__construct" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterIsFirstPage" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterGetPreviousPageUrl" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterGetNextPageUrl" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterGetFramePages" />
-	<pattern value="\Nosto\Cmp\Plugin\Catalog\Block\Pager" member="afterIsLastPage" />
+    <pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getSegmentMappingCookieName" />
+    <pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getNostoAccount" />
+    <pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getCustomerId" />
+    <pattern value="\Nosto\Cmp\Block\SegmentMapping" member="__construct" />
+    <pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getCategoryMappingCookieName" />
+    <pattern value="\Nosto\Cmp\Block\SegmentMapping" member="getNostoBaseUrl" />
+    <pattern value="\Nosto\Cmp\Utils\Debug\Product" member="__construct" />
+    <pattern value="\Nosto\Cmp\Utils\Debug\ServerTiming" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Http\Context" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" member="getSortingOrder" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver" member="getCurrentPage" />
+    <pattern value="\Nosto\Cmp\Plugin\Api\Search\SearchResultSorter" member="beforeSetItems" />
+    <pattern value="\Nosto\Cmp\Plugin\Api\Search\SearchResultSorter" />
+    <pattern value="\Nosto\Cmp\Plugin\Api\Search\SearchResultSorter" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\ListProduct" member="afterGetLoadedProductCollection" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\ListProduct" />
+    <pattern value="\Nosto\Cmp\Plugin\Catalog\Block\ListProduct" member="__construct" />
+    <pattern value="\Nosto\Cmp\Helper\Data" member="isAllCategoriesMapEnabled" />
+    <pattern value="\Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search" member="beforeGetResult" />
+    <pattern value="\Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search" />
+    <pattern value="\Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search" member="__construct" />
+    <pattern value="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner" member="afterClean" />
+    <pattern value="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner" />
+    <pattern value="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner" member="__construct" />
+    <pattern value="\Nosto\Cmp\Utils\Search" member="isNostoSortingByResolver" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

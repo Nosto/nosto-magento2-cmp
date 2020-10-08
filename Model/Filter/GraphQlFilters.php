@@ -47,9 +47,6 @@ class GraphQlFilters implements FiltersInterface
     /** @var ExcludeFilters */
     private $excludeFilters;
 
-    /** @var array */
-    private $requestData;
-
     /**
      * GraphQlFilters constructor.
      * @param IncludeFilters $includeFilters
@@ -82,8 +79,6 @@ class GraphQlFilters implements FiltersInterface
      */
     public function setRequestData(array $requestData)
     {
-        $this->requestData = $requestData;
-
         if (isset($requestData['filters']['price_filter'])) {
             $priceFilters = $requestData['filters']['price_filter'];
             $this->includeFilters->setPrice(

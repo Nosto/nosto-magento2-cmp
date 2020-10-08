@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Exception;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
@@ -116,7 +117,7 @@ abstract class AbstractHandler
 
     /**
      * @param array $requestData
-     * @return array
+     * @return void
      */
     public function handle(array &$requestData)
     {
@@ -127,9 +128,7 @@ abstract class AbstractHandler
             ),
             $this
         );
-
         $this->preFetchOps($requestData);
-
         $productIds = $this->getCmpProductIds(
             $this->parsePageNumber($requestData),
             $this->parseLimit($requestData)
@@ -141,7 +140,7 @@ abstract class AbstractHandler
                 $this,
                 $requestData
             );
-            return $requestData;
+            return;
         }
         $this->resetRequestData($requestData);
         $this->applyCmpFilter(
@@ -252,7 +251,7 @@ abstract class AbstractHandler
                 $limit
             );
             return $res ? CategoryMerchandising::parseProductIds($res) : null;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->exception($e);
             return null;
         }

@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -58,7 +59,6 @@ use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as Categ
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
-    const MAX_PRODUCT_AMOUNT = 100;
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /**
@@ -111,11 +111,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     private $lastUsedLimit;
 
-    /**
-     * @var int
-     */
-    private $lastUsedPage;
-
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
 
@@ -167,6 +162,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $store = $this->storeManager->getStore();
         $category = $this->getCurrentCategoryString($store);
         //@phan-suppress-next-line PhanTypeMismatchArgument
+        /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
@@ -192,7 +188,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             self::TIME_PROF_GRAPHQL_QUERY
         );
         $this->lastUsedLimit = $limit;
-        $this->lastUsedPage = $pageNumber;
         ProductDebug::getInstance()->setProductIds(
             CategoryMerchandising::parseProductIds($this->lastResult)
         );
@@ -232,7 +227,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
     /**
      * @param $id
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function setCategoryInRegistry($id): void
     {
@@ -247,13 +242,5 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     public function getLastUsedLimit(): int
     {
         return $this->lastUsedLimit;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastUsedPage(): int
-    {
-        return $this->lastUsedPage;
     }
 }

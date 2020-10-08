@@ -41,6 +41,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -76,7 +77,6 @@ class Toolbar extends AbstractBlock
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
      * @param WebFilters $filters
-     * @noinspection PhpDeprecationInspection
      */
     public function __construct(
         Context $context,
@@ -167,7 +167,7 @@ class Toolbar extends AbstractBlock
      * @param int $limit
      * @return CategoryMerchandisingResult
      * @throws NostoException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getCmpResult($start, $limit)
     {

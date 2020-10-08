@@ -49,10 +49,7 @@ use Nosto\Service\FeatureAccess;
 
 class Category
 {
-    const NOSTO_PREVIEW_COOKIE = 'nostopreview';
-    const MAX_PRODUCT_AMOUNT = 100;
-
-    private $cookieManager;
+   private $cookieManager;
 
     /**
      * Category constructor.

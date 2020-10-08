@@ -64,6 +64,7 @@ class Search
      * @param MagentoSearch $search
      * @param array $args
      * @param ResolveInfo $info
+     * @noinspection PhpUnusedParameterInspection
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function beforeGetResult(MagentoSearch $search, array $args, ResolveInfo $info)

@@ -36,23 +36,18 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Exception;
 use Magento\Framework\Search\Request\Cleaner;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Utils\Search;
 
 class RequestCleaner
 {
-    const KEY_ES_PRODUCT_ID = '_id';
-    const KEY_MYSQL_PRODUCT_ID = 'entity_id';
     const KEY_BIND_TO_QUERY = 'catalog_view_container';
     const KEY_BIND_TO_GRAPHQL = 'graphql_product_search';
     const KEY_CATEGORY_FILTER = 'category_filter';
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
-    const KEY_VALUE = 'value';
-    const KEY_CMP = 'nosto_cmp_id_search';
-    const KEY_RESULTS_FROM = 'from';
-    const KEY_RESULT_SIZE = 'size';
 
     /** @var GraphQlHandler */
     private $graphqlHandler;
@@ -86,6 +81,7 @@ class RequestCleaner
      * @param Cleaner $cleaner
      * @param array $requestData
      * @return array
+     * @noinspection PhpUnusedParameterInspection
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterClean(Cleaner $cleaner, array $requestData)
@@ -111,7 +107,7 @@ class RequestCleaner
                 );
                 return $requestData;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->debugCmp(
                 'Failed to apply CMP - see exception log(s) for details',
                 $this,
