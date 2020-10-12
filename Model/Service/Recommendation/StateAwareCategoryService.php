@@ -51,6 +51,7 @@ use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
+use Nosto\Tagging\Helper\Data;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
@@ -121,6 +122,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $lastUsedPage;
 
     /**
+     * @var Data
+     */
+    private $nostoCmpHelper;
+
+    /**
      * Category constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
@@ -131,6 +137,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
      * @param LoggerInterface $logger
+     * @param Data $nostoCmpHelper
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
@@ -141,7 +148,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         StoreManagerInterface $storeManager,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Data $nostoCmpHelper
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
@@ -153,6 +161,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
+        $this->nostoCmpHelper = $nostoCmpHelper;
     }
 
     /**
@@ -165,6 +174,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $limit
     ): ?CategoryMerchandisingResult {
         $store = $this->storeManager->getStore();
+        $limit = $this->sanitizeLimit($limit, $store);
         $category = $this->getCurrentCategoryString($store);
         //@phan-suppress-next-line PhanTypeMismatchArgument
         $nostoAccount = $this->accountHelper->findAccount($store);
@@ -250,5 +260,27 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     public function getLastUsedPage(): int
     {
         return $this->lastUsedPage;
+    }
+
+    /**
+     * @param StoreInterface $store
+     * @param int $limit
+     * @return int
+     */
+    private function sanitizeLimit(StoreInterface $store, $limit)
+    {
+        $maxLimit = $this->nostoCmpHelper->getMaxProductLimit($store);
+        if (!is_numeric($limit) || $limit > $maxLimit) {
+            $this->logger->debugCmp(
+                sprintf(
+                    'Limit set to %d - original limit was %s',
+                    $maxLimit,
+                    $limit
+                ),
+                $this
+            );
+            return $maxLimit;
+        }
+        return $limit;
     }
 }

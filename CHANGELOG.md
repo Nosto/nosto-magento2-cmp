@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. This projec
 * Add support for using Elasticsearch as a catalog search engine 
 * Introduce possibility to use all categories (not only the ones in navigation) with Nosto's category merchandising   
 
+### 2.0.2
+* Introduce possibility to define the maximum amount of products to be fetched from Nosto to support category pages with that allow all products to be viewed   
+
 ### 2.0.1
 * Change the script type to `application/json` for category mapping
 * Add possibility to debug the category query via Magento's debug logging 

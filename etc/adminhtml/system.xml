@@ -64,6 +64,17 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="limit" translate="label" type="text" sortOrder="20" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>Limits</label>
+                <field id="max_products" translate="label comment" type="text" sortOrder="200"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Max product limit</label>
+                    <comment>
+                        <![CDATA[Maximum limit for products to be fetched from Nosto in a category page. Please note that Nosto's API might have different internal limit.]]>
+                    </comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>

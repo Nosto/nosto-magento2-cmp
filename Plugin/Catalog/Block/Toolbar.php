@@ -41,6 +41,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -56,7 +57,6 @@ use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-
     /** @var SearchEngine */
     private $searchEngineHelper;
 
@@ -129,7 +129,6 @@ class Toolbar extends AbstractBlock
                     $this->getCurrentPageNumber()-1,
                     $subjectCollection->getPageSize()
                 );
-                //Get ids of products to order
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
@@ -159,6 +158,8 @@ class Toolbar extends AbstractBlock
      * @param int $start starting from 0
      * @param int $limit
      * @return CategoryMerchandisingResult
+     * @throws NostoException
+     * @throws LocalizedException
      */
     private function getCmpResult($start, $limit)
     {
