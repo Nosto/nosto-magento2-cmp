@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 2.0.2
+* Introduce possibility to define maximum amount of products to be fetched from Nosto to support category pages with that allow all products to be viewed   
+
 ### 2.0.1
 * Change the script type to `application/json` for category mapping
 * Add possibility to debug the category query via Magento's debug logging 
