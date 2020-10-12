@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73cff3befbaa3cd192ec7141faffb4ad",
+    "content-hash": "37ec98d74278b39e85cf3651c0227da0",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -137,16 +137,6 @@
                 "ssl",
                 "tls"
             ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-04-08T08:27:21+00:00"
         },
         {
@@ -227,20 +217,6 @@
                 "dependency",
                 "package"
             ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/composer",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-03T09:34:31+00:00"
         },
         {
@@ -302,16 +278,6 @@
                 "validation",
                 "versioning"
             ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-04-21T08:26:55+00:00"
         },
         {
@@ -372,20 +338,6 @@
                 "spdx",
                 "validator"
             ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/composer",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-10T09:16:00+00:00"
         },
         {
@@ -429,20 +381,6 @@
             "keywords": [
                 "Xdebug",
                 "performance"
-            ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/composer",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-06-04T11:16:35+00:00"
         },
@@ -542,28 +480,6 @@
                 "http client",
                 "rest",
                 "web service"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/alexeyshockov",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/gmponos",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/sagikazarmark",
-                    "type": "github"
-                }
             ],
             "time": "2020-07-02T06:52:04+00:00"
         },
@@ -867,12 +783,6 @@
                 "console",
                 "laminas"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-04-15T19:21:25+00:00"
         },
         {
@@ -1051,12 +961,6 @@
                 "escaper",
                 "laminas"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-04-15T19:23:31+00:00"
         },
         {
@@ -1114,12 +1018,6 @@
                 "eventmanager",
                 "events",
                 "laminas"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-15T19:23:44+00:00"
         },
@@ -1189,12 +1087,6 @@
             "keywords": [
                 "filter",
                 "laminas"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-15T19:24:28+00:00"
         },
@@ -1278,12 +1170,6 @@
                 "form",
                 "laminas"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-07-14T13:55:36+00:00"
         },
         {
@@ -1341,12 +1227,6 @@
                 "http",
                 "http client",
                 "laminas"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-08-07T12:51:40+00:00"
         },
@@ -1473,12 +1353,6 @@
                 "inputfilter",
                 "laminas"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-04-15T19:26:07+00:00"
         },
         {
@@ -1527,12 +1401,6 @@
             "keywords": [
                 "laminas",
                 "loader"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-15T19:26:59+00:00"
         },
@@ -1595,12 +1463,6 @@
             "keywords": [
                 "laminas",
                 "mail"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-08-12T18:13:41+00:00"
         },
@@ -1709,12 +1571,6 @@
             "keywords": [
                 "laminas",
                 "mime"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-15T19:28:08+00:00"
         },
@@ -1938,12 +1794,6 @@
                 "service-manager",
                 "servicemanager"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-05-11T14:43:22+00:00"
         },
         {
@@ -1993,12 +1843,6 @@
             "keywords": [
                 "laminas",
                 "stdlib"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-15T19:33:34+00:00"
         },
@@ -2050,12 +1894,6 @@
             "keywords": [
                 "laminas",
                 "uri"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-15T19:34:52+00:00"
         },
@@ -2136,12 +1974,6 @@
                 "laminas",
                 "validator"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-08-07T04:29:53+00:00"
         },
         {
@@ -2194,12 +2026,6 @@
                 "laminas",
                 "zf"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-05-20T16:49:09+00:00"
         },
         {
@@ -2208,6 +2034,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/framework/magento-framework-102.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "c822a9c727e4bf7f58464588a73666035d387843"
             },
             "require": {
@@ -2382,16 +2209,6 @@
                 "logging",
                 "psr-3"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/Seldaek",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/monolog/monolog",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-23T08:35:51+00:00"
         },
         {
@@ -2434,12 +2251,6 @@
                 "annotations",
                 "github",
                 "pmd"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/mridang",
-                    "type": "github"
-                }
             ],
             "time": "2020-03-31T08:41:21+00:00"
         },
@@ -2659,16 +2470,6 @@
                 "php",
                 "type"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpoption/phpoption",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-20T17:29:33+00:00"
         },
         {
@@ -2760,20 +2561,6 @@
                 "twofish",
                 "x.509",
                 "x509"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-08-09T16:00:49+00:00"
         },
@@ -3010,16 +2797,6 @@
                 "parser",
                 "validator"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/Seldaek",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/seld/jsonlint",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-13T09:07:59+00:00"
         },
         {
@@ -3027,7 +2804,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:Seldaek/phar-utils.git",
+                "url": "https://github.com/Seldaek/phar-utils.git",
                 "reference": "8674b1d84ffb47cc59a101f5d5a3b61e87d23796"
             },
             "dist": {
@@ -3141,20 +2918,6 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-11T17:02:45+00:00"
         },
         {
@@ -3205,20 +2968,6 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-10T08:10:48+00:00"
         },
         {
@@ -3268,20 +3017,6 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-06T05:13:39+00:00"
         },
         {
@@ -3343,20 +3078,6 @@
                 "ctype",
                 "polyfill",
                 "portable"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-14T12:35:20+00:00"
         },
@@ -3429,20 +3150,6 @@
                 "portable",
                 "shim"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-04T21:02:56+00:00"
         },
         {
@@ -3510,20 +3217,6 @@
                 "portable",
                 "shim"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-14T12:35:20+00:00"
         },
         {
@@ -3586,20 +3279,6 @@
                 "polyfill",
                 "portable",
                 "shim"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-14T12:35:20+00:00"
         },
@@ -3664,20 +3343,6 @@
                 "portable",
                 "shim"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-14T12:35:20+00:00"
         },
         {
@@ -3736,20 +3401,6 @@
                 "polyfill",
                 "portable",
                 "shim"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-14T12:35:20+00:00"
         },
@@ -3812,20 +3463,6 @@
                 "polyfill",
                 "portable",
                 "shim"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-14T12:35:20+00:00"
         },
@@ -3893,20 +3530,6 @@
                 "portable",
                 "shim"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-14T12:35:20+00:00"
         },
         {
@@ -3956,20 +3579,6 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-23T08:31:43+00:00"
         },
         {
@@ -4031,20 +3640,6 @@
                 "interfaces",
                 "interoperability",
                 "standards"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-06T13:23:11+00:00"
         },
@@ -4405,12 +4000,6 @@
                 "captcha",
                 "laminas"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-04-15T19:19:36+00:00"
         },
         {
@@ -4472,12 +4061,6 @@
             "keywords": [
                 "db",
                 "laminas"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-04-16T14:53:56+00:00"
         },
@@ -4550,12 +4133,6 @@
                 "laminas",
                 "session"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-05-19T19:29:02+00:00"
         },
         {
@@ -4598,6 +4175,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/framework-bulk/magento-framework-bulk-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "509ad2894d5fbbd0648aa84ddd83442a09b03676"
             },
             "require": {
@@ -4664,6 +4242,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-asynchronous-operations/magento-module-asynchronous-operations-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "33c0400729a05e80a0911d9f5a1de38743011aeb"
             },
             "require": {
@@ -4699,6 +4278,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-authorization/magento-module-authorization-100.3.4.0-patch2.zip",
+                "reference": null,
                 "shasum": "f3f1344ddd308e90d7fbddc106ecf85795bab3bb"
             },
             "require": {
@@ -4727,6 +4307,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-backend/magento-module-backend-101.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "e89775eee73a45dcad29c44cd8b48e456a7c148f"
             },
             "require": {
@@ -4773,6 +4354,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-backup/magento-module-backup-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "3621daf8868f8e571119c8a1da505d196198c67c"
             },
             "require": {
@@ -4803,6 +4385,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-bundle/magento-module-bundle-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "f70f3f35721f27b9cc0b580bc19b198576448930"
             },
             "require": {
@@ -4850,6 +4433,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-captcha/magento-module-captcha-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "add6039b2f8aae8e902146d35591f2be6c1ed70d"
             },
             "require": {
@@ -4884,6 +4468,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-catalog/magento-module-catalog-103.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "a3b99eda5d5d16ce67d0e94c7568db840ce36211"
             },
             "require": {
@@ -4936,11 +4521,52 @@
             "description": "N/A"
         },
         {
+            "name": "magento/module-catalog-graph-ql",
+            "version": "100.3.5",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-catalog-graph-ql/magento-module-catalog-graph-ql-100.3.5.0.zip",
+                "reference": null,
+                "shasum": "886dc91a883514d71c2b2a784debca701579a871"
+            },
+            "require": {
+                "magento/framework": "102.0.*",
+                "magento/module-catalog": "103.0.*",
+                "magento/module-catalog-inventory": "100.3.*",
+                "magento/module-catalog-search": "101.0.*",
+                "magento/module-eav": "102.0.*",
+                "magento/module-eav-graph-ql": "100.3.*",
+                "magento/module-search": "101.0.*",
+                "magento/module-store": "101.0.*",
+                "php": "~7.1.3||~7.2.0||~7.3.0"
+            },
+            "suggest": {
+                "magento/module-graph-ql": "100.3.*",
+                "magento/module-graph-ql-cache": "100.3.*",
+                "magento/module-store-graph-ql": "100.3.*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\CatalogGraphQl\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
+        },
+        {
             "name": "magento/module-catalog-import-export",
             "version": "101.0.5-p2",
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-catalog-import-export/magento-module-catalog-import-export-101.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "4553525eafe0d7eb01c0c064f04a63f69052a84a"
             },
             "require": {
@@ -4979,6 +4605,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-catalog-inventory/magento-module-catalog-inventory-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "7b1508cce56fac131a6bbe02d633762f7c05787b"
             },
             "require": {
@@ -5013,6 +4640,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-catalog-rule/magento-module-catalog-rule-101.1.5.0.zip",
+                "reference": null,
                 "shasum": "03cc677562434e6792fce263e40da07221640018"
             },
             "require": {
@@ -5046,11 +4674,54 @@
             "description": "N/A"
         },
         {
+            "name": "magento/module-catalog-search",
+            "version": "101.0.6",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-catalog-search/magento-module-catalog-search-101.0.6.0.zip",
+                "reference": null,
+                "shasum": "f9b7da78b5d70a04a82531d129c23e6006cd23e3"
+            },
+            "require": {
+                "magento/framework": "102.0.*",
+                "magento/module-backend": "101.0.*",
+                "magento/module-catalog": "103.0.*",
+                "magento/module-catalog-inventory": "100.3.*",
+                "magento/module-customer": "102.0.*",
+                "magento/module-directory": "100.3.*",
+                "magento/module-eav": "102.0.*",
+                "magento/module-indexer": "100.3.*",
+                "magento/module-search": "101.0.*",
+                "magento/module-store": "101.0.*",
+                "magento/module-theme": "101.0.*",
+                "magento/module-ui": "101.1.*",
+                "php": "~7.1.3||~7.2.0||~7.3.0"
+            },
+            "suggest": {
+                "magento/module-config": "101.1.*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\CatalogSearch\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "Catalog search"
+        },
+        {
             "name": "magento/module-catalog-url-rewrite",
             "version": "100.3.5",
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-catalog-url-rewrite/magento-module-catalog-url-rewrite-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "8bf1d252e0f51973ee7cbff07f11dfe87e71bc30"
             },
             "require": {
@@ -5089,6 +4760,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-checkout/magento-module-checkout-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "4e23275bac7c354547fc1dc42299e20541122c7f"
             },
             "require": {
@@ -5137,6 +4809,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-cms/magento-module-cms-103.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "f0a40279ee17bf2fae8d825e02e39310e228fa4f"
             },
             "require": {
@@ -5176,6 +4849,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-cms-url-rewrite/magento-module-cms-url-rewrite-100.3.4.0.zip",
+                "reference": null,
                 "shasum": "7df716cbc611cd6a5017129be80e80303334da58"
             },
             "require": {
@@ -5206,6 +4880,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-config/magento-module-config-101.1.5.0.zip",
+                "reference": null,
                 "shasum": "76f1db08a792f3d263a46e2e2fcb7c775891de4c"
             },
             "require": {
@@ -5240,6 +4915,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-contact/magento-module-contact-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "ac90db3add4bae0f07f6fcd13f6096fcc89b3dda"
             },
             "require": {
@@ -5271,6 +4947,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-cron/magento-module-cron-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "23bc93a34e4cd0353bb1156b7d20f47b0ff901d9"
             },
             "require": {
@@ -5302,6 +4979,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-customer/magento-module-customer-102.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "730b768f0797dccb73d0b2c9a45028a2bf468e4e"
             },
             "require": {
@@ -5352,6 +5030,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-deploy/magento-module-deploy-100.3.4.0.zip",
+                "reference": null,
                 "shasum": "95d79bef2bf03ff18e4c6feedff80acc9ba2ba76"
             },
             "require": {
@@ -5384,6 +5063,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-developer/magento-module-developer-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "eb60581bc7c5089c42afb0e05804e275b1ab2c26"
             },
             "require": {
@@ -5413,6 +5093,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-directory/magento-module-directory-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "bb83cfae5ee7af13c3b001fb0ae7291027677b2c"
             },
             "require": {
@@ -5444,6 +5125,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-downloadable/magento-module-downloadable-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "f1dc3a258ee6de78305207e702a070feb80d4b17"
             },
             "require": {
@@ -5490,6 +5172,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-eav/magento-module-eav-102.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "4a72cd7d546ad561da869e72415a63814f9d884a"
             },
             "require": {
@@ -5517,11 +5200,44 @@
             "description": "N/A"
         },
         {
+            "name": "magento/module-eav-graph-ql",
+            "version": "100.3.4",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-eav-graph-ql/magento-module-eav-graph-ql-100.3.4.0.zip",
+                "reference": null,
+                "shasum": "89d1d79f66fa5ba703403e55a7ad92d921b3be5f"
+            },
+            "require": {
+                "magento/framework": "102.0.*",
+                "magento/module-eav": "102.0.*",
+                "php": "~7.1.3||~7.2.0||~7.3.0"
+            },
+            "suggest": {
+                "magento/module-graph-ql": "100.3.*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\EavGraphQl\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
+        },
+        {
             "name": "magento/module-email",
             "version": "101.0.5",
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-email/magento-module-email-101.0.5.0.zip",
+                "reference": null,
                 "shasum": "0625386382db4eeca3ba27eb9b5d7f38fc883c20"
             },
             "require": {
@@ -5560,6 +5276,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-gift-message/magento-module-gift-message-100.3.4.0-patch2.zip",
+                "reference": null,
                 "shasum": "62dd2c2a3277f09c7e5bdf3682a380e9316e7d7a"
             },
             "require": {
@@ -5599,6 +5316,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-import-export/magento-module-import-export-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "96e65e7ff3e376661507798befd0a7bf8ecb1072"
             },
             "require": {
@@ -5633,6 +5351,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-indexer/magento-module-indexer-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "d95afd72b947cf3dc12f9e5cd19e5205d0062d39"
             },
             "require": {
@@ -5661,6 +5380,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-integration/magento-module-integration-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "387845cc77de287199043f222d397d858d359dad"
             },
             "require": {
@@ -5694,6 +5414,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-layered-navigation/magento-module-layered-navigation-100.3.1.0.zip",
+                "reference": null,
                 "shasum": "32c5d1e9d21dd98adabe7083ddb3b39ab49d2bde"
             },
             "require": {
@@ -5723,6 +5444,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-media-storage/magento-module-media-storage-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "770765c3219f6e9b2a9219bda5f323c9a2bbe67f"
             },
             "require": {
@@ -5755,6 +5477,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-msrp/magento-module-msrp-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "e655270c64d4a59042216354fba54f7ea0f79970"
             },
             "require": {
@@ -5791,6 +5514,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-newsletter/magento-module-newsletter-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "5b47ffef85a74b97565e89594dc40925355ed9f5"
             },
             "require": {
@@ -5826,6 +5550,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-page-cache/magento-module-page-cache-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "471c6c14cdef8f95272ef5464a188015e222f75a"
             },
             "require": {
@@ -5856,6 +5581,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-payment/magento-module-payment-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "2ba5a4fc32d0abc41a9ee15c9fd951b60a14f279"
             },
             "require": {
@@ -5889,6 +5615,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-product-alert/magento-module-product-alert-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "09671613f8eed2b5df5502addae25a92146aca9b"
             },
             "require": {
@@ -5923,6 +5650,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-quote/magento-module-quote-101.1.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "11c096eaa9c0b3e671094fdcde6ff0f574d516cd"
             },
             "require": {
@@ -5967,6 +5695,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-reports/magento-module-reports-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "21d76a652705a242465f9d62649cd8e1413cb131"
             },
             "require": {
@@ -6010,6 +5739,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-require-js/magento-module-require-js-100.3.4.0.zip",
+                "reference": null,
                 "shasum": "e79dc717bc6dd757edeed64bf241e5cdfdde9657"
             },
             "require": {
@@ -6037,6 +5767,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-review/magento-module-review-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "1d8c8db3b53d09be9619e08d539da30a9a84ca98"
             },
             "require": {
@@ -6076,6 +5807,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-rss/magento-module-rss-100.3.4.0.zip",
+                "reference": null,
                 "shasum": "1b0679e071ce56735e0cde92aadb11e5aad23a6e"
             },
             "require": {
@@ -6106,6 +5838,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-rule/magento-module-rule-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "c9ca9297c916a1138eb8c2c132356716202d397b"
             },
             "require": {
@@ -6138,6 +5871,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-sales/magento-module-sales-102.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "0db772ddb4c38180fc9ee633f413758ab85fc3bd"
             },
             "require": {
@@ -6192,6 +5926,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-sales-rule/magento-module-sales-rule-101.1.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "8cf1d68bfef4bad4e926b584724d3248ea9e0db3"
             },
             "require": {
@@ -6241,6 +5976,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-sales-sequence/magento-module-sales-sequence-100.3.4.0-patch2.zip",
+                "reference": null,
                 "shasum": "f6a9c3573ad6cad3f8420895767504a7379f4194"
             },
             "require": {
@@ -6263,11 +5999,45 @@
             "description": "N/A"
         },
         {
+            "name": "magento/module-search",
+            "version": "101.0.6",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-search/magento-module-search-101.0.6.0.zip",
+                "reference": null,
+                "shasum": "806907e8ebdeeab0571e465187507b5c40f6b144"
+            },
+            "require": {
+                "magento/framework": "102.0.*",
+                "magento/module-backend": "101.0.*",
+                "magento/module-catalog-search": "101.0.*",
+                "magento/module-reports": "100.3.*",
+                "magento/module-store": "101.0.*",
+                "magento/module-ui": "101.1.*",
+                "php": "~7.1.3||~7.2.0||~7.3.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\Search\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
+        },
+        {
             "name": "magento/module-security",
             "version": "100.3.5",
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-security/magento-module-security-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "6a595272d5f8e90f4fd1e6201044e82b369bbc5f"
             },
             "require": {
@@ -6301,6 +6071,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-shipping/magento-module-shipping-100.3.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "b7b007a28e3704acb130dc35a0943a7bac839639"
             },
             "require": {
@@ -6347,6 +6118,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-store/magento-module-store-101.0.4.0.zip",
+                "reference": null,
                 "shasum": "6a824c36cc10790142e6481f8523361276f5a3e7"
             },
             "require": {
@@ -6385,6 +6157,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-tax/magento-module-tax-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "f610f8ae48e1d193187a270df28f8d1614cc656e"
             },
             "require": {
@@ -6428,6 +6201,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-theme/magento-module-theme-101.0.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "e8a3b23ea13f6543a1d88f0ffa1c60bc7daef67a"
             },
             "require": {
@@ -6470,6 +6244,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-translation/magento-module-translation-100.3.5.0.zip",
+                "reference": null,
                 "shasum": "22f0c984fabba7ee04a953ee9a2e6e4f76a97665"
             },
             "require": {
@@ -6504,6 +6279,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-ui/magento-module-ui-101.1.5.0.zip",
+                "reference": null,
                 "shasum": "ae1eefd94eb62e8e0ce32d24b96f5b6099b4a607"
             },
             "require": {
@@ -6540,6 +6316,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-url-rewrite/magento-module-url-rewrite-101.1.5.0.zip",
+                "reference": null,
                 "shasum": "77bf148c934c944e8922c15f404c1ace69d45e3c"
             },
             "require": {
@@ -6573,6 +6350,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-user/magento-module-user-101.1.5.0.zip",
+                "reference": null,
                 "shasum": "423be90044cb3c3c8c5239f0a8a2fa1eef26fa8c"
             },
             "require": {
@@ -6606,6 +6384,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-variable/magento-module-variable-100.3.4.0-patch2.zip",
+                "reference": null,
                 "shasum": "a63c275c02121b512998e52e91b48e8e96fe9bc7"
             },
             "require": {
@@ -6637,6 +6416,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-widget/magento-module-widget-101.1.4.0-patch2.zip",
+                "reference": null,
                 "shasum": "59cc20d35012657cc10d1ca9ca146077ad3cdf3d"
             },
             "require": {
@@ -6673,6 +6453,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://repo.magento.com/archives/magento/module-wishlist/magento-module-wishlist-101.1.5.0-patch2.zip",
+                "reference": null,
                 "shasum": "41254d8317871479f73aadb5d919ef2439df4009"
             },
             "require": {
@@ -6845,12 +6626,6 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "funding": [
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-05T10:45:18+00:00"
         },
         {
@@ -7234,12 +7009,6 @@
                 "phpmd",
                 "pmd"
             ],
-            "funding": [
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpmd/phpmd",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-04-29T00:08:01+00:00"
         },
         {
@@ -7576,12 +7345,6 @@
                     "name": "Markus Staab"
                 }
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/staabm",
-                    "type": "github"
-                }
-            ],
             "time": "2020-08-13T11:39:01+00:00"
         },
         {
@@ -7648,20 +7411,6 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-10T08:10:48+00:00"
         },
         {
@@ -7737,20 +7486,6 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-10T17:30:39+00:00"
         },
         {
@@ -7801,20 +7536,6 @@
             ],
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-06-06T08:49:21+00:00"
         },
         {
@@ -7956,12 +7677,6 @@
                 "api",
                 "graphql"
             ],
-            "funding": [
-                {
-                    "url": "https://opencollective.com/webonyx-graphql-php",
-                    "type": "open_collective"
-                }
-            ],
             "time": "2020-07-02T05:49:25+00:00"
         }
     ],
@@ -7971,10 +7686,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0.0"
+        "php": ">=7.1",
+        "ext-json": "*"
     },
-    "platform-dev": {
-        "php": ">=7.1.0"
-    },
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

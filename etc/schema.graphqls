@@ -1,0 +1,9 @@
+input ProductAttributeSortInput
+{
+    nosto_personalized: SortEnum @doc(description: "Sort by category merchandising order")
+}
+
+#For older version compatibility
+input ProductSortInput {
+    nosto_personalized: SortEnum @doc(description: "Sort by Nosto category merchandising")
+}

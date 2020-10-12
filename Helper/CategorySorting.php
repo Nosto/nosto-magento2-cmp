@@ -44,7 +44,7 @@ use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class CategorySorting extends AbstractHelper
 {
-    const NOSTO_PERSONALIZED_KEY = 'nosto-personalized';
+    const NOSTO_PERSONALIZED_KEY = 'nosto_personalized';
 
     /** @var NostoHelperScope */
     private $nostoHelperScope;

@@ -45,7 +45,7 @@ use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Logger\LoggerInterface;
 
-class FilterBuilder
+class WebFilters implements FiltersInterface
 {
     /** @var IncludeFilters */
     private $includeFilters;

@@ -50,13 +50,12 @@ class Search
         return self::findNostoSortingIndex($requestData) !== null;
     }
 
-    /**
-     * @param ParameterResolverInterface $parameterResolver
-     * @return bool
-     */
-    public static function isNostoSortingByResolver(ParameterResolverInterface $parameterResolver)
+    public static function hasCategoryFilter(array $requestData)
     {
-        return $parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY;
+        if (empty($requestData['filters'])) {
+            return false;
+        }
+        return array_key_exists('category_filter', $requestData['filters']);
     }
 
     /**

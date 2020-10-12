@@ -36,90 +36,43 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Exception;
 use Magento\Framework\Search\Request\Cleaner;
-use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Search;
-use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 
 class RequestCleaner
 {
-    const KEY_ES_PRODUCT_ID = '_id';
-    const KEY_MYSQL_PRODUCT_ID = 'entity_id';
     const KEY_BIND_TO_QUERY = 'catalog_view_container';
+    const KEY_BIND_TO_GRAPHQL = 'graphql_product_search';
+    const KEY_CATEGORY_FILTER = 'category_filter';
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
-    const KEY_CMP = 'nosto_cmp_id_search';
-    const KEY_RESULTS_FROM = 'from';
-    const KEY_RESULT_SIZE = 'size';
 
-    public static $nostoTmpSort = [5, 11, 401, 2023, 1];
+    /** @var GraphQlHandler */
+    private $graphqlHandler;
 
-    /**
-     * @var ParameterResolverInterface
-     */
-    private $parameterResolver;
+    /** @var WebHandler */
+    private $webHandler;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface  */
     private $logger;
 
     /**
-     * @var SearchEngine
-     */
-    private $searchEngineHelper;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var NostoHelperAccount
-     */
-    private $accountHelper;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var StateAwareCategoryServiceInterface
-     */
-    private $categoryService;
-
-    /**
-     * @param ParameterResolverInterface $parameterResolver
-     * @param SearchEngine $searchEngineHelper
-     * @param StoreManagerInterface $storeManager
-     * @param NostoHelperAccount $nostoHelperAccount
-     * @param FilterBuilder $filterBuilder
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * RequestCleaner constructor.
+     *
+     * @param WebHandler $webHandler
+     * @param GraphQlHandler $graphQlHandler
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ParameterResolverInterface $parameterResolver,
-        SearchEngine $searchEngineHelper,
-        StoreManagerInterface $storeManager,
-        NostoHelperAccount $nostoHelperAccount,
-        FilterBuilder $filterBuilder,
-        StateAwareCategoryServiceInterface $categoryService,
+        WebHandler $webHandler,
+        GraphQlHandler $graphQlHandler,
         LoggerInterface $logger
     ) {
-        $this->parameterResolver = $parameterResolver;
+        $this->webHandler = $webHandler;
+        $this->graphqlHandler = $graphQlHandler;
         $this->logger = $logger;
-        $this->searchEngineHelper = $searchEngineHelper;
-        $this->storeManager = $storeManager;
-        $this->accountHelper = $nostoHelperAccount;
-        $this->filterBuilder = $filterBuilder;
-        $this->categoryService = $categoryService;
     }
 
     /**
@@ -128,23 +81,22 @@ class RequestCleaner
      * @param Cleaner $cleaner
      * @param array $requestData
      * @return array
+     * @noinspection PhpUnusedParameterInspection
      */
-    public function afterClean(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-        Cleaner $cleaner,
-        array $requestData
-    ) {
-        if (!Search::isNostoSorting($requestData)) {
-            $this->logger->debugCmp(
-                'Nosto sorting not used or not found from request data',
-                $this,
-                $requestData
-            );
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterClean(Cleaner $cleaner, array $requestData)
+    {
+        if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
+            $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
             return $requestData;
         }
         try {
-            if (!isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
-                || !isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'])
-            ) {
+
+            if ($this->containsCatalogViewQueries($requestData)) {
+                $this->webHandler->handle($requestData);
+            } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {
+                $this->graphqlHandler->handle($requestData);
+            } else {
                 $this->logger->debugCmp(
                     sprintf(
                         'Could not find %s from ES request data',
@@ -155,32 +107,7 @@ class RequestCleaner
                 );
                 return $requestData;
             }
-            $this->logger->debugCmp(
-                sprintf(
-                    'Using %s as search engine',
-                    $this->searchEngineHelper->getCurrentEngine()
-                ),
-                $this
-            );
-            $productIds = $this->getCmpProductIds(
-                $this->parsePageNumber($requestData),
-                $this->parseLimit($requestData)
-            );
-            $this->cleanUpCmpSort($requestData);
-            if (empty($productIds)) {
-                $this->logger->debugCmp(
-                    'Nosto did not return products for the request',
-                    $this,
-                    $requestData
-                );
-                return $requestData;
-            }
-            $this->resetRequestData($requestData);
-            $this->applyCmpFilter(
-                $requestData,
-                $productIds
-            );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->debugCmp(
                 'Failed to apply CMP - see exception log(s) for details',
                 $this,
@@ -192,137 +119,22 @@ class RequestCleaner
         }
     }
 
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    private function cleanUpCmpSort(array &$requestData)
+    private function containsCatalogViewQueries(array $requestData)
     {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
-    }
-
-    /**
-     * Applies given product ids to the query & filters
-     *
-     * @param array $requestData
-     * @param array $productIds
-     */
-    private function applyCmpFilter(array &$requestData, array $productIds)
-    {
-        $requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'][] = [
-            'clause' => 'must',
-            'ref' => 'nosto_cmp_id_search'
-        ];
-        $requestData[self::KEY_QUERIES][self::KEY_CMP] = [
-            'name' => 'nosto_cmp',
-            'filterReference' => [
-                [
-                    'clause' => 'must',
-                    'ref' => 'prod_id',
-                ],
-            ],
-            'type' => 'filteredQuery',
-        ];
-        $requestData['filters']['prod_id'] = [
-            'name' => 'prod_id',
-            'filterReference' => [
-                [
-                    'clause' => 'must',
-                    'ref' => 'prod_ids',
-                ],
-            ],
-            'type' => 'boolFilter',
-        ];
-        $requestData['filters']['prod_ids'] = [
-            'name' => 'prod_ids',
-            'field' => $this->getProductIdField(),
-            'type' => 'termFilter',
-            'value' => $productIds
-        ];
-    }
-
-    /**
-     * @param array $requestData
-     * @return int
-     */
-    private function parsePageNumber(array $requestData)
-    {
-        $from = $requestData[self::KEY_RESULTS_FROM];
-        if ($from < 1) {
-            return 0;
+        if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
+            && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'])) {
+            return true;
         }
-        return (int) ceil($from / $this->parseLimit($requestData));
+        return false;
     }
 
-    /**
-     * @param array $requestData
-     * @return int
-     */
-    private function parseLimit(array $requestData)
+    private function containsGraphQlProductSearchQueries(array $requestData)
     {
-        return (int) $requestData[self::KEY_RESULT_SIZE];
-    }
-
-    /**
-     * @param int $pageNum
-     * @param int $limit
-     * @return array|null
-     */
-    private function getCmpProductIds($pageNum, $limit)
-    {
-        try {
-            $res = $this->categoryService->getPersonalisationResult(
-                $pageNum,
-                $limit
-            );
-            return $res ? CategoryMerchandising::parseProductIds($res) : null;
-        } catch (\Exception $e) {
-            $this->logger->exception($e);
-            return null;
+        if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])
+            && isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL]['queryReference'])
+            && isset($requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER])) {
+            return true;
         }
-    }
-
-    /**
-     * Removes queries & filters from the request data
-     *
-     * @param array $requestData
-     */
-    private function resetRequestData(array &$requestData)
-    {
-        $removedQueries = [];
-        foreach ($requestData[self::KEY_QUERIES] as $key => $definition) {
-            if ($key !== self::KEY_BIND_TO_QUERY) {
-                $removedQueries[$key] = $key;
-                unset($requestData[self::KEY_QUERIES][$key]);
-            }
-        }
-        $removedRefs = [];
-        // Also referencing definitions
-        foreach ($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'] as $refIndex => $ref) {
-            $refStr = $ref['ref'];
-            if (isset($removedQueries[$refStr])) {
-                $removedRefs[$refStr] = $refStr;
-                unset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY]['queryReference'][$refIndex]);
-            }
-        }
-        $requestData['filters'] = [];
-
-        // Reset also the start point since Nosto will only use product ids
-        $requestData[self::KEY_RESULTS_FROM] = 0;
-    }
-
-    /**
-     * Return the product id field
-     *
-     * @return string
-     */
-    private function getProductIdField()
-    {
-        if ($this->searchEngineHelper->isMysql()) {
-            return self::KEY_MYSQL_PRODUCT_ID;
-        } else {
-            return self::KEY_ES_PRODUCT_ID;
-        }
+        return false;
     }
 }
