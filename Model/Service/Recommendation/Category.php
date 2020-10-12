@@ -49,7 +49,7 @@ use Nosto\Service\FeatureAccess;
 
 class Category
 {
-   private $cookieManager;
+    private $cookieManager;
 
     /**
      * Category constructor.
