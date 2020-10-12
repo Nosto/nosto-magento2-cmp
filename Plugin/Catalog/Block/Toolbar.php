@@ -42,31 +42,32 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
 use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
+use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
+    const MAX_PRODUCTS = 1000;
 
     /**  @var CategoryBuilder */
     private $categoryBuilder;
@@ -132,7 +133,7 @@ class Toolbar extends AbstractBlock
      * @return MagentoToolbar
      * @throws NoSuchEntityException
      */
-    public function afterSetCollection( // phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
+    public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed) {
@@ -149,7 +150,7 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
-                $this->setLimit($subjectCollection->getPageSize());
+                $this->setLimit($this->getPageSize($subjectCollection, $store));
                 $result = $this->getCmpResult($store); //@phan-suppress-current-line PhanTypeMismatchArgument
                 //Get ids of products to order
                 $nostoProductIds = $this->parseProductIds($result);
@@ -284,5 +285,20 @@ class Toolbar extends AbstractBlock
                 $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
             }
         });
+    }
+
+    /**
+     * @param ProductCollection $collection
+     * @param Store $store
+     * @return int|string
+     */
+    private function getPageSize(ProductCollection $collection, Store $store)
+    {
+        $pageSize = $collection->getPageSize();
+        $maxLimit = $this->nostoCmpHelperData->getMaxProductLimit($store);
+        if (!is_numeric($pageSize) || $pageSize > $maxLimit) {
+            return $maxLimit;
+        }
+        return $pageSize;
     }
 }

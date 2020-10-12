@@ -7,6 +7,9 @@
             <flags>
                 <category_sorting>1</category_sorting>
             </flags>
+            <limit>
+                <max_products>1000</max_products>
+            </limit>
         </nosto>
     </default>
 </config>
