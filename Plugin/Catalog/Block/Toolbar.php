@@ -48,6 +48,7 @@ use /** @noinspection PhpDeprecationInspection */
     Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
@@ -289,10 +290,10 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param ProductCollection $collection
-     * @param Store $store
-     * @return int|string
+     * @param StoreInterface $store
+     * @return int
      */
-    private function getPageSize(ProductCollection $collection, Store $store)
+    private function getPageSize(ProductCollection $collection, StoreInterface $store)
     {
         $pageSize = $collection->getPageSize();
         $maxLimit = $this->nostoCmpHelperData->getMaxProductLimit($store);

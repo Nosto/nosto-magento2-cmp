@@ -94,7 +94,7 @@ class Data extends AbstractHelper
      * Returns if category sorting is enabled
      *
      * @param StoreInterface|null $store the store model or null.
-     * @return bool the configuration value
+     * @return integer
      */
     public function getMaxProductLimit(StoreInterface $store = null)
     {
