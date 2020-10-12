@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Utils;
 
 use Nosto\Cmp\Helper\CategorySorting;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 
 class Search
 {

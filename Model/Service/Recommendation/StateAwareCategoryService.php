@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -125,6 +126,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param CategoryBuilder $categoryBuilder
      * @param CategoryRepositoryInterface $categoryRepository
      * @param LoggerInterface $logger
+     * @noinspection PhpDeprecationInspection
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
@@ -233,6 +235,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     {
         $store = $this->storeManager->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
+        /** @noinspection PhpDeprecationInspection */
         $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
