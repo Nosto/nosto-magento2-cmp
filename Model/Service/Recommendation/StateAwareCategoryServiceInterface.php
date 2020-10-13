@@ -62,4 +62,9 @@ interface StateAwareCategoryServiceInterface
      * @param $id
      */
     public function setCategoryInRegistry($id): void;
+
+    /**
+     * @return int
+     */
+    public function getLastUsedLimit(): int;
 }

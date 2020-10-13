@@ -58,7 +58,6 @@ use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-
     /** @var SearchEngine */
     private $searchEngineHelper;
 
@@ -136,7 +135,6 @@ class Toolbar extends AbstractBlock
                     $this->getCurrentPageNumber()-1,
                     $subjectCollection->getPageSize()
                 );
-                //Get ids of products to order
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
