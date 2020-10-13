@@ -122,6 +122,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $nostoCmpHelper;
 
     /**
+     * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
      * @param WebFilters $filterBuilder
@@ -129,9 +130,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
-     * @param CategoryRepositoryInterface $categoryRepository
      * @param LoggerInterface $logger
      * @param Data $nostoCmpHelper
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
