@@ -163,7 +163,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     ): ?CategoryMerchandisingResult {
         $store = $this->storeManager->getStore();
         $category = $this->getCurrentCategoryString($store);
-        //@phan-suppress-next-line PhanTypeMismatchArgument
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
         /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
