@@ -124,7 +124,7 @@ class WebHandler extends AbstractHandler
     {
         $store = $this->storeManager->getStore();
         // Build filters
-        //@phan-suppress-next-line PhanTypeMismatchArgument
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
         /** @noinspection PhpParamsInspection */
         $this->filters->init($store);
         $this->filters->buildFromSelectedFilters(

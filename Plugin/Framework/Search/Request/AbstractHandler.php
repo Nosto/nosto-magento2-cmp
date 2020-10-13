@@ -216,6 +216,7 @@ abstract class AbstractHandler
             'type' => 'termFilter',
             'value' => $productIds
         ];
+        $requestData['size'] = $this->categoryService->getLastUsedLimit();
     }
 
     /**

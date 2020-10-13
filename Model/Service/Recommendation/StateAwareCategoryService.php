@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -170,7 +171,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $store = $this->storeManager->getStore();
         $limit = $this->sanitizeLimit($store, $limit);
         $category = $this->getCurrentCategoryString($store);
-        //@phan-suppress-next-line PhanTypeMismatchArgument
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
         /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
@@ -242,11 +243,12 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     {
         $store = $this->storeManager->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
+        /** @noinspection PhpDeprecationInspection */
         $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**
-     * @return int
+     * @inheritDoc
      */
     public function getLastUsedLimit(): int
     {
