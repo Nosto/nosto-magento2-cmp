@@ -129,11 +129,11 @@ abstract class AbstractHandler
             $this
         );
         $this->preFetchOps($requestData);
+        $this->cleanUpCmpSort($requestData);
         $productIds = $this->getCmpProductIds(
             $this->parsePageNumber($requestData),
             $this->parseLimit($requestData)
         );
-        $this->cleanUpCmpSort($requestData);
         if (empty($productIds)) {
             $this->logger->debugCmp(
                 'Nosto did not return products for the request',
