@@ -65,4 +65,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search">
         <plugin name="nosto_graphql_products_query" type="Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search"/>
     </type>
+    <type name="Magento\Catalog\Model\Config\Source\ListSort">
+        <plugin name="nosto_catalog_config_source_listsort" type="Nosto\Cmp\Plugin\Catalog\Model\Config\Source\ListSort"/>
+    </type>
 </config>
