@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,50 +35,46 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query;
 
-use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Registry;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search as MagentoSearch;
+use Nosto\Cmp\Helper\CategorySorting;
 
-class ListProduct
+class Search
 {
-    /**
-     * @var StateAwareCategoryServiceInterface
-     */
-    private $categoryService;
+    const SORT_KEY = 'sort';
+    const PAGE_SIZE_KEY = 'pageSize';
 
+    /** @var Registry */
+    private $registry;
+
+    /**
+     * Search constructor.
+     * @param Registry $registry
+     */
     public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
+        Registry $registry
     ) {
-        $this->categoryService = $categoryService;
+        $this->registry = $registry;
     }
 
     /**
-     * @param MagentoListProduct $listProduct
-     * @param Collection $collection
-     * @return Collection
+     * @param MagentoSearch $search
+     * @param array $args
+     * @param ResolveInfo $info
      * @noinspection PhpUnusedParameterInspection
      */
-    public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-        MagentoListProduct $listProduct,
-        Collection $collection
-    ) {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
-        if ($categoryMerchandisingResult == null) {
-            return $collection;
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function beforeGetResult(MagentoSearch $search, array $args, ResolveInfo $info)
+    {
+        if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
+            $pageSize = $args[self::PAGE_SIZE_KEY];
+            $this->registry->register(  //@phan-suppress-current-line PhanDeprecatedFunction
+                'nosto_page_size',
+                $pageSize
+            );
         }
-        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
-        $collection->each(static function ($product) use ($cmpProductIds) {
-            /* @var Product $product */
-            if (in_array($product->getId(), $cmpProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
-            }
-        });
-
-        return $collection;
     }
 }

@@ -34,50 +34,57 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Model\Filter;
 
-use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 
-class ListProduct
+class GraphQlFilters implements FiltersInterface
 {
-    /**
-     * @var StateAwareCategoryServiceInterface
-     */
-    private $categoryService;
+    /** @var IncludeFilters */
+    private $includeFilters;
 
-    public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
-    ) {
-        $this->categoryService = $categoryService;
+    /** @var ExcludeFilters */
+    private $excludeFilters;
+
+    /**
+     * GraphQlFilters constructor.
+     * @param IncludeFilters $includeFilters
+     * @param ExcludeFilters $excludeFilters
+     */
+    public function __construct(IncludeFilters $includeFilters, ExcludeFilters $excludeFilters)
+    {
+        $this->includeFilters = $includeFilters;
+        $this->excludeFilters = $excludeFilters;
     }
 
     /**
-     * @param MagentoListProduct $listProduct
-     * @param Collection $collection
-     * @return Collection
-     * @noinspection PhpUnusedParameterInspection
+     * @inheritDoc
      */
-    public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-        MagentoListProduct $listProduct,
-        Collection $collection
-    ) {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
-        if ($categoryMerchandisingResult == null) {
-            return $collection;
-        }
-        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
-        $collection->each(static function ($product) use ($cmpProductIds) {
-            /* @var Product $product */
-            if (in_array($product->getId(), $cmpProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
-            }
-        });
+    public function getIncludeFilters()
+    {
+        return $this->includeFilters;
+    }
 
-        return $collection;
+    /**
+     * @inheritDoc
+     */
+    public function getExcludeFilters()
+    {
+        return $this->excludeFilters;
+    }
+
+    /**
+     * @param array $requestData
+     */
+    public function setRequestData(array $requestData)
+    {
+        if (isset($requestData['filters']['price_filter'])) {
+            $priceFilters = $requestData['filters']['price_filter'];
+            $this->includeFilters->setPrice(
+                isset($priceFilters['from']) ? $priceFilters['from'] : null,
+                isset($priceFilters['to']) ? $priceFilters['to'] : null
+            );
+        }
     }
 }

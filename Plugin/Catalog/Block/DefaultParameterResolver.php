@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
 
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
@@ -51,6 +51,7 @@ class DefaultParameterResolver implements ParameterResolverInterface
 
     /** @var Registry */
     private $registry;
+    /** @noinspection PhpDeprecationInspection */
 
     /**
      * DefaultParameterResolver constructor.

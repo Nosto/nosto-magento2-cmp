@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
@@ -45,13 +44,11 @@ use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Service\FeatureAccess;
 
 class Category
 {
-    const NOSTO_PREVIEW_COOKIE = 'nostopreview';
-    const MAX_PRODUCT_AMOUNT = 100;
-
     private $cookieManager;
 
     /**
@@ -67,7 +64,7 @@ class Category
 
     /**
      * @param NostoAccount $nostoAccount
-     * @param FilterBuilder $filters
+     * @param FiltersInterface $filters
      * @param $nostoCustomerId
      * @param $category
      * @param int $pageNumber
@@ -80,7 +77,7 @@ class Category
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
-        FilterBuilder $filters,
+        FiltersInterface $filters,
         $nostoCustomerId,
         $category,
         $pageNumber,

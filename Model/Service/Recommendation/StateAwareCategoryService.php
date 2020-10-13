@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -36,14 +37,16 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
@@ -57,7 +60,6 @@ use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as Categ
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
-    const MAX_PRODUCT_AMOUNT = 100;
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /**
@@ -71,12 +73,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $cookieManager;
 
     /**
-     * @var State
-     */
-    private $state;
-
-    /**
-     * @var FilterBuilder
+     * @var WebFilters
      */
     private $filterBuilder;
 
@@ -115,37 +112,35 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     private $lastUsedLimit;
 
-    /**
-     * @var int
-     */
-    private $lastUsedPage;
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
 
     /**
-     * Category constructor.
+     * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
-     * @param State $state
-     * @param FilterBuilder $filterBuilder
+     * @param WebFilters $filterBuilder
      * @param Account $nostoHelperAccount
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param LoggerInterface $logger
+     * @noinspection PhpDeprecationInspection
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
         Category $categoryService,
-        State $state,
-        FilterBuilder $filterBuilder,
+        WebFilters $filterBuilder,
         Account $nostoHelperAccount,
         StoreManagerInterface $storeManager,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
+        CategoryRepositoryInterface $categoryRepository,
         LoggerInterface $logger
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
-        $this->state = $state;
         $this->filterBuilder = $filterBuilder;
         $this->cookieManager = $cookieManager;
         $this->accountHelper = $nostoHelperAccount;
@@ -153,6 +148,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -161,12 +157,14 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @throws LocalizedException
      */
     public function getPersonalisationResult(
+        FiltersInterface $filters,
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
         $store = $this->storeManager->getStore();
         $category = $this->getCurrentCategoryString($store);
-        //@phan-suppress-next-line PhanTypeMismatchArgument
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
+        /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
@@ -175,19 +173,13 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
         }
-        // Build filters
-        //@phan-suppress-next-line PhanTypeMismatchArgument
-        $this->filterBuilder->init($store);
-        $this->filterBuilder->buildFromSelectedFilters(
-            $this->state->getActiveFilters()
-        );
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $this->lastResult = ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit) {
+            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters) {
                 return $this->categoryService->getPersonalisationResult(
                     $nostoAccount,
-                    $this->filterBuilder,
+                    $filters,
                     $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
                     $category,
                     $pageNumber,
@@ -198,7 +190,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             self::TIME_PROF_GRAPHQL_QUERY
         );
         $this->lastUsedLimit = $limit;
-        $this->lastUsedPage = $pageNumber;
         ProductDebug::getInstance()->setProductIds(
             CategoryMerchandising::parseProductIds($this->lastResult)
         );
@@ -237,18 +228,22 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     }
 
     /**
-     * @return int
+     * @param $id
+     * @throws NoSuchEntityException
      */
-    public function getLastUsedLimit(): int
+    public function setCategoryInRegistry($id): void
     {
-        return $this->lastUsedLimit;
+        $store = $this->storeManager->getStore();
+        $category = $this->categoryRepository->get($id, $store->getId());
+        /** @noinspection PhpDeprecationInspection */
+        $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**
      * @return int
      */
-    public function getLastUsedPage(): int
+    public function getLastUsedLimit(): int
     {
-        return $this->lastUsedPage;
+        return $this->lastUsedLimit;
     }
 }
