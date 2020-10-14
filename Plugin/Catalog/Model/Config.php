@@ -131,6 +131,7 @@ class Config
 
             $eavAttribute = $this->attributeFactory->createAttribute(Attribute::class);
             $eavAttribute->setAttributeCode(NostoHelperSorting::NOSTO_PERSONALIZED_KEY);
+            //@phan-suppress-next-line PhanTypeMismatchArgument
             $eavAttribute->setDefaultFrontendLabel(__('Relevance'));
 
             $options[] = $eavAttribute;
