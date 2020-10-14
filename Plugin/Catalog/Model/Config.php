@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php /** @noinspection PhpUnusedParameterInspection */
+/** @noinspection PhpUnused */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -111,6 +112,12 @@ class Config
         return $options;
     }
 
+    /**
+     * @param MagentoConfig $catalogConfig
+     * @param $options
+     * @return array
+     * @throws NoSuchEntityException
+     */
     public function afterGetAttributesUsedForSortBy(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,
         $options
