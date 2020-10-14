@@ -44,7 +44,7 @@
                 <map_all_categories>0</map_all_categories>
             </flags>
             <limit>
-                <max_products>1000</max_products>
+                <max_products>250</max_products>
             </limit>
         </nosto_cmp>
     </default>
