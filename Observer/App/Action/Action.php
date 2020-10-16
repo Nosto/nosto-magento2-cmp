@@ -39,11 +39,14 @@ namespace Nosto\Cmp\Observer\App\Action;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Utils\Debug\Product;
+use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class Action implements ObserverInterface
 {
+    public const PRODUCT_DEBUG_HEADER_NAME = 'X-Nosto-Product-Ids';
+
     /**
      * @var HttpResponse $response
      */
@@ -71,10 +74,11 @@ class Action implements ObserverInterface
             );
         }
 
-        if (!Product::getInstance()->isEmpty()) {
+        $results = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_RESULT);
+        if ($results instanceof CategoryMerchandisingResult) {
             $this->response->setHeader(
-                Product::HEADER_NAME,
-                Product::getInstance()->build(),
+                self::PRODUCT_DEBUG_HEADER_NAME,
+                implode(',', CategoryMerchandising::parseProductIds($results)),
                 true
             );
         }

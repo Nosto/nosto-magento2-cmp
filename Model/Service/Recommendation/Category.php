@@ -36,7 +36,8 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
@@ -49,17 +50,18 @@ use Nosto\Service\FeatureAccess;
 
 class Category
 {
-    private $cookieManager;
+    /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
 
     /**
-     * Category constructor.
-     * @param CookieManagerInterface $cookieManager
-     * @noinspection PhpUnused
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
-        CookieManagerInterface $cookieManager
+        ManagerInterface $eventManager
     ) {
-        $this->cookieManager = $cookieManager;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -100,6 +102,20 @@ class Category
             $previewMode,
             $limit
         );
-        return $categoryMerchandising->execute();
+        $this->eventManager->dispatch(
+            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_PRE_RESULTS,
+            [
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising
+            ]
+        );
+        $result = $categoryMerchandising->execute();
+        $this->eventManager->dispatch(
+            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_PRE_RESULTS,
+            [
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising,
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_RESULT => $result
+            ]
+        );
+        return $result;
     }
 }

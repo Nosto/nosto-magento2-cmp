@@ -44,17 +44,15 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Filter\WebFilters;
-use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
-use Nosto\Cmp\Helper\Data;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
@@ -199,9 +197,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             self::TIME_PROF_GRAPHQL_QUERY
         );
         $this->lastUsedLimit = $limit;
-        ProductDebug::getInstance()->setProductIds(
-            CategoryMerchandising::parseProductIds($this->lastResult)
-        );
         $this->logger->debugCmp(
             sprintf(
                 'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
