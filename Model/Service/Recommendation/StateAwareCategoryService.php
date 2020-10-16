@@ -199,9 +199,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             self::TIME_PROF_GRAPHQL_QUERY
         );
         $this->lastUsedLimit = $limit;
-        ProductDebug::getInstance()->setProductIds(
-            CategoryMerchandising::parseProductIds($this->lastResult)
-        );
         $this->logger->debugCmp(
             sprintf(
                 'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
