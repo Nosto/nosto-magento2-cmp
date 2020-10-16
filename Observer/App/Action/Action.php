@@ -76,7 +76,8 @@ class Action implements ObserverInterface
 
         $results = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_RESULT);
         if ($results instanceof CategoryMerchandisingResult) {
-            $this->response->setHeader(self::PRODUCT_DEBUG_HEADER_NAME,
+            $this->response->setHeader(
+                self::PRODUCT_DEBUG_HEADER_NAME,
                 implode(',', CategoryMerchandising::parseProductIds($results)),
                 true
             );
