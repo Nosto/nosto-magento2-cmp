@@ -40,10 +40,8 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Cmp\Utils\Debug\Product;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use phpDocumentor\Reflection\Types\Self_;
 
 class Action implements ObserverInterface
 {
