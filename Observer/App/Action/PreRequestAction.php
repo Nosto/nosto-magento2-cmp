@@ -65,7 +65,8 @@ class PreRequestAction implements ObserverInterface
         $query = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_REQUEST);
         if ($query instanceof CategoryMerchandisingQuery) {
             $batchModel = $this->session->get();
-            if ($batchModel != null) {
+            $limit = $query->getVariables()['limit'];
+            if ($batchModel != null && ($batchModel->getLastUsedLimit() == $limit)) {
                 $query->setBatchToken($batchModel->getBatchToken());
             }
         }

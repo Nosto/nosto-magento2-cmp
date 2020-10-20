@@ -36,20 +36,20 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Magento\Persistent\Model\Session;
+use Magento\Framework\Session\SessionManagerInterface;
 
 class CmpSession
 {
     const SESSION = 'nosto_cmp_session';
 
-    /** @var Session */
+    /** @var SessionManagerInterface */
     private $session;
 
     /**
      * CmpSession constructor.
-     * @param Session $session
+     * @param SessionManagerInterface $session
      */
-    public function __construct(Session $session)
+    public function __construct(SessionManagerInterface $session)
     {
         $this->session = $session;
     }

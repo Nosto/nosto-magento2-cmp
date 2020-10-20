@@ -80,6 +80,8 @@ class PostRequestAction implements ObserverInterface
             );
         }
 
+        $batchModel = $this->getBatchModel();
+
         $results = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_RESULT);
         if ($results instanceof CategoryMerchandisingResult) {
             $this->response->setHeader(
@@ -88,8 +90,25 @@ class PostRequestAction implements ObserverInterface
                 true
             );
 
-            $batchModel = new BatchModel($results->getBatchToken(), count($results->getResultSet()));
-            $this->session->set($batchModel);
+            $batchModel->setBatchToken($results->getBatchToken());
         }
+
+        $limit = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_LIMIT);
+        if (is_int($limit)) {
+            $batchModel->setLastUsedLimit($limit);
+        }
+
+        $this->session->set($batchModel);
+    }
+
+    /**
+     * @return BatchModel
+     */
+    private function getBatchModel() {
+        $batchModel = $this->session->get();
+        if ($batchModel == null) {
+            return new BatchModel();
+        }
+        return $batchModel;
     }
 }

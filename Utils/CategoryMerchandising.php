@@ -44,6 +44,7 @@ class CategoryMerchandising
     const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
     const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
     const DISPATCH_EVENT_KEY_RESULT = 'result';
+    const DISPATCH_EVENT_KEY_LIMIT = 'limit';
 
     /**
      * @param CategoryMerchandisingResult $result

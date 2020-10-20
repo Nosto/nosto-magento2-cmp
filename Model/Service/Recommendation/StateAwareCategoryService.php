@@ -48,6 +48,7 @@ use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
@@ -55,6 +56,7 @@ use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Framework\Event\ManagerInterface;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -120,6 +122,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $nostoCmpHelper;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
@@ -142,7 +149,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         CategoryBuilder $categoryBuilder,
         LoggerInterface $logger,
         Data $nostoCmpHelper,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        ManagerInterface $eventManager
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
@@ -155,6 +163,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoCmpHelper = $nostoCmpHelper;
         $this->categoryRepository = $categoryRepository;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -182,7 +191,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
-        $this->lastResult = ServerTiming::getInstance()->instrument(
+            $this->lastResult = ServerTiming::getInstance()->instrument(
             function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters) {
                 return $this->categoryService->getPersonalisationResult(
                     $nostoAccount,
@@ -197,6 +206,14 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             self::TIME_PROF_GRAPHQL_QUERY
         );
         $this->lastUsedLimit = $limit;
+
+        $this->eventManager->dispatch(
+            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_POST_RESULTS,
+            [
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_LIMIT => $limit
+            ]
+        );
+
         $this->logger->debugCmp(
             sprintf(
                 'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',

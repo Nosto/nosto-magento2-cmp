@@ -49,7 +49,7 @@ class BatchModel implements BatchModelInterface
      * @param string $batchToken
      * @param int $lastUsedLimit
      */
-    public function __construct(string $batchToken, int $lastUsedLimit)
+    public function __construct(string $batchToken = null, int $lastUsedLimit = null)
     {
         $this->batchToken = $batchToken;
         $this->lastUsedLimit = $lastUsedLimit;
