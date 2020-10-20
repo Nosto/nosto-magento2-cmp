@@ -108,6 +108,7 @@ class Category
                 CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising
             ]
         );
+        /** @var CategoryMerchandisingResult $result */
         $result = $categoryMerchandising->execute();
         $this->eventManager->dispatch(
             CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_PRE_RESULTS,

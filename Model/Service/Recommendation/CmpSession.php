@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused */
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,53 +34,35 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Magento\Persistent\Model\Session;
 
-class Action implements ObserverInterface
+class CmpSession
 {
-    public const PRODUCT_DEBUG_HEADER_NAME = 'X-Nosto-Product-Ids';
+    const SESSION = 'nosto_cmp_session';
+
+    /** @var Session */
+    private $session;
 
     /**
-     * @var HttpResponse $response
+     * CmpSession constructor.
+     * @param Session $session
      */
-    private $response;
-
-    /**
-     * Action constructor.
-     * @param HttpResponse $response
-     */
-    public function __construct(HttpResponse $response)
+    public function __construct(Session $session)
     {
-        $this->response = $response;
+        $this->session = $session;
+    }
+
+    public function set(BatchModel $model) {
+        $this->session->setData(self::SESSION, $model);
     }
 
     /**
-     * @param Observer $observer
+     * @return BatchModel
      */
-    public function execute(Observer $observer) // phpcs:ignore
-    {
-        if (!ServerTiming::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                ServerTiming::HEADER_NAME,
-                ServerTiming::getInstance()->build(),
-                true
-            );
-        }
-
-        $results = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_RESULT);
-        if ($results instanceof CategoryMerchandisingResult) {
-            $this->response->setHeader(
-                self::PRODUCT_DEBUG_HEADER_NAME,
-                implode(',', CategoryMerchandising::parseProductIds($results)),
-                true
-            );
-        }
+    public function get() {
+        return $this->session->getData(self::SESSION);
     }
+
 }
