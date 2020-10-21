@@ -98,6 +98,11 @@ class PostRequestAction implements ObserverInterface
             $batchModel->setLastUsedLimit($limit);
         }
 
+        $page = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_PAGE);
+        if (is_int($page)) {
+            $batchModel->setLastFetchedPage($page);
+        }
+
         $this->session->set($batchModel);
     }
 

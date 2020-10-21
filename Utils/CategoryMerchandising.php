@@ -45,6 +45,7 @@ class CategoryMerchandising
     const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
     const DISPATCH_EVENT_KEY_RESULT = 'result';
     const DISPATCH_EVENT_KEY_LIMIT = 'limit';
+    const DISPATCH_EVENT_KEY_PAGE = 'page';
 
     /**
      * @param CategoryMerchandisingResult $result

@@ -44,17 +44,8 @@ class BatchModel implements BatchModelInterface
     /** @var int */
     private $lastUsedLimit;
 
-    /**
-     * BatchModel constructor.
-     * @param string $batchToken
-     * @param int $lastUsedLimit
-     */
-    public function __construct(string $batchToken = null, int $lastUsedLimit = null)
-    {
-        $this->batchToken = $batchToken;
-        $this->lastUsedLimit = $lastUsedLimit;
-    }
-
+    /** @var int */
+    private $lastFetchedPage = 0;
 
     /**
      * @inheritDoc
@@ -75,14 +66,33 @@ class BatchModel implements BatchModelInterface
     /**
      * @param string $batchToken
      */
-    public function setBatchToken($batchToken) {
+    public function setBatchToken($batchToken)
+    {
         $this->batchToken = $batchToken;
     }
 
     /**
      * @param int $lastUsedLimit
      */
-    public function setLastUsedLimit($lastUsedLimit) {
+    public function setLastUsedLimit($lastUsedLimit)
+    {
         $this->lastUsedLimit = $lastUsedLimit;
     }
+
+    /**
+     * @return int
+     */
+    public function getLastFetchedPage(): int
+    {
+        return $this->lastFetchedPage;
+    }
+
+    /**
+     * @param int $lastFetchedPage
+     */
+    public function setLastFetchedPage(int $lastFetchedPage): void
+    {
+        $this->lastFetchedPage = $lastFetchedPage;
+    }
+
 }

@@ -66,7 +66,10 @@ class PreRequestAction implements ObserverInterface
         if ($query instanceof CategoryMerchandisingQuery) {
             $batchModel = $this->session->get();
             $limit = $query->getVariables()['limit'];
-            if ($batchModel != null && ($batchModel->getLastUsedLimit() == $limit)) {
+            $page = $query->getVariables()['skipPages'];
+            if ($batchModel != null
+                && ($batchModel->getLastUsedLimit() == $limit)
+                && ($batchModel->getLastFetchedPage() == $page - 1)) {
                 $query->setBatchToken($batchModel->getBatchToken());
             }
         }

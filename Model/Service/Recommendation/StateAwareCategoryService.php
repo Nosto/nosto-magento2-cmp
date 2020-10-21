@@ -210,7 +210,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->eventManager->dispatch(
             CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_POST_RESULTS,
             [
-                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_LIMIT => $limit
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_LIMIT => $limit,
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_PAGE => $pageNumber,
             ]
         );
 
