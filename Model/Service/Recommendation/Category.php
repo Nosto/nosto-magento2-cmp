@@ -41,6 +41,7 @@ use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Operation\Recommendation\CategoryMerchandising;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
@@ -90,7 +91,7 @@ class Category
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
         }
-        $categoryMerchandising = new CategoryMerchandising(
+        $categoryMerchandising = new BatchedCategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,
             $category,
