@@ -192,19 +192,19 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
             $this->lastResult = ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters) {
-                return $this->categoryService->getPersonalisationResult(
-                    $nostoAccount,
-                    $filters,
-                    $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
-                    $category,
-                    $pageNumber,
-                    $limit,
-                    $previewMode
-                );
-            },
-            self::TIME_PROF_GRAPHQL_QUERY
-        );
+                function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters) {
+                    return $this->categoryService->getPersonalisationResult(
+                        $nostoAccount,
+                        $filters,
+                        $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
+                        $category,
+                        $pageNumber,
+                        $limit,
+                        $previewMode
+                    );
+                },
+                self::TIME_PROF_GRAPHQL_QUERY
+            );
         $this->lastUsedLimit = $limit;
 
         $this->eventManager->dispatch(

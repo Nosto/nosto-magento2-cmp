@@ -54,15 +54,19 @@ class CmpSession
         $this->session = $session;
     }
 
-    public function set(BatchModel $model) {
-        $this->session->setData(self::SESSION, $model);
+    /**
+     * @param BatchModel $model
+     */
+    public function set(BatchModel $model)
+    {
+        $this->session->setData(self::SESSION, $model); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
      * @return BatchModel
      */
-    public function get() {
-        return $this->session->getData(self::SESSION);
+    public function get()
+    {
+        return $this->session->getData(self::SESSION); //@phan-suppress-current-line PhanUndeclaredMethod
     }
-
 }

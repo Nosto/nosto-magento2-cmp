@@ -109,7 +109,8 @@ class PostRequestAction implements ObserverInterface
     /**
      * @return BatchModel
      */
-    private function getBatchModel() {
+    private function getBatchModel()
+    {
         $batchModel = $this->session->get();
         if ($batchModel == null) {
             return new BatchModel();
