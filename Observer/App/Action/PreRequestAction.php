@@ -39,7 +39,7 @@ namespace Nosto\Cmp\Observer\App\Action;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Operation\Recommendation\CategoryMerchandising as CategoryMerchandisingQuery;
+use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Cmp\Model\Service\Recommendation\CmpSession;
 
 class PreRequestAction implements ObserverInterface
@@ -61,15 +61,13 @@ class PreRequestAction implements ObserverInterface
      */
     public function execute(Observer $observer) // phpcs:ignore
     {
-        /** @var CategoryMerchandisingQuery $query */
+        /** @var BatchedCategoryMerchandising $query */
         $query = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_REQUEST);
-        if ($query instanceof CategoryMerchandisingQuery) {
+        if ($query instanceof BatchedCategoryMerchandising) {
             $batchModel = $this->session->get();
-            $limit = $query->getVariables()['limit'];
-            $page = $query->getVariables()['skipPages'];
             if ($batchModel != null
-                && ($batchModel->getLastUsedLimit() == $limit)
-                && ($batchModel->getLastFetchedPage() == $page - 1)) {
+                && ($batchModel->getLastUsedLimit() == $query->getLimit())
+                && ($batchModel->getLastFetchedPage() == $query->getSkipPages() - 1)) {
                 $query->setBatchToken($batchModel->getBatchToken());
             }
         }
