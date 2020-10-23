@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "302d4c351c9ec2cdc9f6d048fda4f645",
+    "content-hash": "c1f07b5b176859e553a6473da7b93dc4",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -145,12 +145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "7fda8433b1d483372c31a131eea3b546b1a869f8"
+                "reference": "dacc21e54f1fbbada4de2fcb7c40a55b5938612e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/7fda8433b1d483372c31a131eea3b546b1a869f8",
-                "reference": "7fda8433b1d483372c31a131eea3b546b1a869f8",
+                "url": "https://api.github.com/repos/composer/composer/zipball/dacc21e54f1fbbada4de2fcb7c40a55b5938612e",
+                "reference": "dacc21e54f1fbbada4de2fcb7c40a55b5938612e",
                 "shasum": ""
             },
             "require": {
@@ -217,7 +217,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-10-16T09:27:59+00:00"
+            "time": "2020-10-22T14:04:27+00:00"
         },
         {
             "name": "composer/semver",
@@ -2244,16 +2244,16 @@
         },
         {
             "name": "nosto/php-sdk",
-            "version": "5.3.1",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-php-sdk.git",
-                "reference": "103296332928b4b012868283170a98faffe6298b"
+                "reference": "87b36aa48d160bf0070cab68699e85f1abd6a645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/103296332928b4b012868283170a98faffe6298b",
-                "reference": "103296332928b4b012868283170a98faffe6298b",
+                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/87b36aa48d160bf0070cab68699e85f1abd6a645",
+                "reference": "87b36aa48d160bf0070cab68699e85f1abd6a645",
                 "shasum": ""
             },
             "require": {
@@ -2291,7 +2291,7 @@
                 "BSD-3-Clause"
             ],
             "description": "PHP SDK for developing Nosto modules for e-commerce platforms",
-            "time": "2020-10-22T05:55:17+00:00"
+            "time": "2020-10-23T08:30:14+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -3324,12 +3324,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php73.git",
-                "reference": "82ea68b4b7878720d2f156a30dfc8ad76db8ae91"
+                "reference": "6b5374ab243eab3021dbf8066e4d33247738850f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/82ea68b4b7878720d2f156a30dfc8ad76db8ae91",
-                "reference": "82ea68b4b7878720d2f156a30dfc8ad76db8ae91",
+                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/6b5374ab243eab3021dbf8066e4d33247738850f",
+                "reference": "6b5374ab243eab3021dbf8066e4d33247738850f",
                 "shasum": ""
             },
             "require": {
@@ -3378,7 +3378,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2020-10-21T09:57:48+00:00"
+            "time": "2020-10-23T08:29:28+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -7217,12 +7217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "d4ba5fc8183e6fc0c5e2b891bc1d8f9f0d34512d"
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d4ba5fc8183e6fc0c5e2b891bc1d8f9f0d34512d",
-                "reference": "d4ba5fc8183e6fc0c5e2b891bc1d8f9f0d34512d",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
                 "shasum": ""
             },
             "require": {
@@ -7260,7 +7260,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-10-13T22:05:34+00:00"
+            "time": "2020-10-23T02:01:07+00:00"
         },
         {
             "name": "staabm/annotate-pull-request-from-checkstyle",
