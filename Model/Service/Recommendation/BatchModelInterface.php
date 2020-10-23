@@ -46,5 +46,5 @@ interface BatchModelInterface
     /**
      * @return string
      */
-    public function getBatchToken(): string;
+    public function getBatchToken(): ?string;
 }

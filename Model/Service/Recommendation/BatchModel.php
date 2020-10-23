@@ -58,7 +58,7 @@ class BatchModel implements BatchModelInterface
     /**
      * @inheritDoc
      */
-    public function getBatchToken(): string
+    public function getBatchToken(): ?string
     {
         return $this->batchToken;
     }
