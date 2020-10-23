@@ -138,6 +138,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param LoggerInterface $logger
      * @param Data $nostoCmpHelper
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         CookieManagerInterface $cookieManager,

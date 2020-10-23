@@ -58,8 +58,9 @@ class PostRequestAction implements ObserverInterface
     private $session;
 
     /**
-     * Action constructor.
+     * PostRequestAction constructor.
      * @param HttpResponse $response
+     * @param CmpSession $session
      */
     public function __construct(HttpResponse $response, CmpSession $session)
     {
