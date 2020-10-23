@@ -61,7 +61,7 @@ class CmpSession
     public function set(BatchModel $model)
     {
         $this->session->start();
-        $this->session->setNostoCmpSession($model);
+        $this->session->setNostoCmpSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
@@ -70,6 +70,6 @@ class CmpSession
     public function get()
     {
         $this->session->start();
-        return $this->session->getNostoCmpSession();
+        return $this->session->getNostoCmpSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 }
