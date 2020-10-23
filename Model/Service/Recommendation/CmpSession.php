@@ -41,8 +41,6 @@ use Magento\Framework\Session\SessionManagerInterface;
 
 class CmpSession
 {
-    const SESSION = 'nosto_cmp_session';
-
     /** @var SessionManagerInterface */
     private $session;
 
