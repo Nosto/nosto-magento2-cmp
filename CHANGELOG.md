@@ -1,5 +1,9 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.1.0-rc1
+* Add support for fetching more than 250 products from Nosto
+* Add category merchandising support for headless (graphql) implementations
+
 ### 3.0.0-rc1
 * Add support for using Elasticsearch as a catalog search engine 
 * Introduce possibility to use all categories (not only the ones in navigation) with Nosto's category merchandising   
