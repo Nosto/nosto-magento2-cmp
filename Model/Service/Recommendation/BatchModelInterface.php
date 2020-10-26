@@ -44,7 +44,7 @@ interface BatchModelInterface
     public function getLastUsedLimit(): int;
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getBatchToken(): ?string;
 }
