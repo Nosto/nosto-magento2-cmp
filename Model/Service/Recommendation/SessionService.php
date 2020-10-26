@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -36,81 +37,55 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-class BatchModel implements BatchModelInterface
+use Magento\Framework\Session\SessionManagerInterface;
+
+class SessionService
 {
-    /** @var string */
-    private $batchToken;
-
-    /** @var int */
-    private $lastUsedLimit;
-
-    /** @var int */
-    private $lastFetchedPage = 0;
-
-    /** @var int */
-    private $totalCount;
+    /** @var SessionManagerInterface */
+    private $session;
 
     /**
-     * @inheritDoc
+     * CmpSession constructor.
+     * @param SessionManagerInterface $session
      */
-    public function getLastUsedLimit(): int
+    public function __construct(SessionManagerInterface $session)
     {
-        return $this->lastUsedLimit;
+        $this->session = $session;
     }
 
     /**
-     * @inheritDoc
+     * @param BatchModel $model
      */
-    public function getBatchToken(): ?string
+    public function setBatchModel(BatchModel $model)
     {
-        return $this->batchToken;
+        $this->session->start();
+        $this->session->setNostoCmpBatchSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
-     * @param string $batchToken
+     * @return BatchModel
      */
-    public function setBatchToken($batchToken)
+    public function getBatchModel()
     {
-        $this->batchToken = $batchToken;
+        $this->session->start();
+        return $this->session->getNostoCmpBatchSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
-     * @param int $lastUsedLimit
+     * @param GraphQlParamModel $model
      */
-    public function setLastUsedLimit($lastUsedLimit)
+    public function setGraphqlModel(GraphQlParamModel $model)
     {
-        $this->lastUsedLimit = $lastUsedLimit;
+        $this->session->start();
+        $this->session->setNostoCmpGraphqlSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
-     * @return int
+     * @return GraphQlParamModel
      */
-    public function getLastFetchedPage(): int
+    public function getGraphqlModel()
     {
-        return $this->lastFetchedPage;
-    }
-
-    /**
-     * @param int $lastFetchedPage
-     */
-    public function setLastFetchedPage(int $lastFetchedPage): void
-    {
-        $this->lastFetchedPage = $lastFetchedPage;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalCount(): int
-    {
-        return $this->totalCount;
-    }
-
-    /**
-     * @param int $totalCount
-     */
-    public function setTotalCount(int $totalCount): void
-    {
-        $this->totalCount = $totalCount;
+        $this->session->start();
+        return $this->session->getNostoCmpGraphqlSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 }

@@ -43,7 +43,7 @@ use Nosto\Cmp\Model\Service\Recommendation\BatchModel;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Model\Service\Recommendation\CmpSession;
+use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 
 class PostRequestAction implements ObserverInterface
 {
@@ -54,15 +54,15 @@ class PostRequestAction implements ObserverInterface
      */
     private $response;
 
-    /** @var CmpSession */
+    /** @var SessionService */
     private $session;
 
     /**
      * PostRequestAction constructor.
      * @param HttpResponse $response
-     * @param CmpSession $session
+     * @param SessionService $session
      */
-    public function __construct(HttpResponse $response, CmpSession $session)
+    public function __construct(HttpResponse $response, SessionService $session)
     {
         $this->response = $response;
         $this->session = $session;
@@ -92,6 +92,7 @@ class PostRequestAction implements ObserverInterface
             );
 
             $batchModel->setBatchToken($results->getBatchToken());
+            $batchModel->setTotalCount($results->getTotalPrimaryCount());
         }
 
         $limit = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_LIMIT);
@@ -104,7 +105,7 @@ class PostRequestAction implements ObserverInterface
             $batchModel->setLastFetchedPage($page);
         }
 
-        $this->session->set($batchModel);
+        $this->session->setBatchModel($batchModel);
     }
 
     /**
@@ -112,7 +113,7 @@ class PostRequestAction implements ObserverInterface
      */
     private function getBatchModel()
     {
-        $batchModel = $this->session->get();
+        $batchModel = $this->session->getBatchModel();
         if ($batchModel == null) {
             return new BatchModel();
         }

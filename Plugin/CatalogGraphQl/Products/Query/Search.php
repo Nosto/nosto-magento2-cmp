@@ -1,5 +1,4 @@
 <?php /** @noinspection PhpDeprecationInspection */
-
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -41,23 +40,34 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Registry;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search as MagentoSearch;
 use Nosto\Cmp\Helper\CategorySorting;
+use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
+use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Nosto\Cmp\Model\Service\Recommendation\GraphQlParamModel;
+use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 
 class Search
 {
     const SORT_KEY = 'sort';
     const PAGE_SIZE_KEY = 'pageSize';
+    const CURRENT_PAGE_KEY = 'currentPage';
 
-    /** @var Registry */
-    private $registry;
+    /** @var SearchResultFactory */
+    private $searchResultFactory;
+
+    /** @var SessionService */
+    private $sessionService;
 
     /**
      * Search constructor.
-     * @param Registry $registry
+     * @param SearchResultFactory $searchResultFactory
+     * @param SessionService $sessionService
      */
     public function __construct(
-        Registry $registry
+        SearchResultFactory $searchResultFactory,
+        SessionService $sessionService
     ) {
-        $this->registry = $registry;
+        $this->searchResultFactory =  $searchResultFactory;
+        $this->sessionService = $sessionService;
     }
 
     /**
@@ -71,10 +81,45 @@ class Search
     {
         if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
             $pageSize = $args[self::PAGE_SIZE_KEY];
-            $this->registry->register(  //@phan-suppress-current-line PhanDeprecatedFunction
-                'nosto_page_size',
-                $pageSize
-            );
+            $currentPage = $args[self::CURRENT_PAGE_KEY];
+            $this->sessionService->setGraphqlModel(new GraphQlParamModel($pageSize, $currentPage));
         }
     }
+
+    /**
+     * @param MagentoSearch $search
+     * @param SearchResult $searchResult
+     * @param array $args
+     * @return SearchResult
+     */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterGetResult(
+        MagentoSearch $search,
+        SearchResult  $searchResult,
+        array $args
+    ) {
+        if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
+                return $this->searchResultFactory->create(
+                [
+                    'totalCount' => $searchResult->getTotalCount(),
+                    'productsSearchResult' => $searchResult->getProductsSearchResult(),
+                    'searchAggregation' => $searchResult->getSearchAggregation(),
+                    'pageSize' => $searchResult->getPageSize(),
+                    'currentPage' => $searchResult->getCurrentPage(),
+                    'totalPages' => $this->getTotalPages(),
+                ]
+            );
+        }
+        return $searchResult;
+    }
+
+    /**
+     * @return int
+     */
+    private function getTotalPages()
+    {
+        $batchModel = $this->sessionService->getBatchModel();
+        return (int) ceil($batchModel->getTotalCount() / $batchModel->getLastUsedLimit());
+    }
+
 }

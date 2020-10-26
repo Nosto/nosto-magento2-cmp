@@ -107,12 +107,23 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @param array $requestData
-     * @return int
+     * @inheritDoc
      */
     public function parseLimit(array $requestData)
     {
         return (int) $requestData[self::KEY_RESULT_SIZE];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function parsePageNumber(array $requestData)
+    {
+        $from = $requestData[self::KEY_RESULTS_FROM];
+        if ($from < 1) {
+            return 0;
+        }
+        return (int) ceil($from / $this->parseLimit($requestData));
     }
 
     /**
