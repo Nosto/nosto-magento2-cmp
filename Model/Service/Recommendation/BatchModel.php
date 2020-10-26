@@ -34,31 +34,64 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-
-class CategoryMerchandising
+class BatchModel implements BatchModelInterface
 {
-    const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';
-    const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
-    const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
-    const DISPATCH_EVENT_KEY_RESULT = 'result';
-    const DISPATCH_EVENT_KEY_LIMIT = 'limit';
-    const DISPATCH_EVENT_KEY_PAGE = 'page';
+    /** @var string */
+    private $batchToken;
+
+    /** @var int */
+    private $lastUsedLimit;
+
+    /** @var int */
+    private $lastFetchedPage = 0;
 
     /**
-     * @param CategoryMerchandisingResult $result
-     * @return array
+     * @inheritDoc
      */
-    public static function parseProductIds(CategoryMerchandisingResult $result)
+    public function getLastUsedLimit(): int
     {
-        $productIds = [];
-        foreach ($result->getResultSet() as $item) {
-            if ($item->getProductId() && is_numeric($item->getProductId())) {
-                $productIds[] = $item->getProductId();
-            }
-        }
-        return $productIds;
+        return $this->lastUsedLimit;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBatchToken(): ?string
+    {
+        return $this->batchToken;
+    }
+
+    /**
+     * @param string $batchToken
+     */
+    public function setBatchToken($batchToken)
+    {
+        $this->batchToken = $batchToken;
+    }
+
+    /**
+     * @param int $lastUsedLimit
+     */
+    public function setLastUsedLimit($lastUsedLimit)
+    {
+        $this->lastUsedLimit = $lastUsedLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastFetchedPage(): int
+    {
+        return $this->lastFetchedPage;
+    }
+
+    /**
+     * @param int $lastFetchedPage
+     */
+    public function setLastFetchedPage(int $lastFetchedPage): void
+    {
+        $this->lastFetchedPage = $lastFetchedPage;
     }
 }

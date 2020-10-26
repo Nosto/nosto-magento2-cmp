@@ -36,29 +36,24 @@
 
 namespace Nosto\Cmp\Observer\App\Action;
 
-use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
+use Nosto\Cmp\Model\Service\Recommendation\CmpSession;
 
-class Action implements ObserverInterface
+class PreRequestAction implements ObserverInterface
 {
-    public const PRODUCT_DEBUG_HEADER_NAME = 'X-Nosto-Product-Ids';
+    /** @var CmpSession */
+    private $session;
 
     /**
-     * @var HttpResponse $response
+     * PreRequestAction constructor.
+     * @param CmpSession $session
      */
-    private $response;
-
-    /**
-     * Action constructor.
-     * @param HttpResponse $response
-     */
-    public function __construct(HttpResponse $response)
+    public function __construct(CmpSession $session)
     {
-        $this->response = $response;
+        $this->session = $session;
     }
 
     /**
@@ -66,21 +61,15 @@ class Action implements ObserverInterface
      */
     public function execute(Observer $observer) // phpcs:ignore
     {
-        if (!ServerTiming::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                ServerTiming::HEADER_NAME,
-                ServerTiming::getInstance()->build(),
-                true
-            );
-        }
-
-        $results = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_RESULT);
-        if ($results instanceof CategoryMerchandisingResult) {
-            $this->response->setHeader(
-                self::PRODUCT_DEBUG_HEADER_NAME,
-                implode(',', CategoryMerchandising::parseProductIds($results)),
-                true
-            );
+        /** @var BatchedCategoryMerchandising $query */
+        $query = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_REQUEST);
+        if ($query instanceof BatchedCategoryMerchandising) {
+            $batchModel = $this->session->get();
+            if ($batchModel != null
+                && ($batchModel->getLastUsedLimit() == $query->getLimit())
+                && ($batchModel->getLastFetchedPage() == $query->getSkipPages() - 1)) {
+                $query->setBatchToken($batchModel->getBatchToken());
+            }
         }
     }
 }

@@ -34,31 +34,17 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-
-class CategoryMerchandising
+interface BatchModelInterface
 {
-    const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';
-    const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
-    const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
-    const DISPATCH_EVENT_KEY_RESULT = 'result';
-    const DISPATCH_EVENT_KEY_LIMIT = 'limit';
-    const DISPATCH_EVENT_KEY_PAGE = 'page';
+    /**
+     * @return int
+     */
+    public function getLastUsedLimit(): int;
 
     /**
-     * @param CategoryMerchandisingResult $result
-     * @return array
+     * @return string|null
      */
-    public static function parseProductIds(CategoryMerchandisingResult $result)
-    {
-        $productIds = [];
-        foreach ($result->getResultSet() as $item) {
-            if ($item->getProductId() && is_numeric($item->getProductId())) {
-                $productIds[] = $item->getProductId();
-            }
-        }
-        return $productIds;
-    }
+    public function getBatchToken(): ?string;
 }

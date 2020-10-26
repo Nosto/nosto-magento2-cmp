@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,31 +35,39 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Magento\Framework\Session\SessionManagerInterface;
 
-class CategoryMerchandising
+class CmpSession
 {
-    const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';
-    const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
-    const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
-    const DISPATCH_EVENT_KEY_RESULT = 'result';
-    const DISPATCH_EVENT_KEY_LIMIT = 'limit';
-    const DISPATCH_EVENT_KEY_PAGE = 'page';
+    /** @var SessionManagerInterface */
+    private $session;
 
     /**
-     * @param CategoryMerchandisingResult $result
-     * @return array
+     * CmpSession constructor.
+     * @param SessionManagerInterface $session
      */
-    public static function parseProductIds(CategoryMerchandisingResult $result)
+    public function __construct(SessionManagerInterface $session)
     {
-        $productIds = [];
-        foreach ($result->getResultSet() as $item) {
-            if ($item->getProductId() && is_numeric($item->getProductId())) {
-                $productIds[] = $item->getProductId();
-            }
-        }
-        return $productIds;
+        $this->session = $session;
+    }
+
+    /**
+     * @param BatchModel $model
+     */
+    public function set(BatchModel $model)
+    {
+        $this->session->start();
+        $this->session->setNostoCmpSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @return BatchModel
+     */
+    public function get()
+    {
+        $this->session->start();
+        return $this->session->getNostoCmpSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 }
