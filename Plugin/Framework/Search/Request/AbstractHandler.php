@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Exception;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
@@ -135,7 +136,7 @@ abstract class AbstractHandler
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
-        } catch (Exception $e) {
+        } catch (CmpException $e) {
             $this->logger->exception($e);
             return;
         }
@@ -227,14 +228,14 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return int
-     * @throws Exception
+     * @throws CmpException
      */
     abstract public function parsePageNumber(array $requestData);
 
     /**
      * @param array $requestData
      * @return int
-     * @throws Exception
+     * @throws CmpException
      */
     abstract public function parseLimit(array $requestData);
 

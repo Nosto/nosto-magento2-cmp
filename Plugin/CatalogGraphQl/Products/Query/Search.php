@@ -36,12 +36,11 @@
 
 namespace Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Registry;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search as MagentoSearch;
-use Nosto\Cmp\Helper\CategorySorting;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Nosto\Cmp\Helper\CategorySorting;
 use Nosto\Cmp\Model\Service\Recommendation\GraphQlParamModel;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 
@@ -99,16 +98,14 @@ class Search
         array $args
     ) {
         if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
-                return $this->searchResultFactory->create(
-                [
-                    'totalCount' => $searchResult->getTotalCount(),
-                    'productsSearchResult' => $searchResult->getProductsSearchResult(),
-                    'searchAggregation' => $searchResult->getSearchAggregation(),
-                    'pageSize' => $searchResult->getPageSize(),
-                    'currentPage' => $searchResult->getCurrentPage(),
-                    'totalPages' => $this->getTotalPages(),
-                ]
-            );
+            return $this->searchResultFactory->create([
+                'totalCount' => $searchResult->getTotalCount(),
+                'productsSearchResult' => $searchResult->getProductsSearchResult(),
+                'searchAggregation' => $searchResult->getSearchAggregation(),
+                'pageSize' => $searchResult->getPageSize(),
+                'currentPage' => $searchResult->getCurrentPage(),
+                'totalPages' => $this->getTotalPages(),
+            ]);
         }
         return $searchResult;
     }
@@ -121,5 +118,4 @@ class Search
         $batchModel = $this->sessionService->getBatchModel();
         return (int) ceil($batchModel->getTotalCount() / $batchModel->getLastUsedLimit());
     }
-
 }
