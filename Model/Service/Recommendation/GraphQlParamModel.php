@@ -1,5 +1,4 @@
-<?php /** @noinspection PhpUndefinedMethodInspection */
-
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -37,37 +36,38 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Magento\Framework\Session\SessionManagerInterface;
-
-class CmpSession
+class GraphQlParamModel
 {
-    /** @var SessionManagerInterface */
-    private $session;
+    /** @var int */
+    private $limit;
+
+    /** @var int */
+    private $currentPage;
 
     /**
-     * CmpSession constructor.
-     * @param SessionManagerInterface $session
+     * GraphQlParamModel constructor.
+     * @param int $limit
+     * @param int $currentPage
      */
-    public function __construct(SessionManagerInterface $session)
+    public function __construct(int $limit, int $currentPage)
     {
-        $this->session = $session;
+        $this->limit = $limit;
+        $this->currentPage = $currentPage;
     }
 
     /**
-     * @param BatchModel $model
+     * @return int
      */
-    public function set(BatchModel $model)
+    public function getLimit(): int
     {
-        $this->session->start();
-        $this->session->setNostoCmpSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+        return $this->limit;
     }
 
     /**
-     * @return BatchModel
+     * @return int
      */
-    public function get()
+    public function getCurrentPage(): int
     {
-        $this->session->start();
-        return $this->session->getNostoCmpSession(); //@phan-suppress-current-line PhanUndeclaredMethod
+        return $this->currentPage;
     }
 }

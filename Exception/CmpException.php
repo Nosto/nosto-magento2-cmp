@@ -34,83 +34,11 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Exception;
 
-class BatchModel implements BatchModelInterface
+use Exception;
+
+class CmpException extends Exception
 {
-    /** @var string */
-    private $batchToken;
 
-    /** @var int */
-    private $lastUsedLimit;
-
-    /** @var int */
-    private $lastFetchedPage = 0;
-
-    /** @var int */
-    private $totalCount;
-
-    /**
-     * @inheritDoc
-     */
-    public function getLastUsedLimit(): int
-    {
-        return $this->lastUsedLimit;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBatchToken(): ?string
-    {
-        return $this->batchToken;
-    }
-
-    /**
-     * @param string $batchToken
-     */
-    public function setBatchToken($batchToken)
-    {
-        $this->batchToken = $batchToken;
-    }
-
-    /**
-     * @param int $lastUsedLimit
-     */
-    public function setLastUsedLimit($lastUsedLimit)
-    {
-        $this->lastUsedLimit = $lastUsedLimit;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastFetchedPage(): int
-    {
-        return $this->lastFetchedPage;
-    }
-
-    /**
-     * @param int $lastFetchedPage
-     */
-    public function setLastFetchedPage(int $lastFetchedPage): void
-    {
-        $this->lastFetchedPage = $lastFetchedPage;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalCount(): int
-    {
-        return $this->totalCount;
-    }
-
-    /**
-     * @param int $totalCount
-     */
-    public function setTotalCount(int $totalCount): void
-    {
-        $this->totalCount = $totalCount;
-    }
 }

@@ -1,5 +1,4 @@
-<?php /** @noinspection PhpDeprecationInspection */
-
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -38,13 +37,14 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\GraphQlFilters;
+use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Magento\Framework\Registry;
 
 class GraphQlHandler extends AbstractHandler
 {
@@ -52,8 +52,8 @@ class GraphQlHandler extends AbstractHandler
     /** @var GraphQlFilters */
     private $filters;
 
-    /** @var Registry */
-    private $registry;
+    /** @var SessionService */
+    private $sessionService;
 
     /**
      * GraphQlHandler constructor.
@@ -63,7 +63,7 @@ class GraphQlHandler extends AbstractHandler
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param Registry $registry
+     * @param SessionService $sessionService
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -73,7 +73,7 @@ class GraphQlHandler extends AbstractHandler
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryServiceInterface $categoryService,
-        Registry $registry,
+        SessionService $sessionService,
         LoggerInterface $logger
     ) {
         parent::__construct(
@@ -85,7 +85,7 @@ class GraphQlHandler extends AbstractHandler
             $logger
         );
         $this->filters = $filters;
-        $this->registry = $registry;
+        $this->sessionService = $sessionService;
     }
 
     /**
@@ -108,13 +108,18 @@ class GraphQlHandler extends AbstractHandler
     }
 
     /**
-     * @param array $requestData
-     * @return int
+     * @inheritDoc
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function parseLimit(array $requestData)
     {
-        return (int) $this->registry->registry('nosto_page_size'); //@phan-suppress-current-line PhanDeprecatedFunction
+        //Get limit/pageSize from session if session exists
+        $model = $this->sessionService->getGraphqlModel();
+        if ($model != null) {
+            return $model->getLimit();
+        } else {
+            throw new CmpException("Could not get limit from session");
+        }
     }
 
     /**
@@ -123,5 +128,20 @@ class GraphQlHandler extends AbstractHandler
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function parsePageNumber(array $requestData)
+    {
+        //Get limit/pageSize from session if session exists
+        $model = $this->sessionService->getGraphqlModel();
+        if ($model != null) {
+            return $model->getCurrentPage() - 1;
+        } else {
+            throw new CmpException("Could not get page size from session");
+        }
     }
 }

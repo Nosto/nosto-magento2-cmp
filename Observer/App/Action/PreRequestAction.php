@@ -40,18 +40,18 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
-use Nosto\Cmp\Model\Service\Recommendation\CmpSession;
+use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 
 class PreRequestAction implements ObserverInterface
 {
-    /** @var CmpSession */
+    /** @var SessionService */
     private $session;
 
     /**
      * PreRequestAction constructor.
-     * @param CmpSession $session
+     * @param SessionService $session
      */
-    public function __construct(CmpSession $session)
+    public function __construct(SessionService $session)
     {
         $this->session = $session;
     }
@@ -64,7 +64,7 @@ class PreRequestAction implements ObserverInterface
         /** @var BatchedCategoryMerchandising $query */
         $query = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_REQUEST);
         if ($query instanceof BatchedCategoryMerchandising) {
-            $batchModel = $this->session->get();
+            $batchModel = $this->session->getBatchModel();
             if ($batchModel != null
                 && ($batchModel->getLastUsedLimit() == $query->getLimit())
                 && ($batchModel->getLastFetchedPage() == $query->getSkipPages() - 1)) {
