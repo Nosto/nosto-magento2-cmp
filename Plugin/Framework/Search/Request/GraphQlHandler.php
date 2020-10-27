@@ -37,7 +37,6 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Exception;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\SearchEngine;
