@@ -98,7 +98,8 @@ class Search
         SearchResult  $searchResult,
         array $args
     ) {
-        if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
+        if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])
+            && $this->getTotalPages() !== null) {
             return $this->searchResultFactory->create([
                 'totalCount' => $searchResult->getTotalCount(),
                 'productsSearchResult' => $searchResult->getProductsSearchResult(),
@@ -112,11 +113,14 @@ class Search
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     private function getTotalPages()
     {
         $batchModel = $this->sessionService->getBatchModel();
+        if ($batchModel === null) {
+            return null;
+        }
         return (int) ceil($batchModel->getTotalCount() / $batchModel->getLastUsedLimit());
     }
 }
