@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.1.0-rc2
+* Fix Magento products graphql query pagination issue
+
 ### 3.1.0-rc1
 * Add support for fetching more than 250 products from Nosto
 * Add category merchandising support for headless (graphql) implementations
