@@ -43,11 +43,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
@@ -64,6 +65,9 @@ class Toolbar extends AbstractBlock
     /** @var WebFilters */
     private $filters;
 
+    /** @var State */
+    private $state;
+
     private static $isProcessed = false;
 
     /**
@@ -76,6 +80,7 @@ class Toolbar extends AbstractBlock
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
      * @param WebFilters $filters
+     * @param State $state
      */
     public function __construct(
         Context $context,
@@ -85,10 +90,12 @@ class Toolbar extends AbstractBlock
         ParameterResolverInterface $parameterResolver,
         LoggerInterface $logger,
         SearchEngine $searchEngineHelper,
-        WebFilters $filters
+        WebFilters $filters,
+        State $state
     ) {
         $this->searchEngineHelper = $searchEngineHelper;
         $this->filters = $filters;
+        $this->state = $state;
         parent::__construct(
             $context,
             $parameterResolver,
@@ -131,6 +138,8 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
+                //@phan-suppress-next-line PhanTypeMismatchArgument
+                $this->buildFilters($store);
                 $result = $this->getCmpResult(
                     $this->getCurrentPageNumber()-1,
                     $subjectCollection->getPageSize()
@@ -174,6 +183,26 @@ class Toolbar extends AbstractBlock
             $start,
             $limit
         );
+    }
+
+    /**
+     * @param Store $store
+     * @return WebFilters
+     */
+    private function buildFilters(Store $store)
+    {
+        // Build filters
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
+        /** @noinspection PhpParamsInspection */
+        $this->filters->init($store);
+        try {
+            $this->filters->buildFromSelectedFilters(
+                $this->state->getActiveFilters()
+            );
+        } catch (LocalizedException $e) {
+            $this->getLogger()->exception($e);
+        }
+        return $this->filters;
     }
 
     /**

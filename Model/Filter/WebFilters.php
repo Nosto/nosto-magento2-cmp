@@ -37,6 +37,7 @@
 namespace Nosto\Cmp\Model\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Nosto\NostoException;
@@ -113,6 +114,7 @@ class WebFilters implements FiltersInterface
             return;
         }
 
+        /** @var Attribute $attributeModel */
         $attributeModel = $filter->getData('attribute_model');
         if ($attributeModel === null) {
             return;
@@ -124,7 +126,6 @@ class WebFilters implements FiltersInterface
             return;
         }
 
-        $filterName = $item->getName();
         $value = '';
         switch ($frontendInput) {
             case 'price':
@@ -150,7 +151,18 @@ class WebFilters implements FiltersInterface
                 return;
         }
         try {
-            $this->mapValueToFilter($filterName, $value);
+            $attributeCode = $attributeModel->getAttributeCode();
+            if (!is_string($attributeCode)) {
+                $this->logger->debugCmp(
+                    sprintf(
+                        'Cannot build include filter for "%s" attribute ',
+                        $attributeModel->getName()
+                    ),
+                    $this
+                );
+                return;
+            }
+            $this->mapValueToFilter($attributeCode, $value);
         } catch (NostoException $e) {
             $this->logger->exception($e);
         }
