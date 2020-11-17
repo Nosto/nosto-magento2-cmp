@@ -138,6 +138,7 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
+                //@phan-suppress-next-line PhanTypeMismatchArgument
                 $this->buildFilters($store);
                 $result = $this->getCmpResult(
                     $this->getCurrentPageNumber()-1,
@@ -184,6 +185,10 @@ class Toolbar extends AbstractBlock
         );
     }
 
+    /**
+     * @param Store $store
+     * @return WebFilters
+     */
     private function buildFilters(Store $store)
     {
         // Build filters
