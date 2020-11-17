@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+## 3.1.0-rc4
+* Fix issue where filters were not passed when using MySQL
+
 ## 3.1.0-rc3
 * Return Magento sorting when CM call fails
 
