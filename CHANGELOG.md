@@ -2,6 +2,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## 3.1.0-rc5
 * Render frontend layouts only when CM configuration is enabled
+* Upgrade PHP-SDK version to fix CM not displaying Nosto sorting when batchToken is null
 
 ## 3.1.0-rc4
 * Fix issue where filters were not passed when using MySQL
