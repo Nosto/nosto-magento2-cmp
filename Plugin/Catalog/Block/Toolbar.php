@@ -45,6 +45,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
@@ -161,6 +162,8 @@ class Toolbar extends AbstractBlock
                         $this
                     );
                 }
+            } catch (MissingCookieException $e) {
+                $this->getLogger()->debugCmp($e->getMessage(), $this);
             } catch (Exception $e) {
                 $this->getLogger()->exception($e);
             }

@@ -34,41 +34,11 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Exception\MissingCookieException;
-use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\NostoException;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
-interface StateAwareCategoryServiceInterface
+class MissingCookieException extends NostoException
 {
-    /**
-     * @param FiltersInterface $filters
-     * @param int $pageNumber
-     * @param int $limit
-     * @return CategoryMerchandisingResult|null
-     * @throws MissingCookieException
-     * @throws NostoException
-     */
-    public function getPersonalisationResult(
-        FiltersInterface $filters,
-        $pageNumber,
-        $limit
-    ): ?CategoryMerchandisingResult;
 
-    /**
-     * @return CategoryMerchandisingResult|null
-     */
-    public function getLastResult(): ?CategoryMerchandisingResult;
-
-    /**
-     * @param $id
-     */
-    public function setCategoryInRegistry($id): void;
-
-    /**
-     * @return int
-     */
-    public function getLastUsedLimit(): int;
 }
