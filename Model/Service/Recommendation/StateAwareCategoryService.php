@@ -193,7 +193,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
-        if ($this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME) == nu)
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
