@@ -175,9 +175,10 @@ class Toolbar extends AbstractBlock
     /**
      * @param int $start starting from 0
      * @param int $limit
-     * @return CategoryMerchandisingResult
-     * @throws NostoException
+     * @return CategoryMerchandisingResult|null
      * @throws LocalizedException
+     * @throws MissingCookieException
+     * @throws NostoException
      */
     private function getCmpResult($start, $limit)
     {
