@@ -44,6 +44,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
@@ -171,12 +172,18 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @inheritDoc
      * @throws NostoException
      * @throws LocalizedException
+     * @throws MissingCookieException
      */
     public function getPersonalisationResult(
         FiltersInterface $filters,
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
+
+        $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+        if ($customerId === null) {
+            throw new MissingCookieException('Missing Nosto cookie and customer id');
+        }
         $store = $this->storeManager->getStore();
         $limit = $this->sanitizeLimit($store, $limit);
         $category = $this->getCurrentCategoryString($store);
@@ -193,11 +200,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
             $this->lastResult = ServerTiming::getInstance()->instrument(
-                function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters) {
+                function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters, $customerId) {
                     return $this->categoryService->getPersonalisationResult(
                         $nostoAccount,
                         $filters,
-                        $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME),
+                        $customerId,
                         $category,
                         $pageNumber,
                         $limit,

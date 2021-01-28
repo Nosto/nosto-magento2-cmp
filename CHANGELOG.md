@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+## 3.1.0-rc6
+* Render magento sorting directly when Nosto customer cookie is missing
+
 ## 3.1.0-rc5
 * Render frontend layouts only when CM configuration is enabled
 * Upgrade PHP-SDK version to fix CM not displaying Nosto sorting when batchToken is null
