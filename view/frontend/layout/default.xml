@@ -9,6 +9,10 @@
     <referenceContainer name="content">
         <block ifconfig="nosto_cmp/flags/category_sorting" class="Nosto\Cmp\Block\CategoryMapping"
             name="nosto.catalog.mapping"
-            template="Nosto_Cmp::category_mapping.phtml" />
+               template="Nosto_Cmp::category_mapping.phtml">
+            <arguments>
+                <argument name="cache_lifetime" xsi:type="number">86400</argument>
+            </arguments>
+        </block>
     </referenceContainer>
 </page>
