@@ -16,9 +16,9 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.2'
-        tools: composer, prestissimo, pecl
+        tools: composer:v1, prestissimo, pecl
+        extensions: ast, bcmath, gd, pdo_mysql, soap, zip
         coverage: none
-        extensions: ast
 
     - name: Cache composer packages
       id: composer-cache
