@@ -37,13 +37,13 @@
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
-
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
 
+/** @noinspection PhpUnused */
 class Pager extends AbstractBlock
 {
     /**
@@ -78,6 +78,8 @@ class Pager extends AbstractBlock
      * @param $result
      * @param $param
      * @return bool
+     * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public function afterIsPageCurrent(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
@@ -85,7 +87,7 @@ class Pager extends AbstractBlock
         $param
     ) {
         if ($this->isCmpTakingOverCatalog()) {
-            return $this->getCurrentPageNumber() === (int) $param;
+            return $this->getCurrentPageNumber() === (int)$param;
         }
         return $result;
     }
@@ -98,6 +100,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return array
+     * @noinspection PhpUnused
      */
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
@@ -111,7 +114,7 @@ class Pager extends AbstractBlock
             if ($lastPageNum <= $frameLength) {
                 $start = 1;
                 $end = $lastPageNum;
-            //else display only as much as frameLength
+                //else display only as much as frameLength
             } else {
                 $half = ceil($frameLength / 2);
                 $curPageNum = $this->getCurrentPageNumber();
@@ -136,6 +139,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return bool
+     * @noinspection PhpUnusedParameterInspection
      */
     public function afterIsFirstPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
@@ -151,6 +155,8 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return bool
+     * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public function afterIsLastPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
@@ -166,6 +172,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return string
+     * @noinspection PhpUnused
      */
     public function afterGetNextPageUrl(MagentoPager $pager, $result)
     {
@@ -179,6 +186,7 @@ class Pager extends AbstractBlock
      * @param MagentoPager $pager
      * @param $result
      * @return string
+     * @noinspection PhpUnused
      */
     public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
     {

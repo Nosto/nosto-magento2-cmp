@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="_files">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/vendor/zendframework/zend-loader/test/_files/PharModuleZip.zip!/" />
+      <root url="file://$PROJECT_DIR$/vendor/zendframework/zend-loader/test/_files/PharModulePharZip.phar.zip" />
+      <root url="jar://$PROJECT_DIR$/vendor/zendframework/zend-loader/test/_files/PharModuleFake.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

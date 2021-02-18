@@ -34,49 +34,11 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Exception;
 
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Utils\Debug\Product;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\NostoException;
 
-class Action implements ObserverInterface
+class MissingCookieException extends NostoException
 {
-    /**
-     * @var HttpResponse $response
-     */
-    private $response;
 
-    /**
-     * Action constructor.
-     * @param HttpResponse $response
-     */
-    public function __construct(HttpResponse $response)
-    {
-        $this->response = $response;
-    }
-
-    /**
-     * @param Observer $observer
-     */
-    public function execute(Observer $observer) // phpcs:ignore
-    {
-        if (!ServerTiming::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                ServerTiming::HEADER_NAME,
-                ServerTiming::getInstance()->build(),
-                true
-            );
-        }
-
-        if (!Product::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                Product::HEADER_NAME,
-                Product::getInstance()->build(),
-                true
-            );
-        }
-    }
 }

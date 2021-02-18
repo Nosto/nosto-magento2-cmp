@@ -43,10 +43,13 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
@@ -60,6 +63,12 @@ class Toolbar extends AbstractBlock
     /** @var SearchEngine */
     private $searchEngineHelper;
 
+    /** @var WebFilters */
+    private $filters;
+
+    /** @var State */
+    private $state;
+
     private static $isProcessed = false;
 
     /**
@@ -71,6 +80,8 @@ class Toolbar extends AbstractBlock
      * @param ParameterResolverInterface $parameterResolver
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
+     * @param WebFilters $filters
+     * @param State $state
      */
     public function __construct(
         Context $context,
@@ -79,9 +90,13 @@ class Toolbar extends AbstractBlock
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
         LoggerInterface $logger,
-        SearchEngine $searchEngineHelper
+        SearchEngine $searchEngineHelper,
+        WebFilters $filters,
+        State $state
     ) {
         $this->searchEngineHelper = $searchEngineHelper;
+        $this->filters = $filters;
+        $this->state = $state;
         parent::__construct(
             $context,
             $parameterResolver,
@@ -124,12 +139,12 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
-                $this->setLimit($this->getPageSize($subjectCollection, $store));
+                //@phan-suppress-next-line PhanTypeMismatchArgument
+                $this->buildFilters($store);
                 $result = $this->getCmpResult(
                     $this->getCurrentPageNumber()-1,
                     $subjectCollection->getPageSize()
                 );
-                //Get ids of products to order
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
@@ -147,6 +162,8 @@ class Toolbar extends AbstractBlock
                         $this
                     );
                 }
+            } catch (MissingCookieException $e) {
+                $this->getLogger()->debugCmp($e->getMessage(), $this);
             } catch (Exception $e) {
                 $this->getLogger()->exception($e);
             }
@@ -158,16 +175,38 @@ class Toolbar extends AbstractBlock
     /**
      * @param int $start starting from 0
      * @param int $limit
-     * @return CategoryMerchandisingResult
-     * @throws NostoException
+     * @return CategoryMerchandisingResult|null
      * @throws LocalizedException
+     * @throws MissingCookieException
+     * @throws NostoException
      */
     private function getCmpResult($start, $limit)
     {
         return $this->getCategoryService()->getPersonalisationResult(
+            $this->filters,
             $start,
             $limit
         );
+    }
+
+    /**
+     * @param Store $store
+     * @return WebFilters
+     */
+    private function buildFilters(Store $store)
+    {
+        // Build filters
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
+        /** @noinspection PhpParamsInspection */
+        $this->filters->init($store);
+        try {
+            $this->filters->buildFromSelectedFilters(
+                $this->state->getActiveFilters()
+            );
+        } catch (LocalizedException $e) {
+            $this->getLogger()->exception($e);
+        }
+        return $this->filters;
     }
 
     /**

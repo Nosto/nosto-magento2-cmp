@@ -85,7 +85,7 @@ class SearchResultSorter
      * @param $productId
      * @return Document|null
      */
-    private function findDocumentByProductId(array &$result, $productId)
+    private function findDocumentByProductId(array $result, $productId)
     {
         foreach ($result as $document) {
             if ($document->getId() == $productId) {

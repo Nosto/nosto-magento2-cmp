@@ -36,17 +36,17 @@
 
 namespace Nosto\Cmp\Model\Filter;
 
-use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Nosto\NostoException;
-use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Logger\LoggerInterface;
 
-class FilterBuilder
+class WebFilters implements FiltersInterface
 {
     /** @var IncludeFilters */
     private $includeFilters;
@@ -109,12 +109,12 @@ class FilterBuilder
      */
     public function mapIncludeFilter(Item $item)
     {
-        /** @var AbstractFilter $filter */
         $filter = $item->getFilter();
         if ($filter === null) {
             return;
         }
 
+        /** @var Attribute $attributeModel */
         $attributeModel = $filter->getData('attribute_model');
         if ($attributeModel === null) {
             return;
@@ -126,7 +126,6 @@ class FilterBuilder
             return;
         }
 
-        $filterName = $item->getName();
         $value = '';
         switch ($frontendInput) {
             case 'price':
@@ -139,7 +138,7 @@ class FilterBuilder
             case 'date':
                 break;
             case 'boolean':
-                $value = (bool) $item->getData('value');
+                $value = (bool)$item->getData('value');
                 break;
             default:
                 $this->logger->debugCmp(
@@ -152,7 +151,18 @@ class FilterBuilder
                 return;
         }
         try {
-            $this->mapValueToFilter($filterName, $value);
+            $attributeCode = $attributeModel->getAttributeCode();
+            if (!is_string($attributeCode)) {
+                $this->logger->debugCmp(
+                    sprintf(
+                        'Cannot build include filter for "%s" attribute ',
+                        $attributeModel->getName()
+                    ),
+                    $this
+                );
+                return;
+            }
+            $this->mapValueToFilter($attributeCode, $value);
         } catch (NostoException $e) {
             $this->logger->exception($e);
         }

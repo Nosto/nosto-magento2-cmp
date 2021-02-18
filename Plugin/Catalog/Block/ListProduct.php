@@ -60,6 +60,7 @@ class ListProduct
      * @param MagentoListProduct $listProduct
      * @param Collection $collection
      * @return Collection
+     * @noinspection PhpUnusedParameterInspection
      */
     public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoListProduct $listProduct,

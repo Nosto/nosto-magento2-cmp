@@ -36,15 +36,15 @@
 
 namespace Nosto\Cmp\Helper;
 
-use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Helper\Scope as NostoHelperScope;
-use Nosto\Service\FeatureAccess;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Nosto\Service\FeatureAccess;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class CategorySorting extends AbstractHelper
 {
-    const NOSTO_PERSONALIZED_KEY = 'nosto-personalized';
+    const NOSTO_PERSONALIZED_KEY = 'nosto_personalized';
 
     /** @var NostoHelperScope */
     private $nostoHelperScope;
@@ -57,6 +57,7 @@ class CategorySorting extends AbstractHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param Context $context
+     * @noinspection PhpUnused
      */
     public function __construct(
         NostoHelperAccount $nostoHelperAccount,

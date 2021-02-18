@@ -34,66 +34,40 @@
  *
  */
 
-namespace Nosto\Cmp\Utils\Debug;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
-class Product
+class GraphQlParamModel
 {
-    public const HEADER_NAME = 'X-Nosto-Product-Ids';
+    /** @var int */
+    private $limit;
+
+    /** @var int */
+    private $currentPage;
 
     /**
-     * @var array Products ID's
+     * GraphQlParamModel constructor.
+     * @param int $limit
+     * @param int $currentPage
      */
-    private $productIdsArray = [];
-
-    /**
-     * @var Product singleton
-     */
-    private static $instance;
-
-    /**
-     * Product constructor.
-     */
-    private function __construct() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
+    public function __construct(int $limit, int $currentPage)
     {
-        // Private
+        $this->limit = $limit;
+        $this->currentPage = $currentPage;
     }
 
     /**
-     * @param array $ids
+     * @return int
      */
-    public function setProductIds(array $ids)
+    public function getLimit(): int
     {
-        $this->productIdsArray = $ids;
+        return $this->limit;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function build()
+    public function getCurrentPage(): int
     {
-        $value = implode(',', $this->productIdsArray);
-        $this->productIdsArray = [];
-        return $value;
-    }
-
-    /**
-     * Returns singleton instance
-     * @return Product
-     */
-    public static function getInstance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new Product();
-        }
-        return self::$instance;
-    }
-
-    /**
-     * Returns if there are product id's in the array for this request
-     * @return bool
-     */
-    public function isEmpty()
-    {
-        return empty($this->productIdsArray);
+        return $this->currentPage;
     }
 }

@@ -42,6 +42,7 @@ return [
     'dead_code_detection' => false,
     'exclude_file_regex' => '@^vendor/.*/(tests|test|Tests|Test)/@',
     'directory_list' => [
+        'Exception',
         'Block',
         'Helper',
         'Model',

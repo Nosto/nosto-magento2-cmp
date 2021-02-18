@@ -36,37 +36,37 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+use Magento\Framework\Event\ManagerInterface;
+use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
+use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
-use Nosto\Service\FeatureAccess;
-use Nosto\Operation\Recommendation\CategoryMerchandising;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Model\Filter\FilterBuilder;
-use Nosto\NostoException;
+use Nosto\Service\FeatureAccess;
 
 class Category
 {
-    const NOSTO_PREVIEW_COOKIE = 'nostopreview';
-    const MAX_PRODUCT_AMOUNT = 100;
-
-    private $cookieManager;
+    /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
 
     /**
-     * Category constructor.
-     * @param CookieManagerInterface $cookieManager
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
-        CookieManagerInterface $cookieManager
+        ManagerInterface $eventManager
     ) {
-        $this->cookieManager = $cookieManager;
+        $this->eventManager = $eventManager;
     }
 
     /**
      * @param NostoAccount $nostoAccount
-     * @param FilterBuilder $filters
+     * @param FiltersInterface $filters
      * @param $nostoCustomerId
      * @param $category
      * @param int $pageNumber
@@ -79,7 +79,7 @@ class Category
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
-        FilterBuilder $filters,
+        FiltersInterface $filters,
         $nostoCustomerId,
         $category,
         $pageNumber,
@@ -90,7 +90,7 @@ class Category
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
         }
-        $categoryMerchandising = new CategoryMerchandising(
+        $categoryMerchandising = new BatchedCategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,
             $category,
@@ -102,6 +102,20 @@ class Category
             $previewMode,
             $limit
         );
-        return $categoryMerchandising->execute();
+        $this->eventManager->dispatch(
+            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_PRE_RESULTS,
+            [
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising
+            ]
+        );
+        $result = $categoryMerchandising->execute();
+        $this->eventManager->dispatch(
+            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_POST_RESULTS,
+            [
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising,
+                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_RESULT => $result
+            ]
+        );
+        return $result;
     }
 }

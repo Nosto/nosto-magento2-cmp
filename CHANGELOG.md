@@ -1,5 +1,16 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.1.0
+* Cache category mapping block
+* Render magento sorting directly when Nosto customer cookie is missing
+* Render frontend layouts only when CM configuration is enabled
+* Fix CM not displaying Nosto sorting when batchToken is null
+* Fix issue where filters were not passed when using MySQL
+* Return Magento sorting when CM call fails
+* Fix Magento products graphql query pagination issue
+* Add support for fetching more than 250 products from Nosto
+* Add category merchandising support for headless (graphql) implementations
+
 ### 3.0.0
 * Add support for using Elasticsearch as a catalog search engine
 * Introduce possibility to use all categories (not only the ones in navigation) with Nosto's category merchandising
@@ -8,7 +19,7 @@ All notable changes to this project will be documented in this file. This projec
 * Fix the default max product limit configuration and set the default value to be 250 which is the current max products limit in Nosto     
 
 ### 2.0.2
-* Introduce possibility to define maximum amount of products to be fetched from Nosto to support category pages with that allow all products to be viewed   
+* Introduce possibility to define maximum amount of products to be fetched from Nosto to support category pages with that allow all products to be viewed
 
 ### 2.0.1
 * Change the script type to `application/json` for category mapping

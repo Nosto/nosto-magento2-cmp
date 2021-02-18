@@ -2,9 +2,8 @@
   "name": "nosto/module-nostocmp",
   "description": "Nosto Category Merchandising extension for Magento 2",
   "type": "magento2-module",
-  "version": "3.0.0",
+  "version": "3.1.0-rc7",
   "require-dev": {
-    "php": ">=7.1.0",
     "magento-ecg/coding-standard": "3.*",
     "magento/module-store": "101.0.4",
     "magento/zendframework1": "1.14.3",
@@ -17,7 +16,8 @@
     "drenso/phan-extensions": "^2.5",
     "phing/phing": "2.*",
     "squizlabs/php_codesniffer": "^3.5",
-    "magento/module-layered-navigation": "100.3.1"
+    "magento/module-layered-navigation": "100.3.1",
+    "magento/module-catalog-graph-ql": "100.3.5"
   },
   "license": [
     "OSL-3.0"
@@ -25,8 +25,9 @@
   "minimum-stability": "dev",
   "require": {
     "nosto/module-nostotagging": "^5.0.3",
-    "nosto/php-sdk": "^5.1.1",
-    "php": ">=7.1.0"
+    "nosto/php-sdk": ">=5.3.5",
+    "php": ">=7.1",
+    "ext-json": "*"
   },
   "repositories": [
     {
@@ -46,6 +47,10 @@
     "exclude": ["Jenkinsfile", "Dockerfile", ".DS_STORE", ".idea", ".phan", ".docker", "ruleset.xml", "phan.*", ".gitignore", "build.xml", ".github", "supervisord.conf", "entrypoint.sh", "/magento"]
   },
   "config": {
-    "process-timeout":0
+    "process-timeout":3600
+  },
+  "scripts": {
+    "di:compile": "./compile.sh",
+    "ci:inspect": "./inspect.sh"
   }
 }
