@@ -43,39 +43,20 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use /** @noinspection PhpDeprecationInspection */
-    Magento\Framework\Registry;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
-use Nosto\Cmp\Model\Filter\FilterBuilder as NostoFilterBuilder;
-use Nosto\Cmp\Model\Service\Recommendation\Category as CategoryRecommendation;
-use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Cmp\Utils\Debug\Product as ProductDebug;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
-use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
-    const MAX_PRODUCTS = 1000;
-
-    /**  @var CategoryBuilder */
-    private $categoryBuilder;
-
     /** @var SearchEngine */
     private $searchEngineHelper;
 
