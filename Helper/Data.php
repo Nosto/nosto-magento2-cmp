@@ -60,6 +60,11 @@ class Data extends AbstractHelper
      */
     const XML_PATH_CATEGORY_MAPPING = 'nosto_cmp/flags/map_all_categories';
 
+    /**
+     * Path to the configuration object that stores the max limit for products
+     */
+    const XML_PATH_CATEGORY_MAX_PRODUCT_LIMIT = 'nosto_cmp/limit/max_products';
+
     /** @var ModuleListInterface */
     private $moduleList;
 
@@ -99,6 +104,17 @@ class Data extends AbstractHelper
     public function isAllCategoriesMapEnabled(StoreInterface $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAPPING, $store);
+    }
+
+    /**
+     * Returns if category sorting is enabled
+     *
+     * @param StoreInterface|null $store the store model or null.
+     * @return integer
+     */
+    public function getMaxProductLimit(StoreInterface $store = null)
+    {
+        return (int)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAX_PRODUCT_LIMIT, $store);
     }
 
     /**
