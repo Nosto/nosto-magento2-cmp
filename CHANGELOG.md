@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
-### 3.0.0-rc1
+### 3.0.0
 * Add support for using Elasticsearch as a catalog search engine 
 * Introduce possibility to use all categories (not only the ones in navigation) with Nosto's category merchandising   
 
