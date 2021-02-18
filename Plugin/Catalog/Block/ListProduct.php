@@ -36,15 +36,47 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-interface ParameterResolverInterface
+use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
+use Nosto\Cmp\Utils\CategoryMerchandising;
+
+class ListProduct
 {
     /**
-     * @return string
+     * @var StateAwareCategoryServiceInterface
      */
-    public function getSortingOrder();
+    private $categoryService;
+
+    public function __construct(
+        StateAwareCategoryServiceInterface $categoryService
+    ) {
+        $this->categoryService = $categoryService;
+    }
 
     /**
-     * @return int
+     * @param MagentoListProduct $listProduct
+     * @param Collection $collection
+     * @return Collection
      */
-    public function getCurrentPage();
+    public function afterGetLoadedProductCollection(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        MagentoListProduct $listProduct,
+        Collection $collection
+    ) {
+        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        if ($categoryMerchandisingResult == null) {
+            return $collection;
+        }
+        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
+        $collection->each(static function ($product) use ($cmpProductIds) {
+            /* @var Product $product */
+            if (in_array($product->getId(), $cmpProductIds, true)) {
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
+            }
+        });
+
+        return $collection;
+    }
 }

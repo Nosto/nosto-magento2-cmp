@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2019, Nosto Solutions Ltd
+ * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,19 +29,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2019 Nosto Solutions Ltd
+ * @copyright 2020 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
-use Magento\Theme\Block\Html\Pager as MagentoPager;
-
 use Magento\Backend\Block\Template\Context;
+
+use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Tagging\Logger\Logger as NostoLogger;
+use Nosto\Cmp\Logger\LoggerInterface;
 
 class Pager extends AbstractBlock
 {
@@ -51,16 +52,25 @@ class Pager extends AbstractBlock
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param ParameterResolverInterface $parameterResolver
-     * @param NostoLogger $logger
+     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         ParameterResolverInterface $parameterResolver,
-        NostoLogger $logger
+        StateAwareCategoryServiceInterface $categoryService,
+        LoggerInterface $logger
     ) {
-        parent::__construct($context, $parameterResolver, $nostoCmpHelperData, $nostoHelperAccount, $logger);
+        parent::__construct(
+            $context,
+            $parameterResolver,
+            $nostoCmpHelperData,
+            $nostoHelperAccount,
+            $categoryService,
+            $logger
+        );
     }
 
     /**
@@ -69,7 +79,7 @@ class Pager extends AbstractBlock
      * @param $param
      * @return bool
      */
-    public function afterIsPageCurrent( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterIsPageCurrent(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result,
         $param
@@ -127,7 +137,7 @@ class Pager extends AbstractBlock
      * @param $result
      * @return bool
      */
-    public function afterIsFirstPage( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterIsFirstPage(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoPager $pager,
         $result
     ) {

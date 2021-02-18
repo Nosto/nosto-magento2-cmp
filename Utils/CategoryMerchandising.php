@@ -34,17 +34,24 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Utils;
 
-interface ParameterResolverInterface
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+
+class CategoryMerchandising
 {
     /**
-     * @return string
+     * @param CategoryMerchandisingResult $result
+     * @return array
      */
-    public function getSortingOrder();
-
-    /**
-     * @return int
-     */
-    public function getCurrentPage();
+    public static function parseProductIds(CategoryMerchandisingResult $result)
+    {
+        $productIds = [];
+        foreach ($result->getResultSet() as $item) {
+            if ($item->getProductId() && is_numeric($item->getProductId())) {
+                $productIds[] = $item->getProductId();
+            }
+        }
+        return $productIds;
+    }
 }

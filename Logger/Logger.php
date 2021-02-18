@@ -34,17 +34,23 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Logger;
 
-interface ParameterResolverInterface
+use Nosto\Tagging\Logger\Logger as NostoLogger;
+
+class Logger extends NostoLogger implements LoggerInterface
 {
     /**
-     * @return string
+     * Logs a debug level message with given source class info
+     *
+     * @param $message
+     * @param object $sourceClass
+     * @param array $context
+     * @return bool
      */
-    public function getSortingOrder();
-
-    /**
-     * @return int
-     */
-    public function getCurrentPage();
+    public function debugCmp($message, $sourceClass, array $context = [])
+    {
+        $mergedContext = array_merge(['nosto' => 'cmp'], $context);
+        return $this->debugWithSource($message, $mergedContext, $sourceClass);
+    }
 }

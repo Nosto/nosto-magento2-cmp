@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2019, Nosto Solutions Ltd
+ * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,22 +29,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2019 Nosto Solutions Ltd
+ * @copyright 2020 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
 namespace  Nosto\Cmp\Plugin\Catalog\Model;
 
-use Magento\Catalog\Model\Config as MagentoConfig;
-use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
-use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Magento\Backend\Block\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\View\Element\Template;
+use Magento\Catalog\Model\Config as MagentoConfig;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 
 class Config extends Template
 {
@@ -85,7 +85,7 @@ class Config extends Template
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws NoSuchEntityException
      */
-    public function afterGetAttributeUsedForSortByArray( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterGetAttributeUsedForSortByArray(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,
         $options
     ) {

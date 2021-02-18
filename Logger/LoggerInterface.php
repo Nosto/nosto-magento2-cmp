@@ -34,17 +34,26 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Logger;
 
-interface ParameterResolverInterface
+use Throwable;
+
+interface LoggerInterface
 {
     /**
-     * @return string
+     * Logs a debug level message with given source class info
+     *
+     * @param $message
+     * @param object $sourceClass
+     * @param array $context
+     * @return bool
      */
-    public function getSortingOrder();
+    public function debugCmp($message, $sourceClass, array $context = []);
 
     /**
-     * @return int
+     * Logs an exception and sends it to New relic if available
+     * @param Throwable $exception
+     * @return bool
      */
-    public function getCurrentPage();
+    public function exception(Throwable $exception);
 }

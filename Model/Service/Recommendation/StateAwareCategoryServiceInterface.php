@@ -34,17 +34,21 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Model\Service\Recommendation;
 
-interface ParameterResolverInterface
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+
+interface StateAwareCategoryServiceInterface
 {
     /**
-     * @return string
+     * @param int $pageNumber
+     * @param int $limit
+     * @return CategoryMerchandisingResult|null
      */
-    public function getSortingOrder();
+    public function getPersonalisationResult($pageNumber, $limit): ?CategoryMerchandisingResult;
 
     /**
-     * @return int
+     * @return CategoryMerchandisingResult|null
      */
-    public function getCurrentPage();
+    public function getLastResult(): ?CategoryMerchandisingResult;
 }

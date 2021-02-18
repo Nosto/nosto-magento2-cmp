@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2019, Nosto Solutions Ltd
+ * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2019 Nosto Solutions Ltd
+ * @copyright 2020 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
@@ -54,6 +54,11 @@ class Data extends AbstractHelper
      * Path to the configuration object that stores category sorting
      */
     const XML_PATH_CATEGORY_SORTING = 'nosto_cmp/flags/category_sorting';
+
+    /**
+     * Path to the configuration object that stores category sorting
+     */
+    const XML_PATH_CATEGORY_MAPPING = 'nosto_cmp/flags/map_all_categories';
 
     /**
      * Path to the configuration object that stores the max limit for products
@@ -88,6 +93,17 @@ class Data extends AbstractHelper
     public function isCategorySortingEnabled(StoreInterface $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_SORTING, $store);
+    }
+
+    /**
+     * Returns if category sorting is enabled
+     *
+     * @param StoreInterface|null $store the store model or null.
+     * @return bool the configuration value
+     */
+    public function isAllCategoriesMapEnabled(StoreInterface $store = null)
+    {
+        return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAPPING, $store);
     }
 
     /**

@@ -34,17 +34,46 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Helper;
 
-interface ParameterResolverInterface
+use Magento\Framework\Search\EngineResolverInterface;
+
+class SearchEngine
 {
+    const ENGINE_MYSQL = 'mysql';
+
     /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
+     * Data constructor.
+     * @param EngineResolverInterface $engineResolver
+     */
+    public function __construct(
+        EngineResolverInterface $engineResolver
+    ) {
+        $this->engineResolver = $engineResolver;
+    }
+
+    /**
+     * Returns the current search engine used for catalog search
+     *
      * @return string
      */
-    public function getSortingOrder();
+    public function getCurrentEngine()
+    {
+        return $this->engineResolver->getCurrentSearchEngine();
+    }
 
     /**
-     * @return int
+     * Shortcut method for determining if the engine is MySQL
+     *
+     * @return boolean
      */
-    public function getCurrentPage();
+    public function isMysql()
+    {
+        return $this->engineResolver->getCurrentSearchEngine() === self::ENGINE_MYSQL;
+    }
 }
