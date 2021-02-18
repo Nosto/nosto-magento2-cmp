@@ -215,5 +215,4 @@ class Toolbar extends AbstractBlock
         );
         $select->where($zendExpression);
     }
-
 }
