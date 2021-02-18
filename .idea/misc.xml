@@ -101,9 +101,7 @@
     <pattern value="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner" />
     <pattern value="\Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner" member="__construct" />
     <pattern value="\Nosto\Cmp\Model\Filter\WebFilters" />
-    <pattern value="\Nosto\Cmp\Model\Filter\WebFilters" method="__construct" />
     <pattern value="\Nosto\Cmp\Model\Filter\GraphQlFilters" />
-    <pattern value="\Nosto\Cmp\Model\Filter\GraphQlFilters" method="__construct" />
     <pattern value="\Nosto\Cmp\Utils\Search" member="isNostoSortingByResolver" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="11" project-jdk-type="JavaSDK">

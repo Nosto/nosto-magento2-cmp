@@ -1,25 +1,13 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
-### 3.1.0-rc7
+### 3.1.0
 * Cache category mapping block
-
-### 3.1.0-rc6
 * Render magento sorting directly when Nosto customer cookie is missing
-
-### 3.1.0-rc5
 * Render frontend layouts only when CM configuration is enabled
-* Upgrade PHP-SDK version to fix CM not displaying Nosto sorting when batchToken is null
-
-### 3.1.0-rc4
+* Fix CM not displaying Nosto sorting when batchToken is null
 * Fix issue where filters were not passed when using MySQL
-
-### 3.1.0-rc3
 * Return Magento sorting when CM call fails
-
-### 3.1.0-rc2
 * Fix Magento products graphql query pagination issue
-
-### 3.1.0-rc1
 * Add support for fetching more than 250 products from Nosto
 * Add category merchandising support for headless (graphql) implementations
 
