@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.1.1
+* Fix version in composer file
+
 ### 3.1.0
 * Cache category mapping block
 * Render magento sorting directly when Nosto customer cookie is missing
