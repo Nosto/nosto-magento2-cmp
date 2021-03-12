@@ -37,6 +37,7 @@
 
 namespace Nosto\Cmp\Block;
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -47,7 +48,11 @@ use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
  */
 class Meta extends Template
 {
+    /** @var NostoCmpHelperData  */
     private $nostoHelperData;
+
+    /** @var Escaper */
+    public $escaper;
 
     /**
      * Constructor.
@@ -61,6 +66,7 @@ class Meta extends Template
     ) {
         parent::__construct($context);
         $this->nostoHelperData = $nostoHelperData;
+        $this->escaper = $context->getEscaper();
     }
 
     /**
