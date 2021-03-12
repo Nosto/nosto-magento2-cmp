@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.1.2
+* Improve logging for getting filter values
+
 ### 3.1.1
 * Fix version in composer file
 

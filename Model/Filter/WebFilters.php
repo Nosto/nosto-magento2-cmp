@@ -176,7 +176,7 @@ class WebFilters implements FiltersInterface
     private function mapValueToFilter(string $name, $value)
     {
         if ($this->brand === $name) {
-            $this->includeFilters->setBrands($this->makeArrayFromValue($value));
+            $this->includeFilters->setBrands($this->makeArrayFromValue($name, $value));
             return;
         }
 
@@ -188,7 +188,7 @@ class WebFilters implements FiltersInterface
                 $this->includeFilters->setFresh((bool)$value);
                 break;
             default:
-                $this->includeFilters->setCustomFields($name, $this->makeArrayFromValue($value));
+                $this->includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
                 break;
         }
     }
@@ -210,11 +210,12 @@ class WebFilters implements FiltersInterface
     }
 
     /**
+     * @param string $name
      * @param string|int|array $value
      * @return array
      * @throws NostoException
      */
-    private function makeArrayFromValue($value)
+    private function makeArrayFromValue($name, $value)
     {
         if (is_string($value) || is_numeric($value)) {
             $value = [$value];
@@ -224,6 +225,6 @@ class WebFilters implements FiltersInterface
             return $value;
         }
 
-        throw new NostoException('Can not map value to filter');
+        throw new NostoException(sprintf('Can not get value for filter: %s', $name));
     }
 }
