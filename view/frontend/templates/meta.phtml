@@ -39,4 +39,4 @@ use Nosto\Cmp\Block\Meta;
 /**  @var Meta $block */
 ?>
 <!-- Nosto CMP Meta Tags -->
-<meta name="nosto-cmp-version" content="<?= $block->escapeHtml($block->getModuleVersion()); ?>">
+<meta name="nosto-cmp-version" content="<?= $block->escaper->escapeHtml($block->getModuleVersion()); ?>">
