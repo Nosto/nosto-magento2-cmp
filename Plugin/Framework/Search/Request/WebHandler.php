@@ -40,6 +40,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\WebFilters;
@@ -57,10 +58,12 @@ class WebHandler extends AbstractHandler
     private $state;
 
     /**
+     * WebHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param WebFilters $filters
      * @param State $state
@@ -71,6 +74,7 @@ class WebHandler extends AbstractHandler
         SearchEngine $searchEngineHelper,
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         WebFilters $filters,
         State $state,
@@ -81,6 +85,7 @@ class WebHandler extends AbstractHandler
             $searchEngineHelper,
             $storeManager,
             $nostoHelperAccount,
+            $cmpHelperData,
             $categoryService,
             $logger
         );

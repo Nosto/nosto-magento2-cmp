@@ -56,9 +56,14 @@ class Data extends AbstractHelper
     const XML_PATH_CATEGORY_SORTING = 'nosto_cmp/flags/category_sorting';
 
     /**
-     * Path to the configuration object that stores category sorting
+     * Path to the configuration object that stores categories mapping
      */
     const XML_PATH_CATEGORY_MAPPING = 'nosto_cmp/flags/map_all_categories';
+
+    /**
+     * Path to the configuration object that stores fallback sorting
+     */
+    const XML_PATH_FALLBACK_SORTING = 'nosto_cmp/flags/fallback_sorting';
 
     /**
      * Path to the configuration object that stores the max limit for products
@@ -97,7 +102,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Returns if category sorting is enabled
+     * Returns if mapping of all categories is enabled
      *
      * @param StoreInterface|null $store the store model or null.
      * @return bool the configuration value
@@ -108,7 +113,18 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Returns if category sorting is enabled
+     * Returns the fallback sorting
+     *
+     * @param StoreInterface|null $store the store model or null.
+     * @return string
+     */
+    public function getFallbackSorting(StoreInterface $store = null)
+    {
+        return $this->getStoreConfig(self::XML_PATH_FALLBACK_SORTING, $store);
+    }
+
+    /**
+     * Returns max product limit
      *
      * @param StoreInterface|null $store the store model or null.
      * @return integer
