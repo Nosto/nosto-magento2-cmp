@@ -202,9 +202,9 @@ abstract class AbstractHandler
     {
         try {
             $store = $this->storeManager->getStore();
-            $this->cmpHelperData->getFallbackSorting($store);
+            $sorting = $this->cmpHelperData->getFallbackSorting($store);
             $requestData['sort'][] = [
-                'field' => 'price',
+                'field' => $sorting,
                 'direction' => 'ASC'
             ];
         } catch (Exception $e) {
