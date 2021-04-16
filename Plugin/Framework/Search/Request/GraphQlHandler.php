@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException;
+use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\GraphQlFilters;
@@ -62,6 +63,7 @@ class GraphQlHandler extends AbstractHandler
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SessionService $sessionService
      * @param LoggerInterface $logger
@@ -72,6 +74,7 @@ class GraphQlHandler extends AbstractHandler
         SearchEngine $searchEngineHelper,
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         SessionService $sessionService,
         LoggerInterface $logger
@@ -81,6 +84,7 @@ class GraphQlHandler extends AbstractHandler
             $searchEngineHelper,
             $storeManager,
             $nostoHelperAccount,
+            $cmpHelperData,
             $categoryService,
             $logger
         );

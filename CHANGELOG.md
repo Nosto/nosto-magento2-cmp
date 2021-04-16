@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.2.0
+* Add configuration to select fallback sorting for relevance
+
 ### 3.1.2
 * Improve logging for getting filter values
 
