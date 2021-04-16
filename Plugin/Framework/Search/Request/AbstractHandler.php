@@ -40,6 +40,7 @@ use Exception;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Exception\MissingCookieException;
+use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
@@ -89,15 +90,22 @@ abstract class AbstractHandler
     private $accountHelper;
 
     /**
+     * @var CmpHelperData
+     */
+    private $cmpHelperData;
+
+    /**
      * @var StateAwareCategoryServiceInterface
      */
     protected $categoryService;
 
     /**
+     * AbstractHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param LoggerInterface $logger
      */
@@ -106,6 +114,7 @@ abstract class AbstractHandler
         SearchEngine $searchEngineHelper,
         StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         LoggerInterface $logger
     ) {
@@ -114,6 +123,7 @@ abstract class AbstractHandler
         $this->searchEngineHelper = $searchEngineHelper;
         $this->storeManager = $storeManager;
         $this->accountHelper = $nostoHelperAccount;
+        $this->cmpHelperData = $cmpHelperData;
         $this->categoryService = $categoryService;
     }
 
@@ -147,6 +157,7 @@ abstract class AbstractHandler
                 $this,
                 $requestData
             );
+            $this->setFallbackSort($requestData);
             return;
         }
         $this->resetRequestData($requestData);
@@ -180,6 +191,25 @@ abstract class AbstractHandler
     private function cleanUpCmpSort(array &$requestData)
     {
         unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+    }
+
+    /**
+     * Set fallback sort order
+     *
+     * @param array $requestData
+     */
+    private function setFallbackSort(array &$requestData)
+    {
+        try {
+            $store = $this->storeManager->getStore();
+            $sorting = $this->cmpHelperData->getFallbackSorting($store);
+            $requestData['sort'][] = [
+                'field' => $sorting,
+                'direction' => 'ASC'
+            ];
+        } catch (Exception $e) {
+            $this->logger->debugCmp(sprintf("Could not set fallback sorting. %s", $e->getMessage()), $this);
+        }
     }
 
     /**

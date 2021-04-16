@@ -63,6 +63,15 @@
                     </comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="fallback_sorting" translate="label comment" type="select" sortOrder="130"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Fallback sorting</label>
+                    <comment>
+                        <![CDATA[Add all categories in the script mapping]]>
+                    </comment>
+                    <source_model>Nosto\Cmp\Model\Config\Source\FallbackSorting</source_model>
+                </field>
+
             </group>
             <group id="limit" translate="label" type="text" sortOrder="20" showInDefault="1"
                    showInWebsite="1" showInStore="1">

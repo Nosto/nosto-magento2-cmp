@@ -42,6 +42,7 @@
             <flags>
                 <category_sorting>0</category_sorting>
                 <map_all_categories>0</map_all_categories>
+                <fallback_sorting>position</fallback_sorting>
             </flags>
             <limit>
                 <max_products>250</max_products>
