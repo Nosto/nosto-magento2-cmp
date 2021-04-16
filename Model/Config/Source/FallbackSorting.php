@@ -51,12 +51,12 @@ class FallbackSorting implements OptionSourceInterface
 
     /**
      * FallbackSorting constructor.
+     * @param ConfigFactory $configFactory
      */
     public function __construct(ConfigFactory $configFactory)
     {
         $this->configFactory = $configFactory;
     }
-
 
     /**
      * @return array|void
@@ -72,7 +72,6 @@ class FallbackSorting implements OptionSourceInterface
         $configModel = $this->configFactory->create();
         $attributesData = $configModel->getAttributesUsedForSortBy();
         foreach ($attributesData as $attributeData) {
-            $attributeCode = $attributeData['attribute_code'];
             $options[] = [
                 'value' => $attributeData['attribute_code'],
                 'label' => new Phrase($attributeData['store_label'])
