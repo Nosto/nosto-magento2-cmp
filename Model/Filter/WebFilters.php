@@ -217,7 +217,7 @@ class WebFilters implements FiltersInterface
      */
     private function makeArrayFromValue($name, $value)
     {
-        if (is_string($value) || is_numeric($value)) {
+        if (is_string($value) || is_numeric($value) || is_bool($value)) {
             $value = [$value];
         }
 
