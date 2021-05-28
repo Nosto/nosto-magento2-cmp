@@ -221,6 +221,12 @@ class WebFilters implements FiltersInterface
             $value = [$value];
         }
 
+        if (is_bool($value)) {
+            // bool Yes/No attributes are stored as text in Nosto
+            $value = $value ? "Yes" : "No";
+            $value = [$value];
+        }
+
         if (is_array($value)) {
             return $value;
         }
