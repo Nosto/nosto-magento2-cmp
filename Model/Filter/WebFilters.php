@@ -217,7 +217,13 @@ class WebFilters implements FiltersInterface
      */
     private function makeArrayFromValue($name, $value)
     {
-        if (is_string($value) || is_numeric($value) || is_bool($value)) {
+        if (is_string($value) || is_numeric($value)) {
+            $value = [$value];
+        }
+
+        if (is_bool($value)) {
+            // bool Yes/No attributes are stored as text in Nosto
+            $value = $value ? "Yes" : "No";
             $value = [$value];
         }
 
