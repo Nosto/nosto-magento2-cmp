@@ -42,7 +42,7 @@
                  showInWebsite="1" showInStore="1">
             <label>Nosto Category Merchandising</label>
             <tab>service</tab>
-            <resource>Nosto_Cmp::config_nosto</resource>
+            <resource>Nosto_Cmp::config_nosto_cmp</resource>
             <group id="flags" translate="label" type="text" sortOrder="10" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Category Merchandising</label>
