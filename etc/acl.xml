@@ -36,10 +36,20 @@
 
 <!--suppress XmlUnboundNsPrefix -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Nosto_Cmp" setup_version="3.2.2">
-        <sequence>
-            <module name="Nosto_Tagging"/>
-        </sequence>
-    </module>
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Nosto_Cmp::config_nosto_cmp"
+                                      title="Nosto CMP Configuration Section" translate="title"
+                                      sortOrder="1200"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
 </config>
