@@ -141,30 +141,30 @@ abstract class AbstractHandler
             $this
         );
         $this->preFetchOps($requestData);
-        $this->cleanUpCmpSort($requestData);
-        try {
-            $productIds = $this->getCmpProductIds(
-                $this->parsePageNumber($requestData),
-                $this->parseLimit($requestData)
-            );
-        } catch (CmpException $e) {
-            $this->logger->exception($e);
-            return;
-        }
-        if (empty($productIds)) {
-            $this->logger->debugCmp(
-                'Nosto did not return products for the request',
-                $this,
-                $requestData
-            );
-            $this->setFallbackSort($requestData);
-            return;
-        }
-        $this->resetRequestData($requestData);
-        $this->applyCmpFilter(
-            $requestData,
-            $productIds
-        );
+//        $this->cleanUpCmpSort($requestData);
+//        try {
+//            $productIds = $this->getCmpProductIds(
+//                $this->parsePageNumber($requestData),
+//                $this->parseLimit($requestData)
+//            );
+//        } catch (CmpException $e) {
+//            $this->logger->exception($e);
+//            return;
+//        }
+//        if (empty($productIds)) {
+//            $this->logger->debugCmp(
+//                'Nosto did not return products for the request',
+//                $this,
+//                $requestData
+//            );
+//            $this->setFallbackSort($requestData);
+//            return;
+//        }
+//        $this->resetRequestData($requestData);
+//        $this->applyCmpFilter(
+//            $requestData,
+//            $productIds
+//        );
     }
 
     /**
