@@ -141,30 +141,30 @@ abstract class AbstractHandler
             $this
         );
         $this->preFetchOps($requestData);
-//        $this->cleanUpCmpSort($requestData);
-//        try {
-//            $productIds = $this->getCmpProductIds(
-//                $this->parsePageNumber($requestData),
-//                $this->parseLimit($requestData)
-//            );
-//        } catch (CmpException $e) {
-//            $this->logger->exception($e);
-//            return;
-//        }
-//        if (empty($productIds)) {
-//            $this->logger->debugCmp(
-//                'Nosto did not return products for the request',
-//                $this,
-//                $requestData
-//            );
-//            $this->setFallbackSort($requestData);
-//            return;
-//        }
+        $this->cleanUpCmpSort($requestData);
+        try {
+            $productIds = $this->getCmpProductIds(
+                $this->parsePageNumber($requestData),
+                $this->parseLimit($requestData)
+            );
+        } catch (CmpException $e) {
+            $this->logger->exception($e);
+            return;
+        }
+        if (empty($productIds)) {
+            $this->logger->debugCmp(
+                'Nosto did not return products for the request',
+                $this,
+                $requestData
+            );
+            $this->setFallbackSort($requestData);
+            return;
+        }
 //        $this->resetRequestData($requestData);
-//        $this->applyCmpFilter(
-//            $requestData,
-//            $productIds
-//        );
+        $this->applyCmpFilter(
+            $requestData,
+            $productIds
+        );
     }
 
     /**
@@ -277,6 +277,7 @@ abstract class AbstractHandler
      */
     private function getCmpProductIds($pageNum, $limit)
     {
+        return [276, 292, 308, 324, 340,196];
         try {
             $res = $this->categoryService->getPersonalisationResult(
                 $this->getFilters(),

@@ -34,48 +34,23 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Framework\Search\Request;
+namespace Nosto\Cmp\Utils;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Search\Request\Builder as MagentoRequestBuilder;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\Search\RequestInterface;
-use Nosto\Cmp\Model\Search\Request;
-use Nosto\Cmp\Utils\Request as RequestUtils;
 
-class Builder
+class Request
 {
     /**
-     * @var ObjectManagerInterface
+     * @param QueryInterface $query
+     * @return bool
      */
-    private $objectManager;
-
-    /**
-     * Builder constructor.
-     * @param ObjectManagerInterface $objectManager
-     */
-    public function __construct(ObjectManagerInterface  $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
-     * @param MagentoRequestBuilder $builder
-     * @param RequestInterface $request
-     * @return RequestInterface
-     */
-    public function afterCreate(MagentoRequestBuilder $builder, RequestInterface $request)
-    {
-        /** @var QueryInterface $query */
-        $query = $request->getQuery();
-        if (RequestUtils::containsBoolNostoSearchQuery($query)) {
-            /** @var Request $nostoRequest */
-            $nostoRequest =  $this->objectManager->create(
-                Request::class,
-                ["request" => $request]
-            );
-            return $nostoRequest;
+    public static function containsBoolNostoSearchQuery(QueryInterface $query) {
+        if ($query instanceof BoolExpression &&
+            $query->getMust() !== null &&
+            isset($query->getMust()['nosto_cmp_id_search'])) {
+            return true;
         }
-        return $request;
+        return false;
     }
 }
