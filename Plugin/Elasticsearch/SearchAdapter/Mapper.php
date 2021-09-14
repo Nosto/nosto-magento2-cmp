@@ -34,20 +34,25 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Elasticsearch\SearchAdaper\Query;
+namespace Nosto\Cmp\Plugin\Elasticsearch\SearchAdapter;
 
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as MagentoQueryBuilder;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as MagentoMapper;
+use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\RequestInterface;
 use Nosto\Cmp\Model\Search\Request as NostoSearchRequest;
 
-class Builder
+class Mapper
 {
-
     const POST_FILTER = 'post_filter';
 
-    public function afterInitQuery(MagentoQueryBuilder $builder, RequestInterface $request, array $searchQuery) {
+    public function afterBuildQuery(MagentoMapper $mapper, array $searchQuery, RequestInterface  $request)
+    {
         if ($request instanceof NostoSearchRequest) {
-            $searchQuery[self::POST_FILTER] = $request->getPostFilter();
+            $postFilter = $request->getPostFilter();
+            if ($postFilter !== null) {
+
+                $searchQuery['body']['post_filter']['bool']['must'][0]['terms']['_id'] = $postFilter->getReference()->getMust()['prod_ids']->getValue();
+            }
         }
         return $searchQuery;
     }

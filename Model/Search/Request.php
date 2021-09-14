@@ -58,13 +58,11 @@ class Request implements RequestInterface
         $this->request = $request;
     }
 
-    /**
-     * @return array
-     */
+
     public function getPostFilter()
     {
         /** @var QueryInterface $query */
-        $query = $this->getQuery();
+        $query = $this->request->getQuery();
         if (RequestUtils::containsBoolNostoSearchQuery($query)) {
             return $query->getMust()['nosto_cmp_id_search'];
         }
