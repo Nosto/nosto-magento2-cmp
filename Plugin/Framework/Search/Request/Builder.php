@@ -65,6 +65,7 @@ class Builder
      * @param RequestInterface $request
      * @return RequestInterface
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterCreate(MagentoRequestBuilder $builder, RequestInterface $request)
     {
         /** @var QueryInterface $query */

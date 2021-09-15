@@ -160,7 +160,6 @@ abstract class AbstractHandler
             $this->setFallbackSort($requestData);
             return;
         }
-//        $this->resetRequestData($requestData);
         $this->applyCmpFilter(
             $requestData,
             $productIds
@@ -277,7 +276,6 @@ abstract class AbstractHandler
      */
     private function getCmpProductIds($pageNum, $limit)
     {
-        return [276, 292, 308, 324, 340,196];
         try {
             $res = $this->categoryService->getPersonalisationResult(
                 $this->getFilters(),
@@ -292,37 +290,6 @@ abstract class AbstractHandler
             $this->logger->exception($e);
             return null;
         }
-    }
-
-    /**
-     * Removes queries & filters from the request data
-     *
-     * @param array $requestData
-     */
-    private function resetRequestData(array &$requestData)
-    {
-        $removedQueries = [];
-        foreach ($requestData[self::KEY_QUERIES] as $key => $definition) {
-            if ($key !== self::KEY_BIND_TO_QUERY && $key !== self::KEY_BIND_TO_GRAPHQL) {
-                $removedQueries[$key] = $key;
-                unset($requestData[self::KEY_QUERIES][$key]);
-            }
-        }
-        $removedRefs = [];
-        $bindKey = $this->getBindKey();
-
-        // Also referencing definitions
-        foreach ($requestData[self::KEY_QUERIES][$bindKey]['queryReference'] as $refIndex => $ref) {
-            $refStr = $ref['ref'];
-            if (isset($removedQueries[$refStr])) {
-                $removedRefs[$refStr] = $refStr;
-                unset($requestData[self::KEY_QUERIES][$bindKey]['queryReference'][$refIndex]);
-            }
-        }
-        $requestData['filters'] = [];
-
-        // Reset also the start point since Nosto will only use product ids
-        $requestData[self::KEY_RESULTS_FROM] = 0;
     }
 
     /**

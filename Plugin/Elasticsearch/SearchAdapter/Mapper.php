@@ -37,10 +37,7 @@
 namespace Nosto\Cmp\Plugin\Elasticsearch\SearchAdapter;
 
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as MagentoMapper;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as QueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
-use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\RequestInterface;
 use Nosto\Cmp\Model\Search\Request as NostoSearchRequest;
 
@@ -49,22 +46,12 @@ class Mapper extends MagentoMapper
     const POST_FILTER = 'post_filter';
 
     /**
-     * Mapper constructor.
-     * @param QueryBuilder $queryBuilder
-     * @param MatchQueryBuilder $matchQueryBuilder
-     * @param FilterBuilder $filterBuilder
-     */
-    public function __construct(QueryBuilder $queryBuilder, MatchQueryBuilder $matchQueryBuilder, FilterBuilder $filterBuilder)
-    {
-        parent::__construct($queryBuilder, $matchQueryBuilder, $filterBuilder);
-    }
-
-    /**
      * @param MagentoMapper $mapper
      * @param array $searchQuery
      * @param RequestInterface $request
      * @return array
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterBuildQuery(MagentoMapper $mapper, array $searchQuery, RequestInterface  $request)
     {
         if ($request instanceof NostoSearchRequest) {
@@ -73,7 +60,7 @@ class Mapper extends MagentoMapper
                 $searchQuery['body'][self::POST_FILTER] = $this->processQuery(
                     $postFilter,
                     [],
-                    BoolQuery::QUERY_CONDITION_MUST
+                    BoolExpression::QUERY_CONDITION_MUST
                 );
             }
         }
