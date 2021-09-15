@@ -38,9 +38,10 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\Request\Builder as MagentoRequestBuilder;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\RequestInterface;
-use Nosto\Cmp\Model\Search\Request;
+use Nosto\Cmp\Model\Search\Request as NostoSearchRequest;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 
 class Builder
@@ -68,10 +69,10 @@ class Builder
     {
         /** @var QueryInterface $query */
         $query = $request->getQuery();
-        if (RequestUtils::containsBoolNostoSearchQuery($query)) {
-            /** @var Request $nostoRequest */
+        if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
+            /** @var NostoSearchRequest $nostoRequest */
             $nostoRequest =  $this->objectManager->create(
-                Request::class,
+                NostoSearchRequest::class,
                 ["request" => $request]
             );
             return $nostoRequest;

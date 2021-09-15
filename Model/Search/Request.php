@@ -58,44 +58,15 @@ class Request implements RequestInterface
         $this->request = $request;
     }
 
-
+    /**
+     * @return BoolExpression|QueryInterface
+     */
     public function getPostFilter()
     {
         /** @var QueryInterface $query */
         $query = $this->request->getQuery();
-        if (RequestUtils::containsBoolNostoSearchQuery($query)) {
-            return $query->getMust()['nosto_cmp_id_search'];
-        }
-        return null;
-    }
-
-    public function getName()
-    {
-        return $this->request->getName();
-    }
-
-    public function getIndex()
-    {
-        return $this->request->getIndex();
-    }
-
-    public function getDimensions()
-    {
-        return $this->request->getDimensions();
-    }
-
-    public function getAggregation()
-    {
-        return $this->request->getAggregation();
-    }
-
-    public function getQuery()
-    {
-        /** @var QueryInterface $query */
-        $query = $this->request->getQuery();
-        if (RequestUtils::containsBoolNostoSearchQuery($query)) {
-            $must = $query->getMust();
-            unset($must['nosto_cmp_id_search']);
+        if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
+            $must['nosto_cmp_id_search'] = $query->getMust()[RequestUtils::NOSTO_CMP_REQUEST_QUERY];
             return new BoolExpression(
                 $query->getName(),
                 $query->getBoost(),
@@ -107,16 +78,78 @@ class Request implements RequestInterface
         return $query;
     }
 
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->request->getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndex()
+    {
+        return $this->request->getIndex();
+    }
+
+    /**
+     * @return MagentoRequest\Dimension[]
+     */
+    public function getDimensions()
+    {
+        return $this->request->getDimensions();
+    }
+
+    /**
+     * @return MagentoRequest\BucketInterface[]
+     */
+    public function getAggregation()
+    {
+        return $this->request->getAggregation();
+    }
+
+    /**
+     * @return BoolExpression|QueryInterface
+     */
+    public function getQuery()
+    {
+        /** @var QueryInterface $query */
+        $query = $this->request->getQuery();
+        if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
+            $must = $query->getMust();
+            unset($must[RequestUtils::NOSTO_CMP_REQUEST_QUERY]);
+            return new BoolExpression(
+                $query->getName(),
+                $query->getBoost(),
+                $must,
+                $query->getShould(),
+                $query->getMustNot()
+            );
+        }
+        return $query;
+    }
+
+    /**
+     * @return int|null
+     */
     public function getFrom()
     {
         return $this->request->getFrom();
     }
 
+    /**
+     * @return int|null
+     */
     public function getSize()
     {
         return $this->request->getSize();
     }
 
+    /**
+     * @return array
+     */
     public function getSort()
     {
         return $this->request->getSort();

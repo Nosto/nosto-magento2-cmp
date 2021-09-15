@@ -41,14 +41,17 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 class Request
 {
+
+    const NOSTO_CMP_REQUEST_QUERY = 'nosto_cmp_id_search';
+
     /**
-     * @param QueryInterface $query
+     * @param BoolExpression $query
      * @return bool
      */
-    public static function containsBoolNostoSearchQuery(QueryInterface $query) {
-        if ($query instanceof BoolExpression &&
-            $query->getMust() !== null &&
-            isset($query->getMust()['nosto_cmp_id_search'])) {
+    public static function containsBoolNostoSearchQuery(BoolExpression $query): bool
+    {
+        if ($query->getMust() !== null &&
+            isset($query->getMust()[self::NOSTO_CMP_REQUEST_QUERY])) {
             return true;
         }
         return false;
