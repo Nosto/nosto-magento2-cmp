@@ -37,10 +37,9 @@
 namespace Nosto\Cmp\Model\Search;
 
 use Magento\Framework\Search\Request as MagentoRequest;
-use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\RequestInterface;
 use Nosto\Cmp\Utils\Request as RequestUtils;
-use Magento\Framework\Search\Request\Query\BoolExpression;
 
 class Request implements RequestInterface
 {
@@ -63,7 +62,6 @@ class Request implements RequestInterface
      */
     public function getPostFilter()
     {
-        /** @var QueryInterface $query */
         $query = $this->request->getQuery();
         if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
             $must = [];
@@ -116,7 +114,6 @@ class Request implements RequestInterface
      */
     public function getQuery()
     {
-        /** @var QueryInterface $query */
         $query = $this->request->getQuery();
         if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
             $must = $query->getMust();
@@ -153,7 +150,8 @@ class Request implements RequestInterface
      */
     public function getSort()
     {
-        //@phan-suppress-next-line PhanDeprecatedFunction
+        //@phan-suppress-next-next-line PhanDeprecatedFunction
+        /** @noinspection PhpDeprecationInspection */
         return $this->request->getSort();
     }
 }

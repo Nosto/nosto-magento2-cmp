@@ -64,11 +64,11 @@ class Builder
      * @param MagentoRequestBuilder $builder
      * @param RequestInterface $request
      * @return RequestInterface
+     * @noinspection RedundantSuppression
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterCreate(MagentoRequestBuilder $builder, RequestInterface $request)
     {
-        /** @var QueryInterface $query */
         $query = $request->getQuery();
         if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
             /** @var NostoSearchRequest $nostoRequest */
