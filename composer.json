@@ -17,7 +17,8 @@
     "phing/phing": "2.*",
     "squizlabs/php_codesniffer": "^3.5",
     "magento/module-layered-navigation": "100.4.2",
-    "magento/module-catalog-graph-ql": "100.4.2"
+    "magento/module-catalog-graph-ql": "100.4.2",
+    "magento/module-elasticsearch": "*"
   },
   "license": [
     "OSL-3.0"

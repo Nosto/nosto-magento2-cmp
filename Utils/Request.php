@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Utils;
 
 use Magento\Framework\Search\Request\Query\BoolExpression;
-use Magento\Framework\Search\Request\QueryInterface;
 
 class Request
 {

@@ -66,6 +66,7 @@ class Request implements RequestInterface
         /** @var QueryInterface $query */
         $query = $this->request->getQuery();
         if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
+            $must = [];
             $must['nosto_cmp_id_search'] = $query->getMust()[RequestUtils::NOSTO_CMP_REQUEST_QUERY];
             return new BoolExpression(
                 $query->getName(),
@@ -152,6 +153,7 @@ class Request implements RequestInterface
      */
     public function getSort()
     {
+        //@phan-suppress-next-line PhanDeprecatedFunction
         return $this->request->getSort();
     }
 }
