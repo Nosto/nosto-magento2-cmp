@@ -66,7 +66,7 @@ class Request implements RequestInterface
         $query = $this->request->getQuery();
         if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
             $must = [];
-            $must['nosto_cmp_id_search'] = $query->getMust()[RequestUtils::NOSTO_CMP_REQUEST_QUERY];
+            $must[RequestUtils::KEY_CMP] = $query->getMust()[RequestUtils::KEY_CMP];
             return new BoolExpression(
                 $query->getName(),
                 $query->getBoost(),
@@ -111,11 +111,23 @@ class Request implements RequestInterface
     }
 
     /**
-     * @return MagentoRequest\QueryInterface
+     * @return BoolExpression|QueryInterface
      */
     public function getQuery()
     {
-        return $this->request->getQuery();
+        $query = $this->request->getQuery();
+        if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
+            $must = $query->getMust();
+            unset($must[RequestUtils::KEY_CMP]);
+            return new BoolExpression(
+                $query->getName(),
+                $query->getBoost(),
+                $must,
+                $query->getShould(),
+                $query->getMustNot()
+            );
+        }
+        return $query;
     }
 
     /**

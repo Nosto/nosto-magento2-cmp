@@ -41,7 +41,7 @@ use Magento\Framework\Search\Request\Query\BoolExpression;
 class Request
 {
 
-    const NOSTO_CMP_REQUEST_QUERY = 'nosto_cmp_id_search';
+    const KEY_CMP = 'nosto_cmp_id_search';
 
     /**
      * @param BoolExpression $query
@@ -50,7 +50,7 @@ class Request
     public static function containsBoolNostoSearchQuery(BoolExpression $query): bool
     {
         if ($query->getMust() !== null &&
-            isset($query->getMust()[self::NOSTO_CMP_REQUEST_QUERY])) {
+            isset($query->getMust()[self::KEY_CMP])) {
             return true;
         }
         return false;

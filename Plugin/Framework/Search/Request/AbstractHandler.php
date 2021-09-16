@@ -47,6 +47,7 @@ use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 
@@ -60,7 +61,6 @@ abstract class AbstractHandler
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
     const KEY_VALUE = 'value';
-    const KEY_CMP = 'nosto_cmp_id_search';
     const KEY_RESULTS_FROM = 'from';
     const KEY_RESULT_SIZE = 'size';
 
@@ -223,10 +223,10 @@ abstract class AbstractHandler
 
         $requestData[self::KEY_QUERIES][$bindKey]['queryReference'][] = [
             'clause' => 'must',
-            'ref' => 'nosto_cmp_id_search'
+            'ref' => RequestUtils::KEY_CMP
         ];
 
-        $requestData[self::KEY_QUERIES][self::KEY_CMP] = [
+        $requestData[self::KEY_QUERIES][RequestUtils::KEY_CMP] = [
             'name' => 'nosto_cmp',
             'filterReference' => [
                 [
