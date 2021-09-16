@@ -40,6 +40,7 @@ use Magento\Framework\Search\Request as MagentoRequest;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\RequestInterface;
 use Nosto\Cmp\Utils\Request as RequestUtils;
+use Magento\Framework\Search\Request\QueryInterface;
 
 class Request implements RequestInterface
 {
@@ -110,23 +111,11 @@ class Request implements RequestInterface
     }
 
     /**
-     * @return BoolExpression|QueryInterface
+     * @return MagentoRequest\QueryInterface
      */
     public function getQuery()
     {
-        $query = $this->request->getQuery();
-        if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
-            $must = $query->getMust();
-            unset($must[RequestUtils::NOSTO_CMP_REQUEST_QUERY]);
-            return new BoolExpression(
-                $query->getName(),
-                $query->getBoost(),
-                $must,
-                $query->getShould(),
-                $query->getMustNot()
-            );
-        }
-        return $query;
+        return $this->request->getQuery();
     }
 
     /**

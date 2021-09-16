@@ -50,6 +50,7 @@ class Mapper extends MagentoMapper
      * @param array $searchQuery
      * @param RequestInterface $request
      * @return array
+     * @noinspection PhpUnusedParameterInspection
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterBuildQuery(MagentoMapper $mapper, array $searchQuery, RequestInterface  $request)
