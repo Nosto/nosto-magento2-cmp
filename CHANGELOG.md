@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
 ### 3.3.0-rc1
-* Fix incorrect numbers in filters
+* Fix incorrect products number in filters
 
 ### 3.2.2
 * Add ACL resource for the module
