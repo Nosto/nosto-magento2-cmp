@@ -50,6 +50,12 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper">
+        <plugin name="nosto_elasticsearch_searchadapter_mapper" type="Nosto\Cmp\Plugin\Elasticsearch\SearchAdapter\Mapper" />
+    </type>
+    <type name="Magento\Framework\Search\Request\Builder">
+        <plugin name="nosto_framework_search_builder" type="Nosto\Cmp\Plugin\Framework\Search\Request\Builder" />
+    </type>
     <type name="Magento\Framework\Search\Request\Cleaner">
         <plugin name="nosto_search_results_cleaner" type="Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner"/>
     </type>

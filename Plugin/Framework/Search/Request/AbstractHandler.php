@@ -47,6 +47,7 @@ use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 
@@ -60,7 +61,6 @@ abstract class AbstractHandler
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
     const KEY_VALUE = 'value';
-    const KEY_CMP = 'nosto_cmp_id_search';
     const KEY_RESULTS_FROM = 'from';
     const KEY_RESULT_SIZE = 'size';
 
@@ -160,7 +160,6 @@ abstract class AbstractHandler
             $this->setFallbackSort($requestData);
             return;
         }
-        $this->resetRequestData($requestData);
         $this->applyCmpFilter(
             $requestData,
             $productIds
@@ -224,10 +223,10 @@ abstract class AbstractHandler
 
         $requestData[self::KEY_QUERIES][$bindKey]['queryReference'][] = [
             'clause' => 'must',
-            'ref' => 'nosto_cmp_id_search'
+            'ref' => RequestUtils::KEY_CMP
         ];
 
-        $requestData[self::KEY_QUERIES][self::KEY_CMP] = [
+        $requestData[self::KEY_QUERIES][RequestUtils::KEY_CMP] = [
             'name' => 'nosto_cmp',
             'filterReference' => [
                 [
@@ -291,37 +290,6 @@ abstract class AbstractHandler
             $this->logger->exception($e);
             return null;
         }
-    }
-
-    /**
-     * Removes queries & filters from the request data
-     *
-     * @param array $requestData
-     */
-    private function resetRequestData(array &$requestData)
-    {
-        $removedQueries = [];
-        foreach ($requestData[self::KEY_QUERIES] as $key => $definition) {
-            if ($key !== self::KEY_BIND_TO_QUERY && $key !== self::KEY_BIND_TO_GRAPHQL) {
-                $removedQueries[$key] = $key;
-                unset($requestData[self::KEY_QUERIES][$key]);
-            }
-        }
-        $removedRefs = [];
-        $bindKey = $this->getBindKey();
-
-        // Also referencing definitions
-        foreach ($requestData[self::KEY_QUERIES][$bindKey]['queryReference'] as $refIndex => $ref) {
-            $refStr = $ref['ref'];
-            if (isset($removedQueries[$refStr])) {
-                $removedRefs[$refStr] = $refStr;
-                unset($requestData[self::KEY_QUERIES][$bindKey]['queryReference'][$refIndex]);
-            }
-        }
-        $requestData['filters'] = [];
-
-        // Reset also the start point since Nosto will only use product ids
-        $requestData[self::KEY_RESULTS_FROM] = 0;
     }
 
     /**
