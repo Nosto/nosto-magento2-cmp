@@ -39,6 +39,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Backend\Block\Template\Context;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
@@ -53,6 +54,7 @@ class Pager extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param ParameterResolverInterface $parameterResolver
      * @param StateAwareCategoryServiceInterface $categoryService
+     * @param SearchEngine $searchEngineHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -61,6 +63,7 @@ class Pager extends AbstractBlock
         NostoHelperAccount $nostoHelperAccount,
         ParameterResolverInterface $parameterResolver,
         StateAwareCategoryServiceInterface $categoryService,
+        SearchEngine $searchEngineHelper,
         LoggerInterface $logger
     ) {
         parent::__construct(
@@ -69,6 +72,7 @@ class Pager extends AbstractBlock
             $nostoCmpHelperData,
             $nostoHelperAccount,
             $categoryService,
+            $searchEngineHelper,
             $logger
         );
     }
@@ -86,7 +90,7 @@ class Pager extends AbstractBlock
         $result,
         $param
     ) {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getCurrentPageNumber() === (int)$param;
         }
         return $result;
@@ -104,7 +108,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             $start = 0;
             $end = 0;
             $frameLength = $pager->getFrameLength();
@@ -145,7 +149,7 @@ class Pager extends AbstractBlock
         MagentoPager $pager,
         $result
     ) {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getCurrentPageNumber() === 1;
         }
         return $result;
@@ -162,7 +166,7 @@ class Pager extends AbstractBlock
         MagentoPager $pager,
         $result
     ) {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getLastPageNumber() === $this->getCurrentPageNumber();
         }
         return $result;
@@ -176,7 +180,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetNextPageUrl(MagentoPager $pager, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $pager->getPageUrl((string)($this->getCurrentPageNumber() + 1));
         }
         return $result;
@@ -190,7 +194,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $pager->getPageUrl((string)($this->getCurrentPageNumber() - 1));
         }
         return $result;

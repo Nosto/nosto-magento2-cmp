@@ -44,6 +44,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
@@ -51,6 +52,10 @@ use Nosto\Cmp\Logger\LoggerInterface;
 
 abstract class AbstractBlock extends Template
 {
+
+    /** @var SearchEngine */
+    protected $searchEngineHelper;
+
     /** @var int */
     private $lastPageNumber;
 
@@ -84,6 +89,7 @@ abstract class AbstractBlock extends Template
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
+     * @param SearchEngine $searchEngineHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -92,6 +98,7 @@ abstract class AbstractBlock extends Template
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryServiceInterface $categoryService,
+        SearchEngine $searchEngineHelper,
         LoggerInterface $logger
     ) {
         $this->categoryService = $categoryService;
@@ -100,6 +107,7 @@ abstract class AbstractBlock extends Template
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->logger = $logger;
         $this->storeManager = $context->getStoreManager();
+        $this->searchEngineHelper = $searchEngineHelper;
         parent::__construct($context);
     }
 
@@ -175,7 +183,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetFirstNum($block, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
             return $pageSize * ($currentPage - 1) + 1;
@@ -192,7 +200,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetLastNum($block, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
             $totalResultOfPage = $block->getCollection()->getSize();
@@ -209,7 +217,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getTotalProducts();
         }
         return $result;
@@ -223,7 +231,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getLastPageNumber();
         }
         return $result;

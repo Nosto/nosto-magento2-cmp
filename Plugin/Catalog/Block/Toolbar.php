@@ -60,8 +60,6 @@ use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-    /** @var SearchEngine */
-    private $searchEngineHelper;
 
     /** @var WebFilters */
     private $filters;
@@ -94,7 +92,6 @@ class Toolbar extends AbstractBlock
         WebFilters $filters,
         State $state
     ) {
-        $this->searchEngineHelper = $searchEngineHelper;
         $this->filters = $filters;
         $this->state = $state;
         parent::__construct(
@@ -103,6 +100,7 @@ class Toolbar extends AbstractBlock
             $nostoCmpHelperData,
             $nostoHelperAccount,
             $categoryService,
+            $searchEngineHelper,
             $logger
         );
     }
