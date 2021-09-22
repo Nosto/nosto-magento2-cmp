@@ -60,6 +60,7 @@ class Search
      * @param MagentoSearch $search
      * @param SearchResultInterface $result
      * @return SearchResultInterface
+     * @noinspection PhpUnusedParameterInspection
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterSearch(MagentoSearch $search, $result)

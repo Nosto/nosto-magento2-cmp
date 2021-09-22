@@ -54,6 +54,7 @@ class Pager extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param ParameterResolverInterface $parameterResolver
      * @param StateAwareCategoryServiceInterface $categoryService
+     * @param SearchEngine $searchEngineHelper
      * @param LoggerInterface $logger
      */
     public function __construct(

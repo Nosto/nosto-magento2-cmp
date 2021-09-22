@@ -89,6 +89,7 @@ abstract class AbstractBlock extends Template
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
+     * @param SearchEngine $searchEngineHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
