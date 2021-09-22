@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.3.0-rc2
+* Set total number of products to search result
+
 ### 3.3.0-rc1
 * Fix incorrect products number in filters
 
