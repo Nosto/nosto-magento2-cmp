@@ -61,6 +61,7 @@ class Search
      * @param SearchResultInterface $result
      * @return SearchResultInterface
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterSearch(MagentoSearch $search, $result)
     {
         $count = $this->getCmpTotalCount();
@@ -78,9 +79,8 @@ class Search
     {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
         if ($categoryMerchandisingResult !== null) {
-           return $categoryMerchandisingResult->getTotalPrimaryCount();
+            return $categoryMerchandisingResult->getTotalPrimaryCount();
         }
         return null;
     }
-
 }
