@@ -34,41 +34,18 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Service\Facet;
 
-use Nosto\Cmp\Exception\MissingCookieException;
-use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\NostoException;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-
-interface StateAwareCategoryServiceInterface
+class BuildGraphQlFacetService implements BuildFacetService
 {
-    /**
-     * @param FacetInterface $facet
-     * @param int $pageNumber
-     * @param int $limit
-     * @return CategoryMerchandisingResult|null
-     * @throws MissingCookieException
-     * @throws NostoException
-     */
-    public function getPersonalisationResult(
-        FacetInterface $facet,
-        $pageNumber,
-        $limit
-    ): ?CategoryMerchandisingResult;
 
-    /**
-     * @return CategoryMerchandisingResult|null
-     */
-    public function getLastResult(): ?CategoryMerchandisingResult;
+    public function initialize()
+    {
 
-    /**
-     * @param $id
-     */
-    public function setCategoryInRegistry($id): void;
+    }
 
-    /**
-     * @return int
-     */
-    public function getLastUsedLimit(): int;
+    public function getFacets()
+    {
+        // TODO: Implement getFacets() method.
+    }
 }

@@ -34,72 +34,67 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Filter;
+namespace Nosto\Cmp\Model\Service\Facet;
 
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
-use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Logger\LoggerInterface;
 
-class WebFilters implements FiltersInterface
+class BuildWebFacetService implements BuildFacetService
 {
-    /** @var IncludeFilters */
-    private $includeFilters;
 
-    /** @var ExcludeFilters */
-    private $excludeFilters;
+    /** @var State */
+    private $state;
 
-    /** @var NostoHelperData */
-    private $nostoHelperData;
-
-    /** @var string */
-    private $brand;
+    /** @var StoreManagerInterface */
+    private $storeManager;
 
     /** @var LoggerInterface */
     private $logger;
 
     /**
-     * FilterBuilder constructor.
-     * @param IncludeFilters $includeFilters
-     * @param ExcludeFilters $excludeFilters
-     * @param NostoHelperData $nostoHelperData
-     * @param LoggerInterface $logger
+     * BuildWebFacetService constructor.
+     * @param StoreManagerInterface $storeManager
+     * @param State $state
      */
     public function __construct(
-        IncludeFilters $includeFilters,
-        ExcludeFilters $excludeFilters,
-        NostoHelperData $nostoHelperData,
+        StoreManagerInterface $storeManager,
+        State $state,
         LoggerInterface $logger
     ) {
-        $this->includeFilters = $includeFilters;
-        $this->excludeFilters = $excludeFilters;
-        $this->nostoHelperData = $nostoHelperData;
+        $this->storeManager = $storeManager;
+        $this->state = $state;
         $this->logger = $logger;
     }
 
-    /**
-     * @param Store $store
-     */
-    public function init(Store $store)
+    public function getFacets(): Facet
     {
-        $this->brand = $this->nostoHelperData->getBrandAttribute($store);
+        $includeFilters = new IncludeFilters();
+        $excludeFilters = new ExcludeFilters();
+
+        try {
+            $this->populateFilters($includeFilters);
+        } catch (NoSuchEntityException $e) {
+
+        }
+        return new Facet($includeFilters, $excludeFilters);
     }
 
-    /**
-     * @param Item[] $filters
-     * @throws LocalizedException
-     */
-    public function buildFromSelectedFilters($filters)
+    private function populateFilters(IncludeFilters &$includeFilters): void
     {
+        $filters = $this->state->getActiveFilters();
         foreach ($filters as $filter) {
-            if ($filter instanceof Item) {
-                $this->mapIncludeFilter($filter);
-            }
+
         }
     }
 
@@ -107,8 +102,16 @@ class WebFilters implements FiltersInterface
      * @param Item $item
      * @throws LocalizedException
      */
-    public function mapIncludeFilter(Item $item)
+    public function mapIncludeFilter(IncludeFilters &$includeFilters, Item $item)
     {
+
+        //\Magento\CatalogSearch\Model\Layer\Filter\Category
+        if ($item->getFilter() instanceof \Magento\CatalogSearch\Model\Layer\Filter\Category) {
+            $categoryId = $item->getData('value');
+
+        }
+
+        //Magento\CatalogSearch\Model\Layer\Filter\Attribute
         $filter = $item->getFilter();
         if ($filter === null) {
             return;
@@ -162,7 +165,7 @@ class WebFilters implements FiltersInterface
                 );
                 return;
             }
-            $this->mapValueToFilter($attributeCode, $value);
+            $this->mapValueToFilter($includeFilters,$attributeCode, $value);
         } catch (NostoException $e) {
             $this->logger->exception($e);
         }
@@ -173,40 +176,24 @@ class WebFilters implements FiltersInterface
      * @param string|array $value
      * @throws NostoException
      */
-    private function mapValueToFilter(string $name, $value)
+    private function mapValueToFilter(IncludeFilters &$includeFilters, string $name, $value)
     {
         if ($this->brand === $name) {
-            $this->includeFilters->setBrands($this->makeArrayFromValue($name, $value));
+            $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
             return;
         }
 
         switch (strtolower($name)) {
             case 'price':
-                $this->includeFilters->setPrice(min($value), max($value));
+                $includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $this->includeFilters->setFresh((bool)$value);
+                $includeFilters->setFresh((bool)$value);
                 break;
             default:
-                $this->includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
                 break;
         }
-    }
-
-    /**
-     * @return IncludeFilters
-     */
-    public function getIncludeFilters()
-    {
-        return $this->includeFilters;
-    }
-
-    /**
-     * @return ExcludeFilters
-     */
-    public function getExcludeFilters()
-    {
-        return $this->excludeFilters;
     }
 
     /**

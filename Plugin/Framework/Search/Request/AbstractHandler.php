@@ -43,7 +43,7 @@ use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
@@ -178,7 +178,7 @@ abstract class AbstractHandler
     abstract protected function preFetchOps(array $requestData);
 
     /**
-     * @return FiltersInterface
+     * @return FacetInterface
      */
     abstract protected function getFilters();
 
