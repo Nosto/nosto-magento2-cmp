@@ -36,22 +36,22 @@
 
 namespace Nosto\Cmp\Model\Service\Facet;
 
+use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogSearch\Model\Layer\Filter\Category;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Magento\CatalogSearch\Model\Layer\Filter\Category;
+use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
-use Magento\Catalog\Model\CategoryRepository;
 
 class BuildWebFacetService implements BuildFacetService
 {
@@ -68,28 +68,44 @@ class BuildWebFacetService implements BuildFacetService
     /** @var CategoryRepository */
     private $categoryRepository;
 
+    /** @var NostoHelperData */
+    private $nostoHelperData;
+
     /** @var LoggerInterface */
     private $logger;
+
+    /** @var string */
+    private $brand;
 
     /**
      * BuildWebFacetService constructor.
      * @param StoreManagerInterface $storeManager
+     * @param NostoCategoryBuilder $nostoCategoryBuilder
+     * @param CategoryRepository $categoryRepository
+     * @param NostoHelperData $nostoHelperData
      * @param State $state
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         NostoCategoryBuilder $nostoCategoryBuilder,
         CategoryRepository $categoryRepository,
+        NostoHelperData $nostoHelperData,
         State $state,
         LoggerInterface $logger
     ) {
         $this->storeManager = $storeManager;
         $this->nostoCategoryBuilder = $nostoCategoryBuilder;
         $this->categoryRepository = $categoryRepository;
+        $this->nostoHelperData = $nostoHelperData;
         $this->state = $state;
         $this->logger = $logger;
     }
 
+    /**
+     * @return Facet
+     * @throws NostoException
+     */
     public function getFacets(): Facet
     {
         $includeFilters = new IncludeFilters();
@@ -105,7 +121,10 @@ class BuildWebFacetService implements BuildFacetService
     }
 
     /**
+     * @param IncludeFilters $includeFilters
      * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NostoException
      */
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
@@ -124,11 +143,11 @@ class BuildWebFacetService implements BuildFacetService
      */
     private function mapIncludeFilter(IncludeFilters &$includeFilters, Item $item)
     {
-
+        $store = $this->storeManager->getStore();
         if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
-            $category = $this->getCategoryName($categoryId);
-            $this->mapValueToFilter($includeFilters, 'category', $category);
+            $category = $this->getCategoryName($store, $categoryId);
+            $this->mapValueToFilter($includeFilters, $store, 'category', $category);
             return;
         }
 
@@ -186,20 +205,20 @@ class BuildWebFacetService implements BuildFacetService
                 );
                 return;
             }
-            $this->mapValueToFilter($includeFilters, $attributeCode, $value);
+            $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
         } catch (NostoException $e) {
             $this->logger->exception($e);
         }
     }
 
     /**
+     * @param StoreInterface $store
      * @param $categoryId
      * @return string|null
      * @throws NoSuchEntityException
      */
-    private function getCategoryName($categoryId)
+    private function getCategoryName(StoreInterface $store, $categoryId)
     {
-        $store = $this->storeManager->getStore();
         $category = $this->categoryRepository->get($categoryId, $store->getId());
         return $this->nostoCategoryBuilder->getCategory($category, $store);
     }
@@ -209,12 +228,11 @@ class BuildWebFacetService implements BuildFacetService
      * @param string|array $value
      * @throws NostoException
      */
-    private function mapValueToFilter(IncludeFilters &$includeFilters, string $name, $value)
+    private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
     {
-//        if ($this->brand === $name) {
-//            $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
-//            return;
-//        }
+        if ($this->brand == null) {
+            $this->brand = $this->nostoHelperData->getBrandAttribute($store);
+        }
 
         switch (strtolower($name)) {
             case 'price':
@@ -225,6 +243,9 @@ class BuildWebFacetService implements BuildFacetService
                 break;
             case 'category':
                 $includeFilters->setCategories([$value]);
+                break;
+            case $this->brand:
+                $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
                 break;
             default:
                 $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
