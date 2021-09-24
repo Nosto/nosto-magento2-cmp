@@ -49,6 +49,9 @@ use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Cmp\Logger\LoggerInterface;
+use Magento\CatalogSearch\Model\Layer\Filter\Category;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
+use Magento\Catalog\Model\CategoryRepository;
 
 class BuildWebFacetService implements BuildFacetService
 {
@@ -58,6 +61,12 @@ class BuildWebFacetService implements BuildFacetService
 
     /** @var StoreManagerInterface */
     private $storeManager;
+
+    /** @var NostoCategoryBuilder */
+    private $nostoCategoryBuilder;
+
+    /** @var CategoryRepository */
+    private $categoryRepository;
 
     /** @var LoggerInterface */
     private $logger;
@@ -69,10 +78,14 @@ class BuildWebFacetService implements BuildFacetService
      */
     public function __construct(
         StoreManagerInterface $storeManager,
+        NostoCategoryBuilder $nostoCategoryBuilder,
+        CategoryRepository $categoryRepository,
         State $state,
         LoggerInterface $logger
     ) {
         $this->storeManager = $storeManager;
+        $this->nostoCategoryBuilder = $nostoCategoryBuilder;
+        $this->categoryRepository = $categoryRepository;
         $this->state = $state;
         $this->logger = $logger;
     }
@@ -84,31 +97,39 @@ class BuildWebFacetService implements BuildFacetService
 
         try {
             $this->populateFilters($includeFilters);
-        } catch (NoSuchEntityException $e) {
-
+        } catch (LocalizedException $e) {
+            $this->logger->exception($e);
         }
+
         return new Facet($includeFilters, $excludeFilters);
     }
 
+    /**
+     * @throws LocalizedException
+     */
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
         foreach ($filters as $filter) {
-
+            $this->mapIncludeFilter($includeFilters, $filter);
         }
     }
 
     /**
+     * @param IncludeFilters $includeFilters
      * @param Item $item
      * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NostoException
      */
-    public function mapIncludeFilter(IncludeFilters &$includeFilters, Item $item)
+    private function mapIncludeFilter(IncludeFilters &$includeFilters, Item $item)
     {
 
-        //\Magento\CatalogSearch\Model\Layer\Filter\Category
-        if ($item->getFilter() instanceof \Magento\CatalogSearch\Model\Layer\Filter\Category) {
+        if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
-
+            $category = $this->getCategoryName($categoryId);
+            $this->mapValueToFilter($includeFilters, 'category', $category);
+            return;
         }
 
         //Magento\CatalogSearch\Model\Layer\Filter\Attribute
@@ -165,10 +186,22 @@ class BuildWebFacetService implements BuildFacetService
                 );
                 return;
             }
-            $this->mapValueToFilter($includeFilters,$attributeCode, $value);
+            $this->mapValueToFilter($includeFilters, $attributeCode, $value);
         } catch (NostoException $e) {
             $this->logger->exception($e);
         }
+    }
+
+    /**
+     * @param $categoryId
+     * @return string|null
+     * @throws NoSuchEntityException
+     */
+    private function getCategoryName($categoryId)
+    {
+        $store = $this->storeManager->getStore();
+        $category = $this->categoryRepository->get($categoryId, $store->getId());
+        return $this->nostoCategoryBuilder->getCategory($category, $store);
     }
 
     /**
@@ -178,10 +211,10 @@ class BuildWebFacetService implements BuildFacetService
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, string $name, $value)
     {
-        if ($this->brand === $name) {
-            $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
-            return;
-        }
+//        if ($this->brand === $name) {
+//            $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
+//            return;
+//        }
 
         switch (strtolower($name)) {
             case 'price':
@@ -189,6 +222,9 @@ class BuildWebFacetService implements BuildFacetService
                 break;
             case 'new':
                 $includeFilters->setFresh((bool)$value);
+                break;
+            case 'category':
+                $includeFilters->setCategories([$value]);
                 break;
             default:
                 $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));

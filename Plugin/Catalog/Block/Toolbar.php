@@ -49,7 +49,9 @@ use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Facet\FacetInterface;
+use Nosto\Cmp\Model\Facet\WebFacet;
+use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
@@ -61,11 +63,14 @@ use Zend_Db_Expr;
 class Toolbar extends AbstractBlock
 {
 
-    /** @var WebFilters */
+    /** @var WebFacet */
     private $filters;
 
     /** @var State */
     private $state;
+
+    /** @var BuildWebFacetService */
+    private $buildWebFacetService;
 
     private static $isProcessed = false;
 
@@ -78,7 +83,7 @@ class Toolbar extends AbstractBlock
      * @param ParameterResolverInterface $parameterResolver
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
-     * @param WebFilters $filters
+     * @param WebFacet $filters
      * @param State $state
      */
     public function __construct(
@@ -89,10 +94,10 @@ class Toolbar extends AbstractBlock
         ParameterResolverInterface $parameterResolver,
         LoggerInterface $logger,
         SearchEngine $searchEngineHelper,
-        WebFilters $filters,
+        BuildWebFacetService $buildWebFacetService,
         State $state
     ) {
-        $this->filters = $filters;
+        $this->buildWebFacetService = $buildWebFacetService;
         $this->state = $state;
         parent::__construct(
             $context,
@@ -171,17 +176,18 @@ class Toolbar extends AbstractBlock
     }
 
     /**
-     * @param int $start starting from 0
-     * @param int $limit
+     * @param FacetInterface $facets
+     * @param $start
+     * @param $limit
      * @return CategoryMerchandisingResult|null
      * @throws LocalizedException
      * @throws MissingCookieException
      * @throws NostoException
      */
-    private function getCmpResult($start, $limit)
+    private function getCmpResult(FacetInterface $facets, $start, $limit)
     {
         return $this->getCategoryService()->getPersonalisationResult(
-            $this->filters,
+            $facets,
             $start,
             $limit
         );
@@ -189,22 +195,11 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param Store $store
-     * @return WebFilters
+     * @return FacetInterface
      */
     private function buildFilters(Store $store)
     {
-        // Build filters
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $this->filters->init($store);
-        try {
-            $this->filters->buildFromSelectedFilters(
-                $this->state->getActiveFilters()
-            );
-        } catch (LocalizedException $e) {
-            $this->getLogger()->exception($e);
-        }
-        return $this->filters;
+        return $this->buildWebFacetService->getFacets();
     }
 
     /**

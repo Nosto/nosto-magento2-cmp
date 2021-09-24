@@ -36,16 +36,18 @@
 
 namespace Nosto\Cmp\Model\Service\Facet;
 
+use Nosto\Cmp\Model\Facet\Facet;
+use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
+
 class BuildGraphQlFacetService implements BuildFacetService
 {
 
-    public function initialize()
+    public function getFacets(): Facet
     {
+        $includeFilters = new IncludeFilters();
+        $excludeFilters = new ExcludeFilters();
 
-    }
-
-    public function getFacets()
-    {
-        // TODO: Implement getFacets() method.
+        return new Facet($includeFilters, $excludeFilters);
     }
 }

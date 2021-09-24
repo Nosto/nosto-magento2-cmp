@@ -43,19 +43,18 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 
 class WebHandler extends AbstractHandler
 {
 
-    /** @var WebFilters */
-    private $filters;
-
     /** @var State */
     private $state;
+
+    private $buildWebFacetService;
 
     /**
      * WebHandler constructor.
@@ -65,7 +64,7 @@ class WebHandler extends AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param WebFilters $filters
+     * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      * @param LoggerInterface $logger
      */
@@ -76,7 +75,7 @@ class WebHandler extends AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
-        WebFilters $filters,
+        BuildWebFacetService $buildWebFacetService,
         State $state,
         LoggerInterface $logger
     ) {
@@ -89,7 +88,7 @@ class WebHandler extends AbstractHandler
             $categoryService,
             $logger
         );
-        $this->filters = $filters;
+        $this->buildWebFacetService = $buildWebFacetService;
         $this->state  = $state;
     }
 
@@ -132,20 +131,10 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
+     * @return \Nosto\Cmp\Model\Facet\Facet|\Nosto\Cmp\Model\Facet\FacetInterface
      */
     public function getFilters()
     {
-        $store = $this->storeManager->getStore();
-        // Build filters
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $this->filters->init($store);
-        $this->filters->buildFromSelectedFilters(
-            $this->state->getActiveFilters()
-        );
-        return $this->filters;
+        return $this->buildWebFacetService->getFacets();
     }
 }

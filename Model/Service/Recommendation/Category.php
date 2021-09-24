@@ -37,7 +37,7 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Event\ManagerInterface;
-use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
@@ -66,7 +66,7 @@ class Category
 
     /**
      * @param NostoAccount $nostoAccount
-     * @param FiltersInterface $filters
+     * @param FacetInterface $facets
      * @param $nostoCustomerId
      * @param $category
      * @param int $pageNumber
@@ -79,7 +79,7 @@ class Category
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
-        FiltersInterface $filters,
+        FacetInterface $facets,
         $nostoCustomerId,
         $category,
         $pageNumber,
@@ -95,8 +95,8 @@ class Category
             $nostoCustomerId,
             $category,
             $pageNumber,
-            $filters->getIncludeFilters(),
-            $filters->getExcludeFilters(),
+            $facets->getIncludeFilters(),
+            $facets->getExcludeFilters(),
             '',
             AbstractGraphQLOperation::IDENTIFIER_BY_CID,
             $previewMode,
