@@ -53,7 +53,7 @@ use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
 
-class BuildWebFacetService implements BuildFacetService
+class BuildWebFacetService
 {
 
     /** @var State */
@@ -129,21 +129,22 @@ class BuildWebFacetService implements BuildFacetService
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
+        $store = $this->storeManager->getStore();
         foreach ($filters as $filter) {
-            $this->mapIncludeFilter($includeFilters, $filter);
+            $this->mapIncludeFilter($store, $includeFilters, $filter);
         }
     }
 
     /**
+     * @param StoreInterface $store
      * @param IncludeFilters $includeFilters
      * @param Item $item
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @throws NostoException
      */
-    private function mapIncludeFilter(IncludeFilters &$includeFilters, Item $item)
+    private function mapIncludeFilter(StoreInterface $store, IncludeFilters &$includeFilters, Item $item)
     {
-        $store = $this->storeManager->getStore();
         if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);

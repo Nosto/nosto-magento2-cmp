@@ -40,13 +40,25 @@ use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 
-class BuildGraphQlFacetService implements BuildFacetService
+class BuildGraphQlFacetService
 {
 
-    public function getFacets(): Facet
+    /**
+     * @param array $requestData
+     * @return Facet
+     */
+    public function getFacets(array $requestData): Facet
     {
         $includeFilters = new IncludeFilters();
         $excludeFilters = new ExcludeFilters();
+
+        if (isset($requestData['filters']['price_filter'])) {
+            $priceFilters = $requestData['filters']['price_filter'];
+            $includeFilters->setPrice(
+                isset($priceFilters['from']) ? $priceFilters['from'] : null,
+                isset($priceFilters['to']) ? $priceFilters['to'] : null
+            );
+        }
 
         return new Facet($includeFilters, $excludeFilters);
     }

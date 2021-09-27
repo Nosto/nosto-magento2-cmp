@@ -144,6 +144,7 @@ abstract class AbstractHandler
         $this->cleanUpCmpSort($requestData);
         try {
             $productIds = $this->getCmpProductIds(
+                $this->getFilters($requestData),
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
@@ -178,9 +179,10 @@ abstract class AbstractHandler
     abstract protected function preFetchOps(array $requestData);
 
     /**
+     * @param array $requestData
      * @return FacetInterface
      */
-    abstract protected function getFilters();
+    abstract protected function getFilters(array $requestData);
 
     /**
      * Removes the Nosto sorting key as it's not indexed
@@ -270,15 +272,16 @@ abstract class AbstractHandler
     abstract public function parseLimit(array $requestData);
 
     /**
-     * @param int $pageNum
-     * @param int $limit
+     * @param FacetInterface $facet
+     * @param $pageNum
+     * @param $limit
      * @return array|null
      */
-    private function getCmpProductIds($pageNum, $limit)
+    private function getCmpProductIds(FacetInterface $facet, $pageNum, $limit)
     {
         try {
             $res = $this->categoryService->getPersonalisationResult(
-                $this->getFilters(),
+                $facet,
                 $pageNum,
                 $limit
             );

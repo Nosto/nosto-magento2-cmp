@@ -109,7 +109,6 @@ class GraphQlHandler extends AbstractHandler
         $this->categoryService->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
-        $this->filters->setRequestData($requestData);
     }
 
     /**
@@ -130,9 +129,9 @@ class GraphQlHandler extends AbstractHandler
     /**
      * @inheritDoc
      */
-    public function getFilters()
+    public function getFilters(array $requestData)
     {
-        return $this->buildFacetService->getFacets();
+        return $this->buildFacetService->getFacets($requestData);
     }
 
     /**

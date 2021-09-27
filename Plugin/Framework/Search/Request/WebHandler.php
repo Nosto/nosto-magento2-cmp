@@ -131,9 +131,9 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @return \Nosto\Cmp\Model\Facet\Facet|\Nosto\Cmp\Model\Facet\FacetInterface
+     * @inheritDoc
      */
-    public function getFilters()
+    public function getFilters(array $requestData)
     {
         return $this->buildWebFacetService->getFacets();
     }
