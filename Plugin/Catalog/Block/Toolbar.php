@@ -50,7 +50,6 @@ use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Model\Facet\WebFacet;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
@@ -62,9 +61,6 @@ use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-
-    /** @var WebFacet */
-    private $filters;
 
     /** @var State */
     private $state;
@@ -83,7 +79,7 @@ class Toolbar extends AbstractBlock
      * @param ParameterResolverInterface $parameterResolver
      * @param LoggerInterface $logger
      * @param SearchEngine $searchEngineHelper
-     * @param WebFacet $filters
+     * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      */
     public function __construct(
@@ -145,6 +141,7 @@ class Toolbar extends AbstractBlock
                 //@phan-suppress-next-line PhanTypeMismatchArgument
                 $this->buildFilters($store);
                 $result = $this->getCmpResult(
+                    $this->buildWebFacetService->getFacets(),
                     $this->getCurrentPageNumber()-1,
                     $subjectCollection->getPageSize()
                 );
