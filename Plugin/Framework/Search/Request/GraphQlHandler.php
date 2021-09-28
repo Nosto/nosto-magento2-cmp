@@ -41,7 +41,6 @@ use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\GraphQlFilters;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
@@ -59,7 +58,7 @@ class GraphQlHandler extends AbstractHandler
 
     /**
      * GraphQlHandler constructor.
-     * @param BuildGraphQlFacetService $filters
+     * @param BuildGraphQlFacetService $buildFacetService
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager

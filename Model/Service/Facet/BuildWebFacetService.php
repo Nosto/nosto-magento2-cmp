@@ -220,6 +220,7 @@ class BuildWebFacetService
      */
     private function getCategoryName(StoreInterface $store, $categoryId)
     {
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
         $category = $this->categoryRepository->get($categoryId, $store->getId());
         return $this->nostoCategoryBuilder->getCategory($category, $store);
     }

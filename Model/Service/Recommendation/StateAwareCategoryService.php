@@ -44,7 +44,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
@@ -57,6 +56,7 @@ use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Store\Model\StoreManagerInterface;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -72,11 +72,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @var CookieManagerInterface
      */
     private $cookieManager;
-
-    /**
-     * @var BuildFace
-     */
-    private $filterBuilder;
 
     /**
      * @var Account

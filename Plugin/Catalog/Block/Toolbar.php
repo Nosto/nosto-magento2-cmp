@@ -138,8 +138,6 @@ class Toolbar extends AbstractBlock
                         "Collection is not instanceof ProductCollection"
                     );
                 }
-                //@phan-suppress-next-line PhanTypeMismatchArgument
-                $this->buildFilters($store);
                 $result = $this->getCmpResult(
                     $this->buildWebFacetService->getFacets(),
                     $this->getCurrentPageNumber()-1,
@@ -188,15 +186,6 @@ class Toolbar extends AbstractBlock
             $start,
             $limit
         );
-    }
-
-    /**
-     * @param Store $store
-     * @return FacetInterface
-     */
-    private function buildFilters(Store $store)
-    {
-        return $this->buildWebFacetService->getFacets();
     }
 
     /**
