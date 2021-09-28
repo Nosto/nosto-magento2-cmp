@@ -148,6 +148,10 @@ class BuildWebFacetService
         if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);
+            if ($category == null) {
+                $this->logger->debugCmp("Could not get category from filters", $this);
+                return;
+            }
             $this->mapValueToFilter($includeFilters, $store, 'category', $category);
             return;
         }
