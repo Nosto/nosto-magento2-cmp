@@ -52,6 +52,7 @@ use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
+use Exception;
 
 class BuildWebFacetService
 {
@@ -104,7 +105,6 @@ class BuildWebFacetService
 
     /**
      * @return Facet
-     * @throws NostoException
      */
     public function getFacets(): Facet
     {
@@ -113,7 +113,7 @@ class BuildWebFacetService
 
         try {
             $this->populateFilters($includeFilters);
-        } catch (LocalizedException $e) {
+        } catch (Exception $e) {
             $this->logger->exception($e);
         }
 
@@ -218,7 +218,7 @@ class BuildWebFacetService
      * @return string|null
      * @throws NoSuchEntityException
      */
-    private function getCategoryName(StoreInterface $store, $categoryId)
+    private function getCategoryName(StoreInterface $store, $categoryId): ?string
     {
         //@phan-suppress-next-next-line PhanTypeMismatchArgument
         $category = $this->categoryRepository->get($categoryId, $store->getId());
@@ -226,9 +226,12 @@ class BuildWebFacetService
     }
 
     /**
+     * @param IncludeFilters $includeFilters
+     * @param StoreInterface $store
      * @param string $name
      * @param string|array $value
      * @throws NostoException
+     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
     {
@@ -256,12 +259,12 @@ class BuildWebFacetService
     }
 
     /**
-     * @param string $name
-     * @param string|int|array $value
+     * @param $name
+     * @param $value
      * @return array
      * @throws NostoException
      */
-    private function makeArrayFromValue($name, $value)
+    private function makeArrayFromValue($name, $value): array
     {
         if (is_string($value) || is_numeric($value)) {
             $value = [$value];

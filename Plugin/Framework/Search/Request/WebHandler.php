@@ -52,6 +52,7 @@ class WebHandler extends AbstractHandler
     /** @var State */
     private $state;
 
+    /** @var BuildWebFacetService  */
     private $buildWebFacetService;
 
     /**
@@ -91,7 +92,7 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     public function getBindKey()
     {
@@ -99,7 +100,8 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param array $requestData
+     * @return null
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     protected function preFetchOps(array $requestData)
@@ -109,7 +111,8 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param array $requestData
+     * @return int
      */
     public function parseLimit(array $requestData)
     {
