@@ -36,26 +36,24 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Magento\Store\Model\StoreManagerInterface;
 
 class WebHandler extends AbstractHandler
 {
 
-    /** @var WebFilters */
-    private $filters;
-
     /** @var State */
     private $state;
+
+    /** @var BuildWebFacetService  */
+    private $buildWebFacetService;
 
     /**
      * WebHandler constructor.
@@ -65,7 +63,7 @@ class WebHandler extends AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param WebFilters $filters
+     * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      * @param LoggerInterface $logger
      */
@@ -76,7 +74,7 @@ class WebHandler extends AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
-        WebFilters $filters,
+        BuildWebFacetService $buildWebFacetService,
         State $state,
         LoggerInterface $logger
     ) {
@@ -89,12 +87,12 @@ class WebHandler extends AbstractHandler
             $categoryService,
             $logger
         );
-        $this->filters = $filters;
+        $this->buildWebFacetService = $buildWebFacetService;
         $this->state  = $state;
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     public function getBindKey()
     {
@@ -102,7 +100,8 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param array $requestData
+     * @return null
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     protected function preFetchOps(array $requestData)
@@ -112,7 +111,8 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param array $requestData
+     * @return int
      */
     public function parseLimit(array $requestData)
     {
@@ -133,19 +133,10 @@ class WebHandler extends AbstractHandler
 
     /**
      * @inheritDoc
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
      */
-    public function getFilters()
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function getFilters(array $requestData)
     {
-        $store = $this->storeManager->getStore();
-        // Build filters
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $this->filters->init($store);
-        $this->filters->buildFromSelectedFilters(
-            $this->state->getActiveFilters()
-        );
-        return $this->filters;
+        return $this->buildWebFacetService->getFacets();
     }
 }

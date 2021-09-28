@@ -38,17 +38,16 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\FiltersInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
@@ -57,7 +56,7 @@ use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -73,11 +72,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @var CookieManagerInterface
      */
     private $cookieManager;
-
-    /**
-     * @var WebFilters
-     */
-    private $filterBuilder;
 
     /**
      * @var Account
@@ -131,7 +125,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
-     * @param WebFilters $filterBuilder
      * @param Account $nostoHelperAccount
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
@@ -144,7 +137,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     public function __construct(
         CookieManagerInterface $cookieManager,
         Category $categoryService,
-        WebFilters $filterBuilder,
         Account $nostoHelperAccount,
         StoreManagerInterface $storeManager,
         Registry $registry,
@@ -156,7 +148,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
-        $this->filterBuilder = $filterBuilder;
         $this->cookieManager = $cookieManager;
         $this->accountHelper = $nostoHelperAccount;
         $this->logger = $logger;
@@ -175,7 +166,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @throws MissingCookieException
      */
     public function getPersonalisationResult(
-        FiltersInterface $filters,
+        FacetInterface $facets,
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
@@ -200,10 +191,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
             $this->lastResult = ServerTiming::getInstance()->instrument(
-                function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $filters, $customerId) {
+                function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $facets, $customerId) {
                     return $this->categoryService->getPersonalisationResult(
                         $nostoAccount,
-                        $filters,
+                        $facets,
                         $customerId,
                         $category,
                         $pageNumber,

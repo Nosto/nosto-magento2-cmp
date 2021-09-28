@@ -34,12 +34,12 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Filter;
+namespace Nosto\Cmp\Model\Facet;
 
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 
-interface FiltersInterface
+interface FacetInterface
 {
     /**
      * @return IncludeFilters

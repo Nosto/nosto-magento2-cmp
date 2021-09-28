@@ -41,7 +41,7 @@ use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\GraphQlFilters;
+use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
@@ -50,15 +50,15 @@ use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 class GraphQlHandler extends AbstractHandler
 {
 
-    /** @var GraphQlFilters */
-    private $filters;
+    /** @var BuildGraphQlFacetService */
+    private $buildFacetService;
 
     /** @var SessionService */
     private $sessionService;
 
     /**
      * GraphQlHandler constructor.
-     * @param GraphQlFilters $filters
+     * @param BuildGraphQlFacetService $buildFacetService
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param StoreManagerInterface $storeManager
@@ -69,7 +69,7 @@ class GraphQlHandler extends AbstractHandler
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GraphQlFilters $filters,
+        BuildGraphQlFacetService $buildFacetService,
         ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
         StoreManagerInterface $storeManager,
@@ -88,7 +88,7 @@ class GraphQlHandler extends AbstractHandler
             $categoryService,
             $logger
         );
-        $this->filters = $filters;
+        $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
     }
 
@@ -108,7 +108,6 @@ class GraphQlHandler extends AbstractHandler
         $this->categoryService->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
-        $this->filters->setRequestData($requestData);
     }
 
     /**
@@ -129,9 +128,9 @@ class GraphQlHandler extends AbstractHandler
     /**
      * @inheritDoc
      */
-    public function getFilters()
+    public function getFilters(array $requestData)
     {
-        return $this->filters;
+        return $this->buildFacetService->getFacets($requestData);
     }
 
     /**

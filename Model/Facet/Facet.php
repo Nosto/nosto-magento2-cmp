@@ -34,41 +34,44 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Facet;
 
-use Nosto\Cmp\Exception\MissingCookieException;
-use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\NostoException;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 
-interface StateAwareCategoryServiceInterface
+class Facet implements FacetInterface
 {
-    /**
-     * @param FacetInterface $facet
-     * @param int $pageNumber
-     * @param int $limit
-     * @return CategoryMerchandisingResult|null
-     * @throws MissingCookieException
-     * @throws NostoException
-     */
-    public function getPersonalisationResult(
-        FacetInterface $facet,
-        $pageNumber,
-        $limit
-    ): ?CategoryMerchandisingResult;
+
+    /** @var IncludeFilters */
+    private $includeFilters;
+
+    /** @var ExcludeFilters */
+    private $excludeFilters;
 
     /**
-     * @return CategoryMerchandisingResult|null
+     * Facet constructor.
+     * @param IncludeFilters $includeFilters
+     * @param ExcludeFilters $excludeFilters
      */
-    public function getLastResult(): ?CategoryMerchandisingResult;
+    public function __construct(IncludeFilters $includeFilters, ExcludeFilters $excludeFilters)
+    {
+        $this->includeFilters = $includeFilters;
+        $this->excludeFilters = $excludeFilters;
+    }
 
     /**
-     * @param $id
+     * @inheritDoc
      */
-    public function setCategoryInRegistry($id): void;
+    public function getIncludeFilters()
+    {
+        return $this->includeFilters;
+    }
 
     /**
-     * @return int
+     * @inheritDoc
      */
-    public function getLastUsedLimit(): int;
+    public function getExcludeFilters()
+    {
+        return $this->excludeFilters;
+    }
 }

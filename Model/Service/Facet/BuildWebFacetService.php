@@ -34,81 +34,129 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Filter;
+namespace Nosto\Cmp\Model\Service\Facet;
 
+use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogSearch\Model\Layer\Filter\Category;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\Store;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
-use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
+use Exception;
 
-class WebFilters implements FiltersInterface
+class BuildWebFacetService
 {
-    /** @var IncludeFilters */
-    private $includeFilters;
 
-    /** @var ExcludeFilters */
-    private $excludeFilters;
+    /** @var State */
+    private $state;
+
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
+    /** @var NostoCategoryBuilder */
+    private $nostoCategoryBuilder;
+
+    /** @var CategoryRepository */
+    private $categoryRepository;
 
     /** @var NostoHelperData */
     private $nostoHelperData;
 
-    /** @var string */
-    private $brand;
-
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var string */
+    private $brand;
+
     /**
-     * FilterBuilder constructor.
-     * @param IncludeFilters $includeFilters
-     * @param ExcludeFilters $excludeFilters
+     * BuildWebFacetService constructor.
+     * @param StoreManagerInterface $storeManager
+     * @param NostoCategoryBuilder $nostoCategoryBuilder
+     * @param CategoryRepository $categoryRepository
      * @param NostoHelperData $nostoHelperData
+     * @param State $state
      * @param LoggerInterface $logger
      */
     public function __construct(
-        IncludeFilters $includeFilters,
-        ExcludeFilters $excludeFilters,
+        StoreManagerInterface $storeManager,
+        NostoCategoryBuilder $nostoCategoryBuilder,
+        CategoryRepository $categoryRepository,
         NostoHelperData $nostoHelperData,
+        State $state,
         LoggerInterface $logger
     ) {
-        $this->includeFilters = $includeFilters;
-        $this->excludeFilters = $excludeFilters;
+        $this->storeManager = $storeManager;
+        $this->nostoCategoryBuilder = $nostoCategoryBuilder;
+        $this->categoryRepository = $categoryRepository;
         $this->nostoHelperData = $nostoHelperData;
+        $this->state = $state;
         $this->logger = $logger;
     }
 
     /**
-     * @param Store $store
+     * @return Facet
      */
-    public function init(Store $store)
+    public function getFacets(): Facet
     {
-        $this->brand = $this->nostoHelperData->getBrandAttribute($store);
+        $includeFilters = new IncludeFilters();
+        $excludeFilters = new ExcludeFilters();
+
+        try {
+            $this->populateFilters($includeFilters);
+        } catch (Exception $e) {
+            $this->logger->exception($e);
+        }
+
+        return new Facet($includeFilters, $excludeFilters);
     }
 
     /**
-     * @param Item[] $filters
+     * @param IncludeFilters $includeFilters
      * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NostoException
      */
-    public function buildFromSelectedFilters($filters)
+    private function populateFilters(IncludeFilters &$includeFilters): void
     {
+        $filters = $this->state->getActiveFilters();
+        $store = $this->storeManager->getStore();
         foreach ($filters as $filter) {
-            if ($filter instanceof Item) {
-                $this->mapIncludeFilter($filter);
-            }
+            $this->mapIncludeFilter($store, $includeFilters, $filter);
         }
     }
 
     /**
+     * @param StoreInterface $store
+     * @param IncludeFilters $includeFilters
      * @param Item $item
      * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NostoException
      */
-    public function mapIncludeFilter(Item $item)
+    private function mapIncludeFilter(StoreInterface $store, IncludeFilters &$includeFilters, Item $item)
     {
+        if ($item->getFilter() instanceof Category) {
+            $categoryId = $item->getData('value');
+            $category = $this->getCategoryName($store, $categoryId);
+            if ($category == null) {
+                $this->logger->debugCmp("Could not get category from filters", $this);
+                return;
+            }
+            $this->mapValueToFilter($includeFilters, $store, 'category', $category);
+            return;
+        }
+
+        //Magento\CatalogSearch\Model\Layer\Filter\Attribute
         $filter = $item->getFilter();
         if ($filter === null) {
             return;
@@ -162,60 +210,65 @@ class WebFilters implements FiltersInterface
                 );
                 return;
             }
-            $this->mapValueToFilter($attributeCode, $value);
+            $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
         } catch (NostoException $e) {
             $this->logger->exception($e);
         }
     }
 
     /**
+     * @param StoreInterface $store
+     * @param $categoryId
+     * @return string|null
+     * @throws NoSuchEntityException
+     */
+    private function getCategoryName(StoreInterface $store, $categoryId): ?string
+    {
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
+        $category = $this->categoryRepository->get($categoryId, $store->getId());
+        return $this->nostoCategoryBuilder->getCategory($category, $store);
+    }
+
+    /**
+     * @param IncludeFilters $includeFilters
+     * @param StoreInterface $store
      * @param string $name
      * @param string|array $value
      * @throws NostoException
+     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
-    private function mapValueToFilter(string $name, $value)
+    private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
     {
-        if ($this->brand === $name) {
-            $this->includeFilters->setBrands($this->makeArrayFromValue($name, $value));
-            return;
+        if ($this->brand == null) {
+            $this->brand = $this->nostoHelperData->getBrandAttribute($store);
         }
 
         switch (strtolower($name)) {
             case 'price':
-                $this->includeFilters->setPrice(min($value), max($value));
+                $includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $this->includeFilters->setFresh((bool)$value);
+                $includeFilters->setFresh((bool)$value);
+                break;
+            case 'category':
+                $includeFilters->setCategories([$value]);
+                break;
+            case $this->brand:
+                $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
                 break;
             default:
-                $this->includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
                 break;
         }
     }
 
     /**
-     * @return IncludeFilters
-     */
-    public function getIncludeFilters()
-    {
-        return $this->includeFilters;
-    }
-
-    /**
-     * @return ExcludeFilters
-     */
-    public function getExcludeFilters()
-    {
-        return $this->excludeFilters;
-    }
-
-    /**
-     * @param string $name
-     * @param string|int|array $value
+     * @param $name
+     * @param $value
      * @return array
      * @throws NostoException
      */
-    private function makeArrayFromValue($name, $value)
+    private function makeArrayFromValue($name, $value): array
     {
         if (is_string($value) || is_numeric($value)) {
             $value = [$value];
