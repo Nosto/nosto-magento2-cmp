@@ -44,6 +44,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
@@ -51,12 +52,12 @@ use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
+use Nosto\Operation\Session\NewSession;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Magento\Store\Model\StoreManagerInterface;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -170,40 +171,42 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
-
-        $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-        if ($customerId === null) {
-            throw new MissingCookieException('Missing Nosto cookie and customer id');
-        }
         $store = $this->storeManager->getStore();
-        $limit = $this->sanitizeLimit($store, $limit);
-        $category = $this->getCurrentCategoryString($store);
         //@phan-suppress-next-next-line PhanTypeMismatchArgument
         /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
+        $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+        //Create new session which Nosto won't track
+        if ($customerId === null) {
+            $newSession = new NewSession($nostoAccount, true);
+            $customerId = $newSession->execute();
+        }
+
+        $limit = $this->sanitizeLimit($store, $limit);
+        $category = $this->getCurrentCategoryString($store);
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
             throw new NostoException('Missing Nosto API_APPS token');
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
-            $this->lastResult = ServerTiming::getInstance()->instrument(
-                function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $facets, $customerId) {
-                    return $this->categoryService->getPersonalisationResult(
-                        $nostoAccount,
-                        $facets,
-                        $customerId,
-                        $category,
-                        $pageNumber,
-                        $limit,
-                        $previewMode
-                    );
-                },
-                self::TIME_PROF_GRAPHQL_QUERY
-            );
+        $this->lastResult = ServerTiming::getInstance()->instrument(
+            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $facets, $customerId) {
+                return $this->categoryService->getPersonalisationResult(
+                    $nostoAccount,
+                    $facets,
+                    $customerId,
+                    $category,
+                    $pageNumber,
+                    $limit,
+                    $previewMode
+                );
+            },
+            self::TIME_PROF_GRAPHQL_QUERY
+        );
         $this->lastUsedLimit = $limit;
 
         $this->eventManager->dispatch(
