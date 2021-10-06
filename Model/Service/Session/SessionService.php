@@ -67,7 +67,7 @@ class SessionService
             $newSession = new NewSession($nostoAccount, $url, true);
             return $newSession->execute();
         } catch (NostoException $e) {
-            throw new NostoException("Something went wrong while creating new session", $e);
+            throw new NostoException("Something went wrong while creating new session", $e->getCode(), $e);
         }
     }
 }

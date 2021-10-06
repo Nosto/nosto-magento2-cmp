@@ -172,7 +172,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @inheritDoc
      * @throws NostoException
      * @throws LocalizedException
-     * @throws MissingCookieException
      */
     public function getPersonalisationResult(
         FacetInterface $facets,
