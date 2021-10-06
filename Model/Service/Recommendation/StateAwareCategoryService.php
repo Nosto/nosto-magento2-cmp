@@ -49,10 +49,10 @@ use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Facet\FacetInterface;
+use Nosto\Cmp\Model\Service\Session\SessionService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
-use Nosto\Operation\Session\NewSession;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
@@ -123,6 +123,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $eventManager;
 
     /**
+     * @var SessionService
+     */
+    private $nostoSessionService;
+
+    /**
      * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
@@ -134,6 +139,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param Data $nostoCmpHelper
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ManagerInterface $eventManager
+     * @param SessionService $sessionService
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
@@ -145,7 +151,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         LoggerInterface $logger,
         Data $nostoCmpHelper,
         CategoryRepositoryInterface $categoryRepository,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        SessionService $sessionService
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
@@ -158,6 +165,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->nostoCmpHelper = $nostoCmpHelper;
         $this->categoryRepository = $categoryRepository;
         $this->eventManager = $eventManager;
+        $this->nostoSessionService = $sessionService;
     }
 
     /**
@@ -181,12 +189,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
         if ($customerId === null) {
-            try {
-                $newSession = new NewSession($nostoAccount, true);
-                $customerId = $newSession->execute();
-            } catch (NostoException $e) {
-                throw new NostoException("Something went wrong while creating new session", $e);
-            }
+            $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
         }
 
         $limit = $this->sanitizeLimit($store, $limit);
