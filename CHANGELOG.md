@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.3.0-rc4
+* Display general nosto sorting when customer is missing
+
 ### 3.3.0-rc3
 * Add support for subcategory filtering
 
