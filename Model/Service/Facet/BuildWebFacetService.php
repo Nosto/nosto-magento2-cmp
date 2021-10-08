@@ -248,7 +248,7 @@ class BuildWebFacetService
                 $includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $includeFilters->setFresh((bool)$value);
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, (bool) $value ? 'yes' : 'no'));
                 break;
             case 'category':
                 $includeFilters->setCategories([$value]);
