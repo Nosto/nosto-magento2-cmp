@@ -135,7 +135,8 @@ class Request implements RequestInterface
      */
     public function getFrom()
     {
-        return $this->request->getFrom();
+        //Always return 0 because the post_filter query contains exactly one page of products
+        return 0;
     }
 
     /**
