@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.3.0-rc6
+* Fix pagination issue in Elasticsearch
+
 ### 3.3.0-rc5 
 * Fix facet mapping to Nosto's include parameters 
 
