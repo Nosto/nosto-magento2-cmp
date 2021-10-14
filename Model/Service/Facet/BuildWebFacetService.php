@@ -45,7 +45,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Tagging\Logger\Logger;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
@@ -72,7 +72,7 @@ class BuildWebFacetService
     /** @var NostoHelperData */
     private $nostoHelperData;
 
-    /** @var LoggerInterface */
+    /** @var Logger */
     private $logger;
 
     /** @var string */
@@ -85,7 +85,7 @@ class BuildWebFacetService
      * @param CategoryRepository $categoryRepository
      * @param NostoHelperData $nostoHelperData
      * @param State $state
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -93,7 +93,7 @@ class BuildWebFacetService
         CategoryRepository $categoryRepository,
         NostoHelperData $nostoHelperData,
         State $state,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->storeManager = $storeManager;
         $this->nostoCategoryBuilder = $nostoCategoryBuilder;
@@ -189,11 +189,12 @@ class BuildWebFacetService
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                $this->logger->debugCmp(
+                $this->logger->debugWithSource(
                     sprintf(
                         'Cannot build include filter for "%s" frontend input type',
                         $frontendInput
                     ),
+                    [],
                     $this
                 );
                 return;
@@ -206,6 +207,7 @@ class BuildWebFacetService
                         'Cannot build include filter for "%s" attribute ',
                         $attributeModel->getName()
                     ),
+                    [],
                     $this
                 );
                 return;

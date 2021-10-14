@@ -48,7 +48,7 @@ use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractBlock extends Template
 {
@@ -71,7 +71,7 @@ abstract class AbstractBlock extends Template
     /** @var NostoHelperAccount */
     private $nostoHelperAccount;
 
-    /** @var LoggerInterface */
+    /** @var Logger */
     private $logger;
 
     /** @var string */
@@ -90,7 +90,7 @@ abstract class AbstractBlock extends Template
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SearchEngine $searchEngineHelper
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         Context $context,
@@ -99,7 +99,7 @@ abstract class AbstractBlock extends Template
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryServiceInterface $categoryService,
         SearchEngine $searchEngineHelper,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->categoryService = $categoryService;
         $this->paramResolver = $parameterResolver;
@@ -282,9 +282,9 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @return LoggerInterface
+     * @return Logger
      */
-    public function getLogger(): LoggerInterface
+    public function getLogger(): Logger
     {
         return $this->logger;
     }
