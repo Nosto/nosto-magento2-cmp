@@ -46,7 +46,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
@@ -55,6 +54,7 @@ use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
+use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Magento\Framework\Event\ManagerInterface;
@@ -85,7 +85,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $accountHelper;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -136,7 +136,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      * @param Data $nostoCmpHelper
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ManagerInterface $eventManager
@@ -149,7 +149,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         StoreManagerInterface $storeManager,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
-        LoggerInterface $logger,
+        Logger $logger,
         Data $nostoCmpHelper,
         CategoryRepositoryInterface $categoryRepository,
         ManagerInterface $eventManager
@@ -223,7 +223,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             ]
         );
 
-        $this->logger->debugCmp(
+        $this->logger->debugWithSource(
             sprintf(
                 'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
                 $this->lastResult->getResultSet()->count(),
@@ -232,6 +232,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
                 $pageNumber,
                 $limit
             ),
+            [],
             $this
         );
         return $this->lastResult;
@@ -289,12 +290,13 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             || $limit > $maxLimit
             || $limit === 0
         ) {
-            $this->logger->debugCmp(
+            $this->logger->debugWithSource(
                 sprintf(
                     'Limit set to %d - original limit was %s',
                     $maxLimit,
                     $limit
                 ),
+                [],
                 $this
             );
             return $maxLimit;

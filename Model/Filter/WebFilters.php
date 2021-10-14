@@ -44,7 +44,7 @@ use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
-use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Tagging\Logger\Logger;
 
 class WebFilters implements FiltersInterface
 {
@@ -60,7 +60,7 @@ class WebFilters implements FiltersInterface
     /** @var string */
     private $brand;
 
-    /** @var LoggerInterface */
+    /** @var Logger */
     private $logger;
 
     /**
@@ -68,13 +68,13 @@ class WebFilters implements FiltersInterface
      * @param IncludeFilters $includeFilters
      * @param ExcludeFilters $excludeFilters
      * @param NostoHelperData $nostoHelperData
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         IncludeFilters $includeFilters,
         ExcludeFilters $excludeFilters,
         NostoHelperData $nostoHelperData,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->includeFilters = $includeFilters;
         $this->excludeFilters = $excludeFilters;
@@ -141,11 +141,12 @@ class WebFilters implements FiltersInterface
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                $this->logger->debugCmp(
+                $this->logger->debugWithSource(
                     sprintf(
                         'Cannot build include filter for "%s" frontend input type',
                         $frontendInput
                     ),
+                    [],
                     $this
                 );
                 return;
@@ -158,6 +159,7 @@ class WebFilters implements FiltersInterface
                         'Cannot build include filter for "%s" attribute ',
                         $attributeModel->getName()
                     ),
+                    [],
                     $this
                 );
                 return;

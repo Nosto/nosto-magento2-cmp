@@ -48,7 +48,6 @@ use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\WebFilters;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
@@ -56,6 +55,7 @@ use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Logger\Logger;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -78,7 +78,7 @@ class Toolbar extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      * @param SearchEngine $searchEngineHelper
      * @param WebFilters $filters
      * @param State $state
@@ -89,7 +89,7 @@ class Toolbar extends AbstractBlock
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
-        LoggerInterface $logger,
+        Logger $logger,
         SearchEngine $searchEngineHelper,
         WebFilters $filters,
         State $state
@@ -118,12 +118,13 @@ class Toolbar extends AbstractBlock
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
-            $this->getLogger()->debugCmp(
+            $this->getLogger()->debugWithSource(
                 sprintf(
                     'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
                     (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
                 ),
+                [],
                 $this
             );
             return $subject;
@@ -152,18 +153,24 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->getLogger()->debugCmp(
+                    $this->getLogger()->debugWithSource(
                         $subjectCollection->getSelectSql()->__toString(),
+                        [],
                         $this
                     );
                 } else {
-                    $this->getLogger()->debugCmp(
+                    $this->getLogger()->debugWithSource(
                         'Got an empty CMP result from Nosto for category',
+                        [],
                         $this
                     );
                 }
             } catch (MissingCookieException $e) {
-                $this->getLogger()->debugCmp($e->getMessage(), $this);
+                $this->getLogger()->debugWithSource(
+                    $e->getMessage(),
+                    [],
+                    $this
+                );
             } catch (Exception $e) {
                 $this->getLogger()->exception($e);
             }

@@ -45,9 +45,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
+use Nosto\Tagging\Logger\Logger;
+use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class CategoryMapping extends Template
 {
@@ -63,7 +63,7 @@ class CategoryMapping extends Template
     /** @var NostoHelperData */
     private $nostoHelperData;
 
-    /** @var LoggerInterface */
+    /** @var Logger */
     private $logger;
 
     /**
@@ -73,7 +73,7 @@ class CategoryMapping extends Template
      * @param CategoryBuilder $categoryBuilder
      * @param NostoHelperData $nostoHelperData
      * @param Context $context
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -81,7 +81,7 @@ class CategoryMapping extends Template
         CategoryBuilder $categoryBuilder,
         NostoHelperData $nostoHelperData,
         Context $context,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;

@@ -42,13 +42,13 @@ use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\FiltersInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractHandler
 {
@@ -70,7 +70,7 @@ abstract class AbstractHandler
     private $parameterResolver;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -107,7 +107,7 @@ abstract class AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
@@ -116,7 +116,7 @@ abstract class AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->parameterResolver = $parameterResolver;
         $this->logger = $logger;
@@ -133,11 +133,12 @@ abstract class AbstractHandler
      */
     public function handle(array &$requestData)
     {
-        $this->logger->debugCmp(
+        $this->logger->debugWithSource(
             sprintf(
                 'Using %s as search engine',
                 $this->searchEngineHelper->getCurrentEngine()
             ),
+            [],
             $this
         );
         $this->preFetchOps($requestData);
@@ -152,10 +153,10 @@ abstract class AbstractHandler
             return;
         }
         if (empty($productIds)) {
-            $this->logger->debugCmp(
+            $this->logger->debugWithSource(
                 'Nosto did not return products for the request',
-                $this,
-                $requestData
+                array_merge(['nosto' => 'cmp'], $requestData),
+                $this
             );
             $this->setFallbackSort($requestData);
             return;
@@ -208,7 +209,11 @@ abstract class AbstractHandler
                 'direction' => 'ASC'
             ];
         } catch (Exception $e) {
-            $this->logger->debugCmp(sprintf("Could not set fallback sorting. %s", $e->getMessage()), $this);
+            $this->logger->debugWithSource(
+                sprintf("Could not set fallback sorting. %s", $e->getMessage()),
+                [],
+                $this
+            );
         }
     }
 
@@ -285,7 +290,11 @@ abstract class AbstractHandler
             );
             return $res ? CategoryMerchandising::parseProductIds($res) : null;
         } catch (MissingCookieException $e) {
-            $this->logger->debugCmp($e->getMessage(), $this);
+            $this->logger->debugWithSource(
+                $e->getMessage(),
+                [],
+                $this
+            );
             return null;
         } catch (Exception $e) {
             $this->logger->exception($e);

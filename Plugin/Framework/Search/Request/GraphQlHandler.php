@@ -40,12 +40,12 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Filter\GraphQlFilters;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Logger\Logger;
 
 class GraphQlHandler extends AbstractHandler
 {
@@ -66,7 +66,7 @@ class GraphQlHandler extends AbstractHandler
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SessionService $sessionService
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         GraphQlFilters $filters,
@@ -77,7 +77,7 @@ class GraphQlHandler extends AbstractHandler
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         SessionService $sessionService,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         parent::__construct(
             $parameterResolver,
