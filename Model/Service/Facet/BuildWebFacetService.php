@@ -202,7 +202,7 @@ class BuildWebFacetService
         try {
             $attributeCode = $attributeModel->getAttributeCode();
             if (!is_string($attributeCode)) {
-                $this->logger->debugCmp(
+                $this->logger->debugWithSource(
                     sprintf(
                         'Cannot build include filter for "%s" attribute ',
                         $attributeModel->getName()
