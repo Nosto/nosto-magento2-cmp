@@ -149,7 +149,11 @@ class BuildWebFacetService
             $categoryId = $item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);
             if ($category == null) {
-                $this->logger->debugCmp("Could not get category from filters", $this);
+                $this->logger->debugWithSource(
+                    "Could not get category from filters",
+                    [],
+                    $this
+                );
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, 'category', $category);
