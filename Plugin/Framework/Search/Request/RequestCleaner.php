@@ -89,7 +89,7 @@ class RequestCleaner
         if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
             $this->logger->debugWithSource(
                 'Nosto sorting not used or not found from request data',
-                array_merge(['nosto' => 'cmp'], $requestData),
+                [],
                 $this
             );
             return $requestData;
@@ -106,7 +106,7 @@ class RequestCleaner
                         'Could not find %s from ES request data',
                         self::KEY_BIND_TO_QUERY
                     ),
-                    array_merge(['nosto' => 'cmp'], $requestData),
+                    [],
                     $this
                 );
                 return $requestData;
@@ -114,7 +114,7 @@ class RequestCleaner
         } catch (Exception $e) {
             $this->logger->debugWithSource(
                 'Failed to apply CMP - see exception log(s) for details',
-                array_merge(['nosto' => 'cmp'], $requestData),
+                [],
                 $this
             );
             $this->logger->exception($e);
