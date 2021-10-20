@@ -156,7 +156,7 @@ abstract class AbstractHandler
         if (empty($productIds)) {
             $this->logger->debugWithSource(
                 'Nosto did not return products for the request',
-                array_merge(['nosto' => 'cmp'], $requestData),
+                $requestData,
                 $this
             );
             $this->setFallbackSort($requestData);
