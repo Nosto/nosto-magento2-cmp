@@ -37,14 +37,14 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Tagging\Logger\Logger;
 
 class WebHandler extends AbstractHandler
 {
@@ -65,7 +65,7 @@ class WebHandler extends AbstractHandler
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
@@ -76,7 +76,7 @@ class WebHandler extends AbstractHandler
         StateAwareCategoryServiceInterface $categoryService,
         BuildWebFacetService $buildWebFacetService,
         State $state,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         parent::__construct(
             $parameterResolver,

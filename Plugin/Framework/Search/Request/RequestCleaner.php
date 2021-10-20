@@ -38,8 +38,8 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Exception;
 use Magento\Framework\Search\Request\Cleaner;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Utils\Search;
+use Nosto\Tagging\Logger\Logger;
 
 class RequestCleaner
 {
@@ -55,7 +55,7 @@ class RequestCleaner
     /** @var WebHandler */
     private $webHandler;
 
-    /** @var LoggerInterface  */
+    /** @var Logger  */
     private $logger;
 
     /**
@@ -63,12 +63,12 @@ class RequestCleaner
      *
      * @param WebHandler $webHandler
      * @param GraphQlHandler $graphQlHandler
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         WebHandler $webHandler,
         GraphQlHandler $graphQlHandler,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->webHandler = $webHandler;
         $this->graphqlHandler = $graphQlHandler;
@@ -87,7 +87,11 @@ class RequestCleaner
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
         if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
-            $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
+            $this->logger->debugWithSource(
+                'Nosto sorting not used or not found from request data',
+                $requestData,
+                $this
+            );
             return $requestData;
         }
         try {
@@ -97,21 +101,21 @@ class RequestCleaner
             } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {
                 $this->graphqlHandler->handle($requestData);
             } else {
-                $this->logger->debugCmp(
+                $this->logger->debugWithSource(
                     sprintf(
                         'Could not find %s from ES request data',
                         self::KEY_BIND_TO_QUERY
                     ),
-                    $this,
-                    $requestData
+                    $requestData,
+                    $this
                 );
                 return $requestData;
             }
         } catch (Exception $e) {
-            $this->logger->debugCmp(
+            $this->logger->debugWithSource(
                 'Failed to apply CMP - see exception log(s) for details',
-                $this,
-                $requestData
+                $requestData,
+                $this
             );
             $this->logger->exception($e);
         } finally {
