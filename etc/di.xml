@@ -57,6 +57,9 @@
     </type>
     <type name="Magento\Framework\Search\Request\Cleaner">
         <plugin name="nosto_search_results_cleaner" type="Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner"/>
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
     </type>
     <type name="Magento\Framework\Search\Search">
         <plugin name="" type="Nosto\Cmp\Plugin\Framework\Search\Search"/>
@@ -69,5 +72,15 @@
     </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search">
         <plugin name="nosto_graphql_products_query" type="Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search"/>
+    </type>
+    <type name="Nosto\Cmp\Plugin\Framework\Search\Request\WebHandler">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Plugin\Framework\Search\Request\GraphQlHandler">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
     </type>
 </config>

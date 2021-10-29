@@ -66,6 +66,7 @@ class WebHandler extends AbstractHandler
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      * @param Logger $logger
+     * @param int $pageSize
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
@@ -76,7 +77,8 @@ class WebHandler extends AbstractHandler
         StateAwareCategoryServiceInterface $categoryService,
         BuildWebFacetService $buildWebFacetService,
         State $state,
-        Logger $logger
+        Logger $logger,
+        $pageSize
     ) {
         parent::__construct(
             $parameterResolver,
@@ -85,7 +87,8 @@ class WebHandler extends AbstractHandler
             $nostoHelperAccount,
             $cmpHelperData,
             $categoryService,
-            $logger
+            $logger,
+            $pageSize
         );
         $this->buildWebFacetService = $buildWebFacetService;
         $this->state  = $state;
@@ -116,6 +119,9 @@ class WebHandler extends AbstractHandler
      */
     public function parseLimit(array $requestData)
     {
+        if ($this->pageSize != -1) {
+            return $this->pageSize;
+        }
         return (int) $requestData[self::KEY_RESULT_SIZE];
     }
 
