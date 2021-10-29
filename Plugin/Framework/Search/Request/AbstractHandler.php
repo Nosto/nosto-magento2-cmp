@@ -98,8 +98,7 @@ abstract class AbstractHandler
      * @var StateAwareCategoryServiceInterface
      */
     protected $categoryService;
-
-
+    
     /**
      * @var int
      */
