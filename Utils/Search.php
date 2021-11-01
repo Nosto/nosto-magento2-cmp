@@ -74,4 +74,14 @@ class Search
         }
         return null;
     }
+
+    /**
+     * Removes the Nosto sorting key as it's not indexed
+     *
+     * @param array $requestData
+     */
+    public static function cleanUpCmpSort(array &$requestData)
+    {
+        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+    }
 }
