@@ -40,6 +40,7 @@ use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -68,6 +69,9 @@ class Toolbar extends AbstractBlock
     /** @var BuildWebFacetService */
     private $buildWebFacetService;
 
+    /** @var Http */
+    private $request;
+
     private static $isProcessed = false;
 
     /**
@@ -77,6 +81,7 @@ class Toolbar extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
+     * @param Http $request
      * @param Logger $logger
      * @param SearchEngine $searchEngineHelper
      * @param BuildWebFacetService $buildWebFacetService
@@ -88,12 +93,14 @@ class Toolbar extends AbstractBlock
         NostoHelperAccount $nostoHelperAccount,
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
+        Http $request,
         Logger $logger,
         SearchEngine $searchEngineHelper,
         BuildWebFacetService $buildWebFacetService,
         State $state
     ) {
         $this->buildWebFacetService = $buildWebFacetService;
+        $this->request = $request;
         $this->state = $state;
         parent::__construct(
             $context,
@@ -130,7 +137,7 @@ class Toolbar extends AbstractBlock
         }
         /* @var Store $store */
         $store = $this->getStoreManager()->getStore();
-        if ($this->isCmpCurrentSortOrder($store)) {
+        if ($this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
             try {
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
@@ -175,6 +182,14 @@ class Toolbar extends AbstractBlock
         }
         self::$isProcessed = true;
         return $subject;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCategoryPage()
+    {
+        return $this->request->getFullActionName() == 'catalog_product_view';
     }
 
     /**
