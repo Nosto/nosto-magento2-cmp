@@ -123,6 +123,15 @@ class GraphQlHandler extends AbstractHandler
     public function parseLimit(array $requestData)
     {
         if ($this->pageSize != -1) {
+            $this->logger->debugWithSource(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                ),
+                [],
+                $this
+            );
+
             return $this->pageSize;
         }
 
