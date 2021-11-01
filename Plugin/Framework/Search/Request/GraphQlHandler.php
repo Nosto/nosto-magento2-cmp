@@ -56,6 +56,9 @@ class GraphQlHandler extends AbstractHandler
     /** @var SessionService */
     private $sessionService;
 
+    /** @var int */
+    private $pageSize;
+
     /**
      * GraphQlHandler constructor.
      * @param BuildGraphQlFacetService $buildFacetService
@@ -88,11 +91,11 @@ class GraphQlHandler extends AbstractHandler
             $nostoHelperAccount,
             $cmpHelperData,
             $categoryService,
-            $logger,
-            $pageSize
+            $logger
         );
         $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
+        $this->pageSize = $pageSize;
     }
 
     /**

@@ -55,6 +55,9 @@ class WebHandler extends AbstractHandler
     /** @var BuildWebFacetService  */
     private $buildWebFacetService;
 
+    /** @var int  */
+    private $pageSize;
+
     /**
      * WebHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
@@ -87,11 +90,11 @@ class WebHandler extends AbstractHandler
             $nostoHelperAccount,
             $cmpHelperData,
             $categoryService,
-            $logger,
-            $pageSize
+            $logger
         );
         $this->buildWebFacetService = $buildWebFacetService;
-        $this->state  = $state;
+        $this->state = $state;
+        $this->pageSize = $pageSize;
     }
 
     /**

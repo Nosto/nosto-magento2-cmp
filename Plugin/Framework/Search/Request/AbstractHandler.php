@@ -98,11 +98,6 @@ abstract class AbstractHandler
      * @var StateAwareCategoryServiceInterface
      */
     protected $categoryService;
-    
-    /**
-     * @var int
-     */
-    protected $pageSize;
 
     /**
      * AbstractHandler constructor.
@@ -113,7 +108,6 @@ abstract class AbstractHandler
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param Logger $logger
-     * @param int $pageSize
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
@@ -122,8 +116,7 @@ abstract class AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
-        Logger $logger,
-        $pageSize
+        Logger $logger
     ) {
         $this->parameterResolver = $parameterResolver;
         $this->logger = $logger;
@@ -132,7 +125,6 @@ abstract class AbstractHandler
         $this->accountHelper = $nostoHelperAccount;
         $this->cmpHelperData = $cmpHelperData;
         $this->categoryService = $categoryService;
-        $this->pageSize = $pageSize;
     }
 
     /**
