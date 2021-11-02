@@ -81,6 +81,7 @@ class Toolbar extends AbstractBlock
      * @param NostoHelperAccount $nostoHelperAccount
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
+     * @param Http $request
      * @param Logger $logger
      * @param SearchEngine $searchEngineHelper
      * @param BuildWebFacetService $buildWebFacetService
