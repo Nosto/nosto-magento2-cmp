@@ -317,4 +317,12 @@ abstract class AbstractHandler
             return self::KEY_ES_PRODUCT_ID;
         }
     }
+
+    /**
+     * @return Logger
+     */
+    public function getLogger(): Logger
+    {
+        return $this->logger;
+    }
 }

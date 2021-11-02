@@ -55,6 +55,9 @@ class WebHandler extends AbstractHandler
     /** @var BuildWebFacetService  */
     private $buildWebFacetService;
 
+    /** @var int  */
+    private $pageSize;
+
     /**
      * WebHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
@@ -66,6 +69,7 @@ class WebHandler extends AbstractHandler
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      * @param Logger $logger
+     * @param int $pageSize
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
@@ -76,7 +80,8 @@ class WebHandler extends AbstractHandler
         StateAwareCategoryServiceInterface $categoryService,
         BuildWebFacetService $buildWebFacetService,
         State $state,
-        Logger $logger
+        Logger $logger,
+        $pageSize
     ) {
         parent::__construct(
             $parameterResolver,
@@ -88,7 +93,8 @@ class WebHandler extends AbstractHandler
             $logger
         );
         $this->buildWebFacetService = $buildWebFacetService;
-        $this->state  = $state;
+        $this->state = $state;
+        $this->pageSize = $pageSize;
     }
 
     /**
@@ -116,6 +122,18 @@ class WebHandler extends AbstractHandler
      */
     public function parseLimit(array $requestData)
     {
+        if ($this->pageSize != -1) {
+            $this->getLogger()->debugWithSource(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                ),
+                [],
+                $this
+            );
+
+            return $this->pageSize;
+        }
         return (int) $requestData[self::KEY_RESULT_SIZE];
     }
 

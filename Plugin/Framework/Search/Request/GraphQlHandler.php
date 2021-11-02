@@ -56,6 +56,9 @@ class GraphQlHandler extends AbstractHandler
     /** @var SessionService */
     private $sessionService;
 
+    /** @var int */
+    private $pageSize;
+
     /**
      * GraphQlHandler constructor.
      * @param BuildGraphQlFacetService $buildFacetService
@@ -67,6 +70,7 @@ class GraphQlHandler extends AbstractHandler
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SessionService $sessionService
      * @param Logger $logger
+     * @param int $pageSize
      */
     public function __construct(
         BuildGraphQlFacetService $buildFacetService,
@@ -77,7 +81,8 @@ class GraphQlHandler extends AbstractHandler
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         SessionService $sessionService,
-        Logger $logger
+        Logger $logger,
+        $pageSize
     ) {
         parent::__construct(
             $parameterResolver,
@@ -90,6 +95,7 @@ class GraphQlHandler extends AbstractHandler
         );
         $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
+        $this->pageSize = $pageSize;
     }
 
     /**
@@ -116,6 +122,19 @@ class GraphQlHandler extends AbstractHandler
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function parseLimit(array $requestData)
     {
+        if ($this->pageSize != -1) {
+            $this->getLogger()->debugWithSource(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                ),
+                [],
+                $this
+            );
+
+            return $this->pageSize;
+        }
+
         //Get limit/pageSize from session if session exists
         $model = $this->sessionService->getGraphqlModel();
         if ($model != null) {
