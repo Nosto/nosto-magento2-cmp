@@ -123,6 +123,15 @@ class WebHandler extends AbstractHandler
     public function parseLimit(array $requestData)
     {
         if ($this->pageSize != -1) {
+            $this->getLogger()->debugWithSource(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                ),
+                [],
+                $this
+            );
+
             return $this->pageSize;
         }
         return (int) $requestData[self::KEY_RESULT_SIZE];
