@@ -290,6 +290,7 @@ class BuildWebFacetService
             return $value;
         }
 
+        // @codingStandardsIgnoreStart
         $this->logger->debugWithSource(
             sprintf(
                 'Can not get value for filter: %s. Value passed was %v (type of %t, class - %c)',
@@ -311,5 +312,6 @@ class BuildWebFacetService
                 (gettype($value) == 'object') ? get_class($value) : 'not an object'
             )
         );
+        // @codingStandardsIgnoreEnd
     }
 }
