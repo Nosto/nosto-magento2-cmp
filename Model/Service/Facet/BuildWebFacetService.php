@@ -290,6 +290,26 @@ class BuildWebFacetService
             return $value;
         }
 
-        throw new NostoException(sprintf('Can not get value for filter: %s', $name));
+        $this->logger->debugWithSource(
+            sprintf(
+                'Can not get value for filter: %s. Value passed was %v (type of %t, class - %c)',
+                $name,
+                $value,
+                gettype($value),
+                (gettype($value) == 'object') ? get_class($value) : 'not an object'
+            ),
+            [],
+            $this
+        );
+
+        throw new NostoException(
+            sprintf(
+                'Can not get value for filter: %s. Value passed was %v (type of %t, class -)',
+                $name,
+                $value,
+                gettype($value),
+                (gettype($value) == 'object') ? get_class($value) : 'not an object'
+            )
+        );
     }
 }
