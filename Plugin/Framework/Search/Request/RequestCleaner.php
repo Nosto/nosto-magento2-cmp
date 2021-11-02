@@ -92,6 +92,8 @@ class RequestCleaner
                 $requestData,
                 $this
             );
+            //remove nosto_personalised in case it's a search page
+            Search::cleanUpCmpSort($requestData);
             return $requestData;
         }
         try {

@@ -142,7 +142,7 @@ abstract class AbstractHandler
             $this
         );
         $this->preFetchOps($requestData);
-        $this->cleanUpCmpSort($requestData);
+        Search::cleanUpCmpSort($requestData);
         try {
             $productIds = $this->getCmpProductIds(
                 $this->getFilters($requestData),
@@ -184,16 +184,6 @@ abstract class AbstractHandler
      * @return FacetInterface
      */
     abstract protected function getFilters(array $requestData);
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    private function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
-    }
 
     /**
      * Set fallback sort order
