@@ -305,7 +305,7 @@ class BuildWebFacetService
 
         throw new NostoException(
             sprintf(
-                'Can not get value for filter: %s. Value passed was %v (type of %t, class -)',
+                'Can not get value for filter: %s. Value passed was %v (type of %t, class - %c)',
                 $name,
                 $value,
                 gettype($value),
