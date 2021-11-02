@@ -206,7 +206,7 @@ class Toolbar extends AbstractBlock
      */
     private function isCategoryPage()
     {
-        return $this->request->getFullActionName() == 'catalog_product_view';
+        return $this->request->getFullActionName() == 'catalog_category_view';
     }
 
     /**
