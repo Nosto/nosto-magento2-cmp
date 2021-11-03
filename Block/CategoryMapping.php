@@ -40,6 +40,7 @@ namespace Nosto\Cmp\Block;
 use Exception;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -51,6 +52,8 @@ use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as Categ
 
 class CategoryMapping extends Template
 {
+    const CACHE_KEY = "nosto_cmp_category_mapping";
+
     /** @var StoreManagerInterface */
     private $storeManager;
 
@@ -62,6 +65,9 @@ class CategoryMapping extends Template
 
     /** @var NostoHelperData */
     private $nostoHelperData;
+
+    /** @var CacheInterface */
+    private $cache;
 
     /** @var Logger */
     private $logger;
@@ -80,6 +86,7 @@ class CategoryMapping extends Template
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
         NostoHelperData $nostoHelperData,
+        CacheInterface $cache,
         Context $context,
         Logger $logger
     ) {
@@ -88,6 +95,7 @@ class CategoryMapping extends Template
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoHelperData = $nostoHelperData;
+        $this->cache = $cache;
         $this->logger = $logger;
     }
 
@@ -97,17 +105,42 @@ class CategoryMapping extends Template
     public function getCategoryMap()
     {
 
-        $array = [];
+        $mapping = '';
         try {
             $store = $this->storeManager->getStore();
             if ($store instanceof Store) {
-                $array = $this->getMagentoCategories($store);
+                $mapping = $this->getCachedCategory($store);
             }
         } catch (NoSuchEntityException $e) {
             $this->logger->exception($e);
         }
 
-        return json_encode((object)$array, JSON_UNESCAPED_SLASHES);
+        return $mapping;
+    }
+
+    /**
+     * @param Store $store
+     * @return false|string
+     */
+    private function getCachedCategory(Store $store)
+    {
+        $cacheKey = $this->getCMCacheKey($store);
+        $mapping = $this->cache->load($cacheKey);
+        if ($mapping) {
+            return $mapping;
+        }
+        $array = $this->getMagentoCategories($store);
+        $mapping = json_encode((object)$array, JSON_UNESCAPED_SLASHES);
+        $this->cache->save($mapping, $cacheKey);
+        return $mapping;
+    }
+
+    /**
+     * @param Store $store
+     * @return string
+     */
+    private function getCMCacheKey(Store $store){
+        return self::CACHE_KEY . '_' . $store->getStoreId();
     }
 
     /**
