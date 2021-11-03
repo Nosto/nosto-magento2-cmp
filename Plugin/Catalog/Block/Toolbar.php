@@ -148,7 +148,7 @@ class Toolbar extends AbstractBlock
                 $result = $this->getCmpResult(
                     $this->buildWebFacetService->getFacets(),
                     $this->getCurrentPageNumber()-1,
-                    $subjectCollection->getPageSize()
+                    $this->getPageSize($subjectCollection->getPageSize())
                 );
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -194,6 +194,17 @@ class Toolbar extends AbstractBlock
      */
     private function getCmpResult(FacetInterface $facets, $start, $limit)
     {
+        return $this->getCategoryService()->getPersonalisationResult(
+            $facets,
+            $start,
+            $limit
+        );
+    }
+
+    /**
+     * @param $limit
+     */
+    private function getPageSize($limit) {
         if ($this->pageSize != -1) {
             $this->getLogger()->debugWithSource(
                 sprintf(
@@ -204,14 +215,10 @@ class Toolbar extends AbstractBlock
                 $this
             );
 
-            $limit = $this->pageSize;
+            return $this->pageSize;
         }
 
-        return $this->getCategoryService()->getPersonalisationResult(
-            $facets,
-            $start,
-            $limit
-        );
+        return $limit;
     }
 
     /**
