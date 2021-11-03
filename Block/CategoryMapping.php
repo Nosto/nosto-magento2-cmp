@@ -139,7 +139,8 @@ class CategoryMapping extends Template
      * @param Store $store
      * @return string
      */
-    private function getCMCacheKey(Store $store){
+    private function getCMCacheKey(Store $store)
+    {
         return self::CACHE_KEY . '_' . $store->getStoreId();
     }
 
