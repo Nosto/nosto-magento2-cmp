@@ -210,6 +210,7 @@ class Toolbar extends AbstractBlock
 
     /**
      * @param $limit
+     * @return int
      */
     private function getPageSize($limit)
     {
