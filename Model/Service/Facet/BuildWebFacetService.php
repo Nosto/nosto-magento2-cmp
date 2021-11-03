@@ -114,6 +114,14 @@ class BuildWebFacetService
         try {
             $this->populateFilters($includeFilters);
         } catch (Exception $e) {
+            $this->logger->debugWithSource(
+                sprintf(
+                    'Cannot populate filters, error message: %e',
+                    $e->getMessage()
+                ),
+                [],
+                $this
+            );
             $this->logger->exception($e);
         }
 
@@ -218,6 +226,14 @@ class BuildWebFacetService
             }
             $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
         } catch (NostoException $e) {
+            $this->logger->debugWithSource(
+                sprintf(
+                    'Cannot map filters, error message: %e',
+                    $e->getMessage()
+                ),
+                [],
+                $this
+            );
             $this->logger->exception($e);
         }
     }
@@ -293,7 +309,7 @@ class BuildWebFacetService
         // @codingStandardsIgnoreStart
         $this->logger->debugWithSource(
             sprintf(
-                'Can not get value for filter: %s. Value passed was %v (type of %t, class - %c)',
+                'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
                 $name,
                 $value,
                 gettype($value),
@@ -305,7 +321,7 @@ class BuildWebFacetService
 
         throw new NostoException(
             sprintf(
-                'Can not get value for filter: %s. Value passed was %v (type of %t, class - %c)',
+                'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
                 $name,
                 $value,
                 gettype($value),
