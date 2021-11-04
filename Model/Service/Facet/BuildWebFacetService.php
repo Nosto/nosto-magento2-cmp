@@ -45,6 +45,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\CmpException\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
@@ -306,28 +307,14 @@ class BuildWebFacetService
             return $value;
         }
 
-        // @codingStandardsIgnoreStart
-        $this->logger->debugWithSource(
+        throw new FacetValueException(
+            // @codingStandardsIgnoreStart
             sprintf(
-                'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
-                $name,
-                $value,
-                gettype($value),
-                (gettype($value) == 'object') ? get_class($value) : 'not an object'
+                FacetValueException::DEFAULT_MESSAGE,
+                $name, $value, gettype($value), (gettype($value) == 'object') ? get_class($value) : 'not an object'
             ),
-            [],
-            $this
+            // @codingStandardsIgnoreEnd
+            $this->logger
         );
-
-        throw new NostoException(
-            sprintf(
-                'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
-                $name,
-                $value,
-                gettype($value),
-                (gettype($value) == 'object') ? get_class($value) : 'not an object'
-            )
-        );
-        // @codingStandardsIgnoreEnd
     }
 }

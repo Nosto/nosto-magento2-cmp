@@ -45,6 +45,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\CmpException\AccountCannotBeNullException;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
@@ -137,10 +138,14 @@ class CategoryMapping extends Template
                 ));
                 if ($hashedCategoryString) {
                     $categoriesArray[$hashedCategoryString] = $category->getUrl();
+                    throw new AccountCannotBeNullException(
+                        AccountCannotBeNullException::DEFAULT_MESSAGE,
+                        $this->logger
+                    );
                 }
             }
-        } catch (Exception $e) {
-            $this->logger->exception($e);
+        } catch (AccountCannotBeNullException $e) {
+            $e->log();
         }
 
         return $categoriesArray;

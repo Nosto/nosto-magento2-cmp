@@ -46,6 +46,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\CmpException\NotInstanceOfProductCollectionException;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
@@ -142,8 +143,9 @@ class Toolbar extends AbstractBlock
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 if (!$subjectCollection instanceof ProductCollection) {
-                    throw new NostoException(
-                        "Collection is not instanceof ProductCollection"
+                    throw new NotInstanceOfProductCollectionException(
+                        NotInstanceOfProductCollectionException::DEFAULT_MESSAGE,
+                        $this->getLogger()
                     );
                 }
                 $result = $this->getCmpResult(

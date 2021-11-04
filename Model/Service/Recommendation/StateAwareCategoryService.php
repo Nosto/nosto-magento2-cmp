@@ -45,12 +45,15 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
+use Nosto\Cmp\Exception\CmpException\AccountCannotBeNullException;
+use Nosto\Cmp\Exception\CmpException\MissingNostoApiAppsTokenException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
@@ -177,24 +180,40 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
-        $store = $this->storeManager->getStore();
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $nostoAccount = $this->accountHelper->findAccount($store);
-        if ($nostoAccount === null) {
-            throw new NostoException('Account cannot be null');
-        }
-        $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-        //Create new session which Nosto won't track
-        if ($customerId === null) {
-            $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
+        try {
+            $store = $this->storeManager->getStore();
+            //@phan-suppress-next-next-line PhanTypeMismatchArgument
+            /** @noinspection PhpParamsInspection */
+            $nostoAccount = $this->accountHelper->findAccount($store);
+            if ($nostoAccount === null) {
+                throw new AccountCannotBeNullException(
+                    AccountCannotBeNullException::DEFAULT_MESSAGE,
+                    $this->logger
+                );
+            }
+            $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+            //Create new session which Nosto won't track
+            if ($customerId === null) {
+                $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
+            }
+
+            $limit = $this->sanitizeLimit($store, $limit);
+            $category = $this->getCurrentCategoryString($store);
+            $featureAccess = new FeatureAccess($nostoAccount);
+            if (!$featureAccess->canUseGraphql()) {
+                throw new MissingNostoApiAppsTokenException(
+                    MissingNostoApiAppsTokenException::DEFAULT_MESSAGE,
+                    $this->logger
+                );
+            }
         }
 
-        $limit = $this->sanitizeLimit($store, $limit);
-        $category = $this->getCurrentCategoryString($store);
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new NostoException('Missing Nosto API_APPS token');
+        catch (AccountCannotBeNullException $e) {
+            $e->log();
+        }
+
+        catch (MissingNostoApiAppsTokenException $e) {
+            $e->log();
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);

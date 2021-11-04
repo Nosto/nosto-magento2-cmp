@@ -37,8 +37,42 @@
 namespace Nosto\Cmp\Exception;
 
 use Exception;
+use Nosto\Tagging\Logger\Logger;
+use Throwable;
 
 class CmpException extends Exception
 {
+    /** @var Logger */
+    protected $logger;
 
+    /**
+     * CmpException constructor.
+     * @param string $message
+     * @param Logger $logger
+     * @param int $code
+     * @param Throwable $previous
+     */
+    public function __construct(
+        $message,
+        $logger,
+        $code = 0,
+        Throwable $previous = null
+    ) {
+        $this->logger = $logger;
+        parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * Log the error when caught.
+     */
+    public function log()
+    {
+        $this->logger->debugWithSource(
+            $this->getMessage(),
+            [],
+            $this
+        );
+
+        $this->logger->exception($this);
+    }
 }

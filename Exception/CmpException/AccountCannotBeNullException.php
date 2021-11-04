@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,59 +29,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Session;
+namespace Nosto\Cmp\Exception\CmpException;
 
-use Magento\Framework\UrlInterface;
-use Nosto\Cmp\Exception\CmpException\SessionCreationException;
-use Nosto\NostoException;
-use Nosto\Operation\Session\NewSession;
-use Nosto\Tagging\Logger\Logger;
-use Nosto\Types\Signup\AccountInterface;
+use Nosto\Cmp\Exception\CmpException;
 
-class SessionService
+class AccountCannotBeNullException extends CmpException
 {
-    /** @var UrlInterface */
-    private $urlInterface;
-
-    /** @var Logger */
-    private $logger;
-
-    /**
-     * SessionService constructor.
-     * @param UrlInterface $urlInterface
-     * @param Logger $logger
-     */
-    public function __construct(
-        UrlInterface $urlInterface,
-        Logger $logger
-    ) {
-        $this->urlInterface = $urlInterface;
-        $this->logger = $logger;
-    }
-
-    /**
-     * @param AccountInterface $nostoAccount
-     * @return string
-     * @throws NostoException
-     */
-    public function getNewNostoSession(AccountInterface $nostoAccount)
-    {
-        $url = $this->urlInterface->getCurrentUrl();
-        try {
-            $newSession = new NewSession($nostoAccount, $url, true);
-            return $newSession->execute();
-        } catch (NostoException $e) {
-            throw new SessionCreationException(
-                SessionCreationException::DEFAULT_MESSAGE,
-                $this->logger,
-                $e->getCode(),
-                $e
-            );
-        }
-    }
+    /** @var string  */
+    const DEFAULT_MESSAGE = 'Account cannot be null';
 }

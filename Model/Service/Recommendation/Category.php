@@ -37,6 +37,7 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Event\ManagerInterface;
+use Nosto\Cmp\Exception\CmpException\MissingNostoApiAppsTokenException;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
@@ -47,6 +48,7 @@ use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
+use Nosto\Tagging\Logger\Logger;
 
 class Category
 {
@@ -56,12 +58,20 @@ class Category
     private $eventManager;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @param ManagerInterface $eventManager
+     * @param Logger $logger
      */
     public function __construct(
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        Logger $logger
     ) {
         $this->eventManager = $eventManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -86,10 +96,18 @@ class Category
         $limit,
         $previewMode = false
     ) {
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new NostoException('Missing Nosto API_APPS token');
+        try {
+            $featureAccess = new FeatureAccess($nostoAccount);
+            if (!$featureAccess->canUseGraphql()) {
+                throw new MissingNostoApiAppsTokenException(
+                    MissingNostoApiAppsTokenException::DEFAULT_MESSAGE,
+                    $this->logger
+                );
+            }
+        } catch (MissingNostoApiAppsTokenException $e) {
+            $e->log();
         }
+
         $categoryMerchandising = new BatchedCategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,
