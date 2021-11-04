@@ -46,7 +46,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
-use Nosto\Cmp\Exception\CmpException\NotInstanceOfProductCollectionException;
+use Nosto\Cmp\Exception\NotInstanceOfProductCollectionException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;

@@ -37,7 +37,7 @@
 namespace Nosto\Cmp\Model\Service\Session;
 
 use Magento\Framework\UrlInterface;
-use Nosto\Cmp\Exception\CmpException\SessionCreationException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\NostoException;
 use Nosto\Operation\Session\NewSession;
 use Nosto\Types\Signup\AccountInterface;

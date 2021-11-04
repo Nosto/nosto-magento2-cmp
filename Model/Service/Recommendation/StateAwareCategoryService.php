@@ -45,9 +45,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Exception\CmpException\MissingAccountException;
-use Nosto\Cmp\Exception\CmpException\MissingTokenException;
-use Nosto\Cmp\Exception\CmpException\SessionCreationException;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
@@ -181,30 +181,25 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
-        try {
-            $store = $this->storeManager->getStore();
-            //@phan-suppress-next-next-line PhanTypeMismatchArgument
-            /** @noinspection PhpParamsInspection */
-            $nostoAccount = $this->accountHelper->findAccount($store);
-            if ($nostoAccount === null) {
-                throw new MissingAccountException();
-            }
-            $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
-            //Create new session which Nosto won't track
-            if ($customerId === null) {
-                $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
-            }
 
-            $limit = $this->sanitizeLimit($store, $limit);
-            $category = $this->getCurrentCategoryString($store);
-            $featureAccess = new FeatureAccess($nostoAccount);
-            if (!$featureAccess->canUseGraphql()) {
-                throw new MissingTokenException(Token::API_GRAPHQL);
-            }
-        } catch (MissingAccountException $e) {
-            $this->logger->exception($e);
-        } catch (MissingTokenException $e) {
-            $this->logger->exception($e);
+        $store = $this->storeManager->getStore();
+        //@phan-suppress-next-next-line PhanTypeMismatchArgument
+        /** @noinspection PhpParamsInspection */
+        $nostoAccount = $this->accountHelper->findAccount($store);
+        if ($nostoAccount === null) {
+            throw new MissingAccountException();
+        }
+        $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
+        //Create new session which Nosto won't track
+        if ($customerId === null) {
+            $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
+        }
+
+        $limit = $this->sanitizeLimit($store, $limit);
+        $category = $this->getCurrentCategoryString($store);
+        $featureAccess = new FeatureAccess($nostoAccount);
+        if (!$featureAccess->canUseGraphql()) {
+            throw new MissingTokenException(Token::API_GRAPHQL);
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);

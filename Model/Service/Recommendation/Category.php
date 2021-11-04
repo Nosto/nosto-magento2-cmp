@@ -37,7 +37,7 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Event\ManagerInterface;
-use Nosto\Cmp\Exception\CmpException\MissingTokenException;
+use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;

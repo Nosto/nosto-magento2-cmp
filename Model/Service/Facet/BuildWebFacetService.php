@@ -45,7 +45,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Exception\CmpException\FacetValueException;
+use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
@@ -256,7 +256,7 @@ class BuildWebFacetService
      * @param IncludeFilters $includeFilters
      * @param StoreInterface $store
      * @param string $name
-     * @param string|array $value
+     * @param mixed $value
      * @throws FacetValueException
      * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */

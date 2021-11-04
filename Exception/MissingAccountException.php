@@ -34,7 +34,7 @@
  *
  */
 
-namespace Nosto\Cmp\Exception\CmpException;
+namespace Nosto\Cmp\Exception;
 
 use Exception;
 use Throwable;

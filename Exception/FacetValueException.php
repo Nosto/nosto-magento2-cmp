@@ -34,23 +34,41 @@
  *
  */
 
-namespace Nosto\Cmp\Exception\CmpException;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Exception\CmpException;
+use Exception;
+use Throwable;
 
-class SessionCreationException extends CmpException
+class FacetValueException extends Exception
 {
     /**
-     * SessionCreationException constructor.
+     * FacetValueException constructor.
+     * @param string $filterName
+     * @param mixed $value
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
      */
     public function __construct(
+        $filterName,
+        $value,
+        $message = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
         $code = 0,
         $previous = null
     ) {
-        $message = 'Something went wrong while creating new session';
-        parent::__construct($message, $code, $previous);
+        // @codingStandardsIgnoreStart
+        $type = gettype($value);
+        if ($type == 'object') {
+            $class = get_class($value);
+        } else {
+            $class = 'not an object';
+        }
+        // @codingStandardsIgnoreEnd
+
+        parent::__construct(
+            sprintf($message, $filterName, $value, $type, $class),
+            $code,
+            $previous
+        );
     }
 }

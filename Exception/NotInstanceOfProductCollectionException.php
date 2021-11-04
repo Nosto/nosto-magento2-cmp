@@ -34,25 +34,24 @@
  *
  */
 
-namespace Nosto\Cmp\Exception\CmpException;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Exception\CmpException;
+use Exception;
+use Throwable;
 
-class MissingTokenException extends CmpException
+class NotInstanceOfProductCollectionException extends Exception
 {
     /**
-     * MissingAccountException constructor.
-     * @param string $token
+     * NotInstanceOfProductCollectionException constructor.
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
      */
     public function __construct(
-        $token,
-        $message = 'Missing Nosto token: %s',
+        $message = 'Collection is not instanceof ProductCollection',
         $code = 0,
         $previous = null
     ) {
-        parent::__construct(sprintf($message, $token), $code, $previous);
+        parent::__construct($message, $code, $previous);
     }
 }

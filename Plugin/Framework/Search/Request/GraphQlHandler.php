@@ -36,8 +36,8 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Exception as NostoException;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
@@ -140,7 +140,7 @@ class GraphQlHandler extends AbstractHandler
         if ($model != null) {
             return $model->getLimit();
         } else {
-            throw new CmpException('Could not get limit from session');
+            throw new NostoException('Could not get limit from session');
         }
     }
 
@@ -163,7 +163,7 @@ class GraphQlHandler extends AbstractHandler
         if ($model != null) {
             return $model->getCurrentPage() - 1;
         } else {
-            throw new CmpException('Could not get page size from session');
+            throw new NostoException('Could not get page size from session');
         }
     }
 }

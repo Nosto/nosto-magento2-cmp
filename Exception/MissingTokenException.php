@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
@@ -37,8 +37,23 @@
 namespace Nosto\Cmp\Exception;
 
 use Exception;
+use Throwable;
 
-class CmpException extends Exception
+class MissingTokenException extends Exception
 {
-
+    /**
+     * MissingAccountException constructor.
+     * @param string $token
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(
+        $token,
+        $message = 'Missing Nosto token: %s',
+        $code = 0,
+        $previous = null
+    ) {
+        parent::__construct(sprintf($message, $token), $code, $previous);
+    }
 }
