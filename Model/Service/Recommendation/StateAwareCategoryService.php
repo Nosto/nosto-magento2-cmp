@@ -53,7 +53,6 @@ use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
-use Nosto\NostoException;
 use Nosto\Request\Api\Token;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
@@ -172,8 +171,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
     /**
      * @inheritDoc
-     * @throws NostoException
-     * @throws LocalizedException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws NoSuchEntityException
      * @throws SessionCreationException
      */
     public function getPersonalisationResult(

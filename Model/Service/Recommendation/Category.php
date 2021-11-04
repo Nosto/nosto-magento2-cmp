@@ -49,7 +49,6 @@ use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
-use Nosto\Tagging\Logger\Logger;
 
 class Category
 {
@@ -59,20 +58,12 @@ class Category
     private $eventManager;
 
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @param ManagerInterface $eventManager
-     * @param Logger $logger
      */
     public function __construct(
-        ManagerInterface $eventManager,
-        Logger $logger
+        ManagerInterface $eventManager
     ) {
         $this->eventManager = $eventManager;
-        $this->logger = $logger;
     }
 
     /**
@@ -98,13 +89,9 @@ class Category
         $limit,
         $previewMode = false
     ) {
-        try {
-            $featureAccess = new FeatureAccess($nostoAccount);
-            if (!$featureAccess->canUseGraphql()) {
-                throw new MissingTokenException(Token::API_GRAPHQL);
-            }
-        } catch (MissingTokenException $e) {
-            $this->logger->exception($e);
+        $featureAccess = new FeatureAccess($nostoAccount);
+        if (!$featureAccess->canUseGraphql()) {
+            throw new MissingTokenException(Token::API_GRAPHQL);
         }
 
         $categoryMerchandising = new BatchedCategoryMerchandising(

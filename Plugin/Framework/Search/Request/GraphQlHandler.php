@@ -36,8 +36,8 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Exception as NostoException;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\NostoException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
