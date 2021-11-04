@@ -50,7 +50,7 @@ class SessionCreationException extends CmpException
         $code = 0,
         $previous = null
     ) {
-        $message = 'Something went wrong while creating new session',
+        $message = 'Something went wrong while creating new session';
         parent::__construct($message, $code, $previous);
     }
 }

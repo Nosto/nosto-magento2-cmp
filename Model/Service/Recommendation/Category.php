@@ -84,7 +84,7 @@ class Category
      * @param int $limit
      * @param bool $previewMode
      * @return CategoryMerchandisingResult
-     * @throws NostoException
+     * @throws MissingTokenException
      * @throws AbstractHttpException
      * @throws HttpResponseException
      */
@@ -103,7 +103,7 @@ class Category
                 throw new MissingTokenException(Token::API_GRAPHQL);
             }
         } catch (MissingTokenException $e) {
-            $e->log();
+            $this->logger->exception($e);
         }
 
         $categoryMerchandising = new BatchedCategoryMerchandising(

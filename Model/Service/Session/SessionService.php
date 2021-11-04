@@ -40,7 +40,6 @@ use Magento\Framework\UrlInterface;
 use Nosto\Cmp\Exception\CmpException\SessionCreationException;
 use Nosto\NostoException;
 use Nosto\Operation\Session\NewSession;
-use Nosto\Tagging\Logger\Logger;
 use Nosto\Types\Signup\AccountInterface;
 
 class SessionService
@@ -48,20 +47,14 @@ class SessionService
     /** @var UrlInterface */
     private $urlInterface;
 
-    /** @var Logger */
-    private $logger;
-
     /**
      * SessionService constructor.
      * @param UrlInterface $urlInterface
-     * @param Logger $logger
      */
     public function __construct(
-        UrlInterface $urlInterface,
-        Logger $logger
+        UrlInterface $urlInterface
     ) {
         $this->urlInterface = $urlInterface;
-        $this->logger = $logger;
     }
 
     /**
