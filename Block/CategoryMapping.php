@@ -40,19 +40,18 @@ namespace Nosto\Cmp\Block;
 use Exception;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
+use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class CategoryMapping extends Template
 {
-    const CACHE_KEY = "nosto_cmp_category_mapping";
 
     /** @var StoreManagerInterface */
     private $storeManager;
@@ -66,7 +65,7 @@ class CategoryMapping extends Template
     /** @var NostoHelperData */
     private $nostoHelperData;
 
-    /** @var CacheInterface */
+    /** @var CategoryCache */
     private $cache;
 
     /** @var Logger */
@@ -86,7 +85,7 @@ class CategoryMapping extends Template
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
         NostoHelperData $nostoHelperData,
-        CacheInterface $cache,
+        CategoryCache $cache,
         Context $context,
         Logger $logger
     ) {
@@ -141,7 +140,7 @@ class CategoryMapping extends Template
      */
     private function getCMCacheKey(Store $store)
     {
-        return self::CACHE_KEY . '_' . $store->getStoreId();
+        return $this->cache->getTag() . '_' . $store->getStoreId();
     }
 
     /**
