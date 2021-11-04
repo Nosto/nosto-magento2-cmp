@@ -36,9 +36,9 @@
 
 namespace Nosto\Cmp\Model\Service\Category;
 
+use Exception;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
@@ -68,7 +68,6 @@ class CategoryMappingService implements CategoryMappingServiceInterface
      * @param CategoryBuilder $categoryBuilder
      * @param NostoHelperData $nostoHelperData
      * @param CategoryCache $cache
-     * @param Context $context
      * @param Logger $logger
      */
     public function __construct(
@@ -76,7 +75,6 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         CategoryBuilder $categoryBuilder,
         NostoHelperData $nostoHelperData,
         CategoryCache $cache,
-        Context $context,
         Logger $logger
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -170,5 +168,4 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         $unsignedInteger = (int)sprintf("%u", $signedInteger);
         return dechex($unsignedInteger);
     }
-
 }
