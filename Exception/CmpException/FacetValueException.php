@@ -40,6 +40,30 @@ use Nosto\Cmp\Exception\CmpException;
 
 class FacetValueException extends CmpException
 {
-    /** @var string  */
-    const DEFAULT_MESSAGE = 'Account cannot be null';
+    /**
+     * FacetValueException constructor.
+     * @param string $name
+     * @param any $value
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(
+        $filterName,
+        $value,
+        $message = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
+        $code = 0,
+        $previous = null
+    ) {
+        // @codingStandardsIgnoreStart
+        $type = gettype($value);
+        $class = (gettype($value) == 'object') ? get_class($value) : 'not an object';
+        // @codingStandardsIgnoreEnd
+
+        parent::__construct(
+            sprintf($message, $filterName, $value, $type, $class),
+            $code,
+            $previous
+        );
+    }
 }

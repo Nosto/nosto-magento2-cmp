@@ -37,9 +37,23 @@
 namespace Nosto\Cmp\Exception\CmpException;
 
 use Nosto\Cmp\Exception\CmpException;
+use Nosto\Tagging\Logger\Logger;
 
-class MissingNostoApiAppsTokenException extends CmpException
+class MissingTokenException extends CmpException
 {
-    /** @var string  */
-    const DEFAULT_MESSAGE = 'Missing Nosto API_APPS token';
+    /**
+     * MissingAccountException constructor.
+     * @param string $token
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(
+        $token,
+        $message = 'Missing Nosto token: %s',
+        $code = 0,
+        $previous = null
+    ) {
+        parent::__construct(sprintf($message, $token), $code, $previous);
+    }
 }

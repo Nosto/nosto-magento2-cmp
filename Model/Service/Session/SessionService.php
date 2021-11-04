@@ -77,8 +77,6 @@ class SessionService
             return $newSession->execute();
         } catch (NostoException $e) {
             throw new SessionCreationException(
-                SessionCreationException::DEFAULT_MESSAGE,
-                $this->logger,
                 $e->getCode(),
                 $e
             );

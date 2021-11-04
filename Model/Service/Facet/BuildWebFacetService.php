@@ -289,7 +289,7 @@ class BuildWebFacetService
      * @param $name
      * @param $value
      * @return array
-     * @throws NostoException
+     * @throws FacetValueException
      */
     private function makeArrayFromValue($name, $value): array
     {
@@ -307,14 +307,6 @@ class BuildWebFacetService
             return $value;
         }
 
-        throw new FacetValueException(
-            // @codingStandardsIgnoreStart
-            sprintf(
-                FacetValueException::DEFAULT_MESSAGE,
-                $name, $value, gettype($value), (gettype($value) == 'object') ? get_class($value) : 'not an object'
-            ),
-            // @codingStandardsIgnoreEnd
-            $this->logger
-        );
+        throw new FacetValueException($name, $value);
     }
 }

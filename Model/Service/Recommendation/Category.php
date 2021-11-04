@@ -37,13 +37,14 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Event\ManagerInterface;
-use Nosto\Cmp\Exception\CmpException\MissingNostoApiAppsTokenException;
+use Nosto\Cmp\Exception\CmpException\MissingTokenException;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
+use Nosto\Request\Api\Token;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
@@ -99,12 +100,9 @@ class Category
         try {
             $featureAccess = new FeatureAccess($nostoAccount);
             if (!$featureAccess->canUseGraphql()) {
-                throw new MissingNostoApiAppsTokenException(
-                    MissingNostoApiAppsTokenException::DEFAULT_MESSAGE,
-                    $this->logger
-                );
+                throw new MissingTokenException(Token::API_GRAPHQL);
             }
-        } catch (MissingNostoApiAppsTokenException $e) {
+        } catch (MissingTokenException $e) {
             $e->log();
         }
 

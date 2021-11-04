@@ -36,10 +36,22 @@
 
 namespace Nosto\Cmp\Exception\CmpException;
 
-use Nosto\Cmp\Exception\CmpException;
+use Exception;
+use Throwable;
 
-class AccountCannotBeNullException extends CmpException
+class MissingAccountException extends Exception
 {
-    /** @var string  */
-    const DEFAULT_MESSAGE = 'Account cannot be null';
+    /**
+     * MissingAccountException constructor.
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(
+        $message = 'Account cannot be null',
+        $code = 0,
+        $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
+    }
 }

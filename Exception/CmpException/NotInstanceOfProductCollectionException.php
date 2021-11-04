@@ -40,6 +40,17 @@ use Nosto\Cmp\Exception\CmpException;
 
 class NotInstanceOfProductCollectionException extends CmpException
 {
-    /** @var string  */
-    const DEFAULT_MESSAGE = 'Collection is not instanceof ProductCollection';
+    /**
+     * NotInstanceOfProductCollectionException constructor.
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(
+        $message = 'Collection is not instanceof ProductCollection',
+        $code = 0,
+        $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
+    }
 }
