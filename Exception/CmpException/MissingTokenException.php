@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Exception\CmpException;
 
 use Nosto\Cmp\Exception\CmpException;
-use Nosto\Tagging\Logger\Logger;
 
 class MissingTokenException extends CmpException
 {

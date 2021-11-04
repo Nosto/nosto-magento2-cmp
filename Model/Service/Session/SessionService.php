@@ -59,8 +59,8 @@ class SessionService
 
     /**
      * @param AccountInterface $nostoAccount
-     * @return string
-     * @throws NostoException
+     * @return mixed|null
+     * @throws SessionCreationException
      */
     public function getNewNostoSession(AccountInterface $nostoAccount)
     {

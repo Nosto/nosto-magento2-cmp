@@ -42,8 +42,8 @@ class FacetValueException extends CmpException
 {
     /**
      * FacetValueException constructor.
-     * @param string $name
-     * @param any $value
+     * @param string $filterName
+     * @param string|array $value
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous

@@ -47,6 +47,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException\MissingAccountException;
 use Nosto\Cmp\Exception\CmpException\MissingTokenException;
+use Nosto\Cmp\Exception\CmpException\SessionCreationException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
@@ -173,6 +174,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @inheritDoc
      * @throws NostoException
      * @throws LocalizedException
+     * @throws SessionCreationException
      */
     public function getPersonalisationResult(
         FacetInterface $facets,

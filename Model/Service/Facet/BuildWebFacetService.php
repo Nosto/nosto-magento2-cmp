@@ -131,9 +131,9 @@ class BuildWebFacetService
 
     /**
      * @param IncludeFilters $includeFilters
+     * @throws FacetValueException
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws NostoException
      */
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
@@ -148,9 +148,9 @@ class BuildWebFacetService
      * @param StoreInterface $store
      * @param IncludeFilters $includeFilters
      * @param Item $item
+     * @throws FacetValueException
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws NostoException
      */
     private function mapIncludeFilter(StoreInterface $store, IncludeFilters &$includeFilters, Item $item)
     {
@@ -257,7 +257,7 @@ class BuildWebFacetService
      * @param StoreInterface $store
      * @param string $name
      * @param string|array $value
-     * @throws NostoException
+     * @throws FacetValueException
      * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)

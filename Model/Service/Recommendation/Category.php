@@ -87,6 +87,7 @@ class Category
      * @throws MissingTokenException
      * @throws AbstractHttpException
      * @throws HttpResponseException
+     * @throws NostoException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
