@@ -70,6 +70,8 @@ class Category
 
     /**
      * @param ManagerInterface $eventManager
+     * @param CmHelperData $cmHelperData
+     * @param NostoHelperData $nostoHelperData
      */
     public function __construct(
         ManagerInterface $eventManager,
