@@ -206,13 +206,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
                     $this->logger
                 );
             }
-        }
-
-        catch (AccountCannotBeNullException $e) {
+        } catch (AccountCannotBeNullException $e) {
             $e->log();
-        }
-
-        catch (MissingNostoApiAppsTokenException $e) {
+        } catch (MissingNostoApiAppsTokenException $e) {
             $e->log();
         }
 
