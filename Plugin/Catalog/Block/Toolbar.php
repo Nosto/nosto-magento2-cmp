@@ -47,7 +47,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\CmpException\NotInstanceOfProductCollectionException;
-use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -172,12 +171,6 @@ class Toolbar extends AbstractBlock
                         $this
                     );
                 }
-            } catch (MissingCookieException $e) {
-                $this->getLogger()->debugWithSource(
-                    $e->getMessage(),
-                    [],
-                    $this
-                );
             } catch (Exception $e) {
                 $this->getLogger()->exception($e);
             }
@@ -192,7 +185,6 @@ class Toolbar extends AbstractBlock
      * @param $limit
      * @return CategoryMerchandisingResult|null
      * @throws LocalizedException
-     * @throws MissingCookieException
      * @throws NostoException
      */
     private function getCmpResult(FacetInterface $facets, $start, $limit)

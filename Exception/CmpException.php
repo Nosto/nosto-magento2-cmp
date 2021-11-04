@@ -50,13 +50,13 @@ class CmpException extends Exception
      * @param string $message
      * @param Logger $logger
      * @param int $code
-     * @param Throwable $previous
+     * @param Throwable|null $previous
      */
     public function __construct(
         $message,
         $logger,
         $code = 0,
-        Throwable $previous = null
+        $previous = null
     ) {
         $this->logger = $logger;
         parent::__construct($message, $code, $previous);

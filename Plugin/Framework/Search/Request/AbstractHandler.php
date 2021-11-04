@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 use Exception;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException;
-use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -281,13 +280,6 @@ abstract class AbstractHandler
                 $limit
             );
             return $res ? CategoryMerchandising::parseProductIds($res) : null;
-        } catch (MissingCookieException $e) {
-            $this->logger->debugWithSource(
-                $e->getMessage(),
-                [],
-                $this
-            );
-            return null;
         } catch (Exception $e) {
             $this->logger->exception($e);
             return null;

@@ -45,7 +45,6 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
@@ -158,7 +157,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     ) {
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
-        $this->cookieManager = $cookieManager;
         $this->accountHelper = $nostoHelperAccount;
         $this->logger = $logger;
         $this->storeManager = $storeManager;
