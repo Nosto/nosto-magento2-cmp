@@ -37,6 +37,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface" type="Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver"/>
     <preference for="Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface" type="Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService"/>
+    <preference for="Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface" type="Nosto\Cmp\Model\Service\Category\CategoryMappingService"/>
     <type name="Magento\Catalog\Model\Config">
         <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config" />
     </type>

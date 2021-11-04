@@ -1,5 +1,4 @@
-<?php /** @noinspection PhpUnused */
-
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -35,55 +34,15 @@
  *
  */
 
-namespace Nosto\Cmp\Block;
+namespace Nosto\Cmp\Model\Service\Category;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
-use Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface;
-use Nosto\Tagging\Logger\Logger;
 
-class CategoryMapping extends Template
+interface CategoryMappingServiceInterface
 {
 
-    /** @var Logger */
-    private $logger;
-
-    /** @var CategoryMappingService  */
-    private $mappingService;
-
     /**
-     * @param CategoryMappingService $mappingService
-     * @param Context $context
-     * @param Logger $logger
+     * @return string
      */
-    public function __construct(
-        CategoryMappingServiceInterface $mappingService,
-        Context $context,
-        Logger $logger
-    ) {
-        parent::__construct($context);
-        $this->mappingService = $mappingService;
-        $this->logger = $logger;
-    }
-
-    /**
-     * @return false|string
-     */
-    public function getCategoryMap()
-    {
-
-        $mapping = '';
-        try {
-            $store = $this->storeManager->getStore();
-            if ($store instanceof Store) {
-                $mapping = $this->mappingService->getCategoryMapping($store);
-            }
-        } catch (NoSuchEntityException $e) {
-            $this->logger->exception($e);
-        }
-
-        return $mapping;
-    }
+    public function getCategoryMapping(Store $store): string;
 }
