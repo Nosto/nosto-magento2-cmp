@@ -140,7 +140,10 @@ class GraphQlHandler extends AbstractHandler
         if ($model != null) {
             return $model->getLimit();
         } else {
-            throw new CmpException("Could not get limit from session");
+            throw new CmpException(
+                'Could not get limit from session',
+                $this->getLogger()
+            );
         }
     }
 
@@ -163,7 +166,10 @@ class GraphQlHandler extends AbstractHandler
         if ($model != null) {
             return $model->getCurrentPage() - 1;
         } else {
-            throw new CmpException("Could not get page size from session");
+            throw new CmpException(
+                'Could not get page size from session',
+                $this->getLogger()
+            );
         }
     }
 }
