@@ -40,7 +40,6 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
 use Nosto\Tagging\Logger\Logger;
@@ -48,9 +47,6 @@ use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as Categ
 
 class CategoryMappingService implements CategoryMappingServiceInterface
 {
-
-    /** @var StoreManagerInterface */
-    private $storeManager;
 
     /** @var CollectionFactory */
     private $collectionFactory;
@@ -67,6 +63,14 @@ class CategoryMappingService implements CategoryMappingServiceInterface
     /** @var Logger */
     private $logger;
 
+    /**
+     * @param CollectionFactory $collectionFactory
+     * @param CategoryBuilder $categoryBuilder
+     * @param NostoHelperData $nostoHelperData
+     * @param CategoryCache $cache
+     * @param Context $context
+     * @param Logger $logger
+     */
     public function __construct(
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
@@ -75,7 +79,6 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         Context $context,
         Logger $logger
     ) {
-        $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoHelperData = $nostoHelperData;
