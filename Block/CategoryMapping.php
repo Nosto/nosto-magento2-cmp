@@ -72,11 +72,11 @@ class CategoryMapping extends Template
     private $logger;
 
     /**
-     * CategoryMapping constructor.
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $collectionFactory
      * @param CategoryBuilder $categoryBuilder
      * @param NostoHelperData $nostoHelperData
+     * @param CategoryCache $cache
      * @param Context $context
      * @param Logger $logger
      */
