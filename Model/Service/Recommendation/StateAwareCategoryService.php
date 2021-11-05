@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;

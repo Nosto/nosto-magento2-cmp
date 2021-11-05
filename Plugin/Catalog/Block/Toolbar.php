@@ -42,11 +42,13 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Exception\NotInstanceOfProductCollectionException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -181,8 +183,11 @@ class Toolbar extends AbstractBlock
      * @param $start
      * @param $limit
      * @return CategoryMerchandisingResult|null
-     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @throws NostoException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
      */
     private function getCmpResult(FacetInterface $facets, $start, $limit)
     {

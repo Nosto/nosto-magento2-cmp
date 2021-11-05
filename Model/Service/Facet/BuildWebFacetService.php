@@ -47,7 +47,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
-use Nosto\NostoException;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
@@ -226,7 +225,7 @@ class BuildWebFacetService
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
-        } catch (NostoException $e) {
+        } catch (FacetValueException $e) {
             $this->logger->debugWithSource(
                 sprintf(
                     'Cannot map filters, error message: %e',
