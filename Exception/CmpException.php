@@ -33,20 +33,10 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
-
 namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Exception\CmpException;
+use Exception;
 
-class NotInstanceOfProductCollectionException extends CmpException
+class CmpException extends Exception
 {
-    /** @var string  */
-    const DEFAULT_MESSAGE = 'Collection is not instanceof ProductCollection';
-
-    /**
-     * NotInstanceOfProductCollectionException constructor.
-     */
-    public function __construct() {
-        parent::__construct($this::DEFAULT_MESSAGE);
-    }
 }

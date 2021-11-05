@@ -36,25 +36,21 @@
 
 namespace Nosto\Cmp\Exception;
 
-use Exception;
-use Throwable;
+use Nosto\Cmp\Exception\CmpException;
 
-class FacetValueException extends Exception
+class FacetValueException extends CmpException
 {
+    /** @var string  */
+    const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)';
+
     /**
      * FacetValueException constructor.
      * @param string $filterName
      * @param mixed $value
-     * @param string $message
-     * @param int $code
-     * @param Throwable|null $previous
      */
     public function __construct(
         $filterName,
-        $value,
-        $message = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)',
-        $code = 0,
-        $previous = null
+        $value
     ) {
         // @codingStandardsIgnoreStart
         $type = gettype($value);
@@ -66,9 +62,7 @@ class FacetValueException extends Exception
         // @codingStandardsIgnoreEnd
 
         parent::__construct(
-            sprintf($message, $filterName, $value, $type, $class),
-            $code,
-            $previous
+            sprintf($this::DEFAULT_MESSAGE, $filterName, $value, $type, $class)
         );
     }
 }

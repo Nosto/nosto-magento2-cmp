@@ -36,21 +36,17 @@
 
 namespace Nosto\Cmp\Exception;
 
-use Exception;
-use Throwable;
+use Nosto\Cmp\Exception\CmpException;
 
-class SessionCreationException extends Exception
+class SessionCreationException extends CmpException
 {
+    /** @var string  */
+    const DEFAULT_MESSAGE = 'Something went wrong while creating new session';
+
     /**
      * SessionCreationException constructor.
-     * @param int $code
-     * @param Throwable|null $previous
      */
-    public function __construct(
-        $code = 0,
-        $previous = null
-    ) {
-        $message = 'Something went wrong while creating new session';
-        parent::__construct($message, $code, $previous);
+    public function __construct() {
+        parent::__construct($this::DEFAULT_MESSAGE);
     }
 }

@@ -36,24 +36,18 @@
 
 namespace Nosto\Cmp\Exception;
 
-use Exception;
-use Throwable;
+use Nosto\Cmp\Exception\CmpException;
 
-class MissingTokenException extends Exception
+class MissingTokenException extends CmpException
 {
+    /** @var string  */
+    const DEFAULT_MESSAGE = 'Missing Nosto token: %s';
+
     /**
      * MissingAccountException constructor.
      * @param string $token
-     * @param string $message
-     * @param int $code
-     * @param Throwable|null $previous
      */
-    public function __construct(
-        $token,
-        $message = 'Missing Nosto token: %s',
-        $code = 0,
-        $previous = null
-    ) {
-        parent::__construct(sprintf($message, $token), $code, $previous);
+    public function __construct($token) {
+        parent::__construct(sprintf($this::DEFAULT_MESSAGE, $token));
     }
 }
