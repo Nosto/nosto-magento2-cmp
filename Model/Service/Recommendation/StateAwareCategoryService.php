@@ -52,6 +52,7 @@ use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Request\Api\Token;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
@@ -64,6 +65,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
+
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /**
      * @var Category
@@ -79,11 +84,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @var Account
      */
     private $accountHelper;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
 
     /**
      * @var StoreManagerInterface
@@ -155,10 +155,12 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         ManagerInterface $eventManager,
         SessionService $sessionService
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
         $this->accountHelper = $nostoHelperAccount;
-        $this->logger = $logger;
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
@@ -229,7 +231,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             ]
         );
 
-        $this->logger->debugWithSource(
+        $this->debugWithSource(
             sprintf(
                 'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
                 $this->lastResult->getResultSet()->count(),
@@ -237,9 +239,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
                 $category,
                 $pageNumber,
                 $limit
-            ),
-            [],
-            $this
+            )
         );
         return $this->lastResult;
     }
@@ -296,15 +296,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             || $limit > $maxLimit
             || $limit === 0
         ) {
-            $this->logger->debugWithSource(
-                sprintf(
-                    'Limit set to %d - original limit was %s',
-                    $maxLimit,
-                    $limit
-                ),
-                [],
-                $this
-            );
+            $this->debugWithSource(sprintf('Limit set to %d - original limit was %s', $maxLimit, $limit));
             return $maxLimit;
         }
         return $limit;

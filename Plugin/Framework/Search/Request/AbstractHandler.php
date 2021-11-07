@@ -46,6 +46,7 @@ use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger;
 
@@ -61,6 +62,10 @@ abstract class AbstractHandler
     const KEY_VALUE = 'value';
     const KEY_RESULTS_FROM = 'from';
     const KEY_RESULT_SIZE = 'size';
+
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /**
      * @var ParameterResolverInterface
@@ -116,8 +121,10 @@ abstract class AbstractHandler
         StateAwareCategoryServiceInterface $categoryService,
         Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->parameterResolver = $parameterResolver;
-        $this->logger = $logger;
         $this->searchEngineHelper = $searchEngineHelper;
         $this->storeManager = $storeManager;
         $this->accountHelper = $nostoHelperAccount;
@@ -131,13 +138,11 @@ abstract class AbstractHandler
      */
     public function handle(array &$requestData)
     {
-        $this->logger->debugWithSource(
+        $this->debugWithSource(
             sprintf(
                 'Using %s as search engine',
                 $this->searchEngineHelper->getCurrentEngine()
-            ),
-            [],
-            $this
+            )
         );
         $this->preFetchOps($requestData);
         Search::cleanUpCmpSort($requestData);
@@ -152,11 +157,7 @@ abstract class AbstractHandler
             return;
         }
         if (empty($productIds)) {
-            $this->logger->debugWithSource(
-                'Nosto did not return products for the request',
-                $requestData,
-                $this
-            );
+            $this->debugWithSource('Nosto did not return products for the request', $requestData);
             $this->setFallbackSort($requestData);
             return;
         }
@@ -198,11 +199,7 @@ abstract class AbstractHandler
                 'direction' => 'ASC'
             ];
         } catch (Exception $e) {
-            $this->logger->debugWithSource(
-                sprintf("Could not set fallback sorting. %s", $e->getMessage()),
-                [],
-                $this
-            );
+            $this->debugWithSource(sprintf("Could not set fallback sorting. %s", $e->getMessage()));
         }
     }
 
@@ -297,13 +294,5 @@ abstract class AbstractHandler
         } else {
             return self::KEY_ES_PRODUCT_ID;
         }
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger(): Logger
-    {
-        return $this->logger;
     }
 }

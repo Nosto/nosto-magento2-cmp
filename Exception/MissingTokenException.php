@@ -36,8 +36,6 @@
 
 namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Exception\CmpException;
-
 class MissingTokenException extends CmpException
 {
     /** @var string  */
@@ -46,7 +44,7 @@ class MissingTokenException extends CmpException
     /**
      * MissingAccountException constructor.
      * @param string $token
-     * @param string $storeId
+     * @param int $storeId
      * @param string $currentUrl
      */
     public function __construct(

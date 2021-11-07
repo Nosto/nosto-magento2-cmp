@@ -126,14 +126,12 @@ class Toolbar extends AbstractBlock
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
-            $this->getLogger()->debugWithSource(
+            $this->debugWithSource(
                 sprintf(
                     'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
                     (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
-                ),
-                [],
-                $this
+                )
             );
             return $subject;
         }
@@ -161,17 +159,9 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->getLogger()->debugWithSource(
-                        $subjectCollection->getSelectSql()->__toString(),
-                        [],
-                        $this
-                    );
+                    $this->debugWithSource($subjectCollection->getSelectSql()->__toString());
                 } else {
-                    $this->getLogger()->debugWithSource(
-                        'Got an empty CMP result from Nosto for category',
-                        [],
-                        $this
-                    );
+                    $this->debugWithSource('Got an empty CMP result from Nosto for category');
                 }
             } catch (Exception $e) {
                 $this->getLogger()->exception($e);

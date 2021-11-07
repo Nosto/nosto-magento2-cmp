@@ -45,12 +45,18 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class CategoryMapping extends Template
 {
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
+
     /** @var StoreManagerInterface */
     private $storeManager;
 
@@ -62,9 +68,6 @@ class CategoryMapping extends Template
 
     /** @var NostoHelperData */
     private $nostoHelperData;
-
-    /** @var Logger */
-    private $logger;
 
     /**
      * CategoryMapping constructor.
@@ -84,11 +87,13 @@ class CategoryMapping extends Template
         Logger $logger
     ) {
         parent::__construct($context);
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoHelperData = $nostoHelperData;
-        $this->logger = $logger;
     }
 
     /**
@@ -139,7 +144,7 @@ class CategoryMapping extends Template
                     $categoriesArray[$hashedCategoryString] = $category->getUrl();
                 }
             }
-        } catch (Exception $e) {
+g        } catch (Exception $e) {
             $this->logger->exception($e);
         }
 

@@ -34,39 +34,37 @@
  *
  */
 
-namespace Nosto\Cmp\Exception;
+namespace Nosto\Cmp\Utils\Traits;
 
-class FacetValueException extends CmpException
+use Exception;
+use Nosto\Tagging\Logger\Logger;
+
+trait LoggerTrait
 {
-    /** @var string  */
-    const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s).';
+    /** @var Logger */
+    private $logger;
 
     /**
-     * FacetValueException constructor.
-     * @param string $filterName
-     * @param mixed $filterValue
-     * @param int $storeId
-     * @param string $currentUrl
+     * LoggerTrait constructor.
+     * @param Logger $logger
      */
     public function __construct(
-        $filterName,
-        $filterValue,
-        $storeId = "",
-        $currentUrl = ""
+        Logger $logger
     ) {
-        // @codingStandardsIgnoreStart
-        $type = gettype($filterValue);
-        if ($type == 'object') {
-            $class = get_class($filterValue);
-        } else {
-            $class = 'not an object';
-        }
-        // @codingStandardsIgnoreEnd
+        $this->logger = $logger;
+    }
 
-        parent::__construct(
-            sprintf($this::DEFAULT_MESSAGE, $filterName, $filterValue, $type, $class),
-            $storeId,
-            $currentUrl
+    /**
+     * @param $message
+     * @param array $context
+     * @return bool
+     */
+    public function debugWithSource($message, array $context = [])
+    {
+        return $this->logger->debugWithSource(
+            $message,
+            $context,
+            $this
         );
     }
 }

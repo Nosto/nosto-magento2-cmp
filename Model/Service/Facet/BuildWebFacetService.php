@@ -47,6 +47,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
@@ -56,6 +57,9 @@ use Exception;
 
 class BuildWebFacetService
 {
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /** @var State */
     private $state;
@@ -71,9 +75,6 @@ class BuildWebFacetService
 
     /** @var NostoHelperData */
     private $nostoHelperData;
-
-    /** @var Logger */
-    private $logger;
 
     /** @var string */
     private $brand;
@@ -95,12 +96,14 @@ class BuildWebFacetService
         State $state,
         Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->storeManager = $storeManager;
         $this->nostoCategoryBuilder = $nostoCategoryBuilder;
         $this->categoryRepository = $categoryRepository;
         $this->nostoHelperData = $nostoHelperData;
         $this->state = $state;
-        $this->logger = $logger;
     }
 
     /**
@@ -114,14 +117,7 @@ class BuildWebFacetService
         try {
             $this->populateFilters($includeFilters);
         } catch (Exception $e) {
-            $this->logger->debugWithSource(
-                sprintf(
-                    'Cannot populate filters, error message: %e',
-                    $e->getMessage()
-                ),
-                [],
-                $this
-            );
+            $this->debugWithSource(sprintf('Cannot populate filters, error message: %e', $e));
             $this->logger->exception($e);
         }
 
@@ -157,11 +153,7 @@ class BuildWebFacetService
             $categoryId = $item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);
             if ($category == null) {
-                $this->logger->debugWithSource(
-                    "Could not get category from filters",
-                    [],
-                    $this
-                );
+                $this->debugWithSource('Could not get category from filters');
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, 'category', $category);
@@ -201,38 +193,26 @@ class BuildWebFacetService
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                $this->logger->debugWithSource(
+                $this->debug(
                     sprintf(
                         'Cannot build include filter for "%s" frontend input type',
                         $frontendInput
-                    ),
-                    [],
-                    $this
+                    )
                 );
                 return;
         }
         try {
             $attributeCode = $attributeModel->getAttributeCode();
             if (!is_string($attributeCode)) {
-                $this->logger->debugWithSource(
-                    sprintf(
-                        'Cannot build include filter for "%s" attribute ',
-                        $attributeModel->getName()
-                    ),
-                    [],
-                    $this
+                $this->debugWithSource(
+                    sprintf('Cannot build include filter for "%s" attribute ', $attributeModel->getName())
                 );
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
         } catch (FacetValueException $e) {
-            $this->logger->debugWithSource(
-                sprintf(
-                    'Cannot map filters, error message: %e',
-                    $e->getMessage()
-                ),
-                [],
-                $this
+            $this->debug(
+                sprintf('Cannot map filters, error message: %s', $e->getMessage())
             );
             $this->logger->exception($e);
         }
