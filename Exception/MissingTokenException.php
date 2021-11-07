@@ -41,13 +41,23 @@ use Nosto\Cmp\Exception\CmpException;
 class MissingTokenException extends CmpException
 {
     /** @var string  */
-    const DEFAULT_MESSAGE = 'Missing Nosto token: %s';
+    const DEFAULT_MESSAGE = 'Missing Nosto token: %s.';
 
     /**
      * MissingAccountException constructor.
      * @param string $token
+     * @param string $storeId
+     * @param string $currentUrl
      */
-    public function __construct($token) {
-        parent::__construct(sprintf($this::DEFAULT_MESSAGE, $token));
+    public function __construct(
+        $token,
+        $storeId = "",
+        $currentUrl = ""
+    ) {
+        parent::__construct(
+            sprintf($this::DEFAULT_MESSAGE, $token),
+            $storeId,
+            $currentUrl
+        );
     }
 }

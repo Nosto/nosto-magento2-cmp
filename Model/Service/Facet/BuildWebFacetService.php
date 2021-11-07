@@ -306,6 +306,11 @@ class BuildWebFacetService
             return $value;
         }
 
-        throw new FacetValueException($name, $value);
+        throw new FacetValueException(
+            $name,
+            $value,
+            $this->storeManager->getStore()->getId(),
+            $this->storeManager->getStore()->getCurrentUrl()
+        );
     }
 }

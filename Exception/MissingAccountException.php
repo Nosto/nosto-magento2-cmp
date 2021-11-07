@@ -41,12 +41,19 @@ use Nosto\Cmp\Exception\CmpException;
 class MissingAccountException extends CmpException
 {
     /** @var string  */
-    const DEFAULT_MESSAGE = 'Account cannot be null';
+    const DEFAULT_MESSAGE = 'Account cannot be null.';
 
     /**
      * MissingAccountException constructor.
+     * @param string $storeId
+     * @param string $currentUrl
      */
-    public function __construct() {
-        parent::__construct($this::DEFAULT_MESSAGE);
+    public function __construct(
+        $storeId = "",
+        $currentUrl = ""
+    ) {
+        parent::__construct(
+            $this::DEFAULT_MESSAGE, $storeId, $currentUrl
+        );
     }
 }

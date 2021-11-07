@@ -41,28 +41,34 @@ use Nosto\Cmp\Exception\CmpException;
 class FacetValueException extends CmpException
 {
     /** @var string  */
-    const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s)';
+    const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s).';
 
     /**
      * FacetValueException constructor.
      * @param string $filterName
-     * @param mixed $value
+     * @param mixed $filterValue
+     * @param string $storeId
+     * @param string $currentUrl
      */
     public function __construct(
         $filterName,
-        $value
+        $filterValue,
+        $storeId = "",
+        $currentUrl = ""
     ) {
         // @codingStandardsIgnoreStart
-        $type = gettype($value);
+        $type = gettype($filterValue);
         if ($type == 'object') {
-            $class = get_class($value);
+            $class = get_class($filterValue);
         } else {
             $class = 'not an object';
         }
         // @codingStandardsIgnoreEnd
 
         parent::__construct(
-            sprintf($this::DEFAULT_MESSAGE, $filterName, $value, $type, $class)
+            sprintf($this::DEFAULT_MESSAGE, $filterName, $filterValue, $type, $class),
+            $storeId,
+            $currentUrl
         );
     }
 }

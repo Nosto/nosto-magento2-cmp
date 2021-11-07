@@ -186,7 +186,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
-            throw new MissingAccountException();
+            throw new MissingAccountException(
+                $store->getId(),
+                $store->getCurrentUrl()
+            );
         }
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track

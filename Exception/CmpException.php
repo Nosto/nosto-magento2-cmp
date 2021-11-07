@@ -39,4 +39,29 @@ use Exception;
 
 class CmpException extends Exception
 {
+    /**
+     * CmpException constructor.
+     * @param string $message
+     * @param string $storeId
+     * @param string $currentUrl
+     */
+    public function __construct(
+        $message = "",
+        $storeId = "",
+        $currentUrl = ""
+    ) {
+        parent::__construct(
+            $this->finalizeMessage($message, $storeId, $currentUrl)
+        );
+    }
+
+    /**
+     * @param $message
+     */
+    private function finalizeMessage($message, $storeId, $currentUrl)
+    {
+        return $message .
+            ' Store Id: ' . $storeId . '.' .
+            ' Url: ' . $currentUrl . '.';
+    }
 }

@@ -36,7 +36,7 @@
 
 namespace Nosto\Cmp\Model\Service\Session;
 
-use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\NostoException;
 use Nosto\Operation\Session\NewSession;
@@ -44,17 +44,17 @@ use Nosto\Types\Signup\AccountInterface;
 
 class SessionService
 {
-    /** @var UrlInterface */
-    private $urlInterface;
+    /** @var StoreManagerInterface */
+    private $storeManager;
 
     /**
      * SessionService constructor.
-     * @param UrlInterface $urlInterface
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        UrlInterface $urlInterface
+        StoreManagerInterface $storeManager
     ) {
-        $this->urlInterface = $urlInterface;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -64,14 +64,14 @@ class SessionService
      */
     public function getNewNostoSession(AccountInterface $nostoAccount)
     {
-        $url = $this->urlInterface->getCurrentUrl();
+        $url = $this->storeManager->getStore()->getCurrentUrl();
         try {
             $newSession = new NewSession($nostoAccount, $url, true);
             return $newSession->execute();
         } catch (NostoException $e) {
             throw new SessionCreationException(
-                $e->getCode(),
-                $e
+                $this->storeManager->getStore()->getId(),
+                $url
             );
         }
     }

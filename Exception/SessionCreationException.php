@@ -41,12 +41,19 @@ use Nosto\Cmp\Exception\CmpException;
 class SessionCreationException extends CmpException
 {
     /** @var string  */
-    const DEFAULT_MESSAGE = 'Something went wrong while creating new session';
+    const DEFAULT_MESSAGE = 'Something went wrong while creating new session.';
 
     /**
      * SessionCreationException constructor.
+     * @param string $storeId
+     * @param string $currentUrl
      */
-    public function __construct() {
-        parent::__construct($this::DEFAULT_MESSAGE);
+    public function __construct(
+        $storeId = "",
+        $currentUrl = ""
+    ) {
+        parent::__construct(
+            $this::DEFAULT_MESSAGE, $storeId, $currentUrl
+        );
     }
 }
