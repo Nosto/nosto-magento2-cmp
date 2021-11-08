@@ -113,8 +113,6 @@ class BuildWebFacetService
 
     /**
      * @return Facet
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getFacets(): Facet
     {
