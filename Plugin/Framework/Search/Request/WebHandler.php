@@ -36,8 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Exception;
-use Magento\LayeredNavigation\Block\Navigation\State;
+guse Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
