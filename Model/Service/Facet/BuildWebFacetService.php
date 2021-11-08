@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Model\Service\Facet;
 
+use Exception;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -124,6 +125,8 @@ class BuildWebFacetService
             $this->populateFilters($includeFilters);
         } catch (FacetValueException $e) {
             $this->debugWithSource('Cannot map filters, error message: %s', [$e->getMessage()]);
+            $this->exception($e);
+        } catch (Exception $e) {
             $this->exception($e);
         }
 

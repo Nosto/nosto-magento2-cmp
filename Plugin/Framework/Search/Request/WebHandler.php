@@ -149,11 +149,6 @@ class WebHandler extends AbstractHandler
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function getFilters(array $requestData)
     {
-        try {
-            return $this->buildWebFacetService->getFacets();
-        } catch (Exception $e) {
-            $this->exception($e);
-            return null;
-        }
+        return $this->buildWebFacetService->getFacets();
     }
 }
