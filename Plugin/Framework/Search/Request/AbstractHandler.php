@@ -138,12 +138,7 @@ abstract class AbstractHandler
      */
     public function handle(array &$requestData)
     {
-        $this->debugWithSource(
-            sprintf(
-                'Using %s as search engine',
-                $this->searchEngineHelper->getCurrentEngine()
-            )
-        );
+        $this->debugWithSource('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
         $this->preFetchOps($requestData);
         Search::cleanUpCmpSort($requestData);
         try {
@@ -157,7 +152,7 @@ abstract class AbstractHandler
             return;
         }
         if (empty($productIds)) {
-            $this->debugWithSource('Nosto did not return products for the request', $requestData);
+            $this->debugWithSource('Nosto did not return products for the request', [], $requestData);
             $this->setFallbackSort($requestData);
             return;
         }
@@ -199,7 +194,7 @@ abstract class AbstractHandler
                 'direction' => 'ASC'
             ];
         } catch (Exception $e) {
-            $this->debugWithSource(sprintf("Could not set fallback sorting. %s", $e->getMessage()));
+            $this->debugWithSource("Could not set fallback sorting. %s", [$e->getMessage()]);
         }
     }
 

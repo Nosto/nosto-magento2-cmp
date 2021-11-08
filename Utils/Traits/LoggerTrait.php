@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Utils\Traits;
 
-use Exception;
 use Nosto\Tagging\Logger\Logger;
 
 trait LoggerTrait
@@ -56,13 +55,20 @@ trait LoggerTrait
 
     /**
      * @param $message
+     * @param array $args
      * @param array $context
      * @return bool
      */
-    public function debugWithSource($message, array $context = [])
+    public function debugWithSource($message, array $args = [], array $context = [])
     {
+        if ($args) {
+            $finalMessage = vsprintf($message, $args);
+        } else {
+            $finalMessage = $message;
+        }
+
         return $this->logger->debugWithSource(
-            $message,
+            $finalMessage,
             $context,
             $this
         );

@@ -43,6 +43,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Exception\MissingTokenException;
@@ -188,10 +189,15 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
-            throw new MissingAccountException(
-                $store->getId(),
-                $store->getCurrentUrl()
-            );
+            if ($store instanceof Store) {
+                $storeId = $store->getId();
+                $currentUrl = $store->getCurrentUrl();
+
+                throw new MissingAccountException(
+                    $storeId,
+                    $currentUrl
+                );
+            }
         }
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
@@ -203,7 +209,16 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $category = $this->getCurrentCategoryString($store);
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            throw new MissingTokenException(Token::API_GRAPHQL);
+            if ($store instanceof Store) {
+                $storeId = $store->getId();
+                $currentUrl = $store->getCurrentUrl();
+
+                throw new MissingTokenException(
+                    Token::API_GRAPHQL,
+                    $storeId,
+                    $currentUrl
+                );
+            }
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
@@ -232,14 +247,14 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         );
 
         $this->debugWithSource(
-            sprintf(
-                'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+            'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+            [
                 $this->lastResult->getResultSet()->count(),
                 $this->lastResult->getTotalPrimaryCount(),
                 $category,
                 $pageNumber,
                 $limit
-            )
+            ]
         );
         return $this->lastResult;
     }
@@ -296,7 +311,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             || $limit > $maxLimit
             || $limit === 0
         ) {
-            $this->debugWithSource(sprintf('Limit set to %d - original limit was %s', $maxLimit, $limit));
+            $this->debugWithSource('Limit set to %d - original limit was %s', [$maxLimit, $limit]);
             return $maxLimit;
         }
         return $limit;

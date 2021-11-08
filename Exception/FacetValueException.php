@@ -45,14 +45,14 @@ class FacetValueException extends CmpException
      * FacetValueException constructor.
      * @param string $filterName
      * @param mixed $filterValue
-     * @param int|string $storeId
+     * @param int $storeId
      * @param string $currentUrl
      */
     public function __construct(
         $filterName,
         $filterValue,
-        $storeId = "",
-        $currentUrl = ""
+        $storeId,
+        $currentUrl
     ) {
         // @codingStandardsIgnoreStart
         $type = gettype($filterValue);

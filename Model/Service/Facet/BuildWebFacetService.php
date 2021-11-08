@@ -44,6 +44,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
@@ -117,7 +118,7 @@ class BuildWebFacetService
         try {
             $this->populateFilters($includeFilters);
         } catch (Exception $e) {
-            $this->debugWithSource(sprintf('Cannot populate filters, error message: %e', $e));
+            $this->debugWithSource('Cannot populate filters, error message: %e', [$e]);
             $this->logger->exception($e);
         }
 
@@ -193,27 +194,18 @@ class BuildWebFacetService
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                $this->debugWithSource(
-                    sprintf(
-                        'Cannot build include filter for "%s" frontend input type',
-                        $frontendInput
-                    )
-                );
+                $this->debugWithSource('Cannot build include filter for "%s" frontend input type', [$frontendInput]);
                 return;
         }
         try {
             $attributeCode = $attributeModel->getAttributeCode();
             if (!is_string($attributeCode)) {
-                $this->debugWithSource(
-                    sprintf('Cannot build include filter for "%s" attribute ', $attributeModel->getName())
-                );
+                $this->debugWithSource('Cannot build include filter for "%s" attribute ', [$attributeModel->getName()]);
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
         } catch (FacetValueException $e) {
-            $this->debugWithSource(
-                sprintf('Cannot map filters, error message: %s', $e->getMessage())
-            );
+            $this->debugWithSource('Cannot map filters, error message: %s', [$e->getMessage()]);
             $this->logger->exception($e);
         }
     }
@@ -286,11 +278,17 @@ class BuildWebFacetService
             return $value;
         }
 
-        throw new FacetValueException(
-            $name,
-            $value,
-            $this->storeManager->getStore()->getId(),
-            $this->storeManager->getStore()->getCurrentUrl()
-        );
+        $store = $this->storeManager->getStore();
+        if ($store instanceof Store) {
+            $storeId = $store->getId();
+            $currentUrl = $store->getCurrentUrl();
+
+            throw new FacetValueException(
+                $name,
+                $value,
+                $storeId,
+                $currentUrl
+            );
+        }
     }
 }

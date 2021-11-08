@@ -45,7 +45,6 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Tagging\Logger\Logger;

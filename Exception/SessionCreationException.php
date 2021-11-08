@@ -43,12 +43,12 @@ class SessionCreationException extends CmpException
 
     /**
      * SessionCreationException constructor.
-     * @param int|string $storeId
+     * @param int $storeId
      * @param string $currentUrl
      */
     public function __construct(
-        $storeId = "",
-        $currentUrl = ""
+        $storeId,
+        $currentUrl
     ) {
         parent::__construct(
             $this::DEFAULT_MESSAGE, $storeId, $currentUrl

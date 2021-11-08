@@ -44,13 +44,13 @@ class MissingTokenException extends CmpException
     /**
      * MissingAccountException constructor.
      * @param string $token
-     * @param int|string $storeId
+     * @param int $storeId
      * @param string $currentUrl
      */
     public function __construct(
         $token,
-        $storeId = "",
-        $currentUrl = ""
+        $storeId,
+        $currentUrl
     ) {
         parent::__construct(
             sprintf($this::DEFAULT_MESSAGE, $token),

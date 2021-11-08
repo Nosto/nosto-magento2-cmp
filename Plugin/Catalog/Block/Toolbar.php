@@ -127,17 +127,17 @@ class Toolbar extends AbstractBlock
     ) {
         if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
             $this->debugWithSource(
-                sprintf(
-                    'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+                'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+                [
                     (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
-                )
+                ]
             );
             return $subject;
         }
         /* @var Store $store */
         $store = $this->getStoreManager()->getStore();
-        if ($this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
+        if ($store instanceof Store && $this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
             try {
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();

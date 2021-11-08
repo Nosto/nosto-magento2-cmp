@@ -52,6 +52,7 @@ use Nosto\Request\Http\HttpRequest;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class Category
 {
@@ -71,18 +72,26 @@ class Category
     private $nostoHelperData;
 
     /**
+     * @var NostoHelperScope
+     */
+    private $nostoHelperScope;
+
+    /**
      * @param ManagerInterface $eventManager
      * @param CmHelperData $cmHelperData
      * @param NostoHelperData $nostoHelperData
+     * @param NostoHelperScope $nostoHelperScope
      */
     public function __construct(
         ManagerInterface $eventManager,
         CmHelperData $cmHelperData,
-        NostoHelperData $nostoHelperData
+        NostoHelperData $nostoHelperData,
+        NostoHelperScope $nostoHelperScope
     ) {
         $this->eventManager = $eventManager;
         $this->cmHelperData = $cmHelperData;
         $this->nostoHelperData = $nostoHelperData;
+        $this->nostoHelperScope = $nostoHelperScope;
     }
 
     /**
@@ -110,7 +119,11 @@ class Category
     ) {
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            throw new MissingTokenException(Token::API_GRAPHQL);
+            throw new MissingTokenException(
+                Token::API_GRAPHQL,
+                $this->nostoHelperScope->getStore()->getId(),
+                $this->nostoHelperScope->getStore()->getCurrentUrl()
+            );
         }
 
         HttpRequest::buildUserAgent(

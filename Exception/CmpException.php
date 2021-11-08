@@ -37,18 +37,18 @@ namespace Nosto\Cmp\Exception;
 
 use Exception;
 
-class CmpException extends Exception
+abstract class CmpException extends Exception
 {
     /**
      * CmpException constructor.
      * @param string $message
-     * @param int|string $storeId
+     * @param int $storeId
      * @param string $currentUrl
      */
     public function __construct(
-        $message = "",
-        $storeId = "",
-        $currentUrl = ""
+        $message,
+        $storeId,
+        $currentUrl
     ) {
         parent::__construct(
             $this->finalizeMessage($message, $storeId, $currentUrl)
