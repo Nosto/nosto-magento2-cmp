@@ -54,7 +54,6 @@ use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
-use Exception;
 
 class BuildWebFacetService
 {
@@ -110,6 +109,12 @@ class BuildWebFacetService
     /**
      * @return Facet
      */
+
+    /**
+     * @return Facet
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function getFacets(): Facet
     {
         $includeFilters = new IncludeFilters();
@@ -117,8 +122,8 @@ class BuildWebFacetService
 
         try {
             $this->populateFilters($includeFilters);
-        } catch (Exception $e) {
-            $this->debugWithSource('Cannot populate filters, error message: %e', [$e]);
+        } catch (FacetValueException $e) {
+            $this->debugWithSource('Cannot map filters, error message: %s', [$e->getMessage()]);
             $this->logger->exception($e);
         }
 
@@ -197,17 +202,13 @@ class BuildWebFacetService
                 $this->debugWithSource('Cannot build include filter for "%s" frontend input type', [$frontendInput]);
                 return;
         }
-        try {
-            $attributeCode = $attributeModel->getAttributeCode();
-            if (!is_string($attributeCode)) {
-                $this->debugWithSource('Cannot build include filter for "%s" attribute ', [$attributeModel->getName()]);
-                return;
-            }
-            $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
-        } catch (FacetValueException $e) {
-            $this->debugWithSource('Cannot map filters, error message: %s', [$e->getMessage()]);
-            $this->logger->exception($e);
+
+        $attributeCode = $attributeModel->getAttributeCode();
+        if (!is_string($attributeCode)) {
+            $this->debugWithSource('Cannot build include filter for "%s" attribute ', [$attributeModel->getName()]);
+            return;
         }
+        $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
     }
 
     /**
@@ -229,6 +230,7 @@ class BuildWebFacetService
      * @param string $name
      * @param mixed $value
      * @throws FacetValueException
+     * @throws NoSuchEntityException
      * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
@@ -291,5 +293,7 @@ class BuildWebFacetService
                 $currentUrl
             );
         }
+
+        return [];
     }
 }

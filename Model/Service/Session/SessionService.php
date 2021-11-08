@@ -80,5 +80,7 @@ class SessionService
                 );
             }
         }
+        
+        return null;
     }
 }

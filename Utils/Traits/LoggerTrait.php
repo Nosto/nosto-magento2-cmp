@@ -41,7 +41,7 @@ use Nosto\Tagging\Logger\Logger;
 trait LoggerTrait
 {
     /** @var Logger */
-    private $logger;
+    protected $logger;
 
     /**
      * LoggerTrait constructor.

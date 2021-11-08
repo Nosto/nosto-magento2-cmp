@@ -51,18 +51,9 @@ abstract class CmpException extends Exception
         $currentUrl
     ) {
         parent::__construct(
-            $this->finalizeMessage($message, $storeId, $currentUrl)
-        );
-    }
-
-    /**
-     * @param $message
-     * @return string
-     */
-    private function finalizeMessage($message, $storeId, $currentUrl)
-    {
-        return $message .
+            $message .
             ' Store Id: ' . $storeId . '.' .
-            ' Url: ' . $currentUrl . '.';
+            ' Url: ' . $currentUrl . '.'
+        );
     }
 }

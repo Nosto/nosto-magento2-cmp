@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Exception;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
@@ -148,6 +149,10 @@ class WebHandler extends AbstractHandler
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function getFilters(array $requestData)
     {
-        return $this->buildWebFacetService->getFacets();
+        try {
+            return $this->buildWebFacetService->getFacets();
+        } catch (Exception $e) {
+            return $this->logger->exception($e);
+        }
     }
 }

@@ -185,7 +185,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
             throw new MissingAccountException(

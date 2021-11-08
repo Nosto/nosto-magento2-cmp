@@ -73,11 +73,6 @@ abstract class AbstractHandler
     private $parameterResolver;
 
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var SearchEngine
      */
     private $searchEngineHelper;
