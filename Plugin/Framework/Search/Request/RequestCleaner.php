@@ -60,9 +60,6 @@ class RequestCleaner
     /** @var WebHandler */
     private $webHandler;
 
-    /** @var Logger  */
-    private $logger;
-
     /**
      * RequestCleaner constructor.
      *
