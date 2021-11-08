@@ -74,6 +74,9 @@ class Toolbar extends AbstractBlock
 
     private static $isProcessed = false;
 
+    /** @var int */
+    private $pageSize;
+
     /**
      * Toolbar constructor.
      * @param Context $context
@@ -86,6 +89,7 @@ class Toolbar extends AbstractBlock
      * @param SearchEngine $searchEngineHelper
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
+     * @param int $pageSize
      */
     public function __construct(
         Context $context,
@@ -97,11 +101,13 @@ class Toolbar extends AbstractBlock
         Logger $logger,
         SearchEngine $searchEngineHelper,
         BuildWebFacetService $buildWebFacetService,
-        State $state
+        State $state,
+        $pageSize
     ) {
         $this->buildWebFacetService = $buildWebFacetService;
         $this->state = $state;
         $this->request = $request;
+        $this->pageSize = $pageSize;
         parent::__construct(
             $context,
             $parameterResolver,
@@ -149,7 +155,7 @@ class Toolbar extends AbstractBlock
                 $result = $this->getCmpResult(
                     $this->buildWebFacetService->getFacets(),
                     $this->getCurrentPageNumber()-1,
-                    $subjectCollection->getPageSize()
+                    $this->getPageSize($subjectCollection)
                 );
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -200,6 +206,28 @@ class Toolbar extends AbstractBlock
             $start,
             $limit
         );
+    }
+
+    /**
+     * @param ProductCollection $subjectCollection
+     * @return int
+     */
+    private function getPageSize($subjectCollection)
+    {
+        if ($this->pageSize != -1) {
+            $this->getLogger()->debugWithSource(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                ),
+                [],
+                $this
+            );
+
+            return $this->pageSize;
+        }
+
+        return $subjectCollection->getPageSize();
     }
 
     /**
