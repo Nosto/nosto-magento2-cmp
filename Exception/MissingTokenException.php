@@ -44,7 +44,7 @@ class MissingTokenException extends CmpException
     /**
      * MissingAccountException constructor.
      * @param string $token
-     * @param int $storeId
+     * @param int|string $storeId
      * @param string $currentUrl
      */
     public function __construct(

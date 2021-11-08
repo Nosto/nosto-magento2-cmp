@@ -144,7 +144,7 @@ class CategoryMapping extends Template
                     $categoriesArray[$hashedCategoryString] = $category->getUrl();
                 }
             }
-g        } catch (Exception $e) {
+        } catch (Exception $e) {
             $this->logger->exception($e);
         }
 

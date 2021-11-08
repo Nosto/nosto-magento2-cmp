@@ -42,7 +42,7 @@ class CmpException extends Exception
     /**
      * CmpException constructor.
      * @param string $message
-     * @param int $storeId
+     * @param int|string $storeId
      * @param string $currentUrl
      */
     public function __construct(

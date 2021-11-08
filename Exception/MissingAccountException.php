@@ -43,7 +43,7 @@ class MissingAccountException extends CmpException
 
     /**
      * MissingAccountException constructor.
-     * @param int $storeId
+     * @param int|string $storeId
      * @param string $currentUrl
      */
     public function __construct(

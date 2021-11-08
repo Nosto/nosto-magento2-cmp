@@ -193,7 +193,7 @@ class BuildWebFacetService
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                $this->debug(
+                $this->debugWithSource(
                     sprintf(
                         'Cannot build include filter for "%s" frontend input type',
                         $frontendInput
@@ -211,7 +211,7 @@ class BuildWebFacetService
             }
             $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
         } catch (FacetValueException $e) {
-            $this->debug(
+            $this->debugWithSource(
                 sprintf('Cannot map filters, error message: %s', $e->getMessage())
             );
             $this->logger->exception($e);
