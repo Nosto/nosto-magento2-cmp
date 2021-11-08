@@ -57,6 +57,7 @@ abstract class CmpException extends Exception
 
     /**
      * @param $message
+     * @return string
      */
     private function finalizeMessage($message, $storeId, $currentUrl)
     {

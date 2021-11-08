@@ -261,6 +261,7 @@ class BuildWebFacetService
      * @param $value
      * @return array
      * @throws FacetValueException
+     * @throws NoSuchEntityException
      */
     private function makeArrayFromValue($name, $value): array
     {

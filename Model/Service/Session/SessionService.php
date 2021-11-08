@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Model\Service\Session;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\SessionCreationException;
@@ -62,6 +63,7 @@ class SessionService
      * @param AccountInterface $nostoAccount
      * @return mixed|null
      * @throws SessionCreationException
+     * @throws NoSuchEntityException
      */
     public function getNewNostoSession(AccountInterface $nostoAccount)
     {

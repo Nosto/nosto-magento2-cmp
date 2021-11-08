@@ -43,8 +43,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Exception\SessionCreationException;
@@ -58,6 +56,7 @@ use Nosto\Request\Api\Token;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
@@ -87,9 +86,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $accountHelper;
 
     /**
-     * @var StoreManagerInterface
+     * @var NostoHelperScope
      */
-    private $storeManager;
+    private $nostoHelperScope;
 
     /**
      * @var Registry
@@ -134,7 +133,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
      * @param Account $nostoHelperAccount
-     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperScope $nostoHelperScope
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
      * @param Logger $logger
@@ -147,7 +146,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         CookieManagerInterface $cookieManager,
         Category $categoryService,
         Account $nostoHelperAccount,
-        StoreManagerInterface $storeManager,
+        NostoHelperScope $nostoHelperScope,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
         Logger $logger,
@@ -162,7 +161,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
         $this->accountHelper = $nostoHelperAccount;
-        $this->storeManager = $storeManager;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoCmpHelper = $nostoCmpHelper;
@@ -184,20 +183,15 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $limit
     ): ?CategoryMerchandisingResult {
 
-        $store = $this->storeManager->getStore();
+        $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-next-line PhanTypeMismatchArgument
         /** @noinspection PhpParamsInspection */
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
-            if ($store instanceof Store) {
-                $storeId = $store->getId();
-                $currentUrl = $store->getCurrentUrl();
-
-                throw new MissingAccountException(
-                    $storeId,
-                    $currentUrl
-                );
-            }
+            throw new MissingAccountException(
+                $store->getId(),
+                $store->getCurrentUrl()
+            );
         }
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
@@ -209,16 +203,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $category = $this->getCurrentCategoryString($store);
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            if ($store instanceof Store) {
-                $storeId = $store->getId();
-                $currentUrl = $store->getCurrentUrl();
-
-                throw new MissingTokenException(
-                    Token::API_GRAPHQL,
-                    $storeId,
-                    $currentUrl
-                );
-            }
+            throw new MissingTokenException(
+                Token::API_GRAPHQL,
+                $store->getId(),
+                $store->getCurrentUrl()
+            );
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
@@ -285,7 +274,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     public function setCategoryInRegistry($id): void
     {
-        $store = $this->storeManager->getStore();
+        $store = $this->nostoHelperScope->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
         /** @noinspection PhpDeprecationInspection */
         $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
