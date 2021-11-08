@@ -37,6 +37,7 @@
 namespace Nosto\Cmp\Utils\Traits;
 
 use Nosto\Tagging\Logger\Logger;
+use Throwable;
 
 trait LoggerTrait
 {
@@ -72,5 +73,14 @@ trait LoggerTrait
             $context,
             $this
         );
+    }
+
+    /**
+     * @param Throwable $exception
+     * @return bool
+     */
+    public function exception(Throwable $exception)
+    {
+        return $this->logger->exception($exception);
     }
 }

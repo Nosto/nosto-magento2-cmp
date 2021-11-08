@@ -124,7 +124,7 @@ class BuildWebFacetService
             $this->populateFilters($includeFilters);
         } catch (FacetValueException $e) {
             $this->debugWithSource('Cannot map filters, error message: %s', [$e->getMessage()]);
-            $this->logger->exception($e);
+            $this->exception($e);
         }
 
         return new Facet($includeFilters, $excludeFilters);

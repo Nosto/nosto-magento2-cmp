@@ -108,7 +108,7 @@ class CategoryMapping extends Template
                 $array = $this->getMagentoCategories($store);
             }
         } catch (NoSuchEntityException $e) {
-            $this->logger->exception($e);
+            $this->exception($e);
         }
 
         return json_encode((object)$array, JSON_UNESCAPED_SLASHES);
@@ -144,7 +144,7 @@ class CategoryMapping extends Template
                 }
             }
         } catch (Exception $e) {
-            $this->logger->exception($e);
+            $this->exception($e);
         }
 
         return $categoriesArray;

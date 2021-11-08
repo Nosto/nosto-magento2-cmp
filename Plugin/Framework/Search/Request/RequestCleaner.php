@@ -108,7 +108,7 @@ class RequestCleaner
             }
         } catch (Exception $e) {
             $this->debugWithSource('Failed to apply CMP - see exception log(s) for details', [], $requestData);
-            $this->logger->exception($e);
+            $this->exception($e);
         } finally {
             return $requestData;
         }

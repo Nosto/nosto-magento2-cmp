@@ -152,7 +152,8 @@ class WebHandler extends AbstractHandler
         try {
             return $this->buildWebFacetService->getFacets();
         } catch (Exception $e) {
-            return $this->logger->exception($e);
+            $this->exception($e);
+            return null;
         }
     }
 }

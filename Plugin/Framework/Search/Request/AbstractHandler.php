@@ -143,7 +143,7 @@ abstract class AbstractHandler
                 $this->parseLimit($requestData)
             );
         } catch (Exception $e) {
-            $this->logger->exception($e);
+            $this->exception($e);
             return;
         }
         if (empty($productIds)) {
@@ -267,7 +267,7 @@ abstract class AbstractHandler
             );
             return $res ? CategoryMerchandising::parseProductIds($res) : null;
         } catch (Exception $e) {
-            $this->logger->exception($e);
+            $this->exception($e);
             return null;
         }
     }
