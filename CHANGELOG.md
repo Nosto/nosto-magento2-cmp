@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file. This projec
 ### 3.3.0-rc7
 * Fix search page bug for MySQL and ElasticSearch
 * Introduce possibility to define page size through DI
+* Replaced direct usage of StoreManagerInterface with a helper
 
 ### 3.3.0-rc6
 * Fix pagination issue in Elasticsearch
