@@ -47,6 +47,7 @@ use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Logger\Logger;
 
@@ -256,6 +257,7 @@ abstract class AbstractHandler
      * @param $pageNum
      * @param $limit
      * @return array|null
+     * @throws NostoException
      */
     private function getCmpProductIds(FacetInterface $facet, $pageNum, $limit)
     {
