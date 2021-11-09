@@ -42,10 +42,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
@@ -57,6 +54,7 @@ use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Zend_Db_Expr;
 
@@ -82,6 +80,7 @@ class Toolbar extends AbstractBlock
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
      * @param Http $request
@@ -95,6 +94,7 @@ class Toolbar extends AbstractBlock
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
         Http $request,
@@ -113,6 +113,7 @@ class Toolbar extends AbstractBlock
             $parameterResolver,
             $nostoCmpHelperData,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $categoryService,
             $searchEngineHelper,
             $logger
@@ -124,7 +125,6 @@ class Toolbar extends AbstractBlock
      *
      * @param MagentoToolbar $subject
      * @return MagentoToolbar
-     * @throws NoSuchEntityException
      */
     public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
@@ -141,8 +141,7 @@ class Toolbar extends AbstractBlock
             );
             return $subject;
         }
-        /* @var Store $store */
-        $store = $this->getStoreManager()->getStore();
+        $store = $this->getNostoHelperScope()->getStore();
         if ($this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
             try {
                 /* @var ProductCollection $subjectCollection */
@@ -195,7 +194,6 @@ class Toolbar extends AbstractBlock
      * @param $start
      * @param $limit
      * @return CategoryMerchandisingResult|null
-     * @throws LocalizedException
      * @throws MissingCookieException
      * @throws NostoException
      */

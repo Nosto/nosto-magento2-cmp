@@ -39,12 +39,10 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
@@ -53,7 +51,8 @@ use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
-use Nosto\Tagging\Helper\Account;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
@@ -74,19 +73,19 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $cookieManager;
 
     /**
-     * @var Account
+     * @var NostoHelperAccount
      */
-    private $accountHelper;
+    private $nostoHelperAccount;
+
+    /**
+     * @var NostoHelperScope
+     */
+    private $nostoHelperScope;
 
     /**
      * @var Logger
      */
     private $logger;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @var Registry
@@ -130,8 +129,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
-     * @param Account $nostoHelperAccount
-     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
      * @param Logger $logger
@@ -143,8 +142,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     public function __construct(
         CookieManagerInterface $cookieManager,
         Category $categoryService,
-        Account $nostoHelperAccount,
-        StoreManagerInterface $storeManager,
+        NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
         Logger $logger,
@@ -156,9 +155,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
         $this->cookieManager = $cookieManager;
-        $this->accountHelper = $nostoHelperAccount;
+        $this->nostoHelperAccount = $nostoHelperAccount;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->logger = $logger;
-        $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoCmpHelper = $nostoCmpHelper;
@@ -170,17 +169,14 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     /**
      * @inheritDoc
      * @throws NostoException
-     * @throws LocalizedException
      */
     public function getPersonalisationResult(
         FacetInterface $facets,
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
-        $store = $this->storeManager->getStore();
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $nostoAccount = $this->accountHelper->findAccount($store);
+        $store = $this->nostoHelperScope->getStore();
+        $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
             throw new NostoException('Account cannot be null');
         }
@@ -247,10 +243,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
     /**
      * Get the current category
-     * @param StoreInterface $store
+     * @param Store $store
      * @return null|string
      */
-    private function getCurrentCategoryString(StoreInterface $store)
+    private function getCurrentCategoryString(Store $store)
     {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
@@ -263,7 +259,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     public function setCategoryInRegistry($id): void
     {
-        $store = $this->storeManager->getStore();
+        $store = $this->nostoHelperScope->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
         /** @noinspection PhpDeprecationInspection */
         $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
@@ -278,11 +274,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param int $limit
      * @return int
      */
-    private function sanitizeLimit(StoreInterface $store, $limit)
+    private function sanitizeLimit(Store $store, $limit)
     {
         $maxLimit = $this->nostoCmpHelper->getMaxProductLimit($store);
         if (!is_numeric($limit)

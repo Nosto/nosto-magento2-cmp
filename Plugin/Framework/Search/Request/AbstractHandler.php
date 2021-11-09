@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Exception;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
@@ -49,6 +48,7 @@ use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractHandler
@@ -80,14 +80,14 @@ abstract class AbstractHandler
     private $searchEngineHelper;
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @var NostoHelperAccount
      */
     private $accountHelper;
+
+    /**
+     * @var NostoHelperScope
+     */
+    private $nostoHelperScope;
 
     /**
      * @var CmpHelperData
@@ -103,8 +103,8 @@ abstract class AbstractHandler
      * AbstractHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
-     * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param Logger $logger
@@ -112,8 +112,8 @@ abstract class AbstractHandler
     public function __construct(
         ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
-        StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         Logger $logger
@@ -121,8 +121,8 @@ abstract class AbstractHandler
         $this->parameterResolver = $parameterResolver;
         $this->logger = $logger;
         $this->searchEngineHelper = $searchEngineHelper;
-        $this->storeManager = $storeManager;
         $this->accountHelper = $nostoHelperAccount;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->cmpHelperData = $cmpHelperData;
         $this->categoryService = $categoryService;
     }
@@ -193,7 +193,7 @@ abstract class AbstractHandler
     private function setFallbackSort(array &$requestData)
     {
         try {
-            $store = $this->storeManager->getStore();
+            $store = $this->nostoHelperScope->getStore();
             $sorting = $this->cmpHelperData->getFallbackSorting($store);
             $requestData['sort'][] = [
                 'field' => $sorting,

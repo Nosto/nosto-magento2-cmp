@@ -42,6 +42,7 @@ use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 /** @noinspection PhpUnused */
@@ -52,6 +53,7 @@ class Pager extends AbstractBlock
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param ParameterResolverInterface $parameterResolver
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SearchEngine $searchEngineHelper
@@ -61,6 +63,7 @@ class Pager extends AbstractBlock
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         ParameterResolverInterface $parameterResolver,
         StateAwareCategoryServiceInterface $categoryService,
         SearchEngine $searchEngineHelper,
@@ -71,6 +74,7 @@ class Pager extends AbstractBlock
             $parameterResolver,
             $nostoCmpHelperData,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $categoryService,
             $searchEngineHelper,
             $logger
