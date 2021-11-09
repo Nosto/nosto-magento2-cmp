@@ -97,7 +97,6 @@ class RequestCleaner
             return $requestData;
         }
         try {
-
             if ($this->containsCatalogViewQueries($requestData)) {
                 $this->webHandler->handle($requestData);
             } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {

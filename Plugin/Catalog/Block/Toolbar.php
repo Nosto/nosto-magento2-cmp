@@ -164,7 +164,7 @@ class Toolbar extends AbstractBlock
                     $this->debugWithSource('Got an empty CMP result from Nosto for category');
                 }
             } catch (Exception $e) {
-                $this->getLogger()->exception($e);
+                $this->exception($e);
             }
         }
         self::$isProcessed = true;

@@ -283,12 +283,4 @@ abstract class AbstractBlock extends Template
     {
         return $this->storeManager;
     }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger(): Logger
-    {
-        return $this->logger;
-    }
 }
