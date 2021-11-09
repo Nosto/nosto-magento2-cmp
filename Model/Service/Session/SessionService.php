@@ -62,25 +62,22 @@ class SessionService
     /**
      * @param AccountInterface $nostoAccount
      * @return mixed|null
-     * @throws SessionCreationException
      * @throws NoSuchEntityException
+     * @throws SessionCreationException
      */
     public function getNewNostoSession(AccountInterface $nostoAccount)
     {
         $store = $this->storeManager->getStore();
         if ($store instanceof Store) {
-            $url = $store->getCurrentUrl();
             try {
+                $url = $store->getCurrentUrl();
                 $newSession = new NewSession($nostoAccount, $url, true);
                 return $newSession->execute();
-            } catch (NostoException $e) {
-                throw new SessionCreationException(
-                    $store->getId(),
-                    $url
-                );
+            } catch (NoSuchEntityException | NostoException $e) {
+                throw new SessionCreationException($store);
             }
         }
-        
+
         return null;
     }
 }

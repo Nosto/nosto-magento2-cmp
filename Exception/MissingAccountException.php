@@ -36,16 +36,16 @@
 
 namespace Nosto\Cmp\Exception;
 
+use Magento\Store\Model\Store;
+
 class MissingAccountException extends CmpException
 {
     const DEFAULT_MESSAGE = 'Account cannot be null.';
 
     /**
-     * MissingAccountException constructor.
-     * @param int $storeId
-     * @param string $currentUrl
+     * @param Store $store
      */
-    public function __construct($storeId, $currentUrl) {
-        parent::__construct(self::DEFAULT_MESSAGE, $storeId, $currentUrl);
+    public function __construct(Store $store) {
+        parent::__construct($store, self::DEFAULT_MESSAGE);
     }
 }

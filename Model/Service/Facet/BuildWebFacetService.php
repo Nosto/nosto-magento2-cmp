@@ -239,7 +239,8 @@ class BuildWebFacetService
                 $includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($store, $name, (bool) $value ? 'yes' : 'no'));
+                $value = (bool) $value ? 'yes' : 'no';
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($store, $name, $value));
                 break;
             case 'category':
                 $includeFilters->setCategories([$value]);
@@ -276,6 +277,6 @@ class BuildWebFacetService
             return $value;
         }
 
-        throw new FacetValueException($name, $value, $store->getId(), $store->getCurrentUrl());
+        throw new FacetValueException($store, $name, $value);
     }
 }

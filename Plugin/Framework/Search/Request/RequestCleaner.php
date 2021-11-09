@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Exception;
 use Magento\Framework\Search\Request\Cleaner;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;

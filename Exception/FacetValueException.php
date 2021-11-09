@@ -36,18 +36,20 @@
 
 namespace Nosto\Cmp\Exception;
 
+
+use Magento\Store\Model\Store;
+
 class FacetValueException extends CmpException
 {
     const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s).';
 
     /**
-     * FacetValueException constructor.
-     * @param string $filterName
-     * @param mixed $filterValue
-     * @param int $storeId
-     * @param string $currentUrl
+     * @param Store $store
+     * @param $filterName
+     * @param $filterValue
      */
-    public function __construct($filterName, $filterValue, $storeId, $currentUrl) {
+    public function __construct(Store $store, $filterName, $filterValue)
+    {
         // @codingStandardsIgnoreStart
         $type = gettype($filterValue);
         if ($type == 'object') {
@@ -58,9 +60,8 @@ class FacetValueException extends CmpException
         // @codingStandardsIgnoreEnd
 
         parent::__construct(
-            sprintf(self::DEFAULT_MESSAGE, $filterName, $filterValue, $type, $class),
-            $storeId,
-            $currentUrl
+            $store,
+            sprintf(self::DEFAULT_MESSAGE, $filterName, $filterValue, $type, $class)
         );
     }
 }

@@ -46,12 +46,10 @@ use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
-use Nosto\Request\Api\Token;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Request\Http\HttpRequest;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 

@@ -142,10 +142,7 @@ class Toolbar extends AbstractBlock
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 if (!$subjectCollection instanceof ProductCollection) {
-                    throw new NotInstanceOfProductCollectionException(
-                        $store->getId(),
-                        $store->getCurrentUrl()
-                    );
+                    throw new NotInstanceOfProductCollectionException($store);
                 }
                 $result = $this->getCmpResult(
                     $this->buildWebFacetService->getFacets(),
