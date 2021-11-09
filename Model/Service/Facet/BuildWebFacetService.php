@@ -133,6 +133,7 @@ class BuildWebFacetService
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
+        /** @var Store $store */
         $store = $this->storeManager->getStore();
         foreach ($filters as $filter) {
             $this->mapIncludeFilter($store, $includeFilters, $filter);
@@ -140,14 +141,14 @@ class BuildWebFacetService
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param IncludeFilters $includeFilters
      * @param Item $item
      * @throws FacetValueException
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    private function mapIncludeFilter(StoreInterface $store, IncludeFilters &$includeFilters, Item $item)
+    private function mapIncludeFilter(Store $store, IncludeFilters &$includeFilters, Item $item)
     {
         if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
@@ -220,14 +221,14 @@ class BuildWebFacetService
 
     /**
      * @param IncludeFilters $includeFilters
-     * @param StoreInterface $store
+     * @param Store $store
      * @param string $name
      * @param mixed $value
      * @throws FacetValueException
      * @throws NoSuchEntityException
      * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
-    private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
+    private function mapValueToFilter(IncludeFilters &$includeFilters, Store $store, string $name, $value)
     {
         if ($this->brand == null) {
             $this->brand = $this->nostoHelperData->getBrandAttribute($store);
@@ -238,16 +239,16 @@ class BuildWebFacetService
                 $includeFilters->setPrice(min($value), max($value));
                 break;
             case 'new':
-                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, (bool) $value ? 'yes' : 'no'));
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($store, $name, (bool) $value ? 'yes' : 'no'));
                 break;
             case 'category':
                 $includeFilters->setCategories([$value]);
                 break;
             case $this->brand:
-                $includeFilters->setBrands($this->makeArrayFromValue($name, $value));
+                $includeFilters->setBrands($this->makeArrayFromValue($store, $name, $value, $store));
                 break;
             default:
-                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($name, $value));
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($store, $name, $value, $store));
                 break;
         }
     }
@@ -259,7 +260,7 @@ class BuildWebFacetService
      * @throws FacetValueException
      * @throws NoSuchEntityException
      */
-    private function makeArrayFromValue($name, $value): array
+    private function makeArrayFromValue(Store $store, $name, $value): array
     {
         if (is_string($value) || is_numeric($value)) {
             $value = [$value];
@@ -275,19 +276,6 @@ class BuildWebFacetService
             return $value;
         }
 
-        $store = $this->storeManager->getStore();
-        if ($store instanceof Store) {
-            $storeId = $store->getId();
-            $currentUrl = $store->getCurrentUrl();
-
-            throw new FacetValueException(
-                $name,
-                $value,
-                $storeId,
-                $currentUrl
-            );
-        }
-
-        return [];
+        throw new FacetValueException($name, $value, $store->getId(), $store->getCurrentUrl());
     }
 }
