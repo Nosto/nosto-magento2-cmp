@@ -187,10 +187,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         //@phan-suppress-next-next-line PhanTypeMismatchArgument
         $nostoAccount = $this->accountHelper->findAccount($store);
         if ($nostoAccount === null) {
-            throw new MissingAccountException(
-                $store->getId(),
-                $store->getCurrentUrl()
-            );
+            throw new MissingAccountException($store->getId(), $store->getCurrentUrl());
         }
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
@@ -202,11 +199,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $category = $this->getCurrentCategoryString($store);
         $featureAccess = new FeatureAccess($nostoAccount);
         if (!$featureAccess->canUseGraphql()) {
-            throw new MissingTokenException(
-                Token::API_GRAPHQL,
-                $store->getId(),
-                $store->getCurrentUrl()
-            );
+            throw new MissingTokenException(Token::API_GRAPHQL, $store->getId(), $store->getCurrentUrl());
         }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);

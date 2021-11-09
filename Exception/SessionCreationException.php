@@ -38,7 +38,6 @@ namespace Nosto\Cmp\Exception;
 
 class SessionCreationException extends CmpException
 {
-    /** @var string  */
     const DEFAULT_MESSAGE = 'Something went wrong while creating new session.';
 
     /**
@@ -46,12 +45,7 @@ class SessionCreationException extends CmpException
      * @param int $storeId
      * @param string $currentUrl
      */
-    public function __construct(
-        $storeId,
-        $currentUrl
-    ) {
-        parent::__construct(
-            $this::DEFAULT_MESSAGE, $storeId, $currentUrl
-        );
+    public function __construct($storeId, $currentUrl) {
+        parent::__construct(self::DEFAULT_MESSAGE, $storeId, $currentUrl);
     }
 }

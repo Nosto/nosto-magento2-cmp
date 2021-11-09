@@ -38,7 +38,6 @@ namespace Nosto\Cmp\Exception;
 
 class MissingTokenException extends CmpException
 {
-    /** @var string  */
     const DEFAULT_MESSAGE = 'Missing Nosto token: %s.';
 
     /**
@@ -47,15 +46,7 @@ class MissingTokenException extends CmpException
      * @param int $storeId
      * @param string $currentUrl
      */
-    public function __construct(
-        $token,
-        $storeId,
-        $currentUrl
-    ) {
-        parent::__construct(
-            sprintf($this::DEFAULT_MESSAGE, $token),
-            $storeId,
-            $currentUrl
-        );
+    public function __construct($token, $storeId, $currentUrl) {
+        parent::__construct(sprintf($this::DEFAULT_MESSAGE, $token), $storeId, $currentUrl);
     }
 }

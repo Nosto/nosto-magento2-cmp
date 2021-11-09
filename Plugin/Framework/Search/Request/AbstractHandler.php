@@ -190,7 +190,7 @@ abstract class AbstractHandler
                 'direction' => 'ASC'
             ];
         } catch (Exception $e) {
-            $this->debugWithSource("Could not set fallback sorting. %s", [$e->getMessage()]);
+            $this->exception($e);
         }
     }
 

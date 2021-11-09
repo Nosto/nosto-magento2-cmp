@@ -45,11 +45,7 @@ abstract class CmpException extends Exception
      * @param int $storeId
      * @param string $currentUrl
      */
-    public function __construct(
-        $message,
-        $storeId,
-        $currentUrl
-    ) {
+    public function __construct($message, $storeId, $currentUrl) {
         parent::__construct(
             $message .
             ' Store Id: ' . $storeId . '.' .

@@ -38,7 +38,6 @@ namespace Nosto\Cmp\Exception;
 
 class NotInstanceOfProductCollectionException extends CmpException
 {
-    /** @var string  */
     const DEFAULT_MESSAGE = 'Collection is not instanceof ProductCollection.';
 
     /**
@@ -46,12 +45,7 @@ class NotInstanceOfProductCollectionException extends CmpException
      * @param int $storeId
      * @param string $currentUrl
      */
-    public function __construct(
-        $storeId,
-        $currentUrl
-    ) {
-        parent::__construct(
-            $this::DEFAULT_MESSAGE, $storeId, $currentUrl
-        );
+    public function __construct($storeId, $currentUrl) {
+        parent::__construct(self::DEFAULT_MESSAGE, $storeId, $currentUrl);
     }
 }
