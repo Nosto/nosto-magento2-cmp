@@ -119,14 +119,6 @@ class Category
         $limit,
         $previewMode = false
     ) {
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new MissingTokenException(
-                Token::API_GRAPHQL,
-                $this->nostoHelperScope->getStore()->getId(),
-                $this->nostoHelperScope->getStore()->getCurrentUrl()
-            );
-        }
 
         HttpRequest::buildUserAgent(
             'Magento',
