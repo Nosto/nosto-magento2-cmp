@@ -259,17 +259,12 @@ abstract class AbstractHandler
      */
     private function getCmpProductIds(FacetInterface $facet, $pageNum, $limit)
     {
-        try {
-            $res = $this->categoryService->getPersonalisationResult(
-                $facet,
-                $pageNum,
-                $limit
-            );
-            return $res ? CategoryMerchandising::parseProductIds($res) : null;
-        } catch (Exception $e) {
-            $this->exception($e);
-            return null;
-        }
+        $res = $this->categoryService->getPersonalisationResult(
+            $facet,
+            $pageNum,
+            $limit
+        );
+        return $res ? CategoryMerchandising::parseProductIds($res) : null;
     }
 
     /**

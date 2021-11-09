@@ -110,10 +110,6 @@ class BuildWebFacetService
     /**
      * @return Facet
      */
-
-    /**
-     * @return Facet
-     */
     public function getFacets(): Facet
     {
         $includeFilters = new IncludeFilters();
@@ -121,9 +117,6 @@ class BuildWebFacetService
 
         try {
             $this->populateFilters($includeFilters);
-        } catch (FacetValueException $e) {
-            $this->debugWithSource('Cannot map filters, error message: %s', [$e->getMessage()]);
-            $this->exception($e);
         } catch (Exception $e) {
             $this->exception($e);
         }
