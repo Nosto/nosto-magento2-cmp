@@ -37,13 +37,56 @@
 namespace Nosto\Cmp\Model\Service\Category;
 
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
 
-interface CategoryMappingServiceInterface
+class CachingCategoryMappingService implements CategoryMappingServiceInterface
 {
 
+    /** @var CategoryCache */
+    private $cache;
+
+    /** @var CategoryMappingServiceInterface */
+    private $categoryMappingService;
+
+    /** @var int */
+    private $ttl;
+
     /**
-     * Return JSON format of the mapping
+     * @param CategoryCache $cache
+     * @param CategoryMappingServiceInterface $categoryMappingService
+     * @param $ttl
+     */
+    public function __construct(
+        CategoryCache $cache,
+        CategoryMappingServiceInterface $categoryMappingService,
+        $ttl
+    ) {
+        $this->cache = $cache;
+        $this->categoryMappingService = $categoryMappingService;
+    }
+
+    /**
+     * @param Store $store
      * @return string
      */
-    public function getCategoryMapping(Store $store): string;
+    public function getCategoryMapping(Store $store): string
+    {
+        $cacheKey = $this->getCMCacheKey($store);
+        $mapping = $this->cache->load($cacheKey);
+        if ($mapping) {
+            return $mapping;
+        }
+        $mapping = $this->categoryMappingService->getCategoryMapping($store);
+        $this->cache->save($mapping, $cacheKey, [], $ttl);
+        return $mapping;
+    }
+
+    /**
+     * @param Store $store
+     * @return string
+     */
+    private function getCMCacheKey(Store $store)
+    {
+        return $this->cache->getTag() . '_' . $store->getStoreId();
+    }
 }
