@@ -141,14 +141,14 @@ class BuildWebFacetService
     }
 
     /**
-     * @param Store $store
+     * @param StoreInterface $store
      * @param IncludeFilters $includeFilters
      * @param Item $item
      * @throws FacetValueException
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    private function mapIncludeFilter(Store $store, IncludeFilters &$includeFilters, Item $item)
+    private function mapIncludeFilter(StoreInterface $store, IncludeFilters &$includeFilters, Item $item)
     {
         if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
@@ -221,14 +221,13 @@ class BuildWebFacetService
 
     /**
      * @param IncludeFilters $includeFilters
-     * @param Store $store
+     * @param StoreInterface $store
      * @param string $name
-     * @param mixed $value
+     * @param $value
      * @throws FacetValueException
      * @throws NoSuchEntityException
-     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
-    private function mapValueToFilter(IncludeFilters &$includeFilters, Store $store, string $name, $value)
+    private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
     {
         if ($this->brand == null) {
             $this->brand = $this->nostoHelperData->getBrandAttribute($store);
@@ -246,22 +245,22 @@ class BuildWebFacetService
                 $includeFilters->setCategories([$value]);
                 break;
             case $this->brand:
-                $includeFilters->setBrands($this->makeArrayFromValue($store, $name, $value, $store));
+                $includeFilters->setBrands($this->makeArrayFromValue($store, $name, $value));
                 break;
             default:
-                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($store, $name, $value, $store));
+                $includeFilters->setCustomFields($name, $this->makeArrayFromValue($store, $name, $value));
                 break;
         }
     }
 
     /**
+     * @param StoreInterface $store
      * @param $name
      * @param $value
      * @return array
      * @throws FacetValueException
-     * @throws NoSuchEntityException
      */
-    private function makeArrayFromValue(Store $store, $name, $value): array
+    private function makeArrayFromValue(StoreInterface $store, $name, $value): array
     {
         if (is_string($value) || is_numeric($value)) {
             $value = [$value];

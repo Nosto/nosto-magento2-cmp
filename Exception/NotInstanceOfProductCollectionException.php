@@ -36,16 +36,16 @@
 
 namespace Nosto\Cmp\Exception;
 
-use Magento\Store\Model\Store;
+use Magento\Store\Api\Data\StoreInterface;
 
 class NotInstanceOfProductCollectionException extends CmpException
 {
     const DEFAULT_MESSAGE = 'Collection is not instanceof ProductCollection.';
 
     /**
-     * @param Store $store
+     * @param StoreInterface $store
      */
-    public function __construct(Store $store)
+    public function __construct(StoreInterface $store)
     {
         parent::__construct($store, self::DEFAULT_MESSAGE);
     }

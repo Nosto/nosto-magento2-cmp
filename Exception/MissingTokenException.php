@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Exception;
 
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
 class MissingTokenException extends CmpException
@@ -46,7 +47,7 @@ class MissingTokenException extends CmpException
      * @param Store $store
      * @param $token
      */
-    public function __construct(Store $store, $token)
+    public function __construct(StoreInterface $store, $token)
     {
         parent::__construct($store, sprintf($this::DEFAULT_MESSAGE, $token));
     }

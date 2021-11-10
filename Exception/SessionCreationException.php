@@ -36,16 +36,16 @@
 
 namespace Nosto\Cmp\Exception;
 
-use Magento\Store\Model\Store;
+use Magento\Store\Api\Data\StoreInterface;
 
 class SessionCreationException extends CmpException
 {
     const DEFAULT_MESSAGE = 'Something went wrong while creating new session.';
 
     /**
-     * @param Store $store
+     * @param StoreInterface $store
      */
-    public function __construct(Store $store)
+    public function __construct(StoreInterface $store)
     {
         parent::__construct($store, self::DEFAULT_MESSAGE);
     }
