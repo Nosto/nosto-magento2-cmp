@@ -37,8 +37,6 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Helper\Data as CmHelperData;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
@@ -102,11 +100,9 @@ class Category
      * @param int $limit
      * @param bool $previewMode
      * @return CategoryMerchandisingResult
-     * @throws MissingTokenException
      * @throws AbstractHttpException
      * @throws HttpResponseException
      * @throws NostoException
-     * @throws NoSuchEntityException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,

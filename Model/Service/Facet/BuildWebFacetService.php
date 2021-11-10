@@ -223,9 +223,9 @@ class BuildWebFacetService
      * @param IncludeFilters $includeFilters
      * @param StoreInterface $store
      * @param string $name
-     * @param $value
+     * @param string|array $value
      * @throws FacetValueException
-     * @throws NoSuchEntityException
+     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
     {

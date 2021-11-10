@@ -45,10 +45,10 @@ class MissingTokenException extends CmpException
 
     /**
      * @param Store $store
-     * @param $token
+     * @param string $token
      */
     public function __construct(StoreInterface $store, $token)
     {
-        parent::__construct($store, sprintf($this::DEFAULT_MESSAGE, $token));
+        parent::__construct($store, sprintf(self::DEFAULT_MESSAGE, $token));
     }
 }
