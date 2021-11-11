@@ -128,6 +128,7 @@ class BuildWebFacetService
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         foreach ($filters as $filter) {
             $this->mapIncludeFilter($store, $includeFilters, $filter);

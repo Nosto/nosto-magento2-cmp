@@ -95,6 +95,7 @@ class CategoryMapping extends Template
      */
     public function getCategoryMap()
     {
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $array = $this->getMagentoCategories($store);
         return json_encode((object)$array, JSON_UNESCAPED_SLASHES);

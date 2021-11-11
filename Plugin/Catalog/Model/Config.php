@@ -92,6 +92,7 @@ class Config
         MagentoConfig $catalogConfig,
         $options
     ) {
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
@@ -116,6 +117,7 @@ class Config
         MagentoConfig $catalogConfig,
         $options
     ) {
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&

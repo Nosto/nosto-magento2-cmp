@@ -141,6 +141,7 @@ class Toolbar extends AbstractBlock
             );
             return $subject;
         }
+        // Current store id value is unavailable
         $store = $this->getNostoHelperScope()->getStore();
         if ($this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
             try {

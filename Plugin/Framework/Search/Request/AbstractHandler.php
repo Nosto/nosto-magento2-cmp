@@ -193,6 +193,7 @@ abstract class AbstractHandler
     private function setFallbackSort(array &$requestData)
     {
         try {
+            // Current store id value is unavailable
             $store = $this->nostoHelperScope->getStore();
             $sorting = $this->cmpHelperData->getFallbackSorting($store);
             $requestData['sort'][] = [

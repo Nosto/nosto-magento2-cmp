@@ -175,6 +175,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
@@ -259,6 +260,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     public function setCategoryInRegistry($id): void
     {
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
         /** @noinspection PhpDeprecationInspection */
