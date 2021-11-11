@@ -44,7 +44,7 @@ class MissingTokenException extends CmpException
     const DEFAULT_MESSAGE = 'Missing Nosto token: %s.';
 
     /**
-     * @param Store $store
+     * @param StoreInterface $store
      * @param string $token
      */
     public function __construct(StoreInterface $store, $token)
