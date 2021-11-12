@@ -78,6 +78,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
     }
 
     /**
+     * @param Store $store
      * @return string
      */
     public function getCategoryMapping(Store $store): string

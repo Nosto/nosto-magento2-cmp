@@ -43,6 +43,7 @@ interface CategoryMappingServiceInterface
 
     /**
      * Return JSON format of the mapping
+     * @param Store $store
      * @return string
      */
     public function getCategoryMapping(Store $store): string;

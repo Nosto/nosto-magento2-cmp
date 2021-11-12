@@ -63,6 +63,7 @@ class CachingCategoryMappingService implements CategoryMappingServiceInterface
     ) {
         $this->cache = $cache;
         $this->categoryMappingService = $categoryMappingService;
+        $this->ttl = $ttl;
     }
 
     /**
@@ -77,7 +78,7 @@ class CachingCategoryMappingService implements CategoryMappingServiceInterface
             return $mapping;
         }
         $mapping = $this->categoryMappingService->getCategoryMapping($store);
-        $this->cache->save($mapping, $cacheKey, [], $ttl);
+        $this->cache->save($mapping, $cacheKey, [], $this->ttl);
         return $mapping;
     }
 
