@@ -37,7 +37,6 @@
 namespace Nosto\Cmp\Exception;
 
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
 
 class MissingTokenException extends CmpException
 {
