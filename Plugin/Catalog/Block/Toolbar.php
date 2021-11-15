@@ -203,13 +203,11 @@ class Toolbar extends AbstractBlock
     private function getPageSize($subjectCollection)
     {
         if ($this->pageSize != -1) {
-            $this->getLogger()->debugWithSource(
+            $this->debugWithSource(
                 sprintf(
                     'Using DI value (%s) for the page size',
                     $this->pageSize
-                ),
-                [],
-                $this
+                )
             );
 
             return $this->pageSize;
