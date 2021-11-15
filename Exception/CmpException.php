@@ -37,34 +37,30 @@ namespace Nosto\Cmp\Exception;
 
 use Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
 abstract class CmpException extends Exception
 {
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param $message
      */
-    public function __construct(StoreInterface $store, $message)
+    public function __construct(Store $store, $message)
     {
         parent::__construct($this->buildMessage($store, $message));
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param $message
      * @return string
      */
-    private function buildMessage(StoreInterface $store, $message)
+    private function buildMessage(Store $store, $message)
     {
-        $currentUrl = '';
-        if ($store instanceof Store) {
-            try {
-                $currentUrl = $store->getCurrentUrl();
-            } catch (NoSuchEntityException $e) {
-                $currentUrl = '';
-            }
+        try {
+            $currentUrl = $store->getCurrentUrl();
+        } catch (NoSuchEntityException $e) {
+            $currentUrl = '';
         }
 
         $storeId = $store->getId();
