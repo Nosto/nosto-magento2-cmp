@@ -45,28 +45,14 @@ use Nosto\Types\Signup\AccountInterface;
 
 class SessionService
 {
-    /** @var NostoHelperScope */
-    private $nostoHelperScope;
-
     /**
-     * SessionService constructor.
-     * @param NostoHelperScope $nostoHelperScope
-     */
-    public function __construct(
-        NostoHelperScope $nostoHelperScope
-    ) {
-        $this->nostoHelperScope = $nostoHelperScope;
-    }
-
-    /**
+     * @param Store $store
      * @param AccountInterface $nostoAccount
      * @return mixed|null
      * @throws SessionCreationException
      */
-    public function getNewNostoSession(AccountInterface $nostoAccount)
+    public function getNewNostoSession(Store $store, AccountInterface $nostoAccount)
     {
-        // Current store id value is unavailable
-        $store = $this->nostoHelperScope->getStore();
         try {
             $url = $store->getCurrentUrl();
             $newSession = new NewSession($nostoAccount, $url, true);

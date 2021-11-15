@@ -200,7 +200,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
         if ($customerId === null) {
-            $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
+            $customerId = $this->nostoSessionService->getNewNostoSession($store, $nostoAccount);
         }
 
         $limit = $this->sanitizeLimit($store, $limit);
