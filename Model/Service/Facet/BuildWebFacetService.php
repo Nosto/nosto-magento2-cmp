@@ -45,7 +45,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\AttributeValueException;
 use Nosto\Cmp\Exception\FacetValueException;
+use Nosto\Cmp\Exception\NotSupportedFrontedInputException;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Operation\Recommendation\ExcludeFilters;
@@ -113,21 +115,12 @@ class BuildWebFacetService
     {
         $includeFilters = new IncludeFilters();
         $excludeFilters = new ExcludeFilters();
-
-        try {
-            $this->populateFilters($includeFilters);
-        } catch (Exception $e) {
-            $this->exception($e);
-        }
-
+        $this->populateFilters($includeFilters);
         return new Facet($includeFilters, $excludeFilters);
     }
 
     /**
      * @param IncludeFilters $includeFilters
-     * @throws FacetValueException
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
@@ -135,7 +128,11 @@ class BuildWebFacetService
         // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         foreach ($filters as $filter) {
-            $this->mapIncludeFilter($store, $includeFilters, $filter);
+            try {
+                $this->mapIncludeFilter($store, $includeFilters, $filter);
+            } catch (FacetValueException | NotSupportedFrontedInputException | AttributeValueException $e) {
+                $this->exception($e);
+            }
         }
     }
 
@@ -143,13 +140,21 @@ class BuildWebFacetService
      * @param Store $store
      * @param IncludeFilters $includeFilters
      * @param Item $item
+     * @throws AttributeValueException
      * @throws FacetValueException
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * @throws NotSupportedFrontedInputException
      */
     private function mapIncludeFilter(Store $store, IncludeFilters &$includeFilters, Item $item)
     {
-        if ($item->getFilter() instanceof Category) {
+        $filter = null;
+        try {
+            $filter = $item->getFilter();
+        } catch (LocalizedException $e) {
+            $this->exception($e);
+            return;
+        }
+
+        if ($filter instanceof Category) {
             $categoryId = $item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);
             if ($category == null) {
@@ -157,12 +162,6 @@ class BuildWebFacetService
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, 'category', $category);
-            return;
-        }
-
-        //Magento\CatalogSearch\Model\Layer\Filter\Attribute
-        $filter = $item->getFilter();
-        if ($filter === null) {
             return;
         }
 
@@ -178,6 +177,23 @@ class BuildWebFacetService
             return;
         }
 
+        $value = $this->getValueFromItem($item, $store, $frontendInput);
+
+        $attributeCode = $attributeModel->getAttributeCode();
+        if (!is_string($attributeCode)) {
+            throw new AttributeValueException($store, $attributeModel->getName());
+        }
+        $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
+    }
+
+    /**
+     * @param Item $item
+     * @param string $frontendInput
+     * @return array|bool|mixed|string|null
+     * @throws NotSupportedFrontedInputException
+     */
+    private function getValueFromItem(Item $item, Store $store, string $frontendInput)
+    {
         $value = '';
         switch ($frontendInput) {
             case 'price':
@@ -193,28 +209,25 @@ class BuildWebFacetService
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                $this->debugWithSource('Cannot build include filter for "%s" frontend input type', [$frontendInput]);
-                return;
+                throw new NotSupportedFrontedInputException($frontendInput);
         }
 
-        $attributeCode = $attributeModel->getAttributeCode();
-        if (!is_string($attributeCode)) {
-            $this->debugWithSource('Cannot build include filter for "%s" attribute ', [$attributeModel->getName()]);
-            return;
-        }
-        $this->mapValueToFilter($includeFilters, $store, $attributeCode, $value);
+        return $value;
     }
 
     /**
      * @param Store $store
-     * @param $categoryId
+     * @param int $categoryId
      * @return string|null
-     * @throws NoSuchEntityException
      */
     private function getCategoryName(Store $store, $categoryId): ?string
     {
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        $category = $this->categoryRepository->get($categoryId, $store->getId());
+        try {
+            $category = $this->categoryRepository->get($categoryId, $store->getId());
+        } catch (NoSuchEntityException $e) {
+            $this->exception($e);
+            return;
+        }
         return $this->nostoCategoryBuilder->getCategory($category, $store);
     }
 
@@ -262,13 +275,13 @@ class BuildWebFacetService
     private function makeArrayFromValue(Store $store, $name, $value): array
     {
         if (is_string($value) || is_numeric($value)) {
-            $value = [$value];
+            return $value = [$value];
         }
 
         if (is_bool($value)) {
             // bool Yes/No attributes are stored as text in Nosto
             $value = $value ? "Yes" : "No";
-            $value = [$value];
+            return  $value = [$value];
         }
 
         if (is_array($value)) {
