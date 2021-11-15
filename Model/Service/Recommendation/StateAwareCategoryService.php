@@ -42,10 +42,10 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Exception\SessionCreationException;
+use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
@@ -55,7 +55,7 @@ use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Request\Api\Token;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
-use Nosto\Tagging\Helper\Account;
+use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
@@ -81,9 +81,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $cookieManager;
 
     /**
-     * @var Account
+     * @var NostoHelperAccount
      */
-    private $accountHelper;
+    private $nostoHelperAccount;
 
     /**
      * @var NostoHelperScope
@@ -132,7 +132,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
      * @param Category $categoryService
-     * @param Account $nostoHelperAccount
+     * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param Registry $registry
      * @param CategoryBuilder $categoryBuilder
@@ -145,7 +145,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     public function __construct(
         CookieManagerInterface $cookieManager,
         Category $categoryService,
-        Account $nostoHelperAccount,
+        NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         Registry $registry,
         CategoryBuilder $categoryBuilder,
@@ -160,7 +160,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         );
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
-        $this->accountHelper = $nostoHelperAccount;
+        $this->cookieManager = $cookieManager;
+        $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
@@ -182,10 +183,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
-
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        $nostoAccount = $this->accountHelper->findAccount($store);
+        $nostoAccount = $this->nostoHelperAccount->findAccount($store);
         if ($nostoAccount === null) {
             throw new MissingAccountException($store);
         }
@@ -250,10 +250,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
     /**
      * Get the current category
-     * @param StoreInterface $store
+     * @param Store $store
      * @return null|string
      */
-    private function getCurrentCategoryString(StoreInterface $store)
+    private function getCurrentCategoryString(Store $store)
     {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
@@ -266,6 +266,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     public function setCategoryInRegistry($id): void
     {
+        // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $category = $this->categoryRepository->get($id, $store->getId());
         /** @noinspection PhpDeprecationInspection */
@@ -281,11 +282,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param int $limit
      * @return int
      */
-    private function sanitizeLimit(StoreInterface $store, $limit)
+    private function sanitizeLimit(Store $store, $limit)
     {
         $maxLimit = $this->nostoCmpHelper->getMaxProductLimit($store);
         if (!is_numeric($limit)

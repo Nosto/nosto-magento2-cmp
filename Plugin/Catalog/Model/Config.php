@@ -37,16 +37,13 @@
 
 namespace Nosto\Cmp\Plugin\Catalog\Model;
 
-use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Model\Config as MagentoConfig;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Model\AttributeFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class Config
 {
@@ -56,8 +53,8 @@ class Config
     /** @var NostoHelperAccount */
     private $nostoHelperAccount;
 
-    /** @var StoreManagerInterface */
-    private $storeManager;
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
 
     /** @var AttributeFactory */
     private $attributeFactory;
@@ -66,19 +63,19 @@ class Config
      * Config constructor.
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param AttributeFactory $attributeFactory
-     * @param Context $context
      */
     public function __construct(
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
-        AttributeFactory $attributeFactory,
-        Context $context
+        NostoHelperScope $nostoHelperScope,
+        AttributeFactory $attributeFactory
     ) {
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->attributeFactory = $attributeFactory;
-        $this->storeManager = $context->getStoreManager();
     }
 
     /**
@@ -88,7 +85,6 @@ class Config
      * @param $options
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws NoSuchEntityException
      * @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
@@ -96,8 +92,8 @@ class Config
         MagentoConfig $catalogConfig,
         $options
     ) {
-        /* @var Store $store */
-        $store = $this->storeManager->getStore();
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($store)
@@ -116,14 +112,13 @@ class Config
      * @param MagentoConfig $catalogConfig
      * @param $options
      * @return array
-     * @throws NoSuchEntityException
      */
     public function afterGetAttributesUsedForSortBy(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         MagentoConfig $catalogConfig,
         $options
     ) {
-        /* @var Store $store */
-        $store = $this->storeManager->getStore();
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
         if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($store)

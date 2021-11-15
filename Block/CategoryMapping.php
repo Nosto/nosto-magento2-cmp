@@ -40,13 +40,12 @@ namespace Nosto\Cmp\Block;
 use Exception;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
@@ -55,9 +54,6 @@ class CategoryMapping extends Template
     use LoggerTrait {
         LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
     }
-
-    /** @var StoreManagerInterface */
-    private $storeManager;
 
     /** @var CollectionFactory */
     private $collectionFactory;
@@ -68,20 +64,23 @@ class CategoryMapping extends Template
     /** @var NostoHelperData */
     private $nostoHelperData;
 
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
+
     /**
      * CategoryMapping constructor.
-     * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $collectionFactory
      * @param CategoryBuilder $categoryBuilder
      * @param NostoHelperData $nostoHelperData
+     * @param NostoHelperScope $nostoHelperScope
      * @param Context $context
      * @param Logger $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
         NostoHelperData $nostoHelperData,
+        NostoHelperScope $nostoHelperScope,
         Context $context,
         Logger $logger
     ) {
@@ -89,28 +88,20 @@ class CategoryMapping extends Template
         $this->loggerTraitConstruct(
             $logger
         );
-        $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoHelperData = $nostoHelperData;
+        $this->nostoHelperScope = $nostoHelperScope;
     }
 
     /**
-     * @return false|string
+     * @return string
      */
     public function getCategoryMap()
     {
-
-        $array = [];
-        try {
-            $store = $this->storeManager->getStore();
-            if ($store instanceof Store) {
-                $array = $this->getMagentoCategories($store);
-            }
-        } catch (NoSuchEntityException $e) {
-            $this->exception($e);
-        }
-
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
+        $array = $this->getMagentoCategories($store);
         return json_encode((object)$array, JSON_UNESCAPED_SLASHES);
     }
 

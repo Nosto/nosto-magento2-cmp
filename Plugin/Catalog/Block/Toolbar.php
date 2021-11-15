@@ -44,7 +44,6 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Exception\NotInstanceOfProductCollectionException;
@@ -59,6 +58,7 @@ use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Zend_Db_Expr;
 
@@ -76,11 +76,15 @@ class Toolbar extends AbstractBlock
 
     private static $isProcessed = false;
 
+    /** @var int */
+    private $pageSize;
+
     /**
      * Toolbar constructor.
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
      * @param Http $request
@@ -88,27 +92,32 @@ class Toolbar extends AbstractBlock
      * @param SearchEngine $searchEngineHelper
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
+     * @param int $pageSize
      */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
         Http $request,
         Logger $logger,
         SearchEngine $searchEngineHelper,
         BuildWebFacetService $buildWebFacetService,
-        State $state
+        State $state,
+        $pageSize
     ) {
         $this->buildWebFacetService = $buildWebFacetService;
         $this->state = $state;
         $this->request = $request;
+        $this->pageSize = $pageSize;
         parent::__construct(
             $context,
             $parameterResolver,
             $nostoCmpHelperData,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $categoryService,
             $searchEngineHelper,
             $logger
@@ -120,7 +129,6 @@ class Toolbar extends AbstractBlock
      *
      * @param MagentoToolbar $subject
      * @return MagentoToolbar
-     * @throws NoSuchEntityException
      */
     public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
@@ -135,9 +143,9 @@ class Toolbar extends AbstractBlock
             );
             return $subject;
         }
-        /* @var Store $store */
-        $store = $this->getStoreManager()->getStore();
-        if ($store instanceof Store && $this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
+        // Current store id value is unavailable
+        $store = $this->getNostoHelperScope()->getStore();
+        if ($this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
             try {
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
@@ -147,7 +155,7 @@ class Toolbar extends AbstractBlock
                 $result = $this->getCmpResult(
                     $this->buildWebFacetService->getFacets(),
                     $this->getCurrentPageNumber()-1,
-                    $subjectCollection->getPageSize()
+                    $this->getPageSize($subjectCollection)
                 );
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -186,6 +194,28 @@ class Toolbar extends AbstractBlock
             $start,
             $limit
         );
+    }
+
+    /**
+     * @param ProductCollection $subjectCollection
+     * @return int
+     */
+    private function getPageSize($subjectCollection)
+    {
+        if ($this->pageSize != -1) {
+            $this->getLogger()->debugWithSource(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                ),
+                [],
+                $this
+            );
+
+            return $this->pageSize;
+        }
+
+        return $subjectCollection->getPageSize();
     }
 
     /**

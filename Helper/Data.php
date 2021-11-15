@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
@@ -93,10 +92,10 @@ class Data extends AbstractHelper
     /**
      * Returns if category sorting is enabled
      *
-     * @param StoreInterface|null $store the store model or null.
+     * @param Store|null $store the store model or null.
      * @return bool the configuration value
      */
-    public function isCategorySortingEnabled(StoreInterface $store = null)
+    public function isCategorySortingEnabled(Store $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_SORTING, $store);
     }
@@ -104,10 +103,10 @@ class Data extends AbstractHelper
     /**
      * Returns if mapping of all categories is enabled
      *
-     * @param StoreInterface|null $store the store model or null.
+     * @param Store|null $store the store model or null.
      * @return bool the configuration value
      */
-    public function isAllCategoriesMapEnabled(StoreInterface $store = null)
+    public function isAllCategoriesMapEnabled(Store $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAPPING, $store);
     }
@@ -115,10 +114,10 @@ class Data extends AbstractHelper
     /**
      * Returns the fallback sorting
      *
-     * @param StoreInterface|null $store the store model or null.
+     * @param Store|null $store the store model or null.
      * @return string
      */
-    public function getFallbackSorting(StoreInterface $store = null)
+    public function getFallbackSorting(Store $store = null)
     {
         return $this->getStoreConfig(self::XML_PATH_FALLBACK_SORTING, $store);
     }
@@ -126,20 +125,20 @@ class Data extends AbstractHelper
     /**
      * Returns max product limit
      *
-     * @param StoreInterface|null $store the store model or null.
+     * @param Store|null $store the store model or null.
      * @return integer
      */
-    public function getMaxProductLimit(StoreInterface $store = null)
+    public function getMaxProductLimit(Store $store = null)
     {
         return (int)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAX_PRODUCT_LIMIT, $store);
     }
 
     /**
      * @param string $path
-     * @param StoreInterface|Store|null $store
+     * @param Store|null $store
      * @return mixed|null
      */
-    public function getStoreConfig($path, StoreInterface $store = null)
+    public function getStoreConfig($path, Store $store = null)
     {
         if ($store === null) {
             $store = $this->nostoHelperScope->getStore(true);

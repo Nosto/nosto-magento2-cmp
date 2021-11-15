@@ -44,15 +44,14 @@ use Magento\CatalogSearch\Model\Layer\Filter\Category;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
 
@@ -65,9 +64,6 @@ class BuildWebFacetService
     /** @var State */
     private $state;
 
-    /** @var StoreManagerInterface */
-    private $storeManager;
-
     /** @var NostoCategoryBuilder */
     private $nostoCategoryBuilder;
 
@@ -77,33 +73,36 @@ class BuildWebFacetService
     /** @var NostoHelperData */
     private $nostoHelperData;
 
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
+
     /** @var string */
     private $brand;
 
     /**
      * BuildWebFacetService constructor.
-     * @param StoreManagerInterface $storeManager
      * @param NostoCategoryBuilder $nostoCategoryBuilder
      * @param CategoryRepository $categoryRepository
      * @param NostoHelperData $nostoHelperData
+     * @param NostoHelperScope $nostoHelperScope
      * @param State $state
      * @param Logger $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         NostoCategoryBuilder $nostoCategoryBuilder,
         CategoryRepository $categoryRepository,
         NostoHelperData $nostoHelperData,
+        NostoHelperScope $nostoHelperScope,
         State $state,
         Logger $logger
     ) {
         $this->loggerTraitConstruct(
             $logger
         );
-        $this->storeManager = $storeManager;
         $this->nostoCategoryBuilder = $nostoCategoryBuilder;
         $this->categoryRepository = $categoryRepository;
         $this->nostoHelperData = $nostoHelperData;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->state = $state;
     }
 
@@ -133,22 +132,22 @@ class BuildWebFacetService
     private function populateFilters(IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
-        /** @var Store $store */
-        $store = $this->storeManager->getStore();
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
         foreach ($filters as $filter) {
             $this->mapIncludeFilter($store, $includeFilters, $filter);
         }
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param IncludeFilters $includeFilters
      * @param Item $item
      * @throws FacetValueException
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    private function mapIncludeFilter(StoreInterface $store, IncludeFilters &$includeFilters, Item $item)
+    private function mapIncludeFilter(Store $store, IncludeFilters &$includeFilters, Item $item)
     {
         if ($item->getFilter() instanceof Category) {
             $categoryId = $item->getData('value');
@@ -207,12 +206,12 @@ class BuildWebFacetService
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param $categoryId
      * @return string|null
      * @throws NoSuchEntityException
      */
-    private function getCategoryName(StoreInterface $store, $categoryId): ?string
+    private function getCategoryName(Store $store, $categoryId): ?string
     {
         //@phan-suppress-next-next-line PhanTypeMismatchArgument
         $category = $this->categoryRepository->get($categoryId, $store->getId());
@@ -221,13 +220,13 @@ class BuildWebFacetService
 
     /**
      * @param IncludeFilters $includeFilters
-     * @param StoreInterface $store
+     * @param Store $store
      * @param string $name
      * @param string|array $value
      * @throws FacetValueException
      * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
-    private function mapValueToFilter(IncludeFilters &$includeFilters, StoreInterface $store, string $name, $value)
+    private function mapValueToFilter(IncludeFilters &$includeFilters, Store $store, string $name, $value)
     {
         if ($this->brand == null) {
             $this->brand = $this->nostoHelperData->getBrandAttribute($store);
@@ -254,13 +253,13 @@ class BuildWebFacetService
     }
 
     /**
-     * @param StoreInterface $store
+     * @param Store $store
      * @param $name
      * @param $value
      * @return array
      * @throws FacetValueException
      */
-    private function makeArrayFromValue(StoreInterface $store, $name, $value): array
+    private function makeArrayFromValue(Store $store, $name, $value): array
     {
         if (is_string($value) || is_numeric($value)) {
             $value = [$value];

@@ -36,15 +36,15 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Nosto\NostoException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 class GraphQlHandler extends AbstractHandler
@@ -64,8 +64,8 @@ class GraphQlHandler extends AbstractHandler
      * @param BuildGraphQlFacetService $buildFacetService
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
-     * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SessionService $sessionService
@@ -76,8 +76,8 @@ class GraphQlHandler extends AbstractHandler
         BuildGraphQlFacetService $buildFacetService,
         ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
-        StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         SessionService $sessionService,
@@ -87,8 +87,8 @@ class GraphQlHandler extends AbstractHandler
         parent::__construct(
             $parameterResolver,
             $searchEngineHelper,
-            $storeManager,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $cmpHelperData,
             $categoryService,
             $logger
