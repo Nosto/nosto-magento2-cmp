@@ -42,21 +42,22 @@ use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\NostoException;
 use Nosto\Operation\Session\NewSession;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Types\Signup\AccountInterface;
 
 class SessionService
 {
-    /** @var StoreManagerInterface */
-    private $storeManager;
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
 
     /**
      * SessionService constructor.
-     * @param StoreManagerInterface $storeManager
+     * @param NostoHelperScope $nostoHelperScope
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        NostoHelperScope $nostoHelperScope
     ) {
-        $this->storeManager = $storeManager;
+        $this->nostoHelperScope = $nostoHelperScope;
     }
 
     /**
@@ -67,17 +68,14 @@ class SessionService
      */
     public function getNewNostoSession(AccountInterface $nostoAccount)
     {
-        $store = $this->storeManager->getStore();
-        if ($store instanceof Store) {
-            try {
-                $url = $store->getCurrentUrl();
-                $newSession = new NewSession($nostoAccount, $url, true);
-                return $newSession->execute();
-            } catch (NoSuchEntityException | NostoException $e) {
-                throw new SessionCreationException($store);
-            }
+        try {
+            // Current store id value is unavailable
+            $store = $this->nostoHelperScope->getStore();
+            $url = $store->getCurrentUrl();
+            $newSession = new NewSession($nostoAccount, $url, true);
+            return $newSession->execute();
+        } catch (NoSuchEntityException | NostoException $e) {
+            throw new SessionCreationException($store);
         }
-
-        return null;
     }
 }
