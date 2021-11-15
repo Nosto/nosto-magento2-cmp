@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Model\Service\Facet;
 
-use Exception;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -109,7 +108,7 @@ class BuildWebFacetService
     {
         $includeFilters = new IncludeFilters();
         $excludeFilters = new ExcludeFilters();
-        $this->populateFilters($includeFilters);
+        $this->populateFilters($store, $includeFilters);
         return new Facet($includeFilters, $excludeFilters);
     }
 

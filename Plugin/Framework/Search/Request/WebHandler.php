@@ -36,8 +36,8 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Magento\Backend\Block\System\Store\Store;
 use Magento\LayeredNavigation\Block\Navigation\State;
+use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;

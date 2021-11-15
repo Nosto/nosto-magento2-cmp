@@ -37,6 +37,7 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Exception;
+use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -143,7 +144,7 @@ abstract class AbstractHandler
 
         try {
             $productIds = $this->getCmpProductIds(
-                $this->getFilters($requestData),
+                $this->getFilters($store, $requestData),
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
@@ -153,7 +154,7 @@ abstract class AbstractHandler
         }
         if (empty($productIds)) {
             $this->debugWithSource('Nosto did not return products for the request', [], $requestData);
-            $this->setFallbackSort($requestData);
+            $this->setFallbackSort($store, $requestData);
             return;
         }
         $this->applyCmpFilter(
@@ -183,13 +184,12 @@ abstract class AbstractHandler
     /**
      * Set fallback sort order
      *
+     * @param Store $store
      * @param array $requestData
      */
-    private function setFallbackSort(array &$requestData)
+    private function setFallbackSort(Store $store, array &$requestData)
     {
         try {
-            // Current store id value is unavailable
-            $store = $this->nostoHelperScope->getStore();
             $sorting = $this->cmpHelperData->getFallbackSorting($store);
             $requestData['sort'][] = [
                 'field' => $sorting,

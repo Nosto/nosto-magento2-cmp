@@ -152,7 +152,7 @@ class Toolbar extends AbstractBlock
                     throw new NotInstanceOfProductCollectionException($store);
                 }
                 $result = $this->getCmpResult(
-                    $this->buildWebFacetService->getFacets(),
+                    $this->buildWebFacetService->getFacets($store),
                     $this->getCurrentPageNumber()-1,
                     $this->getPageSize($subjectCollection)
                 );

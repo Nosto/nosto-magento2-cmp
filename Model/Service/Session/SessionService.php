@@ -37,10 +37,10 @@
 namespace Nosto\Cmp\Model\Service\Session;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\NostoException;
 use Nosto\Operation\Session\NewSession;
-use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Types\Signup\AccountInterface;
 
 class SessionService
