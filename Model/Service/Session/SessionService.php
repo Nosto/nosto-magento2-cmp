@@ -37,8 +37,6 @@
 namespace Nosto\Cmp\Model\Service\Session;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\NostoException;
 use Nosto\Operation\Session\NewSession;
