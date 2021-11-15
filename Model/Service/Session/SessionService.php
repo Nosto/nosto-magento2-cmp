@@ -61,14 +61,13 @@ class SessionService
     /**
      * @param AccountInterface $nostoAccount
      * @return mixed|null
-     * @throws NoSuchEntityException
      * @throws SessionCreationException
      */
     public function getNewNostoSession(AccountInterface $nostoAccount)
     {
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
         try {
-            // Current store id value is unavailable
-            $store = $this->nostoHelperScope->getStore();
             $url = $store->getCurrentUrl();
             $newSession = new NewSession($nostoAccount, $url, true);
             return $newSession->execute();

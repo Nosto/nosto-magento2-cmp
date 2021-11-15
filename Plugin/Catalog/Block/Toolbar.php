@@ -42,7 +42,6 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Exception\MissingTokenException;
@@ -181,7 +180,6 @@ class Toolbar extends AbstractBlock
      * @param $start
      * @param $limit
      * @return CategoryMerchandisingResult|null
-     * @throws NoSuchEntityException
      * @throws NostoException
      * @throws MissingAccountException
      * @throws MissingTokenException

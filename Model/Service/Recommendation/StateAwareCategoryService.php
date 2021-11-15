@@ -175,7 +175,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @inheritDoc
      * @throws MissingAccountException
      * @throws MissingTokenException
-     * @throws NoSuchEntityException
      * @throws SessionCreationException
      */
     public function getPersonalisationResult(
