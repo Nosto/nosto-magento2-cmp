@@ -53,7 +53,6 @@ use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
-use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as NostoCategoryBuilder;
 
@@ -75,9 +74,6 @@ class BuildWebFacetService
     /** @var NostoHelperData */
     private $nostoHelperData;
 
-    /** @var NostoHelperScope */
-    private $nostoHelperScope;
-
     /** @var string */
     private $brand;
 
@@ -86,7 +82,6 @@ class BuildWebFacetService
      * @param NostoCategoryBuilder $nostoCategoryBuilder
      * @param CategoryRepository $categoryRepository
      * @param NostoHelperData $nostoHelperData
-     * @param NostoHelperScope $nostoHelperScope
      * @param State $state
      * @param Logger $logger
      */
@@ -94,7 +89,6 @@ class BuildWebFacetService
         NostoCategoryBuilder $nostoCategoryBuilder,
         CategoryRepository $categoryRepository,
         NostoHelperData $nostoHelperData,
-        NostoHelperScope $nostoHelperScope,
         State $state,
         Logger $logger
     ) {
@@ -104,14 +98,14 @@ class BuildWebFacetService
         $this->nostoCategoryBuilder = $nostoCategoryBuilder;
         $this->categoryRepository = $categoryRepository;
         $this->nostoHelperData = $nostoHelperData;
-        $this->nostoHelperScope = $nostoHelperScope;
         $this->state = $state;
     }
 
     /**
+     * @param Store $store
      * @return Facet
      */
-    public function getFacets(): Facet
+    public function getFacets(Store $store): Facet
     {
         $includeFilters = new IncludeFilters();
         $excludeFilters = new ExcludeFilters();
@@ -120,13 +114,13 @@ class BuildWebFacetService
     }
 
     /**
+     * @param Store $store
      * @param IncludeFilters $includeFilters
      */
-    private function populateFilters(IncludeFilters &$includeFilters): void
+    private function populateFilters(Store $store, IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
-        // Current store id value is unavailable
-        $store = $this->nostoHelperScope->getStore();
+
         foreach ($filters as $filter) {
             try {
                 $this->mapIncludeFilter($store, $includeFilters, $filter);

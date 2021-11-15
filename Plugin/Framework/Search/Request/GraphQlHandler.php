@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Magento\Backend\Block\System\Store\Store;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
@@ -139,7 +140,8 @@ class GraphQlHandler extends AbstractHandler
     /**
      * @inheritDoc
      */
-    public function getFilters(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function getFilters(Store $store, array $requestData)
     {
         return $this->buildFacetService->getFacets($requestData);
     }

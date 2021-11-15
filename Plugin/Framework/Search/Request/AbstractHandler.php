@@ -137,6 +137,10 @@ abstract class AbstractHandler
         $this->debugWithSource('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
         $this->preFetchOps($requestData);
         Search::cleanUpCmpSort($requestData);
+
+        $storeId = $this->getStoreId($requestData);
+        $store = $this->nostoHelperScope->getStore($storeId);
+
         try {
             $productIds = $this->getCmpProductIds(
                 $this->getFilters($requestData),
@@ -170,10 +174,11 @@ abstract class AbstractHandler
     abstract protected function preFetchOps(array $requestData);
 
     /**
+     * @param Store $store
      * @param array $requestData
      * @return FacetInterface
      */
-    abstract protected function getFilters(array $requestData);
+    abstract protected function getFilters(Store $store, array $requestData);
 
     /**
      * Set fallback sort order
@@ -237,6 +242,18 @@ abstract class AbstractHandler
             'value' => $productIds
         ];
         $requestData['size'] = $this->categoryService->getLastUsedLimit();
+    }
+
+    /**
+     * @param array $requestData
+     * @return int|null
+     */
+    private function getStoreId(array $requestData)
+    {
+        if (isset($requestData["dimensions"]["scope"]["value"])) {
+            return (int) $requestData["dimensions"]["scope"]["value"];
+        }
+        return null;
     }
 
     /**

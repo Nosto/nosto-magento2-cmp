@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Magento\Backend\Block\System\Store\Store;
 use Magento\LayeredNavigation\Block\Navigation\State;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
@@ -146,8 +147,8 @@ class WebHandler extends AbstractHandler
      * @inheritDoc
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function getFilters(array $requestData)
+    public function getFilters(Store $store, array $requestData)
     {
-        return $this->buildWebFacetService->getFacets();
+        return $this->buildWebFacetService->getFacets($store);
     }
 }
