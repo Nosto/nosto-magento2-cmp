@@ -185,9 +185,18 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
+
+        // Can happen when CM is implemented through GraphQL
         if ($nostoAccount === null) {
             throw new MissingAccountException($store);
         }
+
+        // Can happen when CM is implemented through GraphQL
+        $featureAccess = new FeatureAccess($nostoAccount);
+        if (!$featureAccess->canUseGraphql()) {
+            throw new MissingTokenException($store, Token::API_GRAPHQL);
+        }
+
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
         if ($customerId === null) {
@@ -196,10 +205,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         $limit = $this->sanitizeLimit($store, $limit);
         $category = $this->getCurrentCategoryString($store);
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new MissingTokenException($store, Token::API_GRAPHQL);
-        }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $this->lastResult = ServerTiming::getInstance()->instrument(

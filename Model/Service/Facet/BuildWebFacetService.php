@@ -209,7 +209,7 @@ class BuildWebFacetService
                 $value = (bool)$item->getData('value');
                 break;
             default:
-                throw new NotSupportedFrontedInputException($frontendInput);
+                throw new NotSupportedFrontedInputException($store, $frontendInput);
         }
 
         return $value;
@@ -223,12 +223,13 @@ class BuildWebFacetService
     private function getCategoryName(Store $store, $categoryId): ?string
     {
         try {
+            //@phan-suppress-next-next-line PhanTypeMismatchArgument
             $category = $this->categoryRepository->get($categoryId, $store->getId());
+            return $this->nostoCategoryBuilder->getCategory($category, $store);
         } catch (NoSuchEntityException $e) {
             $this->exception($e);
-            return;
+            return null;
         }
-        return $this->nostoCategoryBuilder->getCategory($category, $store);
     }
 
     /**
