@@ -150,6 +150,7 @@ abstract class AbstractHandler
             );
         } catch (Exception $e) {
             $this->exception($e);
+            $this->setFallbackSort($store, $requestData);
             return;
         }
         if (empty($productIds)) {
