@@ -189,15 +189,11 @@ abstract class AbstractHandler
      */
     private function setFallbackSort(Store $store, array &$requestData)
     {
-        try {
-            $sorting = $this->cmpHelperData->getFallbackSorting($store);
-            $requestData['sort'][] = [
-                'field' => $sorting,
-                'direction' => 'ASC'
-            ];
-        } catch (Exception $e) {
-            $this->exception($e);
-        }
+        $sorting = $this->cmpHelperData->getFallbackSorting($store);
+        $requestData['sort'][] = [
+            'field' => $sorting,
+            'direction' => 'ASC'
+        ];
     }
 
     /**
