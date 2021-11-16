@@ -74,6 +74,11 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search">
         <plugin name="nosto_graphql_products_query" type="Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search"/>
     </type>
+    <type name="Nosto\Cmp\Plugin\Catalog\Block\Toolbar">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
     <type name="Nosto\Cmp\Plugin\Framework\Search\Request\WebHandler">
         <arguments>
             <argument name="pageSize" xsi:type="number">-1</argument>

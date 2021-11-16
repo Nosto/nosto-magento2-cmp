@@ -37,19 +37,17 @@
 
 namespace Nosto\Cmp\Block;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface;
 use Nosto\Tagging\Logger\Logger;
 
 class CategoryMapping extends Template
 {
 
-    /** @var StoreManagerInterface */
-    private $storeManager;
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
 
     /** @var CategoryMappingServiceInterface  */
     private $mappingService;
@@ -58,39 +56,31 @@ class CategoryMapping extends Template
     private $logger;
 
     /**
-     * @param StoreManagerInterface $storeManager
+     * CategoryMapping constructor.
+     * @param NostoHelperScope $nostoHelperScope
      * @param CategoryMappingServiceInterface $mappingService
      * @param Context $context
      * @param Logger $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
+        NostoHelperScope $nostoHelperScope,
         CategoryMappingServiceInterface $mappingService,
         Context $context,
         Logger $logger
     ) {
         parent::__construct($context);
-        $this->storeManager = $storeManager;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->mappingService = $mappingService;
         $this->logger = $logger;
     }
 
     /**
-     * @return false|string
+     * @return string
      */
     public function getCategoryMap()
     {
-
-        $mapping = '';
-        try {
-            $store = $this->storeManager->getStore();
-            if ($store instanceof Store) {
-                $mapping = $this->mappingService->getCategoryMapping($store);
-            }
-        } catch (NoSuchEntityException $e) {
-            $this->logger->exception($e);
-        }
-
-        return $mapping;
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
+        return $this->mappingService->getCategoryMapping($store);
     }
 }

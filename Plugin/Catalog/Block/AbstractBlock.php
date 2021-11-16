@@ -39,8 +39,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Framework\View\Element\Template;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
@@ -48,6 +47,7 @@ use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractBlock extends Template
@@ -62,14 +62,14 @@ abstract class AbstractBlock extends Template
     /** @var ParameterResolverInterface */
     private $paramResolver;
 
-    /**  @var StoreManagerInterface */
-    private $storeManager;
-
     /** @var NostoCmpHelperData */
     private $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
     private $nostoHelperAccount;
+
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
 
     /** @var Logger */
     private $logger;
@@ -88,6 +88,7 @@ abstract class AbstractBlock extends Template
      * @param ParameterResolverInterface $parameterResolver
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SearchEngine $searchEngineHelper
      * @param Logger $logger
@@ -97,6 +98,7 @@ abstract class AbstractBlock extends Template
         ParameterResolverInterface $parameterResolver,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         StateAwareCategoryServiceInterface $categoryService,
         SearchEngine $searchEngineHelper,
         Logger $logger
@@ -105,8 +107,8 @@ abstract class AbstractBlock extends Template
         $this->paramResolver = $parameterResolver;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
+        $this->nostoHelperScope = $nostoHelperScope;
         $this->logger = $logger;
-        $this->storeManager = $context->getStoreManager();
         $this->searchEngineHelper = $searchEngineHelper;
         parent::__construct($context);
     }
@@ -115,16 +117,15 @@ abstract class AbstractBlock extends Template
      * Checks if current sorting order is Nosto's `Personalized for you`
      * and category sorting is enabled
      *
-     * @param StoreInterface $store
+     * @param Store $store
      * @return bool
      */
-    public function isCmpCurrentSortOrder(StoreInterface $store)
+    public function isCmpCurrentSortOrder(Store $store)
     {
         $currentOrder = $this->getCurrentOrder();
         if ($currentOrder === null) {
             return false;
         }
-        /** @noinspection PhpParamsInspection */
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             //@phan-suppress-next-line PhanTypeMismatchArgument
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
@@ -274,11 +275,11 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @return StoreManagerInterface
+     * @return NostoHelperScope
      */
-    public function getStoreManager(): StoreManagerInterface
+    public function getNostoHelperScope(): NostoHelperScope
     {
-        return $this->storeManager;
+        return $this->nostoHelperScope;
     }
 
     /**

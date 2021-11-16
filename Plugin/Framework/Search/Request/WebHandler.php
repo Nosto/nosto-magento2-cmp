@@ -37,13 +37,13 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Model\StoreManagerInterface;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 class WebHandler extends AbstractHandler
@@ -62,8 +62,8 @@ class WebHandler extends AbstractHandler
      * WebHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
-     * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param BuildWebFacetService $buildWebFacetService
@@ -74,8 +74,8 @@ class WebHandler extends AbstractHandler
     public function __construct(
         ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
-        StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         BuildWebFacetService $buildWebFacetService,
@@ -86,8 +86,8 @@ class WebHandler extends AbstractHandler
         parent::__construct(
             $parameterResolver,
             $searchEngineHelper,
-            $storeManager,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $cmpHelperData,
             $categoryService,
             $logger
