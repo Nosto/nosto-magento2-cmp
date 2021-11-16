@@ -91,9 +91,6 @@
     </type>
     <type name="Nosto\Cmp\Model\Service\Category\CachingCategoryMappingService">
         <arguments>
-            <argument name="categoryService" xsi:type="object">
-                Nosto\Cmp\Model\Service\Category\CategoryMappingService
-            </argument>
             <argument name="ttl" xsi:type="number">604800</argument>
         </arguments>
     </type>
