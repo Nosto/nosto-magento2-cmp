@@ -33,7 +33,8 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "https://repo.magento.com/"
+      "url": "https://repo.magento.com/",
+      "exclude": ["nosto/*"]
     }
   ],
   "autoload": {

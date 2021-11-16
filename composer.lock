@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6bb3de82435a1b9206e7b65e49b33f3",
+    "content-hash": "4352244133fbef6195a03f52ee17e4ce",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -2619,16 +2619,22 @@
         },
         {
             "name": "nosto/module-nostotagging",
-            "version": "5.2.3",
+            "version": "5.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nosto/nosto-magento2.git",
+                "reference": "032553a91efe670b0f75cf9f2bb37d5adf452b67"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/nosto/module-nostotagging/nosto-module-nostotagging-5.2.3.0.zip",
-                "shasum": "56c2539d443c6c83d4da6ad74d0866276363dc61"
+                "url": "https://api.github.com/repos/Nosto/nosto-magento2/zipball/032553a91efe670b0f75cf9f2bb37d5adf452b67",
+                "reference": "032553a91efe670b0f75cf9f2bb37d5adf452b67",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "magento/framework": ">=101.0.6|~102.0",
-                "nosto/php-sdk": ">=5.3.6",
+                "nosto/php-sdk": ">=5.3.7",
                 "php": ">=7.0.0"
             },
             "require-dev": {
@@ -2671,10 +2677,16 @@
                     "registration.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0"
             ],
-            "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey."
+            "description": "Increase your conversion rate and average order value by delivering your customers personalized product recommendations throughout their shopping journey.",
+            "support": {
+                "issues": "https://github.com/Nosto/nosto-magento2/issues",
+                "source": "https://github.com/Nosto/nosto-magento2/tree/5.3.1"
+            },
+            "time": "2021-10-21T12:17:42+00:00"
         },
         {
             "name": "nosto/php-sdk",
@@ -8993,5 +9005,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
