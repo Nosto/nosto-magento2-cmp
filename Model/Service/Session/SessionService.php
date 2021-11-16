@@ -58,7 +58,7 @@ class SessionService
             $newSession = new NewSession($nostoAccount, $url, true);
             return $newSession->execute();
         } catch (NoSuchEntityException | NostoException $e) {
-            throw new SessionCreationException($store);
+            throw new SessionCreationException($store, $e);
         }
     }
 }

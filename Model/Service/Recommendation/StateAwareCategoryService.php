@@ -231,7 +231,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             ]
         );
 
-        $this->debugWithSource(
+        $this->trace(
             'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
             [
                 $this->lastResult->getResultSet()->count(),
@@ -297,7 +297,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             || $limit > $maxLimit
             || $limit === 0
         ) {
-            $this->debugWithSource('Limit set to %d - original limit was %s', [$maxLimit, $limit]);
+            $this->trace('Limit set to %d - original limit was %s', [$maxLimit, $limit]);
             return $maxLimit;
         }
         return $limit;

@@ -139,7 +139,6 @@ class BuildWebFacetService
      */
     private function mapIncludeFilter(Store $store, IncludeFilters &$includeFilters, Item $item)
     {
-        $filter = null;
         try {
             $filter = $item->getFilter();
         } catch (LocalizedException $e) {
@@ -151,7 +150,7 @@ class BuildWebFacetService
             $categoryId = $item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);
             if ($category == null) {
-                $this->debugWithSource('Could not get category from filters');
+                $this->trace('Could not get category from filters');
                 return;
             }
             $this->mapValueToFilter($includeFilters, $store, 'category', $category);
@@ -181,6 +180,7 @@ class BuildWebFacetService
 
     /**
      * @param Item $item
+     * @param Store $store
      * @param string $frontendInput
      * @return array|bool|mixed|string|null
      * @throws NotSupportedFrontedInputException

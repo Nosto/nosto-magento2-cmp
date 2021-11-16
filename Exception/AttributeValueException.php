@@ -44,6 +44,7 @@ class AttributeValueException extends CmpException
 
     /**
      * @param Store $store
+     * @param string $frontendInput
      */
     public function __construct(Store $store, string $frontendInput)
     {

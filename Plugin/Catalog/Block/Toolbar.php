@@ -133,7 +133,7 @@ class Toolbar extends AbstractBlock
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
-            $this->debugWithSource(
+            $this->trace(
                 'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
                 [
                     (string) self::$isProcessed,
@@ -163,9 +163,9 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->debugWithSource($subjectCollection->getSelectSql()->__toString());
+                    $this->trace($subjectCollection->getSelectSql()->__toString());
                 } else {
-                    $this->debugWithSource('Got an empty CMP result from Nosto for category');
+                    $this->trace('Got an empty CMP result from Nosto for category');
                 }
             } catch (Exception $e) {
                 $this->exception($e);
@@ -201,7 +201,7 @@ class Toolbar extends AbstractBlock
     private function getPageSize($subjectCollection)
     {
         if ($this->pageSize != -1) {
-            $this->debugWithSource(
+            $this->trace(
                 sprintf(
                     'Using DI value (%s) for the page size',
                     $this->pageSize

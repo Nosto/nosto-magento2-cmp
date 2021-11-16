@@ -60,7 +60,7 @@ trait LoggerTrait
      * @param array $context
      * @return bool
      */
-    public function debugWithSource($message, array $args = [], array $context = [])
+    public function trace($message, array $args = [], array $context = [])
     {
         if ($args) {
             $finalMessage = vsprintf($message, $args);

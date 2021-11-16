@@ -90,7 +90,7 @@ class RequestCleaner
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
         if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
-            $this->debugWithSource('Nosto sorting not used or not found from request data', [], $requestData);
+            $this->trace('Nosto sorting not used or not found from request data', [], $requestData);
             //remove nosto_personalised in case it's a search page
             Search::cleanUpCmpSort($requestData);
             return $requestData;
@@ -101,7 +101,7 @@ class RequestCleaner
         } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {
             $this->graphqlHandler->handle($requestData);
         } else {
-            $this->debugWithSource('Could not find %s from ES request data', [self::KEY_BIND_TO_QUERY]);
+            $this->trace('Could not find %s from ES request data', [self::KEY_BIND_TO_QUERY]);
         }
 
         return $requestData;

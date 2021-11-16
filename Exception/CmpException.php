@@ -38,16 +38,19 @@ namespace Nosto\Cmp\Exception;
 use Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
+use Throwable;
 
 abstract class CmpException extends Exception
 {
     /**
      * @param Store $store
      * @param $message
+     * @param int $code
+     * @param Throwable|null $previous
      */
-    public function __construct(Store $store, $message)
+    public function __construct(Store $store, $message, $code = 0, Throwable $previous = null)
     {
-        parent::__construct($this->buildMessage($store, $message));
+        parent::__construct($this->buildMessage($store, $message), $code, $previous);
     }
 
     /**

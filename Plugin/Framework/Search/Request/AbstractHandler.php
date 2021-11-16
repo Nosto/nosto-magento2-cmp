@@ -135,7 +135,7 @@ abstract class AbstractHandler
      */
     public function handle(array &$requestData)
     {
-        $this->debugWithSource('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
+        $this->trace('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
         $this->preFetchOps($requestData);
         Search::cleanUpCmpSort($requestData);
 
@@ -153,7 +153,7 @@ abstract class AbstractHandler
             return;
         }
         if (empty($productIds)) {
-            $this->debugWithSource('Nosto did not return products for the request', [], $requestData);
+            $this->trace('Nosto did not return products for the request', [], $requestData);
             $this->setFallbackSort($store, $requestData);
             return;
         }
