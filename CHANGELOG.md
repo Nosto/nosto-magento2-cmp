@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.3.0-rc8
+* Fix filter's price format issue
+
 ### 3.3.0-rc7
 * Fix search page bug for MySQL and ElasticSearch
 * Introduce possibility to define page size through DI
