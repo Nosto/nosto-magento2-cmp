@@ -110,6 +110,7 @@ class GraphQlHandler extends AbstractHandler
     /**
      * @inheritDoc
      */
+    //ToDo add explanation why
     protected function preFetchOps(array $requestData)
     {
         $this->categoryService->setCategoryInRegistry(

@@ -51,6 +51,7 @@ class CategoryMerchandising
      * @param CategoryMerchandisingResult $result
      * @return array
      */
+    //ToDo this method goes into SDK
     public static function parseProductIds(CategoryMerchandisingResult $result)
     {
         $productIds = [];

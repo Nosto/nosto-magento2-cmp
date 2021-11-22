@@ -148,16 +148,19 @@ abstract class AbstractHandler
                 $this->parsePageNumber($requestData),
                 $this->parseLimit($requestData)
             );
+            //In case CM category is not configured in nosto
+            if ($productIds == null || empty($productIds)) {
+                $this->trace('Nosto did not return products for the request', [], $requestData);
+                $this->setFallbackSort($store, $requestData);
+                return;
+            }
+            //ToDo split exception hanlding
         } catch (Exception $e) {
             $this->exception($e);
             $this->setFallbackSort($store, $requestData);
             return;
         }
-        if (empty($productIds)) {
-            $this->trace('Nosto did not return products for the request', [], $requestData);
-            $this->setFallbackSort($store, $requestData);
-            return;
-        }
+        //Add CM sorting to the RequestData array
         $this->applyCmpFilter(
             $requestData,
             $productIds
@@ -256,6 +259,7 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return int
+     * //ToDo check why it's here
      * @throws Exception
      */
     abstract public function parsePageNumber(array $requestData);
@@ -263,6 +267,7 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return int
+     * //ToDo check why it's here
      * @throws Exception
      */
     abstract public function parseLimit(array $requestData);
@@ -281,6 +286,7 @@ abstract class AbstractHandler
             $pageNum,
             $limit
         );
+        //Todo why return null
         return $res ? CategoryMerchandising::parseProductIds($res) : null;
     }
 

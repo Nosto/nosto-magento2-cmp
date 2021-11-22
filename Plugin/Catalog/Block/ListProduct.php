@@ -56,6 +56,7 @@ class ListProduct
         $this->categoryService = $categoryService;
     }
 
+    //ToDo add comment on why inteceptor is being used
     /**
      * @param MagentoListProduct $listProduct
      * @param Collection $collection
@@ -70,8 +71,10 @@ class ListProduct
         if ($categoryMerchandisingResult == null) {
             return $collection;
         }
+        //ToDo add block into an else sentence
         $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
         $collection->each(static function ($product) use ($cmpProductIds) {
+            //ToDo why is strict being used
             /* @var Product $product */
             if (in_array($product->getId(), $cmpProductIds, true)) {
                 $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
