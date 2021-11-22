@@ -113,10 +113,9 @@ class CategoryMappingService implements CategoryMappingServiceInterface
 
             /** @var Category $category $item */
             foreach ($categories->getItems() as $category) {
-                $hashedCategoryString = $this->hashCategoryString(strtolower(
-                    $this->categoryBuilder->getCategory($category, $store)
-                ));
-                if ($hashedCategoryString) {
+                $categoryName = $this->categoryBuilder->getCategory($category, $store);
+                if ($categoryName) {
+                    $hashedCategoryString = $this->hashCategoryString(strtolower($categoryName));
                     $categoriesArray[$hashedCategoryString] = $category->getUrl();
                 }
             }
