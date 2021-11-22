@@ -54,6 +54,6 @@ class JsonEncodeFailureException extends CmpException
      */
     private static function buildMessage(array $payload)
     {
-        sprintf(self::DEFAULT_MESSAGE, implode(" ", $payload));
+        return sprintf(self::DEFAULT_MESSAGE, implode(" ", $payload));
     }
 }
