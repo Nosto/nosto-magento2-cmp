@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Model\Service\Category;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\JsonEncodeFailureException;
 
 interface CategoryMappingServiceInterface
 {
@@ -47,6 +48,7 @@ interface CategoryMappingServiceInterface
      * @param Store $store
      * @return string
      * @throws LocalizedException
+     * @throws JsonEncodeFailureException
      */
     public function getCategoryMapping(Store $store): string;
 }

@@ -37,10 +37,12 @@
 
 namespace Nosto\Cmp\Block;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Cmp\Exception\JsonEncodeFailureException;
 use Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 class CategoryMapping extends Template
@@ -76,6 +78,8 @@ class CategoryMapping extends Template
 
     /**
      * @return string
+     * @throws LocalizedException
+     * @throws JsonEncodeFailureException
      */
     public function getCategoryMap()
     {
