@@ -34,11 +34,64 @@
  *
  */
 
-use Nosto\Cmp\Block\CategoryMapping;
+namespace Nosto\Cmp\Model\Service\Category;
 
-/**  @var CategoryMapping $block */
-?>
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\JsonEncodeFailureException;
+use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
 
-<script id="nosto-cmp-mapping" type="application/json"><?= /* @noEscape */
-    /** @noinspection PhpUnhandledExceptionInspection */
-    $block->getCategoryMap(); ?></script>
+class CachingCategoryMappingService implements CategoryMappingServiceInterface
+{
+
+    /** @var CategoryCache */
+    private $cache;
+
+    /** @var CategoryMappingServiceInterface */
+    private $categoryMappingService;
+
+    /** @var int */
+    private $ttl;
+
+    /**
+     * @param CategoryCache $cache
+     * @param CategoryMappingServiceInterface $categoryMappingService
+     * @param $ttl
+     */
+    public function __construct(
+        CategoryCache $cache,
+        CategoryMappingServiceInterface $categoryMappingService,
+        $ttl
+    ) {
+        $this->cache = $cache;
+        $this->categoryMappingService = $categoryMappingService;
+        $this->ttl = $ttl;
+    }
+
+    /**
+     * @param Store $store
+     * @return string
+     * @throws LocalizedException
+     * @throws JsonEncodeFailureException
+     */
+    public function getCategoryMapping(Store $store): string
+    {
+        $cacheKey = $this->getCMCacheKey($store);
+        $mapping = $this->cache->load($cacheKey);
+        if ($mapping) {
+            return $mapping;
+        }
+        $mapping = $this->categoryMappingService->getCategoryMapping($store);
+        $this->cache->save($mapping, $cacheKey, [], $this->ttl);
+        return $mapping;
+    }
+
+    /**
+     * @param Store $store
+     * @return string
+     */
+    private function getCMCacheKey(Store $store)
+    {
+        return $this->cache->getTag() . '_' . $store->getStoreId();
+    }
+}

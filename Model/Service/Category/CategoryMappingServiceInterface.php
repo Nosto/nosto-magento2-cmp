@@ -34,11 +34,21 @@
  *
  */
 
-use Nosto\Cmp\Block\CategoryMapping;
+namespace Nosto\Cmp\Model\Service\Category;
 
-/**  @var CategoryMapping $block */
-?>
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\JsonEncodeFailureException;
 
-<script id="nosto-cmp-mapping" type="application/json"><?= /* @noEscape */
-    /** @noinspection PhpUnhandledExceptionInspection */
-    $block->getCategoryMap(); ?></script>
+interface CategoryMappingServiceInterface
+{
+
+    /**
+     * Return JSON format of the mapping
+     * @param Store $store
+     * @return string
+     * @throws LocalizedException
+     * @throws JsonEncodeFailureException
+     */
+    public function getCategoryMapping(Store $store): string;
+}
