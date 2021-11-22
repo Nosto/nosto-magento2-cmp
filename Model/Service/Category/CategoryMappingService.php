@@ -43,6 +43,7 @@ use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Magento\Framework\Exception\LocalizedException;
 
 class CategoryMappingService implements CategoryMappingServiceInterface
 {
@@ -80,6 +81,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
     /**
      * @param Store $store
      * @return string
+     * @throws LocalizedException
      */
     public function getCategoryMapping(Store $store): string
     {
@@ -94,6 +96,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
     /**
      * @param Store $store
      * @return array
+     * @throws LocalizedException
      * @suppress PhanTypeMismatchArgument
      */
     private function getMagentoCategories(Store $store)
@@ -101,26 +104,22 @@ class CategoryMappingService implements CategoryMappingServiceInterface
 
         $categoriesArray = [];
 
-        try {
-            $categories = $this->collectionFactory->create()
-                ->addAttributeToSelect('*')
-                ->addIsActiveFilter()
-                ->setStore($store);
+        $categories = $this->collectionFactory->create()
+            ->addAttributeToSelect('*')
+            ->addIsActiveFilter()
+            ->setStore($store);
 
-            if (!$this->nostoHelperData->isAllCategoriesMapEnabled($store)) {
-                $categories->addAttributeToFilter('include_in_menu', ['eq' => 1]);
-            }
+        if (!$this->nostoHelperData->isAllCategoriesMapEnabled($store)) {
+            $categories->addAttributeToFilter('include_in_menu', ['eq' => 1]);
+        }
 
-            /** @var Category $category $item */
-            foreach ($categories->getItems() as $category) {
-                $categoryName = $this->categoryBuilder->getCategory($category, $store);
-                if ($categoryName) {
-                    $hashedCategoryString = $this->hashCategoryString(strtolower($categoryName));
-                    $categoriesArray[$hashedCategoryString] = $category->getUrl();
-                }
+        /** @var Category $category $item */
+        foreach ($categories->getItems() as $category) {
+            $categoryName = $this->categoryBuilder->getCategory($category, $store);
+            if ($categoryName) {
+                $hashedCategoryString = $this->hashCategoryString(strtolower($categoryName));
+                $categoriesArray[$hashedCategoryString] = $category->getUrl();
             }
-        } catch (Exception $e) {
-            $this->logger->exception($e);
         }
 
         return $categoriesArray;

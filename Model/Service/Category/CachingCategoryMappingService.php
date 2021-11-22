@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Model\Service\Category;
 
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
+use Magento\Framework\Exception\LocalizedException;
 
 class CachingCategoryMappingService implements CategoryMappingServiceInterface
 {
@@ -69,6 +70,7 @@ class CachingCategoryMappingService implements CategoryMappingServiceInterface
     /**
      * @param Store $store
      * @return string
+     * @throws LocalizedException
      */
     public function getCategoryMapping(Store $store): string
     {
