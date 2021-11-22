@@ -51,6 +51,7 @@ class JsonEncodeFailureException extends CmpException
 
     /**
      * @param array $payload
+     * @return string
      */
     private static function buildMessage(array $payload)
     {
