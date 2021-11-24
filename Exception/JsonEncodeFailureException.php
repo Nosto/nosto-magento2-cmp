@@ -34,11 +34,27 @@
  *
  */
 
-use Nosto\Cmp\Block\CategoryMapping;
+namespace Nosto\Cmp\Exception;
 
-/**  @var CategoryMapping $block */
-?>
+class JsonEncodeFailureException extends CmpException
+{
+    const DEFAULT_MESSAGE = 'Failed to encode the payload to JSON %s';
 
-<script id="nosto-cmp-mapping" type="application/json"><?= /* @noEscape */
-    /** @noinspection PhpUnhandledExceptionInspection */
-    $block->getCategoryMap(); ?></script>
+    /**
+     * @param array $payload
+     */
+    public function __construct(array $payload)
+    {
+        $message = self::buildMessage($payload);
+        parent::__construct($message);
+    }
+
+    /**
+     * @param array $payload
+     * @return string
+     */
+    private static function buildMessage(array $payload)
+    {
+        return sprintf(self::DEFAULT_MESSAGE, implode(" ", $payload));
+    }
+}

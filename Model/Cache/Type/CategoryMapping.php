@@ -34,11 +34,31 @@
  *
  */
 
-use Nosto\Cmp\Block\CategoryMapping;
+namespace Nosto\Cmp\Model\Cache\Type;
 
-/**  @var CategoryMapping $block */
-?>
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 
-<script id="nosto-cmp-mapping" type="application/json"><?= /* @noEscape */
-    /** @noinspection PhpUnhandledExceptionInspection */
-    $block->getCategoryMap(); ?></script>
+class CategoryMapping extends TagScope
+{
+    /**
+     * Cache type code unique among all cache types
+     */
+    const TYPE_IDENTIFIER = 'nosto_category_mapping_cache';
+
+    /**
+     * The tag name that limits the cache cleaning scope within a particular tag
+     */
+    const CACHE_TAG = 'NOSTO_CATEGORY_MAPPING';
+
+    /**
+     * @param FrontendPool $cacheFrontendPool
+     */
+    public function __construct(FrontendPool $cacheFrontendPool)
+    {
+        parent::__construct(
+            $cacheFrontendPool->get(self::TYPE_IDENTIFIER),
+            self::CACHE_TAG
+        );
+    }
+}

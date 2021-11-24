@@ -241,7 +241,7 @@ class BuildWebFacetService
 
         switch (strtolower($name)) {
             case 'price':
-                $includeFilters->setPrice(min($value), max($value));
+                $includeFilters->setPrice((float) min($value), (float) max($value));
                 break;
             case 'new':
                 $value = (bool) $value ? 'yes' : 'no';

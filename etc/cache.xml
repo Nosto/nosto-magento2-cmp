@@ -34,12 +34,9 @@
   ~
   -->
 
-<!--suppress XmlUnboundNsPrefix -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Nosto_Cmp" setup_version="3.3.0-rc8">
-        <sequence>
-            <module name="Nosto_Tagging"/>
-        </sequence>
-    </module>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="nosto_category_mapping_cache" translate="label,description" instance="Nosto\Cmp\Model\Cache\Type\CategoryMapping">
+        <label>Nosto Category Mapping Cache</label>
+        <description>Cache for Nosto category mapping data</description>
+    </type>
 </config>
