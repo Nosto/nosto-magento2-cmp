@@ -118,10 +118,12 @@ class WebHandler extends AbstractHandler
     }
 
     /**
+     * @param Store $store
      * @param array $requestData
      * @return int
      */
-    public function parseLimit(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function parseLimit(Store $store, array $requestData)
     {
         if ($this->pageSize != -1) {
             $this->trace('Using DI value (%s) for the page size', [$this->pageSize]);
@@ -132,9 +134,12 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param Store $store
+     * @param array $requestData
+     * @return int
      */
-    public function parsePageNumber(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function parsePageNumber(Store $store, array $requestData)
     {
         $from = $requestData[self::KEY_RESULTS_FROM];
         if ($from < 1) {

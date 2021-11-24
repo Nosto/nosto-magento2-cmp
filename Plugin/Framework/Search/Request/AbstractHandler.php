@@ -85,14 +85,14 @@ abstract class AbstractHandler
     private $accountHelper;
 
     /**
-     * @var NostoHelperScope
-     */
-    private $nostoHelperScope;
-
-    /**
      * @var CmpHelperData
      */
     private $cmpHelperData;
+
+    /**
+     * @var NostoHelperScope
+     */
+    protected $nostoHelperScope;
 
     /**
      * @var StateAwareCategoryServiceInterface
@@ -145,8 +145,8 @@ abstract class AbstractHandler
         try {
             $productIds = $this->getCmpProductIds(
                 $this->getFilters($store, $requestData),
-                $this->parsePageNumber($requestData),
-                $this->parseLimit($requestData)
+                $this->parsePageNumber($store, $requestData),
+                $this->parseLimit($store, $requestData)
             );
             //In case CM category is not configured in nosto
             if ($productIds == null || empty($productIds)) {
@@ -248,7 +248,7 @@ abstract class AbstractHandler
      * @param array $requestData
      * @return int|null
      */
-    private function getStoreId(array $requestData)
+    protected function getStoreId(array $requestData)
     {
         if (isset($requestData["dimensions"]["scope"]["value"])) {
             return (int) $requestData["dimensions"]["scope"]["value"];
@@ -257,17 +257,19 @@ abstract class AbstractHandler
     }
 
     /**
+     * @param Store
      * @param array $requestData
      * @return int
      */
-    abstract public function parsePageNumber(array $requestData);
+    abstract public function parsePageNumber(Store $store, array $requestData);
 
     /**
+     * @param Store
      * @param array $requestData
      * @return int
      * @throws Exception
      */
-    abstract public function parseLimit(array $requestData);
+    abstract public function parseLimit(Store $store, array $requestData);
 
     /**
      * @param FacetInterface $facet

@@ -37,13 +37,13 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\GraphqlModelException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
-use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -122,9 +122,9 @@ class GraphQlHandler extends AbstractHandler
 
     /**
      * @inheritDoc
+     * @throws GraphqlModelException
      */
-    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function parseLimit(array $requestData)
+    public function parseLimit(Store $store, array $requestData)
     {
         if ($this->pageSize != -1) {
             $this->trace('Using DI value (%s) for the page size', [$this->pageSize]);
@@ -136,7 +136,7 @@ class GraphQlHandler extends AbstractHandler
         if ($model != null) {
             return $model->getLimit();
         } else {
-            throw new NostoException('Could not get limit from session');
+            throw new GraphqlModelException($store);
         }
     }
 
@@ -151,16 +151,16 @@ class GraphQlHandler extends AbstractHandler
 
     /**
      * @inheritDoc
+     * @throws GraphqlModelException
      */
-    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function parsePageNumber(array $requestData)
+    public function parsePageNumber(Store $store, array $requestData)
     {
         //Get limit/pageSize from session if session exists
         $model = $this->sessionService->getGraphqlModel();
         if ($model != null) {
             return $model->getCurrentPage() - 1;
         } else {
-            throw new NostoException('Could not get page size from session');
+            throw new GraphqlModelException($store);
         }
     }
 }
