@@ -70,7 +70,6 @@ class SearchResultSorter
             return [$result];
         }
         $sorted = [];
-        //ToDo sort in ES not afterwards
         foreach ($cmpSort as $productId) {
             $document = $this->findDocumentByProductId($result, $productId);
             if ($document) {

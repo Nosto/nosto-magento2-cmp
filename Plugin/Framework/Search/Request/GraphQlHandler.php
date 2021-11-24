@@ -108,9 +108,11 @@ class GraphQlHandler extends AbstractHandler
     }
 
     /**
+     * There's no way in StateAwareCategoryService to get the category
+     * when the request comes from GraphQl
+     *
      * @inheritDoc
      */
-    //ToDo add explanation why
     protected function preFetchOps(array $requestData)
     {
         $this->categoryService->setCategoryInRegistry(

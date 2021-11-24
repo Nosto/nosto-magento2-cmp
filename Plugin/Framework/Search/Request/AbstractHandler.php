@@ -259,15 +259,12 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return int
-     * //ToDo check why it's here
-     * @throws Exception
      */
     abstract public function parsePageNumber(array $requestData);
 
     /**
      * @param array $requestData
      * @return int
-     * //ToDo check why it's here
      * @throws Exception
      */
     abstract public function parseLimit(array $requestData);
@@ -286,7 +283,6 @@ abstract class AbstractHandler
             $pageNum,
             $limit
         );
-        //Todo why return null
         return $res ? CategoryMerchandising::parseProductIds($res) : null;
     }
 
