@@ -41,12 +41,13 @@ class JsonEncodeFailureException extends CmpException
     const DEFAULT_MESSAGE = 'Failed to encode the payload to JSON %s';
 
     /**
+     * @param Store $store
      * @param array $payload
      */
-    public function __construct(array $payload)
+    public function __construct(Store $store, array $payload)
     {
         $message = self::buildMessage($payload);
-        parent::__construct($message);
+        parent::__construct($store, $message);
     }
 
     /**

@@ -91,7 +91,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         if ($mapping) {
             return $mapping;
         } else {
-            throw new JsonEncodeFailureException($array);
+            throw new JsonEncodeFailureException($store, $array);
         }
     }
 
