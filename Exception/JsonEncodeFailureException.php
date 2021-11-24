@@ -36,6 +36,8 @@
 
 namespace Nosto\Cmp\Exception;
 
+use Magento\Store\Model\Store;
+
 class JsonEncodeFailureException extends CmpException
 {
     const DEFAULT_MESSAGE = 'Failed to encode the payload to JSON %s';
