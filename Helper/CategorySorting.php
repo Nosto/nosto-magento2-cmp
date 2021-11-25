@@ -78,6 +78,7 @@ class CategorySorting extends AbstractHelper
     public static function getNostoSortingOptions()
     {
         return [
+            /** @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal */
             self::NOSTO_PERSONALIZED_KEY => __('Relevance')
         ];
     }
