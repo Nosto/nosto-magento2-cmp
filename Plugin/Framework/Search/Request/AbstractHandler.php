@@ -154,7 +154,6 @@ abstract class AbstractHandler
                 $this->setFallbackSort($store, $requestData);
                 return;
             }
-            //ToDo split exception hanlding
         } catch (Exception $e) {
             $this->exception($e);
             $this->setFallbackSort($store, $requestData);
@@ -257,14 +256,14 @@ abstract class AbstractHandler
     }
 
     /**
-     * @param Store
+     * @param Store $store
      * @param array $requestData
      * @return int
      */
     abstract public function parsePageNumber(Store $store, array $requestData);
 
     /**
-     * @param Store
+     * @param Store $store
      * @param array $requestData
      * @return int
      * @throws Exception

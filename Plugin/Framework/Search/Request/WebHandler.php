@@ -145,7 +145,7 @@ class WebHandler extends AbstractHandler
         if ($from < 1) {
             return 0;
         }
-        return (int) ceil($from / $this->parseLimit($requestData));
+        return (int) ceil($from / $this->parseLimit($store, $requestData));
     }
 
     /**
