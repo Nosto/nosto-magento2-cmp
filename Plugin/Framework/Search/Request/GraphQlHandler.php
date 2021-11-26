@@ -124,6 +124,7 @@ class GraphQlHandler extends AbstractHandler
      * @inheritDoc
      * @throws GraphqlModelException
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function parseLimit(Store $store, array $requestData)
     {
         if ($this->pageSize != -1) {
@@ -153,6 +154,7 @@ class GraphQlHandler extends AbstractHandler
      * @inheritDoc
      * @throws GraphqlModelException
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function parsePageNumber(Store $store, array $requestData)
     {
         //Get limit/pageSize from session if session exists
