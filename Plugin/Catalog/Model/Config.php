@@ -126,6 +126,9 @@ class Config
 
             $eavAttribute = $this->attributeFactory->createAttribute(Attribute::class);
             $eavAttribute->setAttributeCode(NostoHelperSorting::NOSTO_PERSONALIZED_KEY);
+            /**
+             * Argument is of type string but array is expected
+             */
             /** @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal */
             $eavAttribute->setDefaultFrontendLabel(__('Relevance'));
 

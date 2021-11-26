@@ -229,6 +229,10 @@ class BuildWebFacetService
      */
     private function getCategoryName(Store $store, $categoryId): ?string
     {
+        /**
+         * Argument is of type \Magento\Catalog\Api\Data\CategoryInterface
+         * but \Magento\Catalog\Model\Category is expected
+         */
         /**  @phan-suppress-next-next-line PhanTypeMismatchArgumentSuperType */
         $category = $this->categoryRepository->get($categoryId, $store->getId());
         return $this->nostoCategoryBuilder->getCategory($category, $store);
