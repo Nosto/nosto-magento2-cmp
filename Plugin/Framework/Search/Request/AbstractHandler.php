@@ -54,7 +54,6 @@ use Nosto\Tagging\Logger\Logger;
 abstract class AbstractHandler
 {
     const KEY_ES_PRODUCT_ID = '_id';
-    const KEY_MYSQL_PRODUCT_ID = 'entity_id';
     const KEY_BIND_TO_QUERY = 'catalog_view_container';
     const KEY_BIND_TO_GRAPHQL = 'graphql_product_search';
     const KEY_CATEGORY_FILTER = 'category_filter';
@@ -219,6 +218,15 @@ abstract class AbstractHandler
     {
         $bindKey = $this->getBindKey();
 
+        if ($this->searchEngineHelper->isMysql()) {
+            $this->logger->debugWithSource(
+                'Nosto does not support Mysql search',
+                $requestData,
+                $this
+            );
+            return;
+        }
+
         $requestData[self::KEY_QUERIES][$bindKey]['queryReference'][] = [
             'clause' => 'must',
             'ref' => RequestUtils::KEY_CMP
@@ -246,7 +254,7 @@ abstract class AbstractHandler
         ];
         $requestData['filters']['prod_ids'] = [
             'name' => 'prod_ids',
-            'field' => $this->getProductIdField(),
+            'field' => self::KEY_ES_PRODUCT_ID,
             'type' => 'termFilter',
             'value' => $productIds
         ];
@@ -292,20 +300,6 @@ abstract class AbstractHandler
         } catch (Exception $e) {
             $this->logger->exception($e);
             return null;
-        }
-    }
-
-    /**
-     * Return the product id field
-     *
-     * @return string
-     */
-    private function getProductIdField()
-    {
-        if ($this->searchEngineHelper->isMysql()) {
-            return self::KEY_MYSQL_PRODUCT_ID;
-        } else {
-            return self::KEY_ES_PRODUCT_ID;
         }
     }
 

@@ -37,13 +37,10 @@
 namespace Nosto\Cmp\Plugin\Catalog\Block;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
-use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
@@ -52,9 +49,6 @@ use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractBlock extends Template
 {
-
-    /** @var SearchEngine */
-    protected $searchEngineHelper;
 
     /** @var int */
     private $lastPageNumber;
@@ -90,7 +84,6 @@ abstract class AbstractBlock extends Template
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param SearchEngine $searchEngineHelper
      * @param Logger $logger
      */
     public function __construct(
@@ -100,7 +93,6 @@ abstract class AbstractBlock extends Template
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         StateAwareCategoryServiceInterface $categoryService,
-        SearchEngine $searchEngineHelper,
         Logger $logger
     ) {
         $this->categoryService = $categoryService;
@@ -109,7 +101,6 @@ abstract class AbstractBlock extends Template
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
         $this->logger = $logger;
-        $this->searchEngineHelper = $searchEngineHelper;
         parent::__construct($context);
     }
 
@@ -173,69 +164,6 @@ abstract class AbstractBlock extends Template
             return $this->getCategoryService()->getLastResult()->getTotalPrimaryCount();
         }
         return null;
-    }
-
-    /**
-     * Return order number of first product of the page
-     *
-     * @param MagentoToolbar|MagentoPager $block
-     * @param $result
-     * @return float|int
-     */
-    public function afterGetFirstNum($block, $result)
-    {
-        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
-            $pageSize = $block->getCollection()->getPageSize();
-            $currentPage = $this->getCurrentPageNumber();
-            return $pageSize * ($currentPage - 1) + 1;
-        }
-        return $result;
-    }
-
-    /**
-     * Return order number of last product of the page
-     *
-     * @param MagentoToolbar|MagentoPager $block
-     * @param $result
-     * @return float|int
-     */
-    public function afterGetLastNum($block, $result)
-    {
-        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
-            $pageSize = $block->getCollection()->getPageSize();
-            $currentPage = $this->getCurrentPageNumber();
-            $totalResultOfPage = $block->getCollection()->getSize();
-            return $pageSize * ($currentPage - 1) + $totalResultOfPage;
-        }
-        return $result;
-    }
-
-    /**
-     * @param MagentoToolbar|MagentoPager $block
-     * @param $result
-     * @return int
-     * @noinspection PhpUnusedParameterInspection
-     */
-    public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    {
-        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
-            return $this->getTotalProducts();
-        }
-        return $result;
-    }
-
-    /**
-     * @param MagentoToolbar|MagentoPager $block
-     * @param $result
-     * @return int
-     * @noinspection PhpUnusedParameterInspection
-     */
-    public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    {
-        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
-            return $this->getLastPageNumber();
-        }
-        return $result;
     }
 
     /**

@@ -41,12 +41,6 @@
     <type name="Magento\Catalog\Model\Config">
         <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config" />
     </type>
-    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
-        <plugin name="sortby_extend_default_sort_filters" type="Nosto\Cmp\Plugin\Catalog\Block\Toolbar" />
-    </type>
-    <type name="Magento\Theme\Block\Html\Pager">
-        <plugin name="nosto_cmp_pager" type="Nosto\Cmp\Plugin\Catalog\Block\Pager" />
-    </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
@@ -73,11 +67,6 @@
     </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search">
         <plugin name="nosto_graphql_products_query" type="Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search"/>
-    </type>
-    <type name="Nosto\Cmp\Plugin\Catalog\Block\Toolbar">
-        <arguments>
-            <argument name="pageSize" xsi:type="number">-1</argument>
-        </arguments>
     </type>
     <type name="Nosto\Cmp\Plugin\Framework\Search\Request\WebHandler">
         <arguments>
