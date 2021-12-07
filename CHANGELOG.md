@@ -1,29 +1,14 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
-### 3.3.0-rc8
-* Fix filter's price format issue
-
-### 3.3.0-rc7
+### 3.3.0
+* Fix incorrect products number in filters
+* Add support for subcategory filtering
+* Display general nosto sorting when customer is missing
 * Fix search page bug for MySQL and ElasticSearch
 * Introduce possibility to define page size through DI
-
-### 3.3.0-rc6
+* Fix facet mapping to Nosto's include parameters
 * Fix pagination issue in Elasticsearch
-
-### 3.3.0-rc5 
-* Fix facet mapping to Nosto's include parameters 
-
-### 3.3.0-rc4
-* Display general nosto sorting when customer is missing
-
-### 3.3.0-rc3
-* Add support for subcategory filtering
-
-### 3.3.0-rc2
-* Set total number of products to search result
-
-### 3.3.0-rc1
-* Fix incorrect products number in filters
+* Fix filter's price format issue
 
 ### 3.2.2
 * Add ACL resource for the module
