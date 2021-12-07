@@ -45,6 +45,7 @@ use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Exception\NotSupportedFrontedInputException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
+use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
@@ -154,12 +155,14 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheirtDoc
+     * @param Store $store
+     * @param array $requestData
+     * @return FacetInterface
      * @throws AttributeValueException
      * @throws FacetValueException
-     * @throws NotSupportedFrontedInputException
      * @throws LocalizedException
      * @throws NoSuchEntityException
+     * @throws NotSupportedFrontedInputException
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function getFilters(Store $store, array $requestData)
