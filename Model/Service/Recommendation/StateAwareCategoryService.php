@@ -42,13 +42,17 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
-use Nosto\NostoException;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\Request\Api\Token;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
@@ -61,6 +65,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
+
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /**
      * @var Category
@@ -81,11 +89,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      * @var NostoHelperScope
      */
     private $nostoHelperScope;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
 
     /**
      * @var Registry
@@ -152,12 +155,14 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         ManagerInterface $eventManager,
         SessionService $sessionService
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->cookieManager = $cookieManager;
         $this->categoryService = $categoryService;
         $this->cookieManager = $cookieManager;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
-        $this->logger = $logger;
         $this->registry = $registry;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoCmpHelper = $nostoCmpHelper;
@@ -168,7 +173,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
     /**
      * @inheritDoc
-     * @throws NostoException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
      */
     public function getPersonalisationResult(
         FacetInterface $facets,
@@ -178,21 +185,26 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
+
+        // Can happen when CM is implemented through GraphQL
         if ($nostoAccount === null) {
-            throw new NostoException('Account cannot be null');
+            throw new MissingAccountException($store);
         }
+
+        // Can happen when CM is implemented through GraphQL
+        $featureAccess = new FeatureAccess($nostoAccount);
+        if (!$featureAccess->canUseGraphql()) {
+            throw new MissingTokenException($store, Token::API_GRAPHQL);
+        }
+
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
         if ($customerId === null) {
-            $customerId = $this->nostoSessionService->getNewNostoSession($nostoAccount);
+            $customerId = $this->nostoSessionService->getNewNostoSession($store, $nostoAccount);
         }
 
         $limit = $this->sanitizeLimit($store, $limit);
         $category = $this->getCurrentCategoryString($store);
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new NostoException('Missing Nosto API_APPS token');
-        }
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
         $this->lastResult = ServerTiming::getInstance()->instrument(
@@ -219,17 +231,15 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             ]
         );
 
-        $this->logger->debugWithSource(
-            sprintf(
-                'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+        $this->trace(
+            'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+            [
                 $this->lastResult->getResultSet()->count(),
                 $this->lastResult->getTotalPrimaryCount(),
                 $category,
                 $pageNumber,
                 $limit
-            ),
-            [],
-            $this
+            ]
         );
         return $this->lastResult;
     }
@@ -287,15 +297,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             || $limit > $maxLimit
             || $limit === 0
         ) {
-            $this->logger->debugWithSource(
-                sprintf(
-                    'Limit set to %d - original limit was %s',
-                    $maxLimit,
-                    $limit
-                ),
-                [],
-                $this
-            );
+            $this->trace('Limit set to %d - original limit was %s', [$maxLimit, $limit]);
             return $maxLimit;
         }
         return $limit;

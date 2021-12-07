@@ -36,7 +36,8 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Nosto\Cmp\Exception\CmpException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\GraphqlModelException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
@@ -107,6 +108,9 @@ class GraphQlHandler extends AbstractHandler
     }
 
     /**
+     * There's no way in StateAwareCategoryService to get the category
+     * when the request comes from GraphQl
+     *
      * @inheritDoc
      */
     protected function preFetchOps(array $requestData)
@@ -118,20 +122,13 @@ class GraphQlHandler extends AbstractHandler
 
     /**
      * @inheritDoc
+     * @throws GraphqlModelException
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function parseLimit(array $requestData)
+    public function parseLimit(Store $store, array $requestData)
     {
         if ($this->pageSize != -1) {
-            $this->getLogger()->debugWithSource(
-                sprintf(
-                    'Using DI value (%s) for the page size',
-                    $this->pageSize
-                ),
-                [],
-                $this
-            );
-
+            $this->trace('Using DI value (%s) for the page size', [$this->pageSize]);
             return $this->pageSize;
         }
 
@@ -140,30 +137,32 @@ class GraphQlHandler extends AbstractHandler
         if ($model != null) {
             return $model->getLimit();
         } else {
-            throw new CmpException("Could not get limit from session");
+            throw new GraphqlModelException($store);
         }
     }
 
     /**
      * @inheritDoc
      */
-    public function getFilters(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function getFilters(Store $store, array $requestData)
     {
         return $this->buildFacetService->getFacets($requestData);
     }
 
     /**
      * @inheritDoc
+     * @throws GraphqlModelException
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function parsePageNumber(array $requestData)
+    public function parsePageNumber(Store $store, array $requestData)
     {
         //Get limit/pageSize from session if session exists
         $model = $this->sessionService->getGraphqlModel();
         if ($model != null) {
             return $model->getCurrentPage() - 1;
         } else {
-            throw new CmpException("Could not get page size from session");
+            throw new GraphqlModelException($store);
         }
     }
 }

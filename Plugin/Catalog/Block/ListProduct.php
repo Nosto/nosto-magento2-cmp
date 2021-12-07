@@ -43,6 +43,10 @@ use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 
+/**
+ * This interceptor is used to pass `nosto_cmp` parameter to product urls when they are sorted by Nosto
+ * The parameter is required for attribution in Nosto
+ */
 class ListProduct
 {
     /**
@@ -67,17 +71,16 @@ class ListProduct
         Collection $collection
     ) {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
-        if ($categoryMerchandisingResult == null) {
-            return $collection;
-        }
-        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
-        $collection->each(static function ($product) use ($cmpProductIds) {
-            /* @var Product $product */
-            if (in_array($product->getId(), $cmpProductIds, true)) {
-                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
-            }
-        });
 
+        if ($categoryMerchandisingResult != null) {
+            $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
+            $collection->each(static function ($product) use ($cmpProductIds) {
+                /* @var Product $product */
+                if (in_array($product->getId(), $cmpProductIds)) {
+                    $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
+                }
+            });
+        }
         return $collection;
     }
 }

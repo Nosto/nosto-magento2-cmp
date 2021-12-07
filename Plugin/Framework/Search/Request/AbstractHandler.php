@@ -37,8 +37,8 @@
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Exception;
+use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\CmpException;
-use Nosto\Cmp\Exception\MissingCookieException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -47,6 +47,8 @@ use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -64,15 +66,14 @@ abstract class AbstractHandler
     const KEY_RESULTS_FROM = 'from';
     const KEY_RESULT_SIZE = 'size';
 
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
+
     /**
      * @var ParameterResolverInterface
      */
     private $parameterResolver;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
 
     /**
      * @var SearchEngine
@@ -85,14 +86,14 @@ abstract class AbstractHandler
     private $accountHelper;
 
     /**
-     * @var NostoHelperScope
-     */
-    private $nostoHelperScope;
-
-    /**
      * @var CmpHelperData
      */
     private $cmpHelperData;
+
+    /**
+     * @var NostoHelperScope
+     */
+    protected $nostoHelperScope;
 
     /**
      * @var StateAwareCategoryServiceInterface
@@ -118,8 +119,10 @@ abstract class AbstractHandler
         StateAwareCategoryServiceInterface $categoryService,
         Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->parameterResolver = $parameterResolver;
-        $this->logger = $logger;
         $this->searchEngineHelper = $searchEngineHelper;
         $this->accountHelper = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
@@ -130,38 +133,39 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return void
+     * @noinspection PhpRedundantCatchClauseInspection
      */
     public function handle(array &$requestData)
     {
-        $this->logger->debugWithSource(
-            sprintf(
-                'Using %s as search engine',
-                $this->searchEngineHelper->getCurrentEngine()
-            ),
-            [],
-            $this
-        );
+        $this->trace('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
         $this->preFetchOps($requestData);
         Search::cleanUpCmpSort($requestData);
+
+        $storeId = $this->getStoreId($requestData);
+        $store = $this->nostoHelperScope->getStore($storeId);
+
         try {
             $productIds = $this->getCmpProductIds(
-                $this->getFilters($requestData),
-                $this->parsePageNumber($requestData),
-                $this->parseLimit($requestData)
+                $this->getFilters($store, $requestData),
+                $this->parsePageNumber($store, $requestData),
+                $this->parseLimit($store, $requestData)
             );
+            //In case CM category is not configured in nosto
+            if ($productIds == null || empty($productIds)) {
+                $this->trace('Nosto did not return products for the request', [], $requestData);
+                $this->setFallbackSort($store, $requestData);
+                return;
+            }
         } catch (CmpException $e) {
-            $this->logger->exception($e);
+            $this->exception($e);
+            $this->setFallbackSort($store, $requestData);
+            return;
+        } catch (Exception $e) {
+            $this->exception($e);
+            $this->setFallbackSort($store, $requestData);
             return;
         }
-        if (empty($productIds)) {
-            $this->logger->debugWithSource(
-                'Nosto did not return products for the request',
-                $requestData,
-                $this
-            );
-            $this->setFallbackSort($requestData);
-            return;
-        }
+        //Add CM sorting to the RequestData array
         $this->applyCmpFilter(
             $requestData,
             $productIds
@@ -180,33 +184,25 @@ abstract class AbstractHandler
     abstract protected function preFetchOps(array $requestData);
 
     /**
+     * @param Store $store
      * @param array $requestData
      * @return FacetInterface
      */
-    abstract protected function getFilters(array $requestData);
+    abstract protected function getFilters(Store $store, array $requestData);
 
     /**
      * Set fallback sort order
      *
+     * @param Store $store
      * @param array $requestData
      */
-    private function setFallbackSort(array &$requestData)
+    private function setFallbackSort(Store $store, array &$requestData)
     {
-        try {
-            // Current store id value is unavailable
-            $store = $this->nostoHelperScope->getStore();
-            $sorting = $this->cmpHelperData->getFallbackSorting($store);
-            $requestData['sort'][] = [
-                'field' => $sorting,
-                'direction' => 'ASC'
-            ];
-        } catch (Exception $e) {
-            $this->logger->debugWithSource(
-                sprintf("Could not set fallback sorting. %s", $e->getMessage()),
-                [],
-                $this
-            );
-        }
+        $sorting = $this->cmpHelperData->getFallbackSorting($store);
+        $requestData['sort'][] = [
+            'field' => $sorting,
+            'direction' => 'ASC'
+        ];
     }
 
     /**
@@ -255,44 +251,46 @@ abstract class AbstractHandler
 
     /**
      * @param array $requestData
-     * @return int
-     * @throws CmpException
+     * @return int|null
      */
-    abstract public function parsePageNumber(array $requestData);
+    protected function getStoreId(array $requestData)
+    {
+        if (isset($requestData["dimensions"]["scope"]["value"])) {
+            return (int) $requestData["dimensions"]["scope"]["value"];
+        }
+        return null;
+    }
 
     /**
+     * @param Store $store
      * @param array $requestData
      * @return int
-     * @throws CmpException
      */
-    abstract public function parseLimit(array $requestData);
+    abstract public function parsePageNumber(Store $store, array $requestData);
+
+    /**
+     * @param Store $store
+     * @param array $requestData
+     * @return int
+     * @throws Exception
+     */
+    abstract public function parseLimit(Store $store, array $requestData);
 
     /**
      * @param FacetInterface $facet
      * @param $pageNum
      * @param $limit
      * @return array|null
+     * @throws NostoException
      */
     private function getCmpProductIds(FacetInterface $facet, $pageNum, $limit)
     {
-        try {
-            $res = $this->categoryService->getPersonalisationResult(
-                $facet,
-                $pageNum,
-                $limit
-            );
-            return $res ? CategoryMerchandising::parseProductIds($res) : null;
-        } catch (MissingCookieException $e) {
-            $this->logger->debugWithSource(
-                $e->getMessage(),
-                [],
-                $this
-            );
-            return null;
-        } catch (Exception $e) {
-            $this->logger->exception($e);
-            return null;
-        }
+        $res = $this->categoryService->getPersonalisationResult(
+            $facet,
+            $pageNum,
+            $limit
+        );
+        return $res ? CategoryMerchandising::parseProductIds($res) : null;
     }
 
     /**
@@ -307,13 +305,5 @@ abstract class AbstractHandler
         } else {
             return self::KEY_ES_PRODUCT_ID;
         }
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger(): Logger
-    {
-        return $this->logger;
     }
 }

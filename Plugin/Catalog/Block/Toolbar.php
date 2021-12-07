@@ -43,7 +43,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Nosto\Cmp\Exception\MissingCookieException;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
+use Nosto\Cmp\Exception\NotInstanceOfProductCollectionException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -130,14 +133,12 @@ class Toolbar extends AbstractBlock
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
-            $this->getLogger()->debugWithSource(
-                sprintf(
-                    'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+            $this->trace(
+                'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+                [
                     (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
-                ),
-                [],
-                $this
+                ]
             );
             return $subject;
         }
@@ -148,12 +149,10 @@ class Toolbar extends AbstractBlock
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 if (!$subjectCollection instanceof ProductCollection) {
-                    throw new NostoException(
-                        "Collection is not instanceof ProductCollection"
-                    );
+                    throw new NotInstanceOfProductCollectionException($store);
                 }
                 $result = $this->getCmpResult(
-                    $this->buildWebFacetService->getFacets(),
+                    $this->buildWebFacetService->getFacets($store),
                     $this->getCurrentPageNumber()-1,
                     $this->getPageSize($subjectCollection)
                 );
@@ -164,26 +163,12 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->getLogger()->debugWithSource(
-                        $subjectCollection->getSelectSql()->__toString(),
-                        [],
-                        $this
-                    );
+                    $this->trace($subjectCollection->getSelectSql()->__toString());
                 } else {
-                    $this->getLogger()->debugWithSource(
-                        'Got an empty CMP result from Nosto for category',
-                        [],
-                        $this
-                    );
+                    $this->trace('Got an empty CMP result from Nosto for category');
                 }
-            } catch (MissingCookieException $e) {
-                $this->getLogger()->debugWithSource(
-                    $e->getMessage(),
-                    [],
-                    $this
-                );
             } catch (Exception $e) {
-                $this->getLogger()->exception($e);
+                $this->exception($e);
             }
         }
         self::$isProcessed = true;
@@ -195,8 +180,10 @@ class Toolbar extends AbstractBlock
      * @param $start
      * @param $limit
      * @return CategoryMerchandisingResult|null
-     * @throws MissingCookieException
      * @throws NostoException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
      */
     private function getCmpResult(FacetInterface $facets, $start, $limit)
     {
@@ -214,13 +201,11 @@ class Toolbar extends AbstractBlock
     private function getPageSize($subjectCollection)
     {
         if ($this->pageSize != -1) {
-            $this->getLogger()->debugWithSource(
+            $this->trace(
                 sprintf(
                     'Using DI value (%s) for the page size',
                     $this->pageSize
-                ),
-                [],
-                $this
+                )
             );
 
             return $this->pageSize;
