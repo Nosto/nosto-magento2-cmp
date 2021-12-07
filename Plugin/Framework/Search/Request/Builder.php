@@ -34,54 +34,48 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Request\Builder as MagentoRequestBuilder;
+use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\RequestInterface;
+use Nosto\Cmp\Model\Search\Request as NostoSearchRequest;
+use Nosto\Cmp\Utils\Request as RequestUtils;
 
-class Search
+class Builder
 {
     /**
-     * @param array $requestData
-     * @return bool
+     * @var ObjectManagerInterface
      */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
+    private $objectManager;
 
-    public static function hasCategoryFilter(array $requestData)
+    /**
+     * Builder constructor.
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(ObjectManagerInterface  $objectManager)
     {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
+        $this->objectManager = $objectManager;
     }
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * @param MagentoRequestBuilder $builder
+     * @param RequestInterface $request
+     * @return RequestInterface
+     * @noinspection PhpUnusedParameterInspection
      */
-    public static function findNostoSortingIndex(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterCreate(MagentoRequestBuilder $builder, RequestInterface $request)
     {
-        if (empty($requestData['sort'])) {
-            return null;
+        $query = $request->getQuery();
+        if ($query instanceof BoolExpression && RequestUtils::containsBoolNostoSearchQuery($query)) {
+            /** @var NostoSearchRequest $nostoRequest */
+            return $this->objectManager->create(
+                NostoSearchRequest::class,
+                ["request" => $request]
+            );
         }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    public static function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return $request;
     }
 }

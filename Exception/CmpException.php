@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,16 +29,44 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
-
 namespace Nosto\Cmp\Exception;
 
 use Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+use Throwable;
 
-class CmpException extends Exception
+abstract class CmpException extends Exception
 {
+    /**
+     * @param Store $store
+     * @param $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(Store $store, $message, $code = 0, Throwable $previous = null)
+    {
+        parent::__construct($this->buildMessage($store, $message), $code, $previous);
+    }
 
+    /**
+     * @param Store $store
+     * @param $message
+     * @return string
+     */
+    private function buildMessage(Store $store, $message)
+    {
+        try {
+            $currentUrl = $store->getCurrentUrl();
+        } catch (NoSuchEntityException $e) {
+            $currentUrl = '';
+        }
+
+        $storeId = $store->getId();
+        return sprintf($message . " Store id: %s, Url: %s", $storeId, $currentUrl);
+    }
 }

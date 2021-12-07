@@ -34,57 +34,54 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Filter;
+namespace Nosto\Cmp\Plugin\Framework\Search;
 
-use Nosto\Operation\Recommendation\ExcludeFilters;
-use Nosto\Operation\Recommendation\IncludeFilters;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Search\Search as MagentoSearch;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 
-class GraphQlFilters implements FiltersInterface
+class Search
 {
-    /** @var IncludeFilters */
-    private $includeFilters;
-
-    /** @var ExcludeFilters */
-    private $excludeFilters;
+    /**
+     * @var StateAwareCategoryServiceInterface
+     */
+    private $categoryService;
 
     /**
-     * GraphQlFilters constructor.
-     * @param IncludeFilters $includeFilters
-     * @param ExcludeFilters $excludeFilters
+     * Search constructor.
+     * @param StateAwareCategoryServiceInterface $categoryService
      */
-    public function __construct(IncludeFilters $includeFilters, ExcludeFilters $excludeFilters)
+    public function __construct(StateAwareCategoryServiceInterface $categoryService)
     {
-        $this->includeFilters = $includeFilters;
-        $this->excludeFilters = $excludeFilters;
+        $this->categoryService = $categoryService;
     }
 
     /**
-     * @inheritDoc
+     * @param MagentoSearch $search
+     * @param SearchResultInterface $result
+     * @return SearchResultInterface
+     * @noinspection PhpUnusedParameterInspection
      */
-    public function getIncludeFilters()
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterSearch(MagentoSearch $search, $result)
     {
-        return $this->includeFilters;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getExcludeFilters()
-    {
-        return $this->excludeFilters;
-    }
-
-    /**
-     * @param array $requestData
-     */
-    public function setRequestData(array $requestData)
-    {
-        if (isset($requestData['filters']['price_filter'])) {
-            $priceFilters = $requestData['filters']['price_filter'];
-            $this->includeFilters->setPrice(
-                isset($priceFilters['from']) ? $priceFilters['from'] : null,
-                isset($priceFilters['to']) ? $priceFilters['to'] : null
-            );
+        $count = $this->getCmpTotalCount();
+        if ($count != null) {
+            $result->setTotalCount($count);
         }
+        return $result;
+    }
+
+    /**
+     * Returns the product ids sorted by Nosto
+     * @return int|null
+     */
+    private function getCmpTotalCount()
+    {
+        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        if ($categoryMerchandisingResult !== null) {
+            return $categoryMerchandisingResult->getTotalPrimaryCount();
+        }
+        return null;
     }
 }

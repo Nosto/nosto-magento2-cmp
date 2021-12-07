@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,25 +29,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Model\Filter;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Operation\Recommendation\ExcludeFilters;
-use Nosto\Operation\Recommendation\IncludeFilters;
+use Magento\Store\Model\Store;
 
-interface FiltersInterface
+class MissingTokenException extends CmpException
 {
-    /**
-     * @return IncludeFilters
-     */
-    public function getIncludeFilters();
+    const DEFAULT_MESSAGE = 'Missing Nosto token: %s.';
 
     /**
-     * @return ExcludeFilters
+     * @param Store $store
+     * @param string $token
      */
-    public function getExcludeFilters();
+    public function __construct(Store $store, $token)
+    {
+        parent::__construct($store, sprintf(self::DEFAULT_MESSAGE, $token));
+    }
 }

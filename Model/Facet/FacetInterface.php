@@ -34,26 +34,20 @@
  *
  */
 
-namespace Nosto\Cmp\Logger;
+namespace Nosto\Cmp\Model\Facet;
 
-use Throwable;
+use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 
-interface LoggerInterface
+interface FacetInterface
 {
     /**
-     * Logs a debug level message with given source class info
-     *
-     * @param $message
-     * @param object $sourceClass
-     * @param array $context
-     * @return bool
+     * @return IncludeFilters
      */
-    public function debugCmp($message, $sourceClass, array $context = []);
+    public function getIncludeFilters();
 
     /**
-     * Logs an exception and sends it to New relic if available
-     * @param Throwable $exception
-     * @return bool
+     * @return ExcludeFilters
      */
-    public function exception(Throwable $exception);
+    public function getExcludeFilters();
 }

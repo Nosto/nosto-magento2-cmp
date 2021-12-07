@@ -1,5 +1,15 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.3.0
+* Fix incorrect products number in filters
+* Add support for subcategory filtering
+* Display general nosto sorting when customer is missing
+* Fix search page bug for MySQL and ElasticSearch
+* Introduce possibility to define page size through DI
+* Fix facet mapping to Nosto's include parameters
+* Fix pagination issue in Elasticsearch
+* Fix filter's price format issue
+
 ### 3.2.2
 * Add ACL resource for the module
 

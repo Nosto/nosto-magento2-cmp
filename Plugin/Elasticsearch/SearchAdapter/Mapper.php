@@ -34,54 +34,37 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Plugin\Elasticsearch\SearchAdapter;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as MagentoMapper;
+use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\RequestInterface;
+use Nosto\Cmp\Model\Search\Request as NostoSearchRequest;
 
-class Search
+class Mapper extends MagentoMapper
 {
-    /**
-     * @param array $requestData
-     * @return bool
-     */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
-
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
+    const POST_FILTER = 'post_filter';
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * @param MagentoMapper $mapper
+     * @param array $searchQuery
+     * @param RequestInterface $request
+     * @return array
+     * @noinspection PhpUnusedParameterInspection
      */
-    public static function findNostoSortingIndex(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterBuildQuery(MagentoMapper $mapper, array $searchQuery, RequestInterface  $request)
     {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
+        if ($request instanceof NostoSearchRequest) {
+            $postFilter = $request->getPostFilter();
+            if ($postFilter !== null) {
+                $searchQuery['body'][self::POST_FILTER] = $this->processQuery(
+                    $postFilter,
+                    [],
+                    BoolExpression::QUERY_CONDITION_MUST
+                );
             }
         }
-        return null;
-    }
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    public static function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return $searchQuery;
     }
 }

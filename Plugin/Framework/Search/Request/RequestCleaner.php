@@ -36,10 +36,10 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Exception;
 use Magento\Framework\Search\Request\Cleaner;
-use Nosto\Cmp\Logger\LoggerInterface;
 use Nosto\Cmp\Utils\Search;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\Tagging\Logger\Logger;
 
 class RequestCleaner
 {
@@ -49,30 +49,33 @@ class RequestCleaner
     const KEY_QUERIES = 'queries';
     const KEY_FILTERS = 'filters';
 
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
+
     /** @var GraphQlHandler */
     private $graphqlHandler;
 
     /** @var WebHandler */
     private $webHandler;
 
-    /** @var LoggerInterface  */
-    private $logger;
-
     /**
      * RequestCleaner constructor.
      *
      * @param WebHandler $webHandler
      * @param GraphQlHandler $graphQlHandler
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         WebHandler $webHandler,
         GraphQlHandler $graphQlHandler,
-        LoggerInterface $logger
+        Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->webHandler = $webHandler;
         $this->graphqlHandler = $graphQlHandler;
-        $this->logger = $logger;
     }
 
     /**
@@ -87,38 +90,27 @@ class RequestCleaner
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
         if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
-            $this->logger->debugCmp('Nosto sorting not used or not found from request data', $this, $requestData);
+            $this->trace('Nosto sorting not used or not found from request data', [], $requestData);
+            //remove nosto_personalised in case it's a search page
+            Search::cleanUpCmpSort($requestData);
             return $requestData;
         }
-        try {
 
-            if ($this->containsCatalogViewQueries($requestData)) {
-                $this->webHandler->handle($requestData);
-            } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {
-                $this->graphqlHandler->handle($requestData);
-            } else {
-                $this->logger->debugCmp(
-                    sprintf(
-                        'Could not find %s from ES request data',
-                        self::KEY_BIND_TO_QUERY
-                    ),
-                    $this,
-                    $requestData
-                );
-                return $requestData;
-            }
-        } catch (Exception $e) {
-            $this->logger->debugCmp(
-                'Failed to apply CMP - see exception log(s) for details',
-                $this,
-                $requestData
-            );
-            $this->logger->exception($e);
-        } finally {
-            return $requestData;
+        if ($this->containsCatalogViewQueries($requestData)) {
+            $this->webHandler->handle($requestData);
+        } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {
+            $this->graphqlHandler->handle($requestData);
+        } else {
+            $this->trace('Could not find %s from ES request data', [self::KEY_BIND_TO_QUERY]);
         }
+
+        return $requestData;
     }
 
+    /**
+     * @param array $requestData
+     * @return bool
+     */
     private function containsCatalogViewQueries(array $requestData)
     {
         if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_QUERY])
@@ -128,6 +120,10 @@ class RequestCleaner
         return false;
     }
 
+    /**
+     * @param array $requestData
+     * @return bool
+     */
     private function containsGraphQlProductSearchQueries(array $requestData)
     {
         if (isset($requestData[self::KEY_QUERIES][self::KEY_BIND_TO_GRAPHQL])

@@ -36,60 +36,67 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Exception\CmpException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\GraphqlModelException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\GraphQlFilters;
+use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Tagging\Logger\Logger;
 
 class GraphQlHandler extends AbstractHandler
 {
 
-    /** @var GraphQlFilters */
-    private $filters;
+    /** @var BuildGraphQlFacetService */
+    private $buildFacetService;
 
     /** @var SessionService */
     private $sessionService;
 
+    /** @var int */
+    private $pageSize;
+
     /**
      * GraphQlHandler constructor.
-     * @param GraphQlFilters $filters
+     * @param BuildGraphQlFacetService $buildFacetService
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
-     * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SessionService $sessionService
-     * @param LoggerInterface $logger
+     * @param Logger $logger
+     * @param int $pageSize
      */
     public function __construct(
-        GraphQlFilters $filters,
+        BuildGraphQlFacetService $buildFacetService,
         ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
-        StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         SessionService $sessionService,
-        LoggerInterface $logger
+        Logger $logger,
+        $pageSize
     ) {
         parent::__construct(
             $parameterResolver,
             $searchEngineHelper,
-            $storeManager,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $cmpHelperData,
             $categoryService,
             $logger
         );
-        $this->filters = $filters;
+        $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
+        $this->pageSize = $pageSize;
     }
 
     /**
@@ -101,6 +108,9 @@ class GraphQlHandler extends AbstractHandler
     }
 
     /**
+     * There's no way in StateAwareCategoryService to get the category
+     * when the request comes from GraphQl
+     *
      * @inheritDoc
      */
     protected function preFetchOps(array $requestData)
@@ -108,44 +118,51 @@ class GraphQlHandler extends AbstractHandler
         $this->categoryService->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
-        $this->filters->setRequestData($requestData);
     }
 
     /**
      * @inheritDoc
+     * @throws GraphqlModelException
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function parseLimit(array $requestData)
+    public function parseLimit(Store $store, array $requestData)
     {
+        if ($this->pageSize != -1) {
+            $this->trace('Using DI value (%s) for the page size', [$this->pageSize]);
+            return $this->pageSize;
+        }
+
         //Get limit/pageSize from session if session exists
         $model = $this->sessionService->getGraphqlModel();
         if ($model != null) {
             return $model->getLimit();
         } else {
-            throw new CmpException("Could not get limit from session");
+            throw new GraphqlModelException($store);
         }
     }
 
     /**
      * @inheritDoc
      */
-    public function getFilters()
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function getFilters(Store $store, array $requestData)
     {
-        return $this->filters;
+        return $this->buildFacetService->getFacets($requestData);
     }
 
     /**
      * @inheritDoc
+     * @throws GraphqlModelException
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function parsePageNumber(array $requestData)
+    public function parsePageNumber(Store $store, array $requestData)
     {
         //Get limit/pageSize from session if session exists
         $model = $this->sessionService->getGraphqlModel();
         if ($model != null) {
             return $model->getCurrentPage() - 1;
         } else {
-            throw new CmpException("Could not get page size from session");
+            throw new GraphqlModelException($store);
         }
     }
 }

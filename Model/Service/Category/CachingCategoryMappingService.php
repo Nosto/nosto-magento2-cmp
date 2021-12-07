@@ -34,54 +34,64 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Service\Category;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\JsonEncodeFailureException;
+use Nosto\Cmp\Model\Cache\Type\CategoryMapping as CategoryCache;
 
-class Search
+class CachingCategoryMappingService implements CategoryMappingServiceInterface
 {
-    /**
-     * @param array $requestData
-     * @return bool
-     */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
 
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
+    /** @var CategoryCache */
+    private $cache;
+
+    /** @var CategoryMappingServiceInterface */
+    private $categoryMappingService;
+
+    /** @var int */
+    private $ttl;
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * @param CategoryCache $cache
+     * @param CategoryMappingServiceInterface $categoryMappingService
+     * @param $ttl
      */
-    public static function findNostoSortingIndex(array $requestData)
-    {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
+    public function __construct(
+        CategoryCache $cache,
+        CategoryMappingServiceInterface $categoryMappingService,
+        $ttl
+    ) {
+        $this->cache = $cache;
+        $this->categoryMappingService = $categoryMappingService;
+        $this->ttl = $ttl;
     }
 
     /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
+     * @param Store $store
+     * @return string
+     * @throws LocalizedException
+     * @throws JsonEncodeFailureException
      */
-    public static function cleanUpCmpSort(array &$requestData)
+    public function getCategoryMapping(Store $store): string
     {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        $cacheKey = $this->getCMCacheKey($store);
+        $mapping = $this->cache->load($cacheKey);
+        if ($mapping) {
+            return $mapping;
+        }
+        $mapping = $this->categoryMappingService->getCategoryMapping($store);
+        $this->cache->save($mapping, $cacheKey, [], $this->ttl);
+        return $mapping;
+    }
+
+    /**
+     * @param Store $store
+     * @return string
+     */
+    private function getCMCacheKey(Store $store)
+    {
+        return $this->cache->getTag() . '_' . $store->getStoreId();
     }
 }

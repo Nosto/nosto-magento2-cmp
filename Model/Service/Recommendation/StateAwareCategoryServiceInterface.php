@@ -36,23 +36,21 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
-use Nosto\Cmp\Exception\MissingCookieException;
-use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 interface StateAwareCategoryServiceInterface
 {
     /**
-     * @param FiltersInterface $filters
+     * @param FacetInterface $facet
      * @param int $pageNumber
      * @param int $limit
      * @return CategoryMerchandisingResult|null
-     * @throws MissingCookieException
      * @throws NostoException
      */
     public function getPersonalisationResult(
-        FiltersInterface $filters,
+        FacetInterface $facet,
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult;

@@ -36,52 +36,23 @@
 
 namespace Nosto\Cmp\Utils;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 
-class Search
+class Request
 {
+
+    const KEY_CMP = 'nosto_cmp_id_search';
+
     /**
-     * @param array $requestData
+     * @param BoolExpression $query
      * @return bool
      */
-    public static function isNostoSorting(array $requestData)
+    public static function containsBoolNostoSearchQuery(BoolExpression $query): bool
     {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
-
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
+        if ($query->getMust() !== null &&
+            isset($query->getMust()[self::KEY_CMP])) {
+            return true;
         }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
-
-    /**
-     * @param array $requestData
-     * @return int|string|null
-     */
-    public static function findNostoSortingIndex(array $requestData)
-    {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    public static function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return false;
     }
 }

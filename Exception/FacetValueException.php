@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,28 +29,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Logger;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Tagging\Logger\Logger as NostoLogger;
 
-class Logger extends NostoLogger implements LoggerInterface
+use Magento\Store\Model\Store;
+
+class FacetValueException extends CmpException
 {
+    const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s).';
+
     /**
-     * Logs a debug level message with given source class info
-     *
-     * @param $message
-     * @param object $sourceClass
-     * @param array $context
-     * @return bool
+     * @param Store $store
+     * @param $filterName
+     * @param $filterValue
      */
-    public function debugCmp($message, $sourceClass, array $context = [])
+    public function __construct(Store $store, $filterName, $filterValue)
     {
-        $mergedContext = array_merge(['nosto' => 'cmp'], $context);
-        return $this->debugWithSource($message, $mergedContext, $sourceClass);
+        // @codingStandardsIgnoreStart
+        $type = gettype($filterValue);
+        if ($type == 'object') {
+            $class = get_class($filterValue);
+        } else {
+            $class = 'not an object';
+        }
+        // @codingStandardsIgnoreEnd
+
+        parent::__construct(
+            $store,
+            sprintf(self::DEFAULT_MESSAGE, $filterName, $filterValue, $type, $class)
+        );
     }
 }

@@ -39,26 +39,32 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Framework\View\Element\Template;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
-use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractBlock extends Template
 {
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
+
+    /** @var SearchEngine */
+    protected $searchEngineHelper;
+
     /** @var int */
     private $lastPageNumber;
 
     /** @var ParameterResolverInterface */
     private $paramResolver;
-
-    /**  @var StoreManagerInterface */
-    private $storeManager;
 
     /** @var NostoCmpHelperData */
     private $nostoCmpHelperData;
@@ -66,8 +72,8 @@ abstract class AbstractBlock extends Template
     /** @var NostoHelperAccount */
     private $nostoHelperAccount;
 
-    /** @var LoggerInterface */
-    private $logger;
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
 
     /** @var string */
     public static $currentOrder;
@@ -83,23 +89,30 @@ abstract class AbstractBlock extends Template
      * @param ParameterResolverInterface $parameterResolver
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param LoggerInterface $logger
+     * @param SearchEngine $searchEngineHelper
+     * @param Logger $logger
      */
     public function __construct(
         Context $context,
         ParameterResolverInterface $parameterResolver,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         StateAwareCategoryServiceInterface $categoryService,
-        LoggerInterface $logger
+        SearchEngine $searchEngineHelper,
+        Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->categoryService = $categoryService;
         $this->paramResolver = $parameterResolver;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
-        $this->logger = $logger;
-        $this->storeManager = $context->getStoreManager();
+        $this->nostoHelperScope = $nostoHelperScope;
+        $this->searchEngineHelper = $searchEngineHelper;
         parent::__construct($context);
     }
 
@@ -107,16 +120,15 @@ abstract class AbstractBlock extends Template
      * Checks if current sorting order is Nosto's `Personalized for you`
      * and category sorting is enabled
      *
-     * @param StoreInterface $store
+     * @param Store $store
      * @return bool
      */
-    public function isCmpCurrentSortOrder(StoreInterface $store)
+    public function isCmpCurrentSortOrder(Store $store)
     {
         $currentOrder = $this->getCurrentOrder();
         if ($currentOrder === null) {
             return false;
         }
-        /** @noinspection PhpParamsInspection */
         if ($currentOrder === NostoHelperSorting::NOSTO_PERSONALIZED_KEY
             //@phan-suppress-next-line PhanTypeMismatchArgument
             && $this->nostoHelperAccount->nostoInstalledAndEnabled($store)
@@ -175,7 +187,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetFirstNum($block, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
             return $pageSize * ($currentPage - 1) + 1;
@@ -192,7 +204,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetLastNum($block, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             $pageSize = $block->getCollection()->getPageSize();
             $currentPage = $this->getCurrentPageNumber();
             $totalResultOfPage = $block->getCollection()->getSize();
@@ -209,7 +221,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetTotalNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getTotalProducts();
         }
         return $result;
@@ -223,7 +235,7 @@ abstract class AbstractBlock extends Template
      */
     public function afterGetLastPageNum($block, $result) // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getLastPageNumber();
         }
         return $result;
@@ -266,18 +278,10 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @return StoreManagerInterface
+     * @return NostoHelperScope
      */
-    public function getStoreManager(): StoreManagerInterface
+    public function getNostoHelperScope(): NostoHelperScope
     {
-        return $this->storeManager;
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
+        return $this->nostoHelperScope;
     }
 }

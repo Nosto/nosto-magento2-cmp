@@ -39,9 +39,11 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Backend\Block\Template\Context;
 use Magento\Theme\Block\Html\Pager as MagentoPager;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
-use Nosto\Cmp\Logger\LoggerInterface;
+use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Tagging\Logger\Logger;
 
 /** @noinspection PhpUnused */
 class Pager extends AbstractBlock
@@ -51,24 +53,30 @@ class Pager extends AbstractBlock
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param ParameterResolverInterface $parameterResolver
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param LoggerInterface $logger
+     * @param SearchEngine $searchEngineHelper
+     * @param Logger $logger
      */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         ParameterResolverInterface $parameterResolver,
         StateAwareCategoryServiceInterface $categoryService,
-        LoggerInterface $logger
+        SearchEngine $searchEngineHelper,
+        Logger $logger
     ) {
         parent::__construct(
             $context,
             $parameterResolver,
             $nostoCmpHelperData,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $categoryService,
+            $searchEngineHelper,
             $logger
         );
     }
@@ -86,7 +94,7 @@ class Pager extends AbstractBlock
         $result,
         $param
     ) {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getCurrentPageNumber() === (int)$param;
         }
         return $result;
@@ -104,7 +112,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetFramePages(MagentoPager $pager, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             $start = 0;
             $end = 0;
             $frameLength = $pager->getFrameLength();
@@ -145,7 +153,7 @@ class Pager extends AbstractBlock
         MagentoPager $pager,
         $result
     ) {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getCurrentPageNumber() === 1;
         }
         return $result;
@@ -162,7 +170,7 @@ class Pager extends AbstractBlock
         MagentoPager $pager,
         $result
     ) {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $this->getLastPageNumber() === $this->getCurrentPageNumber();
         }
         return $result;
@@ -176,7 +184,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetNextPageUrl(MagentoPager $pager, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $pager->getPageUrl((string)($this->getCurrentPageNumber() + 1));
         }
         return $result;
@@ -190,7 +198,7 @@ class Pager extends AbstractBlock
      */
     public function afterGetPreviousPageUrl(MagentoPager $pager, $result)
     {
-        if ($this->isCmpTakingOverCatalog()) {
+        if ($this->isCmpTakingOverCatalog() && $this->searchEngineHelper->isMysql()) {
             return $pager->getPageUrl((string)($this->getCurrentPageNumber() - 1));
         }
         return $result;

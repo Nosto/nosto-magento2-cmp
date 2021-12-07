@@ -49,7 +49,6 @@ return [
         'Observer',
         'Plugin',
         'Utils',
-        'Logger',
         'vendor/nosto',
         'vendor/vlucas',
         'vendor/phpseclib',
@@ -70,7 +69,7 @@ return [
       '../../../generated'
     ],
     'suppress_issue_types' => [
-        'PhanParamSignatureMismatch',
+        'PhanParamSignatureMismatch'
     ],
     "color_issue_messages_if_supported" => true,
     'plugins' => [

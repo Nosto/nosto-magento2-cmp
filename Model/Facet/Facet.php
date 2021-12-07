@@ -34,54 +34,44 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Facet;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 
-class Search
+class Facet implements FacetInterface
 {
-    /**
-     * @param array $requestData
-     * @return bool
-     */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
 
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
+    /** @var IncludeFilters */
+    private $includeFilters;
+
+    /** @var ExcludeFilters */
+    private $excludeFilters;
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * Facet constructor.
+     * @param IncludeFilters $includeFilters
+     * @param ExcludeFilters $excludeFilters
      */
-    public static function findNostoSortingIndex(array $requestData)
+    public function __construct(IncludeFilters $includeFilters, ExcludeFilters $excludeFilters)
     {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
+        $this->includeFilters = $includeFilters;
+        $this->excludeFilters = $excludeFilters;
     }
 
     /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
+     * @inheritDoc
      */
-    public static function cleanUpCmpSort(array &$requestData)
+    public function getIncludeFilters()
     {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return $this->includeFilters;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExcludeFilters()
+    {
+        return $this->excludeFilters;
     }
 }

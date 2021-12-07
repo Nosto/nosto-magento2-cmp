@@ -39,62 +39,73 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\AttributeValueException;
+use Nosto\Cmp\Exception\FacetValueException;
+use Nosto\Cmp\Exception\NotSupportedFrontedInputException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Facet\FacetInterface;
+use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Tagging\Logger\Logger;
 
 class WebHandler extends AbstractHandler
 {
 
-    /** @var WebFilters */
-    private $filters;
-
     /** @var State */
     private $state;
+
+    /** @var BuildWebFacetService  */
+    private $buildWebFacetService;
+
+    /** @var int  */
+    private $pageSize;
 
     /**
      * WebHandler constructor.
      * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
-     * @param StoreManagerInterface $storeManager
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
-     * @param WebFilters $filters
+     * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
-     * @param LoggerInterface $logger
+     * @param Logger $logger
+     * @param int $pageSize
      */
     public function __construct(
         ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
-        StoreManagerInterface $storeManager,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
-        WebFilters $filters,
+        BuildWebFacetService $buildWebFacetService,
         State $state,
-        LoggerInterface $logger
+        Logger $logger,
+        $pageSize
     ) {
         parent::__construct(
             $parameterResolver,
             $searchEngineHelper,
-            $storeManager,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $cmpHelperData,
             $categoryService,
             $logger
         );
-        $this->filters = $filters;
-        $this->state  = $state;
+        $this->buildWebFacetService = $buildWebFacetService;
+        $this->state = $state;
+        $this->pageSize = $pageSize;
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     public function getBindKey()
     {
@@ -102,7 +113,8 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param array $requestData
+     * @return null
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     protected function preFetchOps(array $requestData)
@@ -112,40 +124,49 @@ class WebHandler extends AbstractHandler
     }
 
     /**
-     * @inheritDoc
+     * @param Store $store
+     * @param array $requestData
+     * @return int
      */
-    public function parseLimit(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function parseLimit(Store $store, array $requestData)
     {
+        if ($this->pageSize != -1) {
+            $this->trace('Using DI value (%s) for the page size', [$this->pageSize]);
+
+            return $this->pageSize;
+        }
         return (int) $requestData[self::KEY_RESULT_SIZE];
     }
 
     /**
-     * @inheritDoc
+     * @param Store $store
+     * @param array $requestData
+     * @return int
      */
-    public function parsePageNumber(array $requestData)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function parsePageNumber(Store $store, array $requestData)
     {
         $from = $requestData[self::KEY_RESULTS_FROM];
         if ($from < 1) {
             return 0;
         }
-        return (int) ceil($from / $this->parseLimit($requestData));
+        return (int) ceil($from / $this->parseLimit($store, $requestData));
     }
 
     /**
-     * @inheritDoc
-     * @throws NoSuchEntityException
+     * @param Store $store
+     * @param array $requestData
+     * @return FacetInterface
+     * @throws AttributeValueException
+     * @throws FacetValueException
      * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NotSupportedFrontedInputException
      */
-    public function getFilters()
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function getFilters(Store $store, array $requestData)
     {
-        $store = $this->storeManager->getStore();
-        // Build filters
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $this->filters->init($store);
-        $this->filters->buildFromSelectedFilters(
-            $this->state->getActiveFilters()
-        );
-        return $this->filters;
+        return $this->buildWebFacetService->getFacets($store);
     }
 }

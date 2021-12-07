@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,59 +29,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Store\Model\Store;
 
-class Search
+class AttributeValueException extends CmpException
 {
-    /**
-     * @param array $requestData
-     * @return bool
-     */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
-
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
+    const DEFAULT_MESSAGE = 'Cannot build include filter for "%s" attribute.';
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * @param Store $store
+     * @param string $frontendInput
      */
-    public static function findNostoSortingIndex(array $requestData)
+    public function __construct(Store $store, string $frontendInput)
     {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    public static function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        parent::__construct($store, sprintf(self::DEFAULT_MESSAGE, $frontendInput));
     }
 }

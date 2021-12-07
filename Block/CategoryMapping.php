@@ -37,123 +37,54 @@
 
 namespace Nosto\Cmp\Block;
 
-use Exception;
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Nosto\Cmp\Helper\Data as NostoHelperData;
+use Nosto\Cmp\Exception\JsonEncodeFailureException;
+use Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Tagging\Logger\Logger;
 
 class CategoryMapping extends Template
 {
-    /** @var StoreManagerInterface */
-    private $storeManager;
 
-    /** @var CollectionFactory */
-    private $collectionFactory;
+    /** @var NostoHelperScope */
+    private $nostoHelperScope;
 
-    /** @var CategoryBuilder */
-    private $categoryBuilder;
+    /** @var CategoryMappingServiceInterface  */
+    private $mappingService;
 
-    /** @var NostoHelperData */
-    private $nostoHelperData;
-
-    /** @var LoggerInterface */
+    /** @var Logger */
     private $logger;
 
     /**
      * CategoryMapping constructor.
-     * @param StoreManagerInterface $storeManager
-     * @param CollectionFactory $collectionFactory
-     * @param CategoryBuilder $categoryBuilder
-     * @param NostoHelperData $nostoHelperData
+     * @param NostoHelperScope $nostoHelperScope
+     * @param CategoryMappingServiceInterface $mappingService
      * @param Context $context
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        CollectionFactory $collectionFactory,
-        CategoryBuilder $categoryBuilder,
-        NostoHelperData $nostoHelperData,
+        NostoHelperScope $nostoHelperScope,
+        CategoryMappingServiceInterface $mappingService,
         Context $context,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         parent::__construct($context);
-        $this->storeManager = $storeManager;
-        $this->collectionFactory = $collectionFactory;
-        $this->categoryBuilder = $categoryBuilder;
-        $this->nostoHelperData = $nostoHelperData;
+        $this->nostoHelperScope = $nostoHelperScope;
+        $this->mappingService = $mappingService;
         $this->logger = $logger;
     }
 
     /**
-     * @return false|string
+     * @return string
+     * @throws LocalizedException
+     * @throws JsonEncodeFailureException
      */
     public function getCategoryMap()
     {
-
-        $array = [];
-        try {
-            $store = $this->storeManager->getStore();
-            if ($store instanceof Store) {
-                $array = $this->getMagentoCategories($store);
-            }
-        } catch (NoSuchEntityException $e) {
-            $this->logger->exception($e);
-        }
-
-        return json_encode((object)$array, JSON_UNESCAPED_SLASHES);
-    }
-
-    /**
-     * @param Store $store
-     * @return array
-     * @suppress PhanTypeMismatchArgument
-     */
-    private function getMagentoCategories(Store $store)
-    {
-
-        $categoriesArray = [];
-
-        try {
-            $categories = $this->collectionFactory->create()
-                ->addAttributeToSelect('*')
-                ->addIsActiveFilter()
-                ->setStore($store);
-
-            if (!$this->nostoHelperData->isAllCategoriesMapEnabled($store)) {
-                $categories->addAttributeToFilter('include_in_menu', ['eq' => 1]);
-            }
-
-            /** @var Category $category $item */
-            foreach ($categories->getItems() as $category) {
-                $hashedCategoryString = $this->hashCategoryString(strtolower(
-                    $this->categoryBuilder->getCategory($category, $store)
-                ));
-                if ($hashedCategoryString) {
-                    $categoriesArray[$hashedCategoryString] = $category->getUrl();
-                }
-            }
-        } catch (Exception $e) {
-            $this->logger->exception($e);
-        }
-
-        return $categoriesArray;
-    }
-
-    /**
-     * @param String $categoryString
-     * @return string
-     */
-    private function hashCategoryString($categoryString)
-    {
-        $signedInteger = crc32($categoryString);
-        $unsignedInteger = (int)sprintf("%u", $signedInteger);
-        return dechex($unsignedInteger);
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
+        return $this->mappingService->getCategoryMapping($store);
     }
 }

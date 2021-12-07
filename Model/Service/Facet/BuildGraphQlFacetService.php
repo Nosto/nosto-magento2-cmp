@@ -34,11 +34,32 @@
  *
  */
 
-namespace Nosto\Cmp\Exception;
+namespace Nosto\Cmp\Model\Service\Facet;
 
-use Nosto\NostoException;
+use Nosto\Cmp\Model\Facet\Facet;
+use Nosto\Operation\Recommendation\ExcludeFilters;
+use Nosto\Operation\Recommendation\IncludeFilters;
 
-class MissingCookieException extends NostoException
+class BuildGraphQlFacetService
 {
 
+    /**
+     * @param array $requestData
+     * @return Facet
+     */
+    public function getFacets(array $requestData): Facet
+    {
+        $includeFilters = new IncludeFilters();
+        $excludeFilters = new ExcludeFilters();
+
+        if (isset($requestData['filters']['price_filter'])) {
+            $priceFilters = $requestData['filters']['price_filter'];
+            $includeFilters->setPrice(
+                isset($priceFilters['from']) ? $priceFilters['from'] : null,
+                isset($priceFilters['to']) ? $priceFilters['to'] : null
+            );
+        }
+
+        return new Facet($includeFilters, $excludeFilters);
+    }
 }

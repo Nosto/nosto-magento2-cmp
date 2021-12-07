@@ -40,69 +40,85 @@ use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as MagentoToolbar;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\LayeredNavigation\Block\Navigation\State;
-use Magento\Store\Model\Store;
-use Nosto\Cmp\Exception\MissingCookieException;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
+use Nosto\Cmp\Exception\NotInstanceOfProductCollectionException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Logger\LoggerInterface;
-use Nosto\Cmp\Model\Filter\WebFilters;
+use Nosto\Cmp\Model\Facet\FacetInterface;
+use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
+use Nosto\Tagging\Logger\Logger;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
 {
-    /** @var SearchEngine */
-    private $searchEngineHelper;
-
-    /** @var WebFilters */
-    private $filters;
 
     /** @var State */
     private $state;
 
+    /** @var BuildWebFacetService */
+    private $buildWebFacetService;
+
+    /** @var Http */
+    private $request;
+
     private static $isProcessed = false;
+
+    /** @var int */
+    private $pageSize;
 
     /**
      * Toolbar constructor.
      * @param Context $context
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
      * @param StateAwareCategoryService $categoryService
      * @param ParameterResolverInterface $parameterResolver
-     * @param LoggerInterface $logger
+     * @param Http $request
+     * @param Logger $logger
      * @param SearchEngine $searchEngineHelper
-     * @param WebFilters $filters
+     * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
+     * @param int $pageSize
      */
     public function __construct(
         Context $context,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
+        NostoHelperScope $nostoHelperScope,
         StateAwareCategoryService $categoryService,
         ParameterResolverInterface $parameterResolver,
-        LoggerInterface $logger,
+        Http $request,
+        Logger $logger,
         SearchEngine $searchEngineHelper,
-        WebFilters $filters,
-        State $state
+        BuildWebFacetService $buildWebFacetService,
+        State $state,
+        $pageSize
     ) {
-        $this->searchEngineHelper = $searchEngineHelper;
-        $this->filters = $filters;
+        $this->buildWebFacetService = $buildWebFacetService;
         $this->state = $state;
+        $this->request = $request;
+        $this->pageSize = $pageSize;
         parent::__construct(
             $context,
             $parameterResolver,
             $nostoCmpHelperData,
             $nostoHelperAccount,
+            $nostoHelperScope,
             $categoryService,
+            $searchEngineHelper,
             $logger
         );
     }
@@ -112,38 +128,33 @@ class Toolbar extends AbstractBlock
      *
      * @param MagentoToolbar $subject
      * @return MagentoToolbar
-     * @throws NoSuchEntityException
      */
     public function afterSetCollection(// phpcs:ignore EcgM2.Plugins.Plugin.PluginWarning
         MagentoToolbar $subject
     ) {
         if (self::$isProcessed || !$this->searchEngineHelper->isMysql()) {
-            $this->getLogger()->debugCmp(
-                sprintf(
-                    'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+            $this->trace(
+                'Skipping toolbar handling, processed flag is %s, search engine in use "%s"',
+                [
                     (string) self::$isProcessed,
                     $this->searchEngineHelper->getCurrentEngine()
-                ),
-                $this
+                ]
             );
             return $subject;
         }
-        /* @var Store $store */
-        $store = $this->getStoreManager()->getStore();
-        if ($this->isCmpCurrentSortOrder($store)) {
+        // Current store id value is unavailable
+        $store = $this->getNostoHelperScope()->getStore();
+        if ($this->isCmpCurrentSortOrder($store) && $this->isCategoryPage()) {
             try {
                 /* @var ProductCollection $subjectCollection */
                 $subjectCollection = $subject->getCollection();
                 if (!$subjectCollection instanceof ProductCollection) {
-                    throw new NostoException(
-                        "Collection is not instanceof ProductCollection"
-                    );
+                    throw new NotInstanceOfProductCollectionException($store);
                 }
-                //@phan-suppress-next-line PhanTypeMismatchArgument
-                $this->buildFilters($store);
                 $result = $this->getCmpResult(
+                    $this->buildWebFacetService->getFacets($store),
                     $this->getCurrentPageNumber()-1,
-                    $subjectCollection->getPageSize()
+                    $this->getPageSize($subjectCollection)
                 );
                 $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
                 if (!empty($nostoProductIds)
@@ -152,20 +163,12 @@ class Toolbar extends AbstractBlock
                     $nostoProductIds = array_reverse($nostoProductIds);
                     $this->sortByProductIds($subjectCollection, $nostoProductIds);
                     $this->whereInProductIds($subjectCollection, $nostoProductIds);
-                    $this->getLogger()->debugCmp(
-                        $subjectCollection->getSelectSql()->__toString(),
-                        $this
-                    );
+                    $this->trace($subjectCollection->getSelectSql()->__toString());
                 } else {
-                    $this->getLogger()->debugCmp(
-                        'Got an empty CMP result from Nosto for category',
-                        $this
-                    );
+                    $this->trace('Got an empty CMP result from Nosto for category');
                 }
-            } catch (MissingCookieException $e) {
-                $this->getLogger()->debugCmp($e->getMessage(), $this);
             } catch (Exception $e) {
-                $this->getLogger()->exception($e);
+                $this->exception($e);
             }
         }
         self::$isProcessed = true;
@@ -173,40 +176,50 @@ class Toolbar extends AbstractBlock
     }
 
     /**
-     * @param int $start starting from 0
-     * @param int $limit
+     * @param FacetInterface $facets
+     * @param $start
+     * @param $limit
      * @return CategoryMerchandisingResult|null
-     * @throws LocalizedException
-     * @throws MissingCookieException
      * @throws NostoException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
      */
-    private function getCmpResult($start, $limit)
+    private function getCmpResult(FacetInterface $facets, $start, $limit)
     {
         return $this->getCategoryService()->getPersonalisationResult(
-            $this->filters,
+            $facets,
             $start,
             $limit
         );
     }
 
     /**
-     * @param Store $store
-     * @return WebFilters
+     * @param ProductCollection $subjectCollection
+     * @return int
      */
-    private function buildFilters(Store $store)
+    private function getPageSize($subjectCollection)
     {
-        // Build filters
-        //@phan-suppress-next-next-line PhanTypeMismatchArgument
-        /** @noinspection PhpParamsInspection */
-        $this->filters->init($store);
-        try {
-            $this->filters->buildFromSelectedFilters(
-                $this->state->getActiveFilters()
+        if ($this->pageSize != -1) {
+            $this->trace(
+                sprintf(
+                    'Using DI value (%s) for the page size',
+                    $this->pageSize
+                )
             );
-        } catch (LocalizedException $e) {
-            $this->getLogger()->exception($e);
+
+            return $this->pageSize;
         }
-        return $this->filters;
+
+        return $subjectCollection->getPageSize();
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCategoryPage()
+    {
+        return $this->request->getFullActionName() == 'catalog_category_view';
     }
 
     /**

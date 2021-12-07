@@ -34,54 +34,30 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Exception;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Store\Model\Store;
 
-class Search
+class JsonEncodeFailureException extends CmpException
 {
-    /**
-     * @param array $requestData
-     * @return bool
-     */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
+    const DEFAULT_MESSAGE = 'Failed to encode the payload to JSON %s';
 
-    public static function hasCategoryFilter(array $requestData)
+    /**
+     * @param Store $store
+     * @param array $payload
+     */
+    public function __construct(Store $store, array $payload)
     {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
+        $message = $this->buildMessage($payload);
+        parent::__construct($store, $message);
     }
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * @param array $payload
+     * @return string
      */
-    public static function findNostoSortingIndex(array $requestData)
+    private function buildMessage(array $payload)
     {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    public static function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return sprintf(self::DEFAULT_MESSAGE, implode(" ", $payload));
     }
 }

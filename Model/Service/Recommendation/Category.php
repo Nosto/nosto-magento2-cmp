@@ -37,7 +37,8 @@
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
 use Magento\Framework\Event\ManagerInterface;
-use Nosto\Cmp\Model\Filter\FiltersInterface;
+use Nosto\Cmp\Helper\Data as CmHelperData;
+use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
@@ -45,8 +46,10 @@ use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
+use Nosto\Request\Http\HttpRequest;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Service\FeatureAccess;
+use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class Category
 {
@@ -56,47 +59,74 @@ class Category
     private $eventManager;
 
     /**
+     * @var CmHelperData
+     */
+    private $cmHelperData;
+
+    /**
+     * @var NostoHelperData
+     */
+    private $nostoHelperData;
+
+    /**
+     * @var NostoHelperScope
+     */
+    private $nostoHelperScope;
+
+    /**
      * @param ManagerInterface $eventManager
+     * @param CmHelperData $cmHelperData
+     * @param NostoHelperData $nostoHelperData
+     * @param NostoHelperScope $nostoHelperScope
      */
     public function __construct(
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        CmHelperData $cmHelperData,
+        NostoHelperData $nostoHelperData,
+        NostoHelperScope $nostoHelperScope
     ) {
         $this->eventManager = $eventManager;
+        $this->cmHelperData = $cmHelperData;
+        $this->nostoHelperData = $nostoHelperData;
+        $this->nostoHelperScope = $nostoHelperScope;
     }
 
     /**
      * @param NostoAccount $nostoAccount
-     * @param FiltersInterface $filters
+     * @param FacetInterface $facets
      * @param $nostoCustomerId
      * @param $category
      * @param int $pageNumber
      * @param int $limit
      * @param bool $previewMode
      * @return CategoryMerchandisingResult
-     * @throws NostoException
      * @throws AbstractHttpException
      * @throws HttpResponseException
+     * @throws NostoException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
-        FiltersInterface $filters,
+        FacetInterface $facets,
         $nostoCustomerId,
         $category,
         $pageNumber,
         $limit,
         $previewMode = false
     ) {
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new NostoException('Missing Nosto API_APPS token');
-        }
+
+        HttpRequest::buildUserAgent(
+            'Magento',
+            $this->nostoHelperData->getPlatformVersion(),
+            "CMP_" . $this->cmHelperData->getModuleVersion()
+        );
+
         $categoryMerchandising = new BatchedCategoryMerchandising(
             $nostoAccount,
             $nostoCustomerId,
             $category,
             $pageNumber,
-            $filters->getIncludeFilters(),
-            $filters->getExcludeFilters(),
+            $facets->getIncludeFilters(),
+            $facets->getExcludeFilters(),
             '',
             AbstractGraphQLOperation::IDENTIFIER_BY_CID,
             $previewMode,

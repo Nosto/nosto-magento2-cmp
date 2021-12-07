@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2021, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,59 +29,58 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Nosto Solutions Ltd <contact@nosto.com>
- * @copyright 2020 Nosto Solutions Ltd
+ * @copyright 2021 Nosto Solutions Ltd
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Utils\Traits;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Nosto\Tagging\Logger\Logger;
+use Throwable;
 
-class Search
+trait LoggerTrait
 {
+    /** @var Logger */
+    protected $logger;
+
     /**
-     * @param array $requestData
+     * LoggerTrait constructor.
+     * @param Logger $logger
+     */
+    public function __construct(
+        Logger $logger
+    ) {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @param $message
+     * @param array $args
+     * @param array $context
      * @return bool
      */
-    public static function isNostoSorting(array $requestData)
+    public function trace($message, array $args = [], array $context = [])
     {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
+        if ($args) {
+            $finalMessage = vsprintf($message, $args);
+        } else {
+            $finalMessage = $message;
+        }
 
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
-
-    /**
-     * @param array $requestData
-     * @return int|string|null
-     */
-    public static function findNostoSortingIndex(array $requestData)
-    {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
+        return $this->logger->debugWithSource(
+            $finalMessage,
+            $context,
+            $this
+        );
     }
 
     /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
+     * @param Throwable $exception
+     * @return bool
      */
-    public static function cleanUpCmpSort(array &$requestData)
+    public function exception(Throwable $exception)
     {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        return $this->logger->exception($exception);
     }
 }

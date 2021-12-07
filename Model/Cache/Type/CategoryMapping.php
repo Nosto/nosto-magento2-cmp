@@ -34,54 +34,31 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Cache\Type;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 
-class Search
+class CategoryMapping extends TagScope
 {
     /**
-     * @param array $requestData
-     * @return bool
+     * Cache type code unique among all cache types
      */
-    public static function isNostoSorting(array $requestData)
-    {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
-
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
-        }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
+    const TYPE_IDENTIFIER = 'nosto_category_mapping_cache';
 
     /**
-     * @param array $requestData
-     * @return int|string|null
+     * The tag name that limits the cache cleaning scope within a particular tag
      */
-    public static function findNostoSortingIndex(array $requestData)
-    {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
-    }
+    const CACHE_TAG = 'NOSTO_CATEGORY_MAPPING';
 
     /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
+     * @param FrontendPool $cacheFrontendPool
      */
-    public static function cleanUpCmpSort(array &$requestData)
+    public function __construct(FrontendPool $cacheFrontendPool)
     {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
+        parent::__construct(
+            $cacheFrontendPool->get(self::TYPE_IDENTIFIER),
+            self::CACHE_TAG
+        );
     }
 }

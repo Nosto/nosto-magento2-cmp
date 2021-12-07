@@ -37,7 +37,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface" type="Nosto\Cmp\Plugin\Catalog\Block\DefaultParameterResolver"/>
     <preference for="Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface" type="Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService"/>
-    <preference for="Nosto\Cmp\Logger\LoggerInterface" type="Nosto\Cmp\Logger\Logger"/>
+    <preference for="Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface" type="Nosto\Cmp\Model\Service\Category\CachingCategoryMappingService"/>
     <type name="Magento\Catalog\Model\Config">
         <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config" />
     </type>
@@ -50,8 +50,20 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="get_product_url_nosto" type="Nosto\Cmp\Plugin\Catalog\Model\Product" />
     </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper">
+        <plugin name="nosto_elasticsearch_searchadapter_mapper" type="Nosto\Cmp\Plugin\Elasticsearch\SearchAdapter\Mapper" />
+    </type>
+    <type name="Magento\Framework\Search\Request\Builder">
+        <plugin name="nosto_framework_search_builder" type="Nosto\Cmp\Plugin\Framework\Search\Request\Builder" />
+    </type>
     <type name="Magento\Framework\Search\Request\Cleaner">
         <plugin name="nosto_search_results_cleaner" type="Nosto\Cmp\Plugin\Framework\Search\Request\RequestCleaner"/>
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Search">
+        <plugin name="" type="Nosto\Cmp\Plugin\Framework\Search\Search"/>
     </type>
     <type name="Magento\Framework\Api\Search\SearchResult">
         <plugin name="nosto_search_result_sort" type="Nosto\Cmp\Plugin\Api\Search\SearchResultSorter"/>
@@ -61,5 +73,28 @@
     </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search">
         <plugin name="nosto_graphql_products_query" type="Nosto\Cmp\Plugin\CatalogGraphQl\Products\Query\Search"/>
+    </type>
+    <type name="Nosto\Cmp\Plugin\Catalog\Block\Toolbar">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Plugin\Framework\Search\Request\WebHandler">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Plugin\Framework\Search\Request\GraphQlHandler">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Model\Service\Category\CachingCategoryMappingService">
+        <arguments>
+            <argument name="categoryMappingService" xsi:type="object">
+                Nosto\Cmp\Model\Service\Category\CategoryMappingService
+            </argument>
+            <argument name="ttl" xsi:type="number">604800</argument>
+        </arguments>
     </type>
 </config>

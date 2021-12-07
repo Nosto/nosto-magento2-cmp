@@ -34,54 +34,31 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Service\Session;
 
-use Nosto\Cmp\Helper\CategorySorting;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\SessionCreationException;
+use Nosto\NostoException;
+use Nosto\Operation\Session\NewSession;
+use Nosto\Types\Signup\AccountInterface;
 
-class Search
+class SessionService
 {
     /**
-     * @param array $requestData
-     * @return bool
+     * @param Store $store
+     * @param AccountInterface $nostoAccount
+     * @return mixed|null
+     * @throws SessionCreationException
      */
-    public static function isNostoSorting(array $requestData)
+    public function getNewNostoSession(Store $store, AccountInterface $nostoAccount)
     {
-        return self::findNostoSortingIndex($requestData) !== null;
-    }
-
-    public static function hasCategoryFilter(array $requestData)
-    {
-        if (empty($requestData['filters'])) {
-            return false;
+        try {
+            $url = $store->getCurrentUrl();
+            $newSession = new NewSession($nostoAccount, $url, true);
+            return $newSession->execute();
+        } catch (NoSuchEntityException | NostoException $e) {
+            throw new SessionCreationException($store, $e);
         }
-        return array_key_exists('category_filter', $requestData['filters']);
-    }
-
-    /**
-     * @param array $requestData
-     * @return int|string|null
-     */
-    public static function findNostoSortingIndex(array $requestData)
-    {
-        if (empty($requestData['sort'])) {
-            return null;
-        }
-        $sorting = $requestData['sort'];
-        foreach ($sorting as $index => $sort) {
-            if (!empty($sort['field']) && $sort['field'] === CategorySorting::NOSTO_PERSONALIZED_KEY) {
-                return $index;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the Nosto sorting key as it's not indexed
-     *
-     * @param array $requestData
-     */
-    public static function cleanUpCmpSort(array &$requestData)
-    {
-        unset($requestData['sort'][Search::findNostoSortingIndex($requestData)]);
     }
 }
