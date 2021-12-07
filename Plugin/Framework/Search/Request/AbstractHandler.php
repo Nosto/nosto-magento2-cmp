@@ -38,6 +38,7 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Exception;
 use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
@@ -154,6 +155,10 @@ abstract class AbstractHandler
                 $this->setFallbackSort($store, $requestData);
                 return;
             }
+        } catch (CmpException $e) {
+            $this->exception($e);
+            $this->setFallbackSort($store, $requestData);
+            return;
         } catch (Exception $e) {
             $this->exception($e);
             $this->setFallbackSort($store, $requestData);

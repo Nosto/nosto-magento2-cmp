@@ -103,6 +103,11 @@ class BuildWebFacetService
     /**
      * @param Store $store
      * @return Facet
+     * @throws AttributeValueException
+     * @throws FacetValueException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NotSupportedFrontedInputException
      */
     public function getFacets(Store $store): Facet
     {
@@ -115,17 +120,18 @@ class BuildWebFacetService
     /**
      * @param Store $store
      * @param IncludeFilters $includeFilters
+     * @throws AttributeValueException
+     * @throws FacetValueException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws NotSupportedFrontedInputException
      */
     private function populateFilters(Store $store, IncludeFilters &$includeFilters): void
     {
         $filters = $this->state->getActiveFilters();
 
         foreach ($filters as $filter) {
-            try {
-                $this->mapIncludeFilter($store, $includeFilters, $filter);
-            } catch (FacetValueException | NotSupportedFrontedInputException | AttributeValueException $e) {
-                $this->exception($e);
-            }
+            $this->mapIncludeFilter($store, $includeFilters, $filter);
         }
     }
 
@@ -135,16 +141,13 @@ class BuildWebFacetService
      * @param Item $item
      * @throws AttributeValueException
      * @throws FacetValueException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @throws NotSupportedFrontedInputException
      */
     private function mapIncludeFilter(Store $store, IncludeFilters &$includeFilters, Item $item)
     {
-        try {
-            $filter = $item->getFilter();
-        } catch (LocalizedException $e) {
-            $this->exception($e);
-            return;
-        }
+        $filter = $item->getFilter();
 
         if ($filter instanceof Category) {
             $categoryId = $item->getData('value');
@@ -212,21 +215,17 @@ class BuildWebFacetService
      * @param Store $store
      * @param int $categoryId
      * @return string|null
+     * @throws NoSuchEntityException
      */
     private function getCategoryName(Store $store, $categoryId): ?string
     {
-        try {
-            /**
-             * Argument is of type \Magento\Catalog\Api\Data\CategoryInterface
-             * but \Magento\Catalog\Model\Category is expected
-             */
-            /**  @phan-suppress-next-next-line PhanTypeMismatchArgumentSuperType */
-            $category = $this->categoryRepository->get($categoryId, $store->getId());
-            return $this->nostoCategoryBuilder->getCategory($category, $store);
-        } catch (NoSuchEntityException $e) {
-            $this->exception($e);
-            return null;
-        }
+        /**
+         * Argument is of type \Magento\Catalog\Api\Data\CategoryInterface
+         * but \Magento\Catalog\Model\Category is expected
+         */
+        /**  @phan-suppress-next-next-line PhanTypeMismatchArgumentSuperType */
+        $category = $this->categoryRepository->get($categoryId, $store->getId());
+        return $this->nostoCategoryBuilder->getCategory($category, $store);
     }
 
     /**
