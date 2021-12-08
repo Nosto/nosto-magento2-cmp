@@ -33,40 +33,54 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
-namespace Nosto\Cmp\Exception;
 
-use Exception;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Store;
+namespace Nosto\Cmp\Utils\Traits;
+
+use Nosto\Tagging\Logger\Logger;
 use Throwable;
 
-abstract class CmpException extends Exception
+trait LoggerTrait
 {
+    /** @var Logger */
+    protected $logger;
+
     /**
-     * @param Store $store
-     * @param $message
-     * @param int $code
-     * @param Throwable|null $previous
+     * LoggerTrait constructor.
+     * @param Logger $logger
      */
-    public function __construct(Store $store, $message, $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($this->buildMessage($store, $message), $code, $previous);
+    public function __construct(
+        Logger $logger
+    ) {
+        $this->logger = $logger;
     }
 
     /**
-     * @param Store $store
      * @param $message
-     * @return string
+     * @param array $args
+     * @param array $context
+     * @return bool
      */
-    private function buildMessage(Store $store, $message)
+    public function trace($message, array $args = [], array $context = [])
     {
-        try {
-            $currentUrl = $store->getCurrentUrl();
-        } catch (NoSuchEntityException $e) {
-            $currentUrl = '';
+        if ($args) {
+            $finalMessage = vsprintf($message, $args);
+        } else {
+            $finalMessage = $message;
         }
 
-        $storeId = $store->getId();
-        return sprintf($message . " Store id: %s, Url: %s", $storeId, $currentUrl);
+        return $this->logger->debugWithSource(
+            $finalMessage,
+            $context,
+            $this
+        );
+    }
+
+    /**
+     * @param Throwable $exception
+     * @return bool
+     */
+    public function exception(Throwable $exception)
+    {
+        return $this->logger->exception($exception);
     }
 }

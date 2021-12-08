@@ -33,40 +33,21 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
+
 namespace Nosto\Cmp\Exception;
 
-use Exception;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
-use Throwable;
 
-abstract class CmpException extends Exception
+class AttributeValueException extends CmpException
 {
-    /**
-     * @param Store $store
-     * @param $message
-     * @param int $code
-     * @param Throwable|null $previous
-     */
-    public function __construct(Store $store, $message, $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($this->buildMessage($store, $message), $code, $previous);
-    }
+    const DEFAULT_MESSAGE = 'Cannot build include filter for "%s" attribute.';
 
     /**
      * @param Store $store
-     * @param $message
-     * @return string
+     * @param string $frontendInput
      */
-    private function buildMessage(Store $store, $message)
+    public function __construct(Store $store, string $frontendInput)
     {
-        try {
-            $currentUrl = $store->getCurrentUrl();
-        } catch (NoSuchEntityException $e) {
-            $currentUrl = '';
-        }
-
-        $storeId = $store->getId();
-        return sprintf($message . " Store id: %s, Url: %s", $storeId, $currentUrl);
+        parent::__construct($store, sprintf(self::DEFAULT_MESSAGE, $frontendInput));
     }
 }

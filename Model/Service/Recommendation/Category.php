@@ -48,8 +48,8 @@ use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Request\Http\HttpRequest;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Data as NostoHelperData;
+use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class Category
 {
@@ -69,18 +69,26 @@ class Category
     private $nostoHelperData;
 
     /**
+     * @var NostoHelperScope
+     */
+    private $nostoHelperScope;
+
+    /**
      * @param ManagerInterface $eventManager
      * @param CmHelperData $cmHelperData
      * @param NostoHelperData $nostoHelperData
+     * @param NostoHelperScope $nostoHelperScope
      */
     public function __construct(
         ManagerInterface $eventManager,
         CmHelperData $cmHelperData,
-        NostoHelperData $nostoHelperData
+        NostoHelperData $nostoHelperData,
+        NostoHelperScope $nostoHelperScope
     ) {
         $this->eventManager = $eventManager;
         $this->cmHelperData = $cmHelperData;
         $this->nostoHelperData = $nostoHelperData;
+        $this->nostoHelperScope = $nostoHelperScope;
     }
 
     /**
@@ -92,9 +100,9 @@ class Category
      * @param int $limit
      * @param bool $previewMode
      * @return CategoryMerchandisingResult
-     * @throws NostoException
      * @throws AbstractHttpException
      * @throws HttpResponseException
+     * @throws NostoException
      */
     public function getPersonalisationResult(
         NostoAccount $nostoAccount,
@@ -105,10 +113,6 @@ class Category
         $limit,
         $previewMode = false
     ) {
-        $featureAccess = new FeatureAccess($nostoAccount);
-        if (!$featureAccess->canUseGraphql()) {
-            throw new NostoException('Missing Nosto API_APPS token');
-        }
 
         HttpRequest::buildUserAgent(
             'Magento',

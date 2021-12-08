@@ -33,40 +33,35 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD 3-Clause
  *
  */
+
 namespace Nosto\Cmp\Exception;
 
-use Exception;
-use Magento\Framework\Exception\NoSuchEntityException;
+
 use Magento\Store\Model\Store;
-use Throwable;
 
-abstract class CmpException extends Exception
+class FacetValueException extends CmpException
 {
-    /**
-     * @param Store $store
-     * @param $message
-     * @param int $code
-     * @param Throwable|null $previous
-     */
-    public function __construct(Store $store, $message, $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($this->buildMessage($store, $message), $code, $previous);
-    }
+    const DEFAULT_MESSAGE = 'Cannot get value for filter: %s. Value passed was %s (type of %s, class - %s).';
 
     /**
      * @param Store $store
-     * @param $message
-     * @return string
+     * @param $filterName
+     * @param $filterValue
      */
-    private function buildMessage(Store $store, $message)
+    public function __construct(Store $store, $filterName, $filterValue)
     {
-        try {
-            $currentUrl = $store->getCurrentUrl();
-        } catch (NoSuchEntityException $e) {
-            $currentUrl = '';
+        // @codingStandardsIgnoreStart
+        $type = gettype($filterValue);
+        if ($type == 'object') {
+            $class = get_class($filterValue);
+        } else {
+            $class = 'not an object';
         }
+        // @codingStandardsIgnoreEnd
 
-        $storeId = $store->getId();
-        return sprintf($message . " Store id: %s, Url: %s", $storeId, $currentUrl);
+        parent::__construct(
+            $store,
+            sprintf(self::DEFAULT_MESSAGE, $filterName, $filterValue, $type, $class)
+        );
     }
 }

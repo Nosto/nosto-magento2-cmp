@@ -43,12 +43,16 @@ use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 
 abstract class AbstractBlock extends Template
 {
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /** @var int */
     private $lastPageNumber;
@@ -64,9 +68,6 @@ abstract class AbstractBlock extends Template
 
     /** @var NostoHelperScope */
     private $nostoHelperScope;
-
-    /** @var Logger */
-    private $logger;
 
     /** @var string */
     public static $currentOrder;
@@ -95,12 +96,14 @@ abstract class AbstractBlock extends Template
         StateAwareCategoryServiceInterface $categoryService,
         Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->categoryService = $categoryService;
         $this->paramResolver = $parameterResolver;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
-        $this->logger = $logger;
         parent::__construct($context);
     }
 
@@ -208,13 +211,5 @@ abstract class AbstractBlock extends Template
     public function getNostoHelperScope(): NostoHelperScope
     {
         return $this->nostoHelperScope;
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger(): Logger
-    {
-        return $this->logger;
     }
 }
