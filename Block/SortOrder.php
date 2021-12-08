@@ -36,10 +36,12 @@
 
 namespace Nosto\Cmp\Block;
 
+use Magento\Catalog\Model\Category;
+use Magento\Framework\App\Request\Http;
+use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Helper\CategorySorting;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Model\SortOrder as NostoSortOrder;
 use Nosto\Tagging\Block\TaggingTrait;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
@@ -47,30 +49,61 @@ use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class SortOrder extends Template
 {
+    const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
 
     use TaggingTrait {
         TaggingTrait::__construct as taggingConstruct; // @codingStandardsIgnoreLine
     }
 
-    /** @var ParameterResolverInterface */
-    private $parameterResolver;
+    /** @var Http */
+    private $httpRequest;
+
+    /** @var Registry */
+    private $registry;
 
     /**
      * SortOrder constructor.
      * @param Context $context
-     * @param ParameterResolverInterface $parameterResolver
+     * @param Http $httpRequest
+     * @param Registry $registry
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      */
     public function __construct(
         Context $context,
-        ParameterResolverInterface $parameterResolver,
+        Http $httpRequest,
+        Registry $registry,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope
     ) {
         parent::__construct($context);
         $this->taggingConstruct($nostoHelperAccount, $nostoHelperScope);
-        $this->parameterResolver = $parameterResolver;
+        $this->httpRequest = $httpRequest;
+        $this->registry = $registry;
+    }
+
+    /**
+     * Returns default category sorting order
+     *
+     * @return string
+     */
+    public function getDefaultCategorySorting()
+    {
+        /**
+         * @var Category $category
+         * @noinspection PhpDeprecationInspection
+         */
+        $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
+        $sortBy = null;
+
+        if ($category instanceof Category) {
+            $sortBy = $category->getDefaultSortBy();
+        }
+
+        return $this->httpRequest->getParam(
+            self::DEFAULT_SORTING_ORDER_PARAM,
+            $sortBy
+        );
     }
 
     /**
@@ -80,10 +113,10 @@ class SortOrder extends Template
      */
     private function getSortOrder()
     {
-        if ($this->parameterResolver->getSortingOrder() === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+        if ($this->getDefaultCategorySorting() === CategorySorting::NOSTO_PERSONALIZED_KEY) {
             return NostoSortOrder::CMP_VALUE;
         }
-        return $this->parameterResolver->getSortingOrder();
+        return $this->getDefaultCategorySorting();
     }
 
     /**

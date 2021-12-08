@@ -43,7 +43,6 @@ use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -63,7 +62,6 @@ class GraphQlHandler extends AbstractHandler
     /**
      * GraphQlHandler constructor.
      * @param BuildGraphQlFacetService $buildFacetService
-     * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
@@ -75,7 +73,6 @@ class GraphQlHandler extends AbstractHandler
      */
     public function __construct(
         BuildGraphQlFacetService $buildFacetService,
-        ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
@@ -86,7 +83,6 @@ class GraphQlHandler extends AbstractHandler
         $pageSize
     ) {
         parent::__construct(
-            $parameterResolver,
             $searchEngineHelper,
             $nostoHelperAccount,
             $nostoHelperScope,

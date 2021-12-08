@@ -48,7 +48,6 @@ use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -67,7 +66,6 @@ class WebHandler extends AbstractHandler
 
     /**
      * WebHandler constructor.
-     * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
@@ -79,7 +77,6 @@ class WebHandler extends AbstractHandler
      * @param int $pageSize
      */
     public function __construct(
-        ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
@@ -91,7 +88,6 @@ class WebHandler extends AbstractHandler
         $pageSize
     ) {
         parent::__construct(
-            $parameterResolver,
             $searchEngineHelper,
             $nostoHelperAccount,
             $nostoHelperScope,

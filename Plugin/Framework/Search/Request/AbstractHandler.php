@@ -43,7 +43,6 @@ use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
@@ -68,11 +67,6 @@ abstract class AbstractHandler
     use LoggerTrait {
         LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
     }
-
-    /**
-     * @var ParameterResolverInterface
-     */
-    private $parameterResolver;
 
     /**
      * @var SearchEngine
@@ -101,7 +95,6 @@ abstract class AbstractHandler
 
     /**
      * AbstractHandler constructor.
-     * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
@@ -110,7 +103,6 @@ abstract class AbstractHandler
      * @param Logger $logger
      */
     public function __construct(
-        ParameterResolverInterface $parameterResolver,
         SearchEngine $searchEngineHelper,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
@@ -121,7 +113,6 @@ abstract class AbstractHandler
         $this->loggerTraitConstruct(
             $logger
         );
-        $this->parameterResolver = $parameterResolver;
         $this->searchEngineHelper = $searchEngineHelper;
         $this->accountHelper = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
