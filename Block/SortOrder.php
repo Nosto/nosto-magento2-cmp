@@ -60,6 +60,7 @@ class SortOrder extends Template
 
     /** @var Registry */
     private $registry;
+    /** @noinspection PhpDeprecationInspection */
 
     /**
      * SortOrder constructor.
@@ -68,6 +69,8 @@ class SortOrder extends Template
      * @param Registry $registry
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
+     * @noinspection PhpDeprecationInspection
+     * @noinspection PhpUnused
      */
     public function __construct(
         Context $context,
