@@ -300,18 +300,4 @@ abstract class AbstractHandler
         );
         return $res ? CategoryMerchandising::parseProductIds($res) : null;
     }
-
-    /**
-     * Return the product id field
-     *
-     * @return string
-     */
-    private function getProductIdField()
-    {
-        if ($this->searchEngineHelper->isMysql()) {
-            return self::KEY_MYSQL_PRODUCT_ID;
-        } else {
-            return self::KEY_ES_PRODUCT_ID;
-        }
-    }
 }
