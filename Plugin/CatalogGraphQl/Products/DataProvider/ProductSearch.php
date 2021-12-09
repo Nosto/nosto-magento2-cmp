@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnusedParameterInspection */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -44,7 +44,7 @@ use Nosto\Cmp\Utils\CategoryMerchandising;
 /**
  * Class used to re-sort products when served through Magento's GraphQl
  */
-class ProductSearch extends MagentoProductSearch
+class ProductSearch
 {
     /**
      * @var StateAwareCategoryServiceInterface
