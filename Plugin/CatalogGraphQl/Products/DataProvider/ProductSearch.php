@@ -66,6 +66,7 @@ class ProductSearch extends MagentoProductSearch
      * @param SearchResultsInterface $result
      * @return SearchResultsInterface
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterGetList(MagentoProductSearch $productSearch, SearchResultsInterface $result)
     {
         $cmp = $this->getCmpSort();
