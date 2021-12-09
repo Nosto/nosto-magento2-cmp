@@ -40,10 +40,10 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Model\Service\Recommendation\BatchModel;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
+use Nosto\Util\CategoryMerchandising;
 
 class PostRequestAction implements ObserverInterface
 {

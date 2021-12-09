@@ -39,7 +39,7 @@ namespace Nosto\Cmp\Plugin\Api\Search;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResult;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Util\CategoryMerchandising;
 
 class SearchResultSorter
 {
