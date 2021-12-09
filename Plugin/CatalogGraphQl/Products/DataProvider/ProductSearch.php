@@ -42,7 +42,7 @@ use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 
 /**
- * Class used to re-sort products
+ * Class used to re-sort products when served through Magento's GraphQl
  */
 class ProductSearch extends MagentoProductSearch
 {
