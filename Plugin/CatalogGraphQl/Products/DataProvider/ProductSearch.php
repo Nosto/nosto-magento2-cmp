@@ -85,7 +85,7 @@ class ProductSearch
     }
 
     /**
-     * Returns the product ids sorted by Nosto 
+     * Returns the product ids sorted by Nosto
      * or null in case CM is not applied or does not return any results
      * @return int[]|null
      */
