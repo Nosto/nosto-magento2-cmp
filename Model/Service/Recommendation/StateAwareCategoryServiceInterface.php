@@ -56,7 +56,7 @@ interface StateAwareCategoryServiceInterface
     ): ?CategoryMerchandisingResult;
 
     /**
-     * @return CategoryMerchandisingResult|null
+     * @return CategoryMerchandisingResult
      */
     public function getLastResult(): ?CategoryMerchandisingResult;
 

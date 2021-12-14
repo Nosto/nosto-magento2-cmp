@@ -148,9 +148,7 @@ abstract class AbstractBlock extends Template
     public function isCmpTakingOverCatalog()
     {
         $categoryMerchandisingResult = $this->getCategoryService()->getLastResult();
-        if ($categoryMerchandisingResult !== null
-            && !empty($categoryMerchandisingResult->getTrackingCode())
-        ) {
+        if (!empty($categoryMerchandisingResult->getTrackingCode())) {
             return true;
         }
         return false;
@@ -168,14 +166,11 @@ abstract class AbstractBlock extends Template
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getTotalProducts()
     {
-        if ($this->getCategoryService()->getLastResult() !== null) {
-            return $this->getCategoryService()->getLastResult()->getTotalPrimaryCount();
-        }
-        return null;
+        return $this->getCategoryService()->getLastResult()->getTotalPrimaryCount();
     }
 
     /**

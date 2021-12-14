@@ -89,17 +89,19 @@ class RequestCleaner
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function afterClean(Cleaner $cleaner, array $requestData)
     {
+        $doLog = true;
         if (!Search::isNostoSorting($requestData) || !Search::hasCategoryFilter($requestData)) {
             $this->trace('Nosto sorting not used or not found from request data', [], $requestData);
             //remove nosto_personalised in case it's a search page
             Search::cleanUpCmpSort($requestData);
-            return $requestData;
+            // No need to log if Nosto sorting is not used
+            $doLog = false;
         }
 
         if ($this->containsCatalogViewQueries($requestData)) {
-            $this->webHandler->handle($requestData);
+            $this->webHandler->handle($requestData, $doLog);
         } elseif ($this->containsGraphQlProductSearchQueries($requestData)) {
-            $this->graphqlHandler->handle($requestData);
+            $this->graphqlHandler->handle($requestData, $doLog);
         } else {
             $this->trace('Could not find %s from ES request data', [self::KEY_BIND_TO_QUERY]);
         }

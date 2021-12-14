@@ -71,16 +71,14 @@ class ListProduct
         Collection $collection
     ) {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
 
-        if ($categoryMerchandisingResult != null) {
-            $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
-            $collection->each(static function ($product) use ($cmpProductIds) {
-                /* @var Product $product */
-                if (in_array($product->getId(), $cmpProductIds)) {
-                    $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
-                }
-            });
-        }
+        $collection->each(static function ($product) use ($cmpProductIds) {
+            /* @var Product $product */
+            if (in_array($product->getId(), $cmpProductIds)) {
+                $product->setData(NostoProductPlugin::NOSTO_TRACKING_PARAMETER_NAME, true);
+            }
+        });
         return $collection;
     }
 }

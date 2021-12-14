@@ -135,9 +135,42 @@ abstract class AbstractHandler
      * @return void
      * @noinspection PhpRedundantCatchClauseInspection
      */
-    public function handle(array &$requestData)
+    public function setEmptyCmpProducts(array &$requestData)
     {
-        $this->trace('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
+        $this->preFetchOps($requestData);
+        Search::cleanUpCmpSort($requestData);
+
+        $storeId = $this->getStoreId($requestData);
+        $store = $this->nostoHelperScope->getStore($storeId);
+
+        try {
+            $this->getCmpProductIds(
+                $this->getFilters($store, $requestData),
+                $this->parsePageNumber($store, $requestData),
+                $this->parseLimit($store, $requestData)
+            );
+        } catch (CmpException $e) {
+            $this->exception($e);
+            $this->setFallbackSort($store, $requestData);
+            return;
+        } catch (Exception $e) {
+            $this->exception($e);
+            $this->setFallbackSort($store, $requestData);
+            return;
+        }
+    }
+
+    /**
+     * @param array $requestData
+     * @param bool $doLog
+     * @return void
+     * @noinspection PhpRedundantCatchClauseInspection
+     */
+    public function handle(array &$requestData, $doLog)
+    {
+        if ($doLog) {
+            $this->trace('Using %s as search engine', [$this->searchEngineHelper->getCurrentEngine()]);
+        }
         $this->preFetchOps($requestData);
         Search::cleanUpCmpSort($requestData);
 
@@ -152,7 +185,9 @@ abstract class AbstractHandler
             );
             //In case CM category is not configured in nosto
             if ($productIds == null || empty($productIds)) {
-                $this->trace('Nosto did not return products for the request', [], $requestData);
+                if ($doLog) {
+                    $this->trace('Nosto did not return products for the request', [], $requestData);
+                }
                 $this->setFallbackSort($store, $requestData);
                 return;
             }

@@ -101,9 +101,9 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $categoryBuilder;
 
     /**
-     * @var CategoryMerchandisingResult|null
+     * @var CategoryMerchandisingResult
      */
-    private $lastResult = null;
+    private $lastResult;
 
     /**
      * @var int

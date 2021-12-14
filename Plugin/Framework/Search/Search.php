@@ -79,9 +79,6 @@ class Search
     private function getCmpTotalCount()
     {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
-        if ($categoryMerchandisingResult !== null) {
-            return $categoryMerchandisingResult->getTotalPrimaryCount();
-        }
-        return null;
+        return $categoryMerchandisingResult->getTotalPrimaryCount();
     }
 }

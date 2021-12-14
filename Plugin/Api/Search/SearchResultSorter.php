@@ -97,17 +97,14 @@ class SearchResultSorter
 
     /**
      * Returns the product ids sorted by Nosto
-     * @return int[]|null
+     * @return int[]
      */
     private function getCmpSort()
     {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
-        if ($categoryMerchandisingResult !== null) {
-            return CategoryMerchandising::parseProductIds(
-                $categoryMerchandisingResult
-            );
-        }
-        return null;
+        return CategoryMerchandising::parseProductIds(
+            $categoryMerchandisingResult
+        );
     }
 
     /**
@@ -117,9 +114,6 @@ class SearchResultSorter
     private function getTotalPrimaryCount()
     {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
-        if ($categoryMerchandisingResult !== null) {
-            return $categoryMerchandisingResult->getTotalPrimaryCount();
-        }
-        return null;
+        return $categoryMerchandisingResult->getTotalPrimaryCount();
     }
 }
