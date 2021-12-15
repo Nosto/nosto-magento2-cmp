@@ -132,36 +132,6 @@ abstract class AbstractHandler
 
     /**
      * @param array $requestData
-     * @return void
-     * @noinspection PhpRedundantCatchClauseInspection
-     */
-    public function setEmptyCmpProducts(array &$requestData)
-    {
-        $this->preFetchOps($requestData);
-        Search::cleanUpCmpSort($requestData);
-
-        $storeId = $this->getStoreId($requestData);
-        $store = $this->nostoHelperScope->getStore($storeId);
-
-        try {
-            $this->getCmpProductIds(
-                $this->getFilters($store, $requestData),
-                $this->parsePageNumber($store, $requestData),
-                $this->parseLimit($store, $requestData)
-            );
-        } catch (CmpException $e) {
-            $this->exception($e);
-            $this->setFallbackSort($store, $requestData);
-            return;
-        } catch (Exception $e) {
-            $this->exception($e);
-            $this->setFallbackSort($store, $requestData);
-            return;
-        }
-    }
-
-    /**
-     * @param array $requestData
      * @param bool $doLog
      * @return void
      * @noinspection PhpRedundantCatchClauseInspection
