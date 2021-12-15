@@ -247,7 +247,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     /**
      * @inheritDoc
      */
-    public function getLastResult(): ?CategoryMerchandisingResult
+    public function getLastResult(): CategoryMerchandisingResult
     {
         return $this->lastResult;
     }

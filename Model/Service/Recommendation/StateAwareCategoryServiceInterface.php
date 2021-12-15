@@ -58,7 +58,7 @@ interface StateAwareCategoryServiceInterface
     /**
      * @return CategoryMerchandisingResult
      */
-    public function getLastResult(): ?CategoryMerchandisingResult;
+    public function getLastResult(): CategoryMerchandisingResult;
 
     /**
      * @param $id
