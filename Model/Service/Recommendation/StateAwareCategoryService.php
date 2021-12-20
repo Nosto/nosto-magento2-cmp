@@ -49,7 +49,6 @@ use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Session\SessionService;
-use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Request\Api\Token;
@@ -224,10 +223,10 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->lastUsedLimit = $limit;
 
         $this->eventManager->dispatch(
-            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_POST_RESULTS,
+            CategoryMerchandisingResult::DISPATCH_EVENT_NAME_POST_RESULTS,
             [
-                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_LIMIT => $limit,
-                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_PAGE => $pageNumber,
+                CategoryMerchandisingResult::DISPATCH_EVENT_KEY_LIMIT => $limit,
+                CategoryMerchandisingResult::DISPATCH_EVENT_KEY_PAGE => $pageNumber,
             ]
         );
 

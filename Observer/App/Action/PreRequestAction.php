@@ -38,9 +38,9 @@ namespace Nosto\Cmp\Observer\App\Action;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
-use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
+use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
+use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class PreRequestAction implements ObserverInterface
 {
@@ -62,7 +62,7 @@ class PreRequestAction implements ObserverInterface
     public function execute(Observer $observer) // phpcs:ignore
     {
         /** @var BatchedCategoryMerchandising $query */
-        $query = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_REQUEST);
+        $query = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_REQUEST);
         if ($query instanceof BatchedCategoryMerchandising) {
             $batchModel = $this->session->getBatchModel();
             if ($batchModel != null

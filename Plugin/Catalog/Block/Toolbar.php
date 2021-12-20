@@ -58,7 +58,6 @@ use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
-use Nosto\Util\CategoryMerchandising as CategoryMerchandisingUtil;
 use Zend_Db_Expr;
 
 class Toolbar extends AbstractBlock
@@ -156,7 +155,7 @@ class Toolbar extends AbstractBlock
                     $this->getCurrentPageNumber()-1,
                     $this->getPageSize($subjectCollection)
                 );
-                $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
+                $nostoProductIds = CategoryMerchandisingResult::parseProductIds($result);
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
                 ) {

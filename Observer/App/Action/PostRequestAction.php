@@ -43,7 +43,6 @@ use Nosto\Cmp\Model\Service\Recommendation\BatchModel;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Util\CategoryMerchandising;
 
 class PostRequestAction implements ObserverInterface
 {
@@ -83,11 +82,11 @@ class PostRequestAction implements ObserverInterface
 
         $batchModel = $this->getBatchModel();
 
-        $results = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_RESULT);
+        $results = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_RESULT);
         if ($results instanceof CategoryMerchandisingResult) {
             $this->response->setHeader(
                 self::PRODUCT_DEBUG_HEADER_NAME,
-                implode(',', CategoryMerchandising::parseProductIds($results)),
+                implode(',', CategoryMerchandisingResult::parseProductIds($results)),
                 true
             );
 
@@ -95,12 +94,12 @@ class PostRequestAction implements ObserverInterface
             $batchModel->setTotalCount($results->getTotalPrimaryCount());
         }
 
-        $limit = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_LIMIT);
+        $limit = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_LIMIT);
         if (is_int($limit)) {
             $batchModel->setLastUsedLimit($limit);
         }
 
-        $page = $observer->getData(CategoryMerchandising::DISPATCH_EVENT_KEY_PAGE);
+        $page = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_PAGE);
         if (is_int($page)) {
             $batchModel->setLastFetchedPage($page);
         }
