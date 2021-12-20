@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused */
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,43 +34,16 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Utils;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
-use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
-use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
-class PreRequestAction implements ObserverInterface
+class CategoryMerchandising
 {
-    /** @var SessionService */
-    private $session;
-
-    /**
-     * PreRequestAction constructor.
-     * @param SessionService $session
-     */
-    public function __construct(SessionService $session)
-    {
-        $this->session = $session;
-    }
-
-    /**
-     * @param Observer $observer
-     */
-    public function execute(Observer $observer) // phpcs:ignore
-    {
-        /** @var BatchedCategoryMerchandising $query */
-        $query = $observer->getData(CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST);
-        if ($query instanceof BatchedCategoryMerchandising) {
-            $batchModel = $this->session->getBatchModel();
-            if ($batchModel != null
-                && ($batchModel->getLastUsedLimit() == $query->getLimit())
-                && ($batchModel->getLastFetchedPage() == $query->getSkipPages() - 1)) {
-                $query->setBatchToken($batchModel->getBatchToken());
-            }
-        }
-    }
+    const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';
+    const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
+    const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
+    const DISPATCH_EVENT_KEY_RESULT = 'result';
+    const DISPATCH_EVENT_KEY_LIMIT = 'limit';
+    const DISPATCH_EVENT_KEY_PAGE = 'page';
 }

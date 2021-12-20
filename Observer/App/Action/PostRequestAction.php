@@ -41,6 +41,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Model\Service\Recommendation\BatchModel;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
+use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
@@ -82,11 +83,11 @@ class PostRequestAction implements ObserverInterface
 
         $batchModel = $this->getBatchModel();
 
-        $results = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_RESULT);
+        $results = $observer->getData(CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_RESULT);
         if ($results instanceof CategoryMerchandisingResult) {
             $this->response->setHeader(
                 self::PRODUCT_DEBUG_HEADER_NAME,
-                implode(',', CategoryMerchandisingResult::parseProductIds($results)),
+                implode(',', CategoryMerchandisingResult::parseProductIds()),
                 true
             );
 
@@ -94,12 +95,12 @@ class PostRequestAction implements ObserverInterface
             $batchModel->setTotalCount($results->getTotalPrimaryCount());
         }
 
-        $limit = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_LIMIT);
+        $limit = $observer->getData(CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_LIMIT);
         if (is_int($limit)) {
             $batchModel->setLastUsedLimit($limit);
         }
 
-        $page = $observer->getData(CategoryMerchandisingResult::DISPATCH_EVENT_KEY_PAGE);
+        $page = $observer->getData(CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_PAGE);
         if (is_int($page)) {
             $batchModel->setLastFetchedPage($page);
         }
