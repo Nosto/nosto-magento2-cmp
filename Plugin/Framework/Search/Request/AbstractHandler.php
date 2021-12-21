@@ -290,7 +290,7 @@ abstract class AbstractHandler
             $pageNum,
             $limit
         );
-        return $res ? CategoryMerchandisingResult::parseProductIds() : null;
+        return $res ? $res->parseProductIds() : null;
     }
 
     /**

@@ -73,7 +73,7 @@ class ListProduct
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
 
         if ($categoryMerchandisingResult != null) {
-            $cmpProductIds = CategoryMerchandisingResult::parseProductIds();
+            $cmpProductIds = $categoryMerchandisingResult->parseProductIds();
             $collection->each(static function ($product) use ($cmpProductIds) {
                 /* @var Product $product */
                 if (in_array($product->getId(), $cmpProductIds)) {

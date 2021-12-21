@@ -87,7 +87,7 @@ class PostRequestAction implements ObserverInterface
         if ($results instanceof CategoryMerchandisingResult) {
             $this->response->setHeader(
                 self::PRODUCT_DEBUG_HEADER_NAME,
-                implode(',', CategoryMerchandisingResult::parseProductIds()),
+                implode(',', $results->parseProductIds()),
                 true
             );
 

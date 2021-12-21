@@ -155,7 +155,7 @@ class Toolbar extends AbstractBlock
                     $this->getCurrentPageNumber()-1,
                     $this->getPageSize($subjectCollection)
                 );
-                $nostoProductIds = CategoryMerchandisingResult::parseProductIds();
+                $nostoProductIds = $categoryMerchandisingResult->parseProductIds();
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
                 ) {

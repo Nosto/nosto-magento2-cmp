@@ -103,7 +103,7 @@ class SearchResultSorter
     {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
         if ($categoryMerchandisingResult !== null) {
-            return CategoryMerchandisingResult::parseProductIds();
+            return $categoryMerchandisingResult->parseProductIds();
         }
         return null;
     }
