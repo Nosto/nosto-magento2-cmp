@@ -36,8 +36,6 @@
 
 namespace Nosto\Cmp\Utils;
 
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-
 class CategoryMerchandising
 {
     const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';

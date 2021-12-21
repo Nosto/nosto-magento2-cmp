@@ -41,7 +41,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 /**
  * This interceptor is used to pass `nosto_cmp` parameter to product urls when they are sorted by Nosto

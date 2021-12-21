@@ -41,7 +41,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class PreRequestAction implements ObserverInterface
 {
