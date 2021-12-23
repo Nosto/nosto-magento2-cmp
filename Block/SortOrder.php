@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http;
-use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
+use /** @noinspection PhpDeprecationInspection */ Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Helper\CategorySorting;
@@ -60,7 +60,6 @@ class SortOrder extends Template
 
     /** @var Registry */
     private $registry;
-    /** @noinspection PhpDeprecationInspection */
 
     /**
      * SortOrder constructor.
