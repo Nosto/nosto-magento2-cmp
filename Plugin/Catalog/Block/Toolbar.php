@@ -52,7 +52,6 @@ use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
-use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
 use Nosto\Helper\ArrayHelper as NostoHelperArray;
 use Nosto\NostoException;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
@@ -156,7 +155,7 @@ class Toolbar extends AbstractBlock
                     $this->getCurrentPageNumber()-1,
                     $this->getPageSize($subjectCollection)
                 );
-                $nostoProductIds = CategoryMerchandisingUtil::parseProductIds($result);
+                $nostoProductIds = $result->parseProductIds();
                 if (!empty($nostoProductIds)
                     && NostoHelperArray::onlyScalarValues($nostoProductIds)
                 ) {

@@ -44,7 +44,6 @@ use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
@@ -290,7 +289,7 @@ abstract class AbstractHandler
             $pageNum,
             $limit
         );
-        return $res ? CategoryMerchandising::parseProductIds($res) : null;
+        return $res ? $res->parseProductIds() : null;
     }
 
     /**
