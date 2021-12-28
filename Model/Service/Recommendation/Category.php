@@ -39,7 +39,8 @@ namespace Nosto\Cmp\Model\Service\Recommendation;
 use Magento\Framework\Event\ManagerInterface;
 use Nosto\Cmp\Helper\Data as CmHelperData;
 use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising as CategoryMerchandisingUtil;
+use Nosto\Cmp\Observer\App\Action\PostRequestAction;
+use Nosto\Cmp\Observer\App\Action\PreRequestAction;
 use Nosto\Model\Signup\Account as NostoAccount;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
@@ -133,17 +134,17 @@ class Category
             $limit
         );
         $this->eventManager->dispatch(
-            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_PRE_RESULTS,
+            PreRequestAction::DISPATCH_EVENT_NAME_PRE_RESULTS,
             [
-                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising
+                PreRequestAction::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising
             ]
         );
         $result = $categoryMerchandising->execute();
         $this->eventManager->dispatch(
-            CategoryMerchandisingUtil::DISPATCH_EVENT_NAME_POST_RESULTS,
+            PostRequestAction::DISPATCH_EVENT_NAME_POST_RESULTS,
             [
-                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising,
-                CategoryMerchandisingUtil::DISPATCH_EVENT_KEY_RESULT => $result
+                PostRequestAction::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising,
+                PostRequestAction::DISPATCH_EVENT_KEY_RESULT => $result
             ]
         );
         return $result;

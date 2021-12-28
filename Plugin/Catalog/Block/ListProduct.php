@@ -41,7 +41,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
-use Nosto\Cmp\Utils\CategoryMerchandising;
 
 /**
  * This interceptor is used to pass `nosto_cmp` parameter to product urls when they are sorted by Nosto
@@ -73,7 +72,7 @@ class ListProduct
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
 
         if ($categoryMerchandisingResult != null) {
-            $cmpProductIds = CategoryMerchandising::parseProductIds($categoryMerchandisingResult);
+            $cmpProductIds = $categoryMerchandisingResult->parseProductIds();
             $collection->each(static function ($product) use ($cmpProductIds) {
                 /* @var Product $product */
                 if (in_array($product->getId(), $cmpProductIds)) {

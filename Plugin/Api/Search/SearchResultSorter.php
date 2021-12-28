@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Plugin\Api\Search;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResult;
 use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
 
 class SearchResultSorter
 {
@@ -103,9 +102,7 @@ class SearchResultSorter
     {
         $categoryMerchandisingResult = $this->categoryService->getLastResult();
         if ($categoryMerchandisingResult !== null) {
-            return CategoryMerchandising::parseProductIds(
-                $categoryMerchandisingResult
-            );
+            return $categoryMerchandisingResult->parseProductIds();
         }
         return null;
     }
