@@ -41,12 +41,16 @@ use Magento\Catalog\Model\Config as MagentoConfig;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Model\AttributeFactory;
 use Nosto\Cmp\Helper\CategorySorting as NostoHelperSorting;
+use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class Config
 {
+    /** @var SearchEngine */
+    private $searchEngineHelper;
+
     /** @var NostoCmpHelperData */
     private $nostoCmpHelperData;
 
@@ -61,17 +65,20 @@ class Config
 
     /**
      * Config constructor.
+     * @param SearchEngine $searchEngineHelper
      * @param NostoCmpHelperData $nostoCmpHelperData
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param AttributeFactory $attributeFactory
      */
     public function __construct(
+        SearchEngine $searchEngineHelper,
         NostoCmpHelperData $nostoCmpHelperData,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         AttributeFactory $attributeFactory
     ) {
+        $this->searchEngineHelper = $searchEngineHelper;
         $this->nostoCmpHelperData = $nostoCmpHelperData;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
@@ -95,7 +102,8 @@ class Config
         // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
-        if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
+        if (!$this->searchEngineHelper->isMysql() &&
+            $this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
             // new option
@@ -120,7 +128,8 @@ class Config
         // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         //@phan-suppress-next-line PhanTypeMismatchArgument
-        if ($this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
+        if (!$this->searchEngineHelper->isMysql() &&
+            $this->nostoHelperAccount->nostoInstalledAndEnabled($store) &&
             $this->nostoCmpHelperData->isCategorySortingEnabled($store)
         ) {
 
