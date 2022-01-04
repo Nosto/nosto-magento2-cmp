@@ -36,6 +36,10 @@
 
 namespace Nosto\Cmp\Model\Service\Recommendation;
 
+/**
+ * This classed is used to pass around the BatchToken returned from Nosto
+ * in order to improve performance during pagination
+ */
 class BatchModel implements BatchModelInterface
 {
     /** @var string */

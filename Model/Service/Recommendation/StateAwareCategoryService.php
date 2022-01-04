@@ -48,11 +48,16 @@ use Nosto\Cmp\Exception\SessionCreationException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Model\Service\Session\SessionService;
+use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
+use Nosto\Cmp\Model\Service\Session\SessionService as VisitSessionService;
 use Nosto\Cmp\Observer\App\Action\PostRequestAction;
+use Nosto\Cmp\Observer\App\Action\PreRequestAction;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\Operation\AbstractGraphQLOperation;
+use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Request\Api\Token;
+use Nosto\Request\Http\HttpRequest;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
@@ -60,6 +65,10 @@ use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
+use Nosto\NostoException;
+use Nosto\Request\Http\Exception\AbstractHttpException;
+use Nosto\Request\Http\Exception\HttpResponseException;
+use Nosto\Cmp\Model\Service\Recommendation\SessionService as ResultSessionService;
 
 class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 {
@@ -124,9 +133,14 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     private $eventManager;
 
     /**
-     * @var SessionService
+     * @var VisitSessionService
      */
-    private $nostoSessionService;
+    private $visitSessionService;
+
+    /**
+     * @var ResultSessionService
+     */
+    private $resultSessionService;
 
     /**
      * StateAwareCategoryService constructor.
@@ -153,7 +167,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         Data $nostoCmpHelper,
         CategoryRepositoryInterface $categoryRepository,
         ManagerInterface $eventManager,
-        SessionService $sessionService
+        VisitSessionService $visitSessionService,
+        ResultSessionService $resultSessionService
     ) {
         $this->loggerTraitConstruct(
             $logger
@@ -168,7 +183,8 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $this->nostoCmpHelper = $nostoCmpHelper;
         $this->categoryRepository = $categoryRepository;
         $this->eventManager = $eventManager;
-        $this->nostoSessionService = $sessionService;
+        $this->visitSessionService = $visitSessionService;
+        $this->resultSessionService = $resultSessionService;
     }
 
     /**
@@ -182,6 +198,42 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $pageNumber,
         $limit
     ): ?CategoryMerchandisingResult {
+
+        $requestParams = $this->createRequestParams($facets, $pageNumber, $limit);
+
+        $this->lastResult = ServerTiming::getInstance()->instrument(
+            function () use ($requestParams) {
+                return $this->getMerchandiseResults($requestParams)
+            },
+            self::TIME_PROF_GRAPHQL_QUERY
+        );
+
+        $this->lastUsedLimit = $limit;
+
+        $this->trace(
+            'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+            [
+                $this->lastResult->getResultSet()->count(),
+                $this->lastResult->getTotalPrimaryCount(),
+                $category,
+                $pageNumber,
+                $limit
+            ]
+        );
+        return $this->lastResult;
+    }
+
+    /**
+     * @param FacetInterface $facets
+     * @param $pageNumber
+     * @param $limit
+     * @return MerchandiseRequestParams
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
+     */
+    private function createRequestParams(FacetInterface $facets, $pageNumber, $limit)
+    {
         // Current store id value is unavailable
         $store = $this->nostoHelperScope->getStore();
         $nostoAccount = $this->nostoHelperAccount->findAccount($store);
@@ -200,48 +252,83 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         $customerId = $this->cookieManager->getCookie(NostoCustomer::COOKIE_NAME);
         //Create new session which Nosto won't track
         if ($customerId === null) {
-            $customerId = $this->nostoSessionService->getNewNostoSession($store, $nostoAccount);
+            $customerId = $this->visitSessionService->getNewNostoSession($store, $nostoAccount);
         }
 
         $limit = $this->sanitizeLimit($store, $limit);
         $category = $this->getCurrentCategoryString($store);
 
         $previewMode = (bool)$this->cookieManager->getCookie(self::NOSTO_PREVIEW_COOKIE);
-        $this->lastResult = ServerTiming::getInstance()->instrument(
-            function () use ($nostoAccount, $previewMode, $category, $pageNumber, $limit, $facets, $customerId) {
-                return $this->categoryService->getPersonalisationResult(
-                    $nostoAccount,
-                    $facets,
-                    $customerId,
-                    $category,
-                    $pageNumber,
-                    $limit,
-                    $previewMode
-                );
-            },
-            self::TIME_PROF_GRAPHQL_QUERY
+
+        //Get batch token
+        $token = '';
+        $batchModel = $this->session->getBatchModel();
+        if ($batchModel != null
+            && ($batchModel->getLastUsedLimit() == $limit)
+            && ($batchModel->getLastFetchedPage() == $pageNumber)) {
+            $token = $batchModel->getBatchToken();
+        }
+
+        return new MerchandiseRequestParams(
+            $nostoAccount,
+            $facets,
+            $customerId,
+            $category,
+            $pageNumber,
+            $limit,
+            $previewMode,
+            $token
         );
-        $this->lastUsedLimit = $limit;
+    }
+
+
+    /**
+     * @param MerchandiseRequestParams $requestParams
+     * @return CategoryMerchandisingResult
+     * @throws AbstractHttpException
+     * @throws HttpResponseException
+     * @throws NostoException
+     */
+    private function getMerchandiseResults(MerchandiseRequestParams $requestParams)
+    {
+        HttpRequest::buildUserAgent(
+            'Magento',
+            $this->nostoHelperData->getPlatformVersion(),
+            "CMP_" . $this->cmHelperData->getModuleVersion()
+        );
+
+        $this->eventManager->dispatch(
+            PreRequestAction::DISPATCH_EVENT_NAME_PRE_RESULTS,
+            [
+                PreRequestAction::DISPATCH_EVENT_KEY_REQUEST => $requestParams
+            ]
+        );
+
+        $categoryMerchandising = new BatchedCategoryMerchandising(
+            $requestParams->getNostoAccount(),
+            $requestParams->getCustomerId(),
+            $requestParams->getCategory(),
+            $requestParams->getPageNumber(),
+            $requestParams->getFacets()->getIncludeFilters(),
+            $requestParams->getFacets()->getExcludeFilters(),
+            '',
+            AbstractGraphQLOperation::IDENTIFIER_BY_CID,
+            $requestParams->isPreviewMode(),
+            $requestParams->getLimit(),
+            $requestParams->getBatchToken()
+        );
+
+        $result = $categoryMerchandising->execute();
 
         $this->eventManager->dispatch(
             PostRequestAction::DISPATCH_EVENT_NAME_POST_RESULTS,
             [
-                PostRequestAction::DISPATCH_EVENT_KEY_LIMIT => $limit,
-                PostRequestAction::DISPATCH_EVENT_KEY_PAGE => $pageNumber,
+                PostRequestAction::DISPATCH_EVENT_KEY_RESULT => $result,
+                PostRequestAction::DISPATCH_EVENT_KEY_LIMIT => $requestParams->getLimit(),
+                PostRequestAction::DISPATCH_EVENT_KEY_PAGE => $requestParams->getPageNumber(),
             ]
         );
-
-        $this->trace(
-            'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
-            [
-                $this->lastResult->getResultSet()->count(),
-                $this->lastResult->getTotalPrimaryCount(),
-                $category,
-                $pageNumber,
-                $limit
-            ]
-        );
-        return $this->lastResult;
+        return $result;
     }
 
     /**
