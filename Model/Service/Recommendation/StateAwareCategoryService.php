@@ -80,11 +80,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     }
 
     /**
-     * @var Category
-     */
-    private $categoryService;
-
-    /**
      * @var CookieManagerInterface
      */
     private $cookieManager;
@@ -145,7 +140,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
     /**
      * StateAwareCategoryService constructor.
      * @param CookieManagerInterface $cookieManager
-     * @param Category $categoryService
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param Registry $registry
@@ -158,7 +152,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
-        Category $categoryService,
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         Registry $registry,
@@ -174,7 +167,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
             $logger
         );
         $this->cookieManager = $cookieManager;
-        $this->categoryService = $categoryService;
         $this->cookieManager = $cookieManager;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
@@ -203,23 +195,13 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         $this->lastResult = ServerTiming::getInstance()->instrument(
             function () use ($requestParams) {
-                return $this->getMerchandiseResults($requestParams)
+                return $this->getMerchandiseResults($requestParams);
             },
             self::TIME_PROF_GRAPHQL_QUERY
         );
 
         $this->lastUsedLimit = $limit;
 
-        $this->trace(
-            'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
-            [
-                $this->lastResult->getResultSet()->count(),
-                $this->lastResult->getTotalPrimaryCount(),
-                $category,
-                $pageNumber,
-                $limit
-            ]
-        );
         return $this->lastResult;
     }
 
@@ -262,7 +244,7 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
 
         //Get batch token
         $token = '';
-        $batchModel = $this->session->getBatchModel();
+        $batchModel = $this->resultSessionService->getBatchModel();
         if ($batchModel != null
             && ($batchModel->getLastUsedLimit() == $limit)
             && ($batchModel->getLastFetchedPage() == $pageNumber)) {
@@ -291,18 +273,11 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
      */
     private function getMerchandiseResults(MerchandiseRequestParams $requestParams)
     {
-        HttpRequest::buildUserAgent(
-            'Magento',
-            $this->nostoHelperData->getPlatformVersion(),
-            "CMP_" . $this->cmHelperData->getModuleVersion()
-        );
-
-        $this->eventManager->dispatch(
-            PreRequestAction::DISPATCH_EVENT_NAME_PRE_RESULTS,
-            [
-                PreRequestAction::DISPATCH_EVENT_KEY_REQUEST => $requestParams
-            ]
-        );
+//        HttpRequest::buildUserAgent(
+//            'Magento',
+//            $this->nostoHelperData->getPlatformVersion(),
+//            "CMP_" . $this->cmHelperData->getModuleVersion()
+//        );
 
         $categoryMerchandising = new BatchedCategoryMerchandising(
             $requestParams->getNostoAccount(),
@@ -328,6 +303,17 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
                 PostRequestAction::DISPATCH_EVENT_KEY_PAGE => $requestParams->getPageNumber(),
             ]
         );
+
+        $this->trace(
+            'Got %d / %d (total) product ids from Nosto CMP for category "%s", using page num: %d, using limit: %d',
+            [
+                $result->getResultSet()->count(),
+                $result->getTotalPrimaryCount(),
+                $requestParams->getCategory(),
+                $requestParams->getPageNumber(),
+                $requestParams->getLimit()
+            ]
+        );
         return $result;
     }
 
@@ -349,19 +335,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         return $this->categoryBuilder->getCategory($category, $store);
-    }
-
-    /**
-     * @param $id
-     * @throws NoSuchEntityException
-     */
-    public function setCategoryInRegistry($id): void
-    {
-        // Current store id value is unavailable
-        $store = $this->nostoHelperScope->getStore();
-        $category = $this->categoryRepository->get($id, $store->getId());
-        /** @noinspection PhpDeprecationInspection */
-        $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**

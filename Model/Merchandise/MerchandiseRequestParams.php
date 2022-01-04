@@ -37,10 +37,11 @@
 namespace Nosto\Cmp\Model\Merchandise;
 
 use Nosto\Cmp\Model\Facet\FacetInterface;
+use Nosto\Types\Signup\AccountInterface;
 
 class MerchandiseRequestParams
 {
-    /** @var string */
+    /** @var AccountInterface */
     private $nostoAccount;
 
     /** @var FacetInterface */
@@ -65,7 +66,7 @@ class MerchandiseRequestParams
     private $batchToken;
 
     /**
-     * @param string $nostoAccount
+     * @param AccountInterface $nostoAccount
      * @param FacetInterface $facets
      * @param string $customerId
      * @param string $category
@@ -74,8 +75,16 @@ class MerchandiseRequestParams
      * @param bool $previewMode
      * @param string $batchToken
      */
-    public function __construct(string $nostoAccount, FacetInterface $facets, string $customerId, string $category, int $pageNumber, int $limit, bool $previewMode, string $batchToken)
-    {
+    public function __construct(
+        AccountInterface $nostoAccount,
+        FacetInterface $facets,
+        string $customerId,
+        string $category,
+        int $pageNumber,
+        int $limit,
+        bool $previewMode,
+        string $batchToken
+    ) {
         $this->nostoAccount = $nostoAccount;
         $this->facets = $facets;
         $this->customerId = $customerId;
@@ -88,9 +97,9 @@ class MerchandiseRequestParams
 
 
     /**
-     * @return string
+     * @return AccountInterface
      */
-    public function getNostoAccount(): string
+    public function getNostoAccount(): AccountInterface
     {
         return $this->nostoAccount;
     }

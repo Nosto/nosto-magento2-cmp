@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\GraphqlModelException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
@@ -46,6 +47,7 @@ use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 class GraphQlHandler extends AbstractHandler
 {
@@ -56,11 +58,13 @@ class GraphQlHandler extends AbstractHandler
     /** @var SessionService */
     private $sessionService;
 
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
     /** @var int */
     private $pageSize;
 
     /**
-     * GraphQlHandler constructor.
      * @param BuildGraphQlFacetService $buildFacetService
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
@@ -68,8 +72,9 @@ class GraphQlHandler extends AbstractHandler
      * @param CmpHelperData $cmpHelperData
      * @param StateAwareCategoryServiceInterface $categoryService
      * @param SessionService $sessionService
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param Logger $logger
-     * @param int $pageSize
+     * @param $pageSize
      */
     public function __construct(
         BuildGraphQlFacetService $buildFacetService,
@@ -79,6 +84,7 @@ class GraphQlHandler extends AbstractHandler
         CmpHelperData $cmpHelperData,
         StateAwareCategoryServiceInterface $categoryService,
         SessionService $sessionService,
+        CategoryRepositoryInterface $categoryRepository,
         Logger $logger,
         $pageSize
     ) {
@@ -111,9 +117,22 @@ class GraphQlHandler extends AbstractHandler
      */
     protected function preFetchOps(array $requestData)
     {
-        $this->categoryService->setCategoryInRegistry(
+        $this->categoryRepository->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
+    }
+
+    /**
+     * @param $id
+     * @throws NoSuchEntityException
+     */
+    public function setCategoryInRegistry($id): void
+    {
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
+        $category = $this->categoryRepository->get($id, $store->getId());
+        /** @noinspection PhpDeprecationInspection */
+        $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**

@@ -61,11 +61,6 @@ interface StateAwareCategoryServiceInterface
     public function getLastResult(): ?CategoryMerchandisingResult;
 
     /**
-     * @param $id
-     */
-    public function setCategoryInRegistry($id): void;
-
-    /**
      * @return int
      */
     public function getLastUsedLimit(): int;
