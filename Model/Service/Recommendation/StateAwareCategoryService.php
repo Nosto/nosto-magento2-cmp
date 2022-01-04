@@ -70,7 +70,7 @@ use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService as ResultSessionService;
 
-class StateAwareCategoryService implements StateAwareCategoryServiceInterface
+class StateAwareCategoryService
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
@@ -335,14 +335,6 @@ class StateAwareCategoryService implements StateAwareCategoryServiceInterface
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         return $this->categoryBuilder->getCategory($category, $store);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getLastUsedLimit(): int
-    {
-        return $this->lastUsedLimit;
     }
 
     /**

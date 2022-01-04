@@ -38,21 +38,21 @@ namespace Nosto\Cmp\Plugin\Api\Search;
 
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResult;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 
 class SearchResultSorter
 {
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var StateAwareCategoryService
      */
     private $categoryService;
 
     /**
      * SearchResultSorter constructor.
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param StateAwareCategoryService $categoryService
      */
     public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
+        StateAwareCategoryService $categoryService
     ) {
         $this->categoryService = $categoryService;
     }

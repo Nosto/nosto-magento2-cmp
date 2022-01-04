@@ -43,7 +43,7 @@ use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -70,7 +70,7 @@ class GraphQlHandler extends AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param StateAwareCategoryService $categoryService
      * @param SessionService $sessionService
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Logger $logger
@@ -82,7 +82,7 @@ class GraphQlHandler extends AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
+        StateAwareCategoryService $categoryService,
         SessionService $sessionService,
         CategoryRepositoryInterface $categoryRepository,
         Logger $logger,

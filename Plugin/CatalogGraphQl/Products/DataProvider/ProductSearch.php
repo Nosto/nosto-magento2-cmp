@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Plugin\CatalogGraphQl\Products\DataProvider;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch as MagentoProductSearch;
 use Magento\Framework\Api\SearchResultsInterface;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 
 /**
@@ -47,16 +47,16 @@ use Nosto\Cmp\Utils\CategoryMerchandising;
 class ProductSearch
 {
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var StateAwareCategoryService
      */
     private $categoryService;
 
     /**
      * SearchResultSorter constructor.
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param StateAwareCategoryService $categoryService
      */
     public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
+        StateAwareCategoryService $categoryService
     ) {
         $this->categoryService = $categoryService;
     }

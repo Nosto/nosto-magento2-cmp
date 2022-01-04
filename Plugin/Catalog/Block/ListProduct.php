@@ -39,7 +39,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 /**
@@ -49,12 +49,12 @@ use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 class ListProduct
 {
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var StateAwareCategoryService
      */
     private $categoryService;
 
     public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
+        StateAwareCategoryService $categoryService
     ) {
         $this->categoryService = $categoryService;
     }

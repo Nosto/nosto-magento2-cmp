@@ -42,7 +42,7 @@ use Nosto\Cmp\Exception\CmpException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
@@ -88,7 +88,7 @@ abstract class AbstractHandler
     protected $nostoHelperScope;
 
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var StateAwareCategoryService
      */
     protected $categoryService;
 
@@ -98,7 +98,7 @@ abstract class AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param StateAwareCategoryService $categoryService
      * @param Logger $logger
      */
     public function __construct(
@@ -106,7 +106,7 @@ abstract class AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
+        StateAwareCategoryService $categoryService,
         Logger $logger
     ) {
         $this->loggerTraitConstruct(
@@ -134,10 +134,11 @@ abstract class AbstractHandler
         $store = $this->nostoHelperScope->getStore($storeId);
 
         try {
+            $limit = $this->parseLimit($store, $requestData);
             $productIds = $this->getCmpProductIds(
                 $this->getFilters($store, $requestData),
                 $this->parsePageNumber($store, $requestData),
-                $this->parseLimit($store, $requestData)
+                $limit
             );
             //In case CM category is not configured in nosto
             if ($productIds == null || empty($productIds)) {
@@ -157,7 +158,8 @@ abstract class AbstractHandler
         //Add CM sorting to the RequestData array
         $this->applyCmpFilter(
             $requestData,
-            $productIds
+            $productIds,
+            $limit
         );
     }
 
@@ -199,8 +201,9 @@ abstract class AbstractHandler
      *
      * @param array $requestData
      * @param array $productIds
+     * @param int $limit
      */
-    private function applyCmpFilter(array &$requestData, array $productIds)
+    private function applyCmpFilter(array &$requestData, array $productIds, $limit)
     {
         $bindKey = $this->getBindKey();
 
@@ -244,7 +247,7 @@ abstract class AbstractHandler
             'type' => 'termFilter',
             'value' => $productIds
         ];
-        $requestData['size'] = $this->categoryService->getLastUsedLimit();
+        $requestData['size'] = $limit;
     }
 
     /**

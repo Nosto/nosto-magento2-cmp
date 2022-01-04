@@ -38,20 +38,20 @@ namespace Nosto\Cmp\Plugin\Framework\Search;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\Search as MagentoSearch;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 
 class Search
 {
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var StateAwareCategoryService
      */
     private $categoryService;
 
     /**
      * Search constructor.
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param StateAwareCategoryService $categoryService
      */
-    public function __construct(StateAwareCategoryServiceInterface $categoryService)
+    public function __construct(StateAwareCategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
     }

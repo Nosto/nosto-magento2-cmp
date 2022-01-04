@@ -47,7 +47,7 @@ use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -70,7 +70,7 @@ class WebHandler extends AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param StateAwareCategoryService $categoryService
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      * @param Logger $logger
@@ -81,7 +81,7 @@ class WebHandler extends AbstractHandler
         NostoHelperAccount $nostoHelperAccount,
         NostoHelperScope $nostoHelperScope,
         CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
+        StateAwareCategoryService $categoryService,
         BuildWebFacetService $buildWebFacetService,
         State $state,
         Logger $logger,
