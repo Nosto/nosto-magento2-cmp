@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 3.3.1
+* Fix sorting for CM result served through Magento's GraphQl
+
 ### 3.3.0
 * Fix incorrect products number in filters
 * Add support for subcategory filtering
