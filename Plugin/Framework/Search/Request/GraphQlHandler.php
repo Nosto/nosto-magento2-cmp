@@ -36,18 +36,19 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\GraphqlModelException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
+use Nosto\Cmp\Model\Service\Merchandise\MerchandiseServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\RequestParamsService;
+use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 class GraphQlHandler extends AbstractHandler
 {
@@ -70,30 +71,33 @@ class GraphQlHandler extends AbstractHandler
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryService $categoryService
+     * @param MerchandiseServiceInterface $merchandiseService
+     * @param RequestParamsService $requestParamsService
      * @param SessionService $sessionService
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Logger $logger
      * @param $pageSize
      */
     public function __construct(
-        BuildGraphQlFacetService $buildFacetService,
-        SearchEngine $searchEngineHelper,
-        NostoHelperAccount $nostoHelperAccount,
-        NostoHelperScope $nostoHelperScope,
-        CmpHelperData $cmpHelperData,
-        StateAwareCategoryService $categoryService,
-        SessionService $sessionService,
+        BuildGraphQlFacetService    $buildFacetService,
+        SearchEngine                $searchEngineHelper,
+        NostoHelperAccount          $nostoHelperAccount,
+        NostoHelperScope            $nostoHelperScope,
+        CmpHelperData               $cmpHelperData,
+        MerchandiseServiceInterface $merchandiseService,
+        RequestParamsService        $requestParamsService,
+        SessionService              $sessionService,
         CategoryRepositoryInterface $categoryRepository,
-        Logger $logger,
-        $pageSize
+        Logger                      $logger,
+                                    $pageSize
     ) {
         parent::__construct(
             $searchEngineHelper,
             $nostoHelperAccount,
             $nostoHelperScope,
             $cmpHelperData,
-            $categoryService,
+            $merchandiseService,
+            $requestParamsService,
             $logger
         );
         $this->buildFacetService = $buildFacetService;

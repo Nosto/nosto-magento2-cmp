@@ -34,87 +34,40 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Service\MagentoSession;
 
-/**
- * This classed is used to pass around the BatchToken returned from Nosto
- * in order to improve performance during pagination
- */
-class BatchModel
+class GraphQlParamModel
 {
-    /** @var string */
-    private $batchToken;
+    /** @var int */
+    private $limit;
 
     /** @var int */
-    private $lastUsedLimit;
-
-    /** @var int */
-    private $lastFetchedPage = 0;
-
-    /** @var int */
-    private $totalCount;
+    private $currentPage;
 
     /**
-     * @inheritDoc
+     * GraphQlParamModel constructor.
+     * @param int $limit
+     * @param int $currentPage
      */
-    public function getLastUsedLimit(): int
+    public function __construct(int $limit, int $currentPage)
     {
-        return $this->lastUsedLimit;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBatchToken(): ?string
-    {
-        return $this->batchToken;
-    }
-
-    /**
-     * @param string $batchToken
-     */
-    public function setBatchToken($batchToken)
-    {
-        $this->batchToken = $batchToken;
-    }
-
-    /**
-     * @param int $lastUsedLimit
-     */
-    public function setLastUsedLimit($lastUsedLimit)
-    {
-        $this->lastUsedLimit = $lastUsedLimit;
+        $this->limit = $limit;
+        $this->currentPage = $currentPage;
     }
 
     /**
      * @return int
      */
-    public function getLastFetchedPage(): int
+    public function getLimit(): int
     {
-        return $this->lastFetchedPage;
-    }
-
-    /**
-     * @param int $lastFetchedPage
-     */
-    public function setLastFetchedPage(int $lastFetchedPage): void
-    {
-        $this->lastFetchedPage = $lastFetchedPage;
+        return $this->limit;
     }
 
     /**
      * @return int
      */
-    public function getTotalCount(): int
+    public function getCurrentPage(): int
     {
-        return $this->totalCount;
-    }
-
-    /**
-     * @param int $totalCount
-     */
-    public function setTotalCount(int $totalCount): void
-    {
-        $this->totalCount = $totalCount;
+        return $this->currentPage;
     }
 }

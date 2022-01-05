@@ -36,6 +36,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface" type="Nosto\Cmp\Model\Service\Category\CachingCategoryMappingService"/>
+    <preference for="Nosto\Cmp\Model\Service\Merchandise\MerchandiseServiceInterface" type="Nosto\Cmp\Model\Service\Merchandise\TracingMerchandiseService"/>
     <type name="Magento\Catalog\Model\Config">
         <plugin name="sortby_add_custom_option" type="Nosto\Cmp\Plugin\Catalog\Model\Config" />
     </type>
@@ -77,6 +78,13 @@
     <type name="Nosto\Cmp\Plugin\Framework\Search\Request\GraphQlHandler">
         <arguments>
             <argument name="pageSize" xsi:type="number">-1</argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Model\Service\Merchandise\TracingMerchandiseService">
+        <arguments>
+            <argument name="merchandiseService" xsi:type="object">
+                Nosto\Cmp\Model\Service\Merchandise\DefaultMerchandiseService
+            </argument>
         </arguments>
     </type>
     <type name="Nosto\Cmp\Model\Service\Category\CachingCategoryMappingService">

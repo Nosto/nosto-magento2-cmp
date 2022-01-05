@@ -38,22 +38,21 @@ namespace Nosto\Cmp\Plugin\Framework\Search;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\Search as MagentoSearch;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
+use Nosto\Cmp\Model\Service\Merchandise\LastResult;
+use Nosto\Cmp\Model\Service\Recommendation\DefaultMerchandiseService;
 
 class Search
 {
-    /**
-     * @var StateAwareCategoryService
-     */
-    private $categoryService;
+    /** @var LastResult  */
+    private $lastResult;
 
     /**
      * Search constructor.
-     * @param StateAwareCategoryService $categoryService
+     * @param LastResult $lastResult
      */
-    public function __construct(StateAwareCategoryService $categoryService)
+    public function __construct(LastResult $lastResult)
     {
-        $this->categoryService = $categoryService;
+        $this->lastResult = $lastResult;
     }
 
     /**
@@ -78,7 +77,7 @@ class Search
      */
     private function getCmpTotalCount()
     {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
             return $categoryMerchandisingResult->getTotalPrimaryCount();
         }

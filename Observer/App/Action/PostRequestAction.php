@@ -39,8 +39,8 @@ namespace Nosto\Cmp\Observer\App\Action;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Model\Service\Recommendation\BatchModel;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
+use Nosto\Cmp\Model\Service\MagentoSession\BatchModel;
+use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 

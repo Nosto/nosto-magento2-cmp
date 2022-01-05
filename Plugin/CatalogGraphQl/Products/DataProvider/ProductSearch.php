@@ -38,7 +38,8 @@ namespace Nosto\Cmp\Plugin\CatalogGraphQl\Products\DataProvider;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch as MagentoProductSearch;
 use Magento\Framework\Api\SearchResultsInterface;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryService;
+use Nosto\Cmp\Model\Service\Merchandise\LastResult;
+use Nosto\Cmp\Model\Service\Recommendation\DefaultMerchandiseService;
 use Nosto\Cmp\Utils\CategoryMerchandising;
 
 /**
@@ -46,19 +47,17 @@ use Nosto\Cmp\Utils\CategoryMerchandising;
  */
 class ProductSearch
 {
-    /**
-     * @var StateAwareCategoryService
-     */
-    private $categoryService;
+    /** @var LastResult  */
+    private $lastResult;
 
     /**
      * SearchResultSorter constructor.
-     * @param StateAwareCategoryService $categoryService
+     * @param DefaultMerchandiseService $categoryService
      */
     public function __construct(
-        StateAwareCategoryService $categoryService
+        LastResult $lastResult
     ) {
-        $this->categoryService = $categoryService;
+        $this->lastResult = $lastResult;
     }
 
     /**
@@ -91,7 +90,7 @@ class ProductSearch
      */
     private function getCmpSort()
     {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
             return CategoryMerchandising::parseProductIds(
                 $categoryMerchandisingResult

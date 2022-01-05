@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,31 +35,57 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Session;
+namespace Nosto\Cmp\Model\Service\MagentoSession;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Store;
-use Nosto\Cmp\Exception\SessionCreationException;
-use Nosto\NostoException;
-use Nosto\Operation\Session\NewSession;
-use Nosto\Types\Signup\AccountInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 
 class SessionService
 {
+    /** @var SessionManagerInterface */
+    private $session;
+
     /**
-     * @param Store $store
-     * @param AccountInterface $nostoAccount
-     * @return mixed|null
-     * @throws SessionCreationException
+     * CmpSession constructor.
+     * @param SessionManagerInterface $session
      */
-    public function getNewNostoSession(Store $store, AccountInterface $nostoAccount)
+    public function __construct(SessionManagerInterface $session)
     {
-        try {
-            $url = $store->getCurrentUrl();
-            $newSession = new NewSession($nostoAccount, $url, true);
-            return $newSession->execute();
-        } catch (NoSuchEntityException | NostoException $e) {
-            throw new SessionCreationException($store, $e);
-        }
+        $this->session = $session;
+    }
+
+    /**
+     * @param BatchModel $model
+     */
+    public function setBatchModel(BatchModel $model)
+    {
+        $this->session->start();
+        $this->session->setNostoCmpBatchSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @return BatchModel
+     */
+    public function getBatchModel()
+    {
+        $this->session->start();
+        return $this->session->getNostoCmpBatchSession(); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @param GraphQlParamModel $model
+     */
+    public function setGraphqlModel(GraphQlParamModel $model)
+    {
+        $this->session->start();
+        $this->session->setNostoCmpGraphqlSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @return GraphQlParamModel
+     */
+    public function getGraphqlModel()
+    {
+        $this->session->start();
+        return $this->session->getNostoCmpGraphqlSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 }
