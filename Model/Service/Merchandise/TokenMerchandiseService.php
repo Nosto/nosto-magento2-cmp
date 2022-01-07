@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused */
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,81 +34,56 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Model\Service\Merchandise;
 
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
+use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
 use Nosto\Cmp\Model\Service\MagentoSession\BatchModel;
-use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
+use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 
-class PostRequestAction implements ObserverInterface
+class TokenMerchandiseService implements MerchandiseServiceInterface
 {
-    public const PRODUCT_DEBUG_HEADER_NAME = 'X-Nosto-Product-Ids';
-    public const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';
-    public const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
-    public const DISPATCH_EVENT_KEY_RESULT = 'result';
-    public const DISPATCH_EVENT_KEY_LIMIT = 'limit';
-    public const DISPATCH_EVENT_KEY_PAGE = 'page';
-
-    /**
-     * @var HttpResponse $response
-     */
-    private $response;
+    /** @var MerchandiseServiceInterface */
+    private $merchandiseService;
 
     /** @var SessionService */
-    private $session;
+    private $sessionService;
 
     /**
-     * PostRequestAction constructor.
-     * @param HttpResponse $response
-     * @param SessionService $session
+     * @param MerchandiseServiceInterface $merchandiseService
+     * @param SessionService $sessionService
      */
-    public function __construct(HttpResponse $response, SessionService $session)
+    public function __construct(MerchandiseServiceInterface $merchandiseService, SessionService $sessionService)
     {
-        $this->response = $response;
-        $this->session = $session;
+        $this->merchandiseService = $merchandiseService;
+        $this->sessionService = $sessionService;
     }
 
     /**
-     * @param Observer $observer
+     * @param MerchandiseRequestParams $requestParams
+     * @return CategoryMerchandisingResult
      */
-    public function execute(Observer $observer) // phpcs:ignore
+    public function getMerchandiseResults(MerchandiseRequestParams $requestParams): CategoryMerchandisingResult
     {
-        if (!ServerTiming::getInstance()->isEmpty()) {
-            $this->response->setHeader(
-                ServerTiming::HEADER_NAME,
-                ServerTiming::getInstance()->build(),
-                true
-            );
-        }
+        $result = $this->merchandiseService->getMerchandiseResults($requestParams);
+        $this->handleBatchModel($requestParams, $result);
+        return $result;
+    }
 
+    /**
+     * @param MerchandiseRequestParams $requestParams
+     * @param CategoryMerchandisingResult $result
+     */
+    private function handleBatchModel(MerchandiseRequestParams $requestParams, CategoryMerchandisingResult $result)
+    {
         $batchModel = $this->getBatchModel();
-
-        $results = $observer->getData(self::DISPATCH_EVENT_KEY_RESULT);
         if ($results instanceof CategoryMerchandisingResult) {
-            $this->response->setHeader(
-                self::PRODUCT_DEBUG_HEADER_NAME,
-                implode(',', $results->parseProductIds()),
-                true
-            );
 
             $batchModel->setBatchToken($results->getBatchToken());
             $batchModel->setTotalCount($results->getTotalPrimaryCount());
+            $batchModel->setLastUsedLimit($requestParams->getLimit());
+            $batchModel->setLastFetchedPage($requestParams->getPageNumber());
         }
-
-        $limit = $observer->getData(self::DISPATCH_EVENT_KEY_LIMIT);
-        if (is_int($limit)) {
-            $batchModel->setLastUsedLimit($limit);
-        }
-
-        $page = $observer->getData(self::DISPATCH_EVENT_KEY_PAGE);
-        if (is_int($page)) {
-            $batchModel->setLastFetchedPage($page);
-        }
-
         $this->session->setBatchModel($batchModel);
     }
 
