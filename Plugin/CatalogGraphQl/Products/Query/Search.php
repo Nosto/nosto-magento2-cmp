@@ -99,7 +99,7 @@ class Search
         array $args
     ) {
         if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])
-            && $this->getTotalPages() !== null) {
+            && $this->getTotalPages() != 0) {
             return $this->searchResultFactory->create([
                 'totalCount' => $searchResult->getTotalCount(),
                 'productsSearchResult' => $searchResult->getProductsSearchResult(),
@@ -113,13 +113,14 @@ class Search
     }
 
     /**
-     * @return int|null
+     * Returns 0 when there are no results, also includes the case CM is not enabled for a category
+     * @return int
      */
     private function getTotalPages()
     {
         $batchModel = $this->sessionService->getBatchModel();
         if ($batchModel === null) {
-            return null;
+            return 0;
         }
         return (int) ceil($batchModel->getTotalCount() / $batchModel->getLastUsedLimit());
     }
