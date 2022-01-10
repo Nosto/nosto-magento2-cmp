@@ -39,7 +39,6 @@ namespace Nosto\Cmp\Plugin\Framework\Search;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\Search as MagentoSearch;
 use Nosto\Cmp\Model\Service\Merchandise\LastResult;
-use Nosto\Cmp\Model\Service\Recommendation\DefaultMerchandiseService;
 
 class Search
 {

@@ -39,8 +39,6 @@ namespace Nosto\Cmp\Plugin\CatalogGraphQl\Products\DataProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch as MagentoProductSearch;
 use Magento\Framework\Api\SearchResultsInterface;
 use Nosto\Cmp\Model\Service\Merchandise\LastResult;
-use Nosto\Cmp\Model\Service\Recommendation\DefaultMerchandiseService;
-use Nosto\Cmp\Utils\CategoryMerchandising;
 
 /**
  * Class used to re-sort products when served through Magento's GraphQl
@@ -51,8 +49,7 @@ class ProductSearch
     private $lastResult;
 
     /**
-     * SearchResultSorter constructor.
-     * @param DefaultMerchandiseService $categoryService
+     * @param LastResult $lastResult
      */
     public function __construct(
         LastResult $lastResult
@@ -92,9 +89,7 @@ class ProductSearch
     {
         $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
-            return CategoryMerchandising::parseProductIds(
-                $categoryMerchandisingResult
-            );
+            return $categoryMerchandisingResult->parseProductIds();
         }
         return null;
     }

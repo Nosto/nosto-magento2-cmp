@@ -77,14 +77,14 @@ class TokenMerchandiseService implements MerchandiseServiceInterface
     private function handleBatchModel(MerchandiseRequestParams $requestParams, CategoryMerchandisingResult $result)
     {
         $batchModel = $this->getBatchModel();
-        if ($results instanceof CategoryMerchandisingResult) {
 
-            $batchModel->setBatchToken($results->getBatchToken());
-            $batchModel->setTotalCount($results->getTotalPrimaryCount());
+        if ($result instanceof CategoryMerchandisingResult) {
+            $batchModel->setBatchToken($result->getBatchToken());
+            $batchModel->setTotalCount($result->getTotalPrimaryCount());
             $batchModel->setLastUsedLimit($requestParams->getLimit());
             $batchModel->setLastFetchedPage($requestParams->getPageNumber());
         }
-        $this->session->setBatchModel($batchModel);
+        $this->sessionService->setBatchModel($batchModel);
     }
 
     /**
@@ -92,7 +92,7 @@ class TokenMerchandiseService implements MerchandiseServiceInterface
      */
     private function getBatchModel()
     {
-        $batchModel = $this->session->getBatchModel();
+        $batchModel = $this->sessionService->getBatchModel();
         if ($batchModel == null) {
             return new BatchModel();
         }

@@ -39,9 +39,6 @@ namespace Nosto\Cmp\Model\Service\Merchandise;
 
 use Magento\Framework\Event\ManagerInterface;
 use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
-use Nosto\Cmp\Model\Service\Merchandise\LastResult;
-use Nosto\Cmp\Observer\App\Action\PostRequestAction;
-use Nosto\Cmp\Observer\App\Action\PreRequestAction;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
@@ -117,14 +114,6 @@ class DefaultMerchandiseService implements MerchandiseServiceInterface
 
         $result = $categoryMerchandising->execute();
 
-        $this->eventManager->dispatch(
-            PostRequestAction::DISPATCH_EVENT_NAME_POST_RESULTS,
-            [
-                PostRequestAction::DISPATCH_EVENT_KEY_RESULT => $result,
-                PostRequestAction::DISPATCH_EVENT_KEY_LIMIT => $requestParams->getLimit(),
-                PostRequestAction::DISPATCH_EVENT_KEY_PAGE => $requestParams->getPageNumber(),
-            ]
-        );
         return $result;
     }
 

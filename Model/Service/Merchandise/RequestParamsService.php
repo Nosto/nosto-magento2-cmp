@@ -4,7 +4,6 @@ namespace Nosto\Cmp\Model\Service\Merchandise;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Nosto\Cmp\Exception\MissingAccountException;
@@ -15,29 +14,23 @@ use Nosto\Cmp\Helper\Data;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
 use Nosto\Cmp\Model\Service\VisitSession\SessionService as VisitSessionService;
-use Nosto\Cmp\Observer\App\Action\PostRequestAction;
-use Nosto\Cmp\Observer\App\Action\PreRequestAction;
-use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
-use Nosto\Operation\AbstractGraphQLOperation;
-use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Request\Api\Token;
-use Nosto\Request\Http\HttpRequest;
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 use Nosto\Service\FeatureAccess;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
-use Nosto\NostoException;
-use Nosto\Request\Http\Exception\AbstractHttpException;
-use Nosto\Request\Http\Exception\HttpResponseException;
 use Nosto\Cmp\Model\Service\MagentoSession\SessionService as ResultSessionService;
 
 class RequestParamsService
 {
     const NOSTO_PREVIEW_COOKIE = 'nostopreview';
+
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /**
      * @var CookieManagerInterface
@@ -89,6 +82,19 @@ class RequestParamsService
      */
     private $resultSessionService;
 
+    /**
+     * @param CookieManagerInterface $cookieManager
+     * @param NostoHelperAccount $nostoHelperAccount
+     * @param NostoHelperScope $nostoHelperScope
+     * @param Registry $registry
+     * @param CategoryBuilder $categoryBuilder
+     * @param Logger $logger
+     * @param Data $nostoCmpHelper
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param ManagerInterface $eventManager
+     * @param VisitSessionService $visitSessionService
+     * @param ResultSessionService $resultSessionService
+     */
     public function __construct(
         CookieManagerInterface $cookieManager,
         NostoHelperAccount $nostoHelperAccount,
@@ -102,6 +108,9 @@ class RequestParamsService
         VisitSessionService $visitSessionService,
         ResultSessionService $resultSessionService
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->cookieManager = $cookieManager;
         $this->nostoHelperAccount = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;

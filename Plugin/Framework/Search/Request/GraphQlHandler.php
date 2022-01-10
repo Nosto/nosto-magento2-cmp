@@ -49,6 +49,7 @@ use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
+use Magento\Framework\Registry;
 
 class GraphQlHandler extends AbstractHandler
 {
@@ -61,6 +62,9 @@ class GraphQlHandler extends AbstractHandler
 
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
+
+    /** @var Registry */
+    private $registry;
 
     /** @var int */
     private $pageSize;
@@ -75,6 +79,7 @@ class GraphQlHandler extends AbstractHandler
      * @param RequestParamsService $requestParamsService
      * @param SessionService $sessionService
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param Registry $registry
      * @param Logger $logger
      * @param $pageSize
      */
@@ -88,6 +93,7 @@ class GraphQlHandler extends AbstractHandler
         RequestParamsService        $requestParamsService,
         SessionService              $sessionService,
         CategoryRepositoryInterface $categoryRepository,
+        Registry                    $registry,
         Logger                      $logger,
                                     $pageSize
     ) {
@@ -102,6 +108,7 @@ class GraphQlHandler extends AbstractHandler
         );
         $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
+        $this->registry = $registry;
         $this->pageSize = $pageSize;
     }
 
@@ -121,7 +128,7 @@ class GraphQlHandler extends AbstractHandler
      */
     protected function preFetchOps(array $requestData)
     {
-        $this->categoryRepository->setCategoryInRegistry(
+        $this->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
     }

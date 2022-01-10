@@ -105,9 +105,9 @@ class MerchandiseRequestParams
     }
 
     /**
-     * @param string $nostoAccount
+     * @param AccountInterface $nostoAccount
      */
-    public function setNostoAccount(string $nostoAccount): void
+    public function setNostoAccount(AccountInterface $nostoAccount): void
     {
         $this->nostoAccount = $nostoAccount;
     }

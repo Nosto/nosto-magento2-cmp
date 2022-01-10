@@ -55,7 +55,7 @@ class BatchModel
     private $totalCount;
 
     /**
-     * @inheritDoc
+     * @return int
      */
     public function getLastUsedLimit(): int
     {
@@ -63,9 +63,9 @@ class BatchModel
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
-    public function getBatchToken(): ?string
+    public function getBatchToken(): string
     {
         return $this->batchToken;
     }

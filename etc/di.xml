@@ -83,6 +83,13 @@
     <type name="Nosto\Cmp\Model\Service\Merchandise\TracingMerchandiseService">
         <arguments>
             <argument name="merchandiseService" xsi:type="object">
+                Nosto\Cmp\Model\Service\Merchandise\TokenMerchandiseService
+            </argument>
+        </arguments>
+    </type>
+    <type name="Nosto\Cmp\Model\Service\Merchandise\TokenMerchandiseService">
+        <arguments>
+            <argument name="merchandiseService" xsi:type="object">
                 Nosto\Cmp\Model\Service\Merchandise\DefaultMerchandiseService
             </argument>
         </arguments>
