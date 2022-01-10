@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -95,7 +95,7 @@ class GraphQlHandler extends AbstractHandler
         CategoryRepositoryInterface $categoryRepository,
         Registry                    $registry,
         Logger                      $logger,
-                                    $pageSize
+        $pageSize
     ) {
         parent::__construct(
             $searchEngineHelper,
@@ -108,6 +108,7 @@ class GraphQlHandler extends AbstractHandler
         );
         $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
+        $this->categoryRepository = $categoryRepository;
         $this->registry = $registry;
         $this->pageSize = $pageSize;
     }
@@ -124,7 +125,8 @@ class GraphQlHandler extends AbstractHandler
      * There's no way in StateAwareCategoryService to get the category
      * when the request comes from GraphQl
      *
-     * @inheritDoc
+     * @param array $requestData
+     * @throws NoSuchEntityException
      */
     protected function preFetchOps(array $requestData)
     {

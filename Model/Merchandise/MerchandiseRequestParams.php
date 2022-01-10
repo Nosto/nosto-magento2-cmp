@@ -95,7 +95,6 @@ class MerchandiseRequestParams
         $this->batchToken = $batchToken;
     }
 
-
     /**
      * @return AccountInterface
      */
@@ -223,5 +222,4 @@ class MerchandiseRequestParams
     {
         $this->batchToken = $batchToken;
     }
-
 }

@@ -87,7 +87,7 @@ class WebHandler extends AbstractHandler
         BuildWebFacetService      $buildWebFacetService,
         State                     $state,
         Logger                    $logger,
-                                  $pageSize
+        $pageSize
     ) {
         parent::__construct(
             $searchEngineHelper,
