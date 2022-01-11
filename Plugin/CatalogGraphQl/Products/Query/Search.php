@@ -83,6 +83,7 @@ class Search
      * @param array $args
      * @param ResolveInfo $info
      * @param ContextInterface $context
+     * @return array
      * @noinspection PhpUnusedParameterInspection
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
@@ -95,9 +96,8 @@ class Search
 
             $sorting = $this->cmpHelperData->getFallbackSorting();
             $args['sort'][$sorting] = 'ASC';
-
-            return [$args, $info, $context];
         }
+        return [$args, $info, $context];
     }
 
     /**
