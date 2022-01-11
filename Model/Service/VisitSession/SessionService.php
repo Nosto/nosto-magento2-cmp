@@ -34,83 +34,31 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Service\VisitSession;
 
-class BatchModel implements BatchModelInterface
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\SessionCreationException;
+use Nosto\NostoException;
+use Nosto\Operation\Session\NewSession;
+use Nosto\Types\Signup\AccountInterface;
+
+class SessionService
 {
-    /** @var string */
-    private $batchToken;
-
-    /** @var int */
-    private $lastUsedLimit;
-
-    /** @var int */
-    private $lastFetchedPage = 0;
-
-    /** @var int */
-    private $totalCount;
-
     /**
-     * @inheritDoc
+     * @param Store $store
+     * @param AccountInterface $nostoAccount
+     * @return mixed|null
+     * @throws SessionCreationException
      */
-    public function getLastUsedLimit(): int
+    public function getNewNostoSession(Store $store, AccountInterface $nostoAccount)
     {
-        return $this->lastUsedLimit;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBatchToken(): ?string
-    {
-        return $this->batchToken;
-    }
-
-    /**
-     * @param string $batchToken
-     */
-    public function setBatchToken($batchToken)
-    {
-        $this->batchToken = $batchToken;
-    }
-
-    /**
-     * @param int $lastUsedLimit
-     */
-    public function setLastUsedLimit($lastUsedLimit)
-    {
-        $this->lastUsedLimit = $lastUsedLimit;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastFetchedPage(): int
-    {
-        return $this->lastFetchedPage;
-    }
-
-    /**
-     * @param int $lastFetchedPage
-     */
-    public function setLastFetchedPage(int $lastFetchedPage): void
-    {
-        $this->lastFetchedPage = $lastFetchedPage;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalCount(): int
-    {
-        return $this->totalCount;
-    }
-
-    /**
-     * @param int $totalCount
-     */
-    public function setTotalCount(int $totalCount): void
-    {
-        $this->totalCount = $totalCount;
+        try {
+            $url = $store->getCurrentUrl();
+            $newSession = new NewSession($nostoAccount, $url, true);
+            return $newSession->execute();
+        } catch (NoSuchEntityException | NostoException $e) {
+            throw new SessionCreationException($store, $e);
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace Nosto\Cmp\Plugin\Catalog\Block;
 use Magento\Catalog\Block\Product\ListProduct as MagentoListProduct;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 
 /**
@@ -49,14 +49,14 @@ use Nosto\Cmp\Plugin\Catalog\Model\Product as NostoProductPlugin;
 class ListProduct
 {
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var LastResult
      */
-    private $categoryService;
+    private $lastResult;
 
     public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
+        LastResult $lastResult
     ) {
-        $this->categoryService = $categoryService;
+        $this->lastResult = $lastResult;
     }
 
     /**
@@ -69,7 +69,7 @@ class ListProduct
         MagentoListProduct $listProduct,
         Collection $collection
     ) {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        $categoryMerchandisingResult = $this->lastResult->getLastResult();
 
         if ($categoryMerchandisingResult != null) {
             $cmpProductIds = $categoryMerchandisingResult->parseProductIds();

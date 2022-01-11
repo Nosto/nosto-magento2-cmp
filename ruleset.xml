@@ -39,7 +39,6 @@
     <file>./Block</file>
     <file>./Helper</file>
     <file>./Model</file>
-    <file>./Observer</file>
     <file>./Plugin</file>
     <file>./Utils</file>
     <file>./view</file>

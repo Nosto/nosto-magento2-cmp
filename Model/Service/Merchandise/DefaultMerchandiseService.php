@@ -34,119 +34,83 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Service\Merchandise;
 
 use Magento\Framework\Event\ManagerInterface;
-use Nosto\Cmp\Helper\Data as CmHelperData;
-use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Observer\App\Action\PostRequestAction;
-use Nosto\Cmp\Observer\App\Action\PreRequestAction;
-use Nosto\Model\Signup\Account as NostoAccount;
+use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
+use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
 use Nosto\Operation\AbstractGraphQLOperation;
 use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
 use Nosto\Request\Http\Exception\AbstractHttpException;
 use Nosto\Request\Http\Exception\HttpResponseException;
-use Nosto\Request\Http\HttpRequest;
 use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-use Nosto\Tagging\Helper\Data as NostoHelperData;
-use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
-class Category
+class DefaultMerchandiseService implements MerchandiseServiceInterface
 {
-    /**
-     * @var ManagerInterface
-     */
+
+    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
+
+    /** @var ManagerInterface  */
     private $eventManager;
 
-    /**
-     * @var CmHelperData
-     */
-    private $cmHelperData;
-
-    /**
-     * @var NostoHelperData
-     */
-    private $nostoHelperData;
-
-    /**
-     * @var NostoHelperScope
-     */
-    private $nostoHelperScope;
+    /** @var LastResult */
+    private $lastResult;
 
     /**
      * @param ManagerInterface $eventManager
-     * @param CmHelperData $cmHelperData
-     * @param NostoHelperData $nostoHelperData
-     * @param NostoHelperScope $nostoHelperScope
+     * @param LastResult $lastResult
      */
     public function __construct(
         ManagerInterface $eventManager,
-        CmHelperData $cmHelperData,
-        NostoHelperData $nostoHelperData,
-        NostoHelperScope $nostoHelperScope
+        LastResult $lastResult
     ) {
         $this->eventManager = $eventManager;
-        $this->cmHelperData = $cmHelperData;
-        $this->nostoHelperData = $nostoHelperData;
-        $this->nostoHelperScope = $nostoHelperScope;
+        $this->lastResult = $lastResult;
     }
 
     /**
-     * @param NostoAccount $nostoAccount
-     * @param FacetInterface $facets
-     * @param $nostoCustomerId
-     * @param $category
-     * @param int $pageNumber
-     * @param int $limit
-     * @param bool $previewMode
+     * @param MerchandiseRequestParams $requestParams
+     * @return CategoryMerchandisingResult
+     */
+    public function getMerchandiseResults(MerchandiseRequestParams $requestParams): CategoryMerchandisingResult
+    {
+        $result = ServerTiming::getInstance()->instrument(
+            function () use ($requestParams) {
+                return $this->getResults($requestParams);
+            },
+            self::TIME_PROF_GRAPHQL_QUERY
+        );
+
+        //This will be used by other interceptors
+        $this->lastResult->setLastResult($result);
+
+        return $result;
+    }
+
+    /**
+     * @param MerchandiseRequestParams $requestParams
      * @return CategoryMerchandisingResult
      * @throws AbstractHttpException
      * @throws HttpResponseException
      * @throws NostoException
      */
-    public function getPersonalisationResult(
-        NostoAccount $nostoAccount,
-        FacetInterface $facets,
-        $nostoCustomerId,
-        $category,
-        $pageNumber,
-        $limit,
-        $previewMode = false
-    ) {
-
-        HttpRequest::buildUserAgent(
-            'Magento',
-            $this->nostoHelperData->getPlatformVersion(),
-            "CMP_" . $this->cmHelperData->getModuleVersion()
-        );
-
+    private function getResults(MerchandiseRequestParams $requestParams)
+    {
         $categoryMerchandising = new BatchedCategoryMerchandising(
-            $nostoAccount,
-            $nostoCustomerId,
-            $category,
-            $pageNumber,
-            $facets->getIncludeFilters(),
-            $facets->getExcludeFilters(),
+            $requestParams->getNostoAccount(),
+            $requestParams->getCustomerId(),
+            $requestParams->getCategory(),
+            $requestParams->getPageNumber(),
+            $requestParams->getFacets()->getIncludeFilters(),
+            $requestParams->getFacets()->getExcludeFilters(),
             '',
             AbstractGraphQLOperation::IDENTIFIER_BY_CID,
-            $previewMode,
-            $limit
+            $requestParams->isPreviewMode(),
+            $requestParams->getLimit(),
+            $requestParams->getBatchToken()
         );
-        $this->eventManager->dispatch(
-            PreRequestAction::DISPATCH_EVENT_NAME_PRE_RESULTS,
-            [
-                PreRequestAction::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising
-            ]
-        );
-        $result = $categoryMerchandising->execute();
-        $this->eventManager->dispatch(
-            PostRequestAction::DISPATCH_EVENT_NAME_POST_RESULTS,
-            [
-                PostRequestAction::DISPATCH_EVENT_KEY_REQUEST => $categoryMerchandising,
-                PostRequestAction::DISPATCH_EVENT_KEY_RESULT => $result
-            ]
-        );
-        return $result;
+
+        return $categoryMerchandising->execute();
     }
 }

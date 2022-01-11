@@ -39,14 +39,17 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 use Exception;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\CmpException;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\MerchandiseServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\RequestParamsService;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
-use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -88,26 +91,32 @@ abstract class AbstractHandler
     protected $nostoHelperScope;
 
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var MerchandiseServiceInterface
      */
-    protected $categoryService;
+    protected $merchandiseService;
 
     /**
-     * AbstractHandler constructor.
+     * @var RequestParamsService
+     */
+    private $requestParamService;
+
+    /**
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param MerchandiseServiceInterface $merchandiseService
+     * @param RequestParamsService $requestParamsService
      * @param Logger $logger
      */
     public function __construct(
-        SearchEngine $searchEngineHelper,
-        NostoHelperAccount $nostoHelperAccount,
-        NostoHelperScope $nostoHelperScope,
-        CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
-        Logger $logger
+        SearchEngine               $searchEngineHelper,
+        NostoHelperAccount         $nostoHelperAccount,
+        NostoHelperScope           $nostoHelperScope,
+        CmpHelperData              $cmpHelperData,
+        MerchandiseServiceInterface $merchandiseService,
+        RequestParamsService       $requestParamsService,
+        Logger                     $logger
     ) {
         $this->loggerTraitConstruct(
             $logger
@@ -116,7 +125,8 @@ abstract class AbstractHandler
         $this->accountHelper = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
         $this->cmpHelperData = $cmpHelperData;
-        $this->categoryService = $categoryService;
+        $this->merchandiseService = $merchandiseService;
+        $this->requestParamService = $requestParamsService;
     }
 
     /**
@@ -134,10 +144,11 @@ abstract class AbstractHandler
         $store = $this->nostoHelperScope->getStore($storeId);
 
         try {
+            $limit = $this->parseLimit($store, $requestData);
             $productIds = $this->getCmpProductIds(
                 $this->getFilters($store, $requestData),
                 $this->parsePageNumber($store, $requestData),
-                $this->parseLimit($store, $requestData)
+                $limit
             );
             //In case CM category is not configured in nosto
             if ($productIds == null || empty($productIds)) {
@@ -157,7 +168,8 @@ abstract class AbstractHandler
         //Add CM sorting to the RequestData array
         $this->applyCmpFilter(
             $requestData,
-            $productIds
+            $productIds,
+            $limit
         );
     }
 
@@ -199,8 +211,9 @@ abstract class AbstractHandler
      *
      * @param array $requestData
      * @param array $productIds
+     * @param int $limit
      */
-    private function applyCmpFilter(array &$requestData, array $productIds)
+    private function applyCmpFilter(array &$requestData, array $productIds, $limit)
     {
         $bindKey = $this->getBindKey();
 
@@ -244,7 +257,7 @@ abstract class AbstractHandler
             'type' => 'termFilter',
             'value' => $productIds
         ];
-        $requestData['size'] = $this->categoryService->getLastUsedLimit();
+        $requestData['size'] = $limit;
     }
 
     /**
@@ -279,15 +292,14 @@ abstract class AbstractHandler
      * @param $pageNum
      * @param $limit
      * @return array|null
-     * @throws NostoException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
      */
     private function getCmpProductIds(FacetInterface $facet, $pageNum, $limit)
     {
-        $res = $this->categoryService->getPersonalisationResult(
-            $facet,
-            $pageNum,
-            $limit
-        );
+        $requestParams = $this->requestParamService->createRequestParams($facet, $pageNum, $limit);
+        $res = $this->merchandiseService->getMerchandiseResults($requestParams);
         return $res ? $res->parseProductIds() : null;
     }
 }

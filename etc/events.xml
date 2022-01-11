@@ -37,9 +37,6 @@
 <!--suppress XmlUnboundNsPrefix -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="nosto_pre_cmp_results">
-        <observer name="nosto_cmp_pre_request" instance="Nosto\Cmp\Observer\App\Action\PreRequestAction"/>
-    </event>
     <event name="nosto_post_cmp_results">
         <observer name="nosto_cmp_post_request" instance="Nosto\Cmp\Observer\App\Action\PostRequestAction"/>
     </event>

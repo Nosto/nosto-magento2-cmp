@@ -1,5 +1,4 @@
-<?php /** @noinspection PhpUndefinedMethodInspection */
-
+<?php
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -35,57 +34,40 @@
  *
  */
 
-namespace Nosto\Cmp\Model\Service\Recommendation;
+namespace Nosto\Cmp\Model\Service\MagentoSession;
 
-use Magento\Framework\Session\SessionManagerInterface;
-
-class SessionService
+class GraphQlParamModel
 {
-    /** @var SessionManagerInterface */
-    private $session;
+    /** @var int */
+    private $limit;
+
+    /** @var int */
+    private $currentPage;
 
     /**
-     * CmpSession constructor.
-     * @param SessionManagerInterface $session
+     * GraphQlParamModel constructor.
+     * @param int $limit
+     * @param int $currentPage
      */
-    public function __construct(SessionManagerInterface $session)
+    public function __construct(int $limit, int $currentPage)
     {
-        $this->session = $session;
+        $this->limit = $limit;
+        $this->currentPage = $currentPage;
     }
 
     /**
-     * @param BatchModel $model
+     * @return int
      */
-    public function setBatchModel(BatchModel $model)
+    public function getLimit(): int
     {
-        $this->session->start();
-        $this->session->setNostoCmpBatchSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+        return $this->limit;
     }
 
     /**
-     * @return BatchModel
+     * @return int
      */
-    public function getBatchModel()
+    public function getCurrentPage(): int
     {
-        $this->session->start();
-        return $this->session->getNostoCmpBatchSession(); //@phan-suppress-current-line PhanUndeclaredMethod
-    }
-
-    /**
-     * @param GraphQlParamModel $model
-     */
-    public function setGraphqlModel(GraphQlParamModel $model)
-    {
-        $this->session->start();
-        $this->session->setNostoCmpGraphqlSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
-    }
-
-    /**
-     * @return GraphQlParamModel
-     */
-    public function getGraphqlModel()
-    {
-        $this->session->start();
-        return $this->session->getNostoCmpGraphqlSession(); //@phan-suppress-current-line PhanUndeclaredMethod
+        return $this->currentPage;
     }
 }

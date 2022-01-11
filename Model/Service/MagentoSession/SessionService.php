@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php /** @noinspection PhpUndefinedMethodInspection */
+
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -34,44 +35,57 @@
  *
  */
 
-namespace Nosto\Cmp\Observer\App\Action;
+namespace Nosto\Cmp\Model\Service\MagentoSession;
 
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
-use Nosto\Operation\Recommendation\BatchedCategoryMerchandising;
+use Magento\Framework\Session\SessionManagerInterface;
 
-class PreRequestAction implements ObserverInterface
+class SessionService
 {
-    public const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
-    public const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
-
-    /** @var SessionService */
+    /** @var SessionManagerInterface */
     private $session;
 
     /**
-     * PreRequestAction constructor.
-     * @param SessionService $session
+     * CmpSession constructor.
+     * @param SessionManagerInterface $session
      */
-    public function __construct(SessionService $session)
+    public function __construct(SessionManagerInterface $session)
     {
         $this->session = $session;
     }
 
     /**
-     * @param Observer $observer
+     * @param BatchModel $model
      */
-    public function execute(Observer $observer) // phpcs:ignore
+    public function setBatchModel(BatchModel $model)
     {
-        /** @var BatchedCategoryMerchandising $query */
-        $query = $observer->getData(self::DISPATCH_EVENT_KEY_REQUEST);
-        if ($query instanceof BatchedCategoryMerchandising) {
-            $batchModel = $this->session->getBatchModel();
-            if ($batchModel != null
-                && ($batchModel->getLastUsedLimit() == $query->getLimit())
-                && ($batchModel->getLastFetchedPage() == $query->getSkipPages() - 1)) {
-                $query->setBatchToken($batchModel->getBatchToken());
-            }
-        }
+        $this->session->start();
+        $this->session->setNostoCmpBatchSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @return BatchModel
+     */
+    public function getBatchModel()
+    {
+        $this->session->start();
+        return $this->session->getNostoCmpBatchSession(); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @param GraphQlParamModel $model
+     */
+    public function setGraphqlModel(GraphQlParamModel $model)
+    {
+        $this->session->start();
+        $this->session->setNostoCmpGraphqlSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @return GraphQlParamModel
+     */
+    public function getGraphqlModel()
+    {
+        $this->session->start();
+        return $this->session->getNostoCmpGraphqlSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 }
