@@ -95,7 +95,7 @@ class Search
             $this->sessionService->setGraphqlModel(new GraphQlParamModel($pageSize, $currentPage));
 
             $sorting = $this->cmpHelperData->getFallbackSorting();
-            $args['sort'][$sorting] = 'ASC';
+            $args[$args[self::SORT_KEY][$sorting] = 'ASC';
         }
         return [$args, $info, $context];
     }
