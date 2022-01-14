@@ -1,9 +1,6 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
 ### 3.3.2
-* Fix fallback sorting issue on GraphQl when merchandising is not enabled
-
-### 3.3.2
 * Fix category page issue on GraphQl when merchandising is not enabled
 
 ### 3.3.1

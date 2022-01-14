@@ -41,9 +41,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search as MagentoSearch
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Nosto\Cmp\Helper\CategorySorting;
-use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Model\Service\Recommendation\GraphQlParamModel;
 use Nosto\Cmp\Model\Service\Recommendation\SessionService;
 
@@ -59,45 +57,33 @@ class Search
     /** @var SessionService */
     private $sessionService;
 
-    /** @var CmpHelperData */
-    private $cmpHelperData;
-
     /**
      * Search constructor.
      * @param SearchResultFactory $searchResultFactory
      * @param SessionService $sessionService
-     * @param CmpHelperData $cmpHelperData
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
-        SessionService $sessionService,
-        CmpHelperData $cmpHelperData
+        SessionService $sessionService
     ) {
         $this->searchResultFactory =  $searchResultFactory;
         $this->sessionService = $sessionService;
-        $this->cmpHelperData = $cmpHelperData;
     }
 
     /**
      * @param MagentoSearch $search
      * @param array $args
      * @param ResolveInfo $info
-     * @param ContextInterface $context
-     * @return array
      * @noinspection PhpUnusedParameterInspection
      */
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-    public function beforeGetResult(MagentoSearch $search, array $args, ResolveInfo $info, ContextInterface $context)
+    public function beforeGetResult(MagentoSearch $search, array $args, ResolveInfo $info)
     {
         if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])) {
             $pageSize = $args[self::PAGE_SIZE_KEY];
             $currentPage = $args[self::CURRENT_PAGE_KEY];
             $this->sessionService->setGraphqlModel(new GraphQlParamModel($pageSize, $currentPage));
-
-            $sorting = $this->cmpHelperData->getFallbackSorting();
-            $args[self::SORT_KEY][$sorting] = 'ASC';
         }
-        return [$args, $info, $context];
     }
 
     /**
