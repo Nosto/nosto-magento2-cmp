@@ -34,17 +34,31 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Model\Service\VisitSession;
 
-interface ParameterResolverInterface
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\SessionCreationException;
+use Nosto\NostoException;
+use Nosto\Operation\Session\NewSession;
+use Nosto\Types\Signup\AccountInterface;
+
+class SessionService
 {
     /**
-     * @return string
+     * @param Store $store
+     * @param AccountInterface $nostoAccount
+     * @return mixed|null
+     * @throws SessionCreationException
      */
-    public function getSortingOrder();
-
-    /**
-     * @return int
-     */
-    public function getCurrentPage();
+    public function getNewNostoSession(Store $store, AccountInterface $nostoAccount)
+    {
+        try {
+            $url = $store->getCurrentUrl();
+            $newSession = new NewSession($nostoAccount, $url, true);
+            return $newSession->execute();
+        } catch (NoSuchEntityException | NostoException $e) {
+            throw new SessionCreationException($store, $e);
+        }
+    }
 }

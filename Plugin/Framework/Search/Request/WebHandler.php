@@ -47,8 +47,8 @@ use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
 use Nosto\Cmp\Model\Service\Facet\BuildWebFacetService;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Cmp\Model\Service\Merchandise\MerchandiseServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\RequestParamsService;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -66,37 +66,36 @@ class WebHandler extends AbstractHandler
     private $pageSize;
 
     /**
-     * WebHandler constructor.
-     * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param MerchandiseServiceInterface $merchandiseService
+     * @param RequestParamsService $requestParamsService
      * @param BuildWebFacetService $buildWebFacetService
      * @param State $state
      * @param Logger $logger
-     * @param int $pageSize
+     * @param $pageSize
      */
     public function __construct(
-        ParameterResolverInterface $parameterResolver,
-        SearchEngine $searchEngineHelper,
-        NostoHelperAccount $nostoHelperAccount,
-        NostoHelperScope $nostoHelperScope,
-        CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
-        BuildWebFacetService $buildWebFacetService,
-        State $state,
-        Logger $logger,
+        SearchEngine              $searchEngineHelper,
+        NostoHelperAccount        $nostoHelperAccount,
+        NostoHelperScope          $nostoHelperScope,
+        CmpHelperData             $cmpHelperData,
+        MerchandiseServiceInterface $merchandiseService,
+        RequestParamsService      $requestParamsService,
+        BuildWebFacetService      $buildWebFacetService,
+        State                     $state,
+        Logger                    $logger,
         $pageSize
     ) {
         parent::__construct(
-            $parameterResolver,
             $searchEngineHelper,
             $nostoHelperAccount,
             $nostoHelperScope,
             $cmpHelperData,
-            $categoryService,
+            $merchandiseService,
+            $requestParamsService,
             $logger
         );
         $this->buildWebFacetService = $buildWebFacetService;

@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpDeprecationInspection */
+<?php /** @noinspection PhpUndefinedMethodInspection */
 
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
@@ -35,71 +35,57 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Catalog\Block;
+namespace Nosto\Cmp\Model\Service\MagentoSession;
 
-use Magento\Catalog\Model\Category;
-use Magento\Framework\App\Request\Http;
-use /** @noinspection PhpDeprecationInspection */Magento\Framework\Registry;
+use Magento\Framework\Session\SessionManagerInterface;
 
-class DefaultParameterResolver implements ParameterResolverInterface
+class SessionService
 {
-    const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
-    const DEFAULT_CURRENT_PAGE_PARAM = 'p';
-
-    /** @var Http */
-    private $httpRequest;
-
-    /** @var Registry */
-    private $registry;
-    /** @noinspection PhpDeprecationInspection */
+    /** @var SessionManagerInterface */
+    private $session;
 
     /**
-     * DefaultParameterResolver constructor.
-     * @param Http $httpRequest
-     * @param Registry $registry
-     * @noinspection PhpDeprecationInspection
-     * @noinspection PhpUnused
+     * CmpSession constructor.
+     * @param SessionManagerInterface $session
      */
-    public function __construct(Http $httpRequest, Registry $registry)
+    public function __construct(SessionManagerInterface $session)
     {
-        $this->httpRequest = $httpRequest;
-        $this->registry = $registry;
+        $this->session = $session;
     }
 
     /**
-     * @inheritdoc
-     * @noinspection PhpUnused
+     * @param BatchModel $model
      */
-    public function getSortingOrder()
+    public function setBatchModel(BatchModel $model)
     {
-        return $this->httpRequest->getParam(
-            self::DEFAULT_SORTING_ORDER_PARAM,
-            $this->getDefaultCategorySorting()
-        );
+        $this->session->start();
+        $this->session->setNostoCmpBatchSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
-     * @inheritdoc
-     * @noinspection PhpUnused
+     * @return BatchModel
      */
-    public function getCurrentPage()
+    public function getBatchModel()
     {
-        return (int)$this->httpRequest->getParam(self::DEFAULT_CURRENT_PAGE_PARAM, '1');
+        $this->session->start();
+        return $this->session->getNostoCmpBatchSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 
     /**
-     * @return string|null
+     * @param GraphQlParamModel $model
      */
-    private function getDefaultCategorySorting()
+    public function setGraphqlModel(GraphQlParamModel $model)
     {
-        /**
-         * @var Category $category
-         * @noinspection PhpDeprecationInspection
-         */
-        $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
-        if ($category instanceof Category) {
-            return $category->getDefaultSortBy();
-        }
-        return null;
+        $this->session->start();
+        $this->session->setNostoCmpGraphqlSession($model); //@phan-suppress-current-line PhanUndeclaredMethod
+    }
+
+    /**
+     * @return GraphQlParamModel
+     */
+    public function getGraphqlModel()
+    {
+        $this->session->start();
+        return $this->session->getNostoCmpGraphqlSession(); //@phan-suppress-current-line PhanUndeclaredMethod
     }
 }

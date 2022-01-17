@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpDeprecationInspection */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -36,17 +36,20 @@
 
 namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\GraphqlModelException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Service\Facet\BuildGraphQlFacetService;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
+use Nosto\Cmp\Model\Service\Merchandise\MerchandiseServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\RequestParamsService;
+use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
+use Magento\Framework\Registry;
 
 class GraphQlHandler extends AbstractHandler
 {
@@ -57,45 +60,56 @@ class GraphQlHandler extends AbstractHandler
     /** @var SessionService */
     private $sessionService;
 
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
+    /** @var Registry */
+    private $registry;
+
     /** @var int */
     private $pageSize;
 
     /**
-     * GraphQlHandler constructor.
      * @param BuildGraphQlFacetService $buildFacetService
-     * @param ParameterResolverInterface $parameterResolver
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param MerchandiseServiceInterface $merchandiseService
+     * @param RequestParamsService $requestParamsService
      * @param SessionService $sessionService
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param Registry $registry
      * @param Logger $logger
-     * @param int $pageSize
+     * @param $pageSize
      */
     public function __construct(
-        BuildGraphQlFacetService $buildFacetService,
-        ParameterResolverInterface $parameterResolver,
-        SearchEngine $searchEngineHelper,
-        NostoHelperAccount $nostoHelperAccount,
-        NostoHelperScope $nostoHelperScope,
-        CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
-        SessionService $sessionService,
-        Logger $logger,
+        BuildGraphQlFacetService    $buildFacetService,
+        SearchEngine                $searchEngineHelper,
+        NostoHelperAccount          $nostoHelperAccount,
+        NostoHelperScope            $nostoHelperScope,
+        CmpHelperData               $cmpHelperData,
+        MerchandiseServiceInterface $merchandiseService,
+        RequestParamsService        $requestParamsService,
+        SessionService              $sessionService,
+        CategoryRepositoryInterface $categoryRepository,
+        Registry                    $registry,
+        Logger                      $logger,
         $pageSize
     ) {
         parent::__construct(
-            $parameterResolver,
             $searchEngineHelper,
             $nostoHelperAccount,
             $nostoHelperScope,
             $cmpHelperData,
-            $categoryService,
+            $merchandiseService,
+            $requestParamsService,
             $logger
         );
         $this->buildFacetService = $buildFacetService;
         $this->sessionService = $sessionService;
+        $this->categoryRepository = $categoryRepository;
+        $this->registry = $registry;
         $this->pageSize = $pageSize;
     }
 
@@ -111,13 +125,27 @@ class GraphQlHandler extends AbstractHandler
      * There's no way in StateAwareCategoryService to get the category
      * when the request comes from GraphQl
      *
-     * @inheritDoc
+     * @param array $requestData
+     * @throws NoSuchEntityException
      */
     protected function preFetchOps(array $requestData)
     {
-        $this->categoryService->setCategoryInRegistry(
+        $this->setCategoryInRegistry(
             $requestData[self::KEY_FILTERS][self::KEY_CATEGORY_FILTER][self::KEY_VALUE]
         );
+    }
+
+    /**
+     * @param $id
+     * @throws NoSuchEntityException
+     */
+    public function setCategoryInRegistry($id): void
+    {
+        // Current store id value is unavailable
+        $store = $this->nostoHelperScope->getStore();
+        $category = $this->categoryRepository->get($id, $store->getId());
+        /** @noinspection PhpDeprecationInspection */
+        $this->registry->register('current_category', $category); //@phan-suppress-current-line PhanDeprecatedFunction
     }
 
     /**

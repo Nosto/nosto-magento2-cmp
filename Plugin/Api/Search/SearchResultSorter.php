@@ -38,24 +38,20 @@ namespace Nosto\Cmp\Plugin\Api\Search;
 
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResult;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 
 class SearchResultSorter
 {
-    /**
-     * @var StateAwareCategoryServiceInterface
-     */
-    private $categoryService;
+    /** @var LastResult  */
+    private $lastResult;
 
     /**
-     * SearchResultSorter constructor.
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param LastResult $lastResult
      */
     public function __construct(
-        StateAwareCategoryServiceInterface $categoryService
+        LastResult $lastResult
     ) {
-        $this->categoryService = $categoryService;
+        $this->lastResult = $lastResult;
     }
 
     /**
@@ -101,11 +97,9 @@ class SearchResultSorter
      */
     private function getCmpSort()
     {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
-            return CategoryMerchandising::parseProductIds(
-                $categoryMerchandisingResult
-            );
+            return $categoryMerchandisingResult->parseProductIds();
         }
         return null;
     }
@@ -116,7 +110,7 @@ class SearchResultSorter
      */
     private function getTotalPrimaryCount()
     {
-        $categoryMerchandisingResult = $this->categoryService->getLastResult();
+        $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
             return $categoryMerchandisingResult->getTotalPrimaryCount();
         }

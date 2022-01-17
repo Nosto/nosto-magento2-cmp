@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6865d9f2be5af392b20540c85a6fad12",
+    "content-hash": "4555f7f58b94a8141a108a6c4cb8437b",
     "packages": [
         {
             "name": "brick/math",
@@ -2821,16 +2821,16 @@
         },
         {
             "name": "nosto/php-sdk",
-            "version": "dev-develop",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nosto/nosto-php-sdk.git",
-                "reference": "d9f8cb82bb072c4a65b100b289a8f25243defef1"
+                "reference": "a471b4a8a2b76a626218daec7d834f991f406c4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/d9f8cb82bb072c4a65b100b289a8f25243defef1",
-                "reference": "d9f8cb82bb072c4a65b100b289a8f25243defef1",
+                "url": "https://api.github.com/repos/Nosto/nosto-php-sdk/zipball/a471b4a8a2b76a626218daec7d834f991f406c4e",
+                "reference": "a471b4a8a2b76a626218daec7d834f991f406c4e",
                 "shasum": ""
             },
             "require": {
@@ -2855,7 +2855,6 @@
                 "symfony/console": "3.*",
                 "wimg/php-compatibility": "^9.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2872,9 +2871,9 @@
             "description": "PHP SDK for developing Nosto modules for e-commerce platforms",
             "support": {
                 "issues": "https://github.com/Nosto/nosto-php-sdk/issues",
-                "source": "https://github.com/Nosto/nosto-php-sdk/tree/develop"
+                "source": "https://github.com/Nosto/nosto-php-sdk/tree/5.5.0"
             },
-            "time": "2021-11-18T15:05:52+00:00"
+            "time": "2021-12-21T12:54:43+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",

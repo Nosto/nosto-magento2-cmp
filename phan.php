@@ -46,7 +46,6 @@ return [
         'Block',
         'Helper',
         'Model',
-        'Observer',
         'Plugin',
         'Utils',
         'vendor/nosto',

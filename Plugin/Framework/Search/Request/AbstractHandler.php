@@ -39,16 +39,17 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 use Exception;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\CmpException;
+use Nosto\Cmp\Exception\MissingAccountException;
+use Nosto\Cmp\Exception\MissingTokenException;
+use Nosto\Cmp\Exception\SessionCreationException;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
 use Nosto\Cmp\Helper\SearchEngine;
 use Nosto\Cmp\Model\Facet\FacetInterface;
-use Nosto\Cmp\Model\Service\Recommendation\StateAwareCategoryServiceInterface;
-use Nosto\Cmp\Plugin\Catalog\Block\ParameterResolverInterface;
-use Nosto\Cmp\Utils\CategoryMerchandising;
+use Nosto\Cmp\Model\Service\Merchandise\MerchandiseServiceInterface;
+use Nosto\Cmp\Model\Service\Merchandise\RequestParamsService;
 use Nosto\Cmp\Utils\Request as RequestUtils;
 use Nosto\Cmp\Utils\Search;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
-use Nosto\NostoException;
 use Nosto\Tagging\Helper\Account as NostoHelperAccount;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 use Nosto\Tagging\Logger\Logger;
@@ -56,7 +57,6 @@ use Nosto\Tagging\Logger\Logger;
 abstract class AbstractHandler
 {
     const KEY_ES_PRODUCT_ID = '_id';
-    const KEY_MYSQL_PRODUCT_ID = 'entity_id';
     const KEY_BIND_TO_QUERY = 'catalog_view_container';
     const KEY_BIND_TO_GRAPHQL = 'graphql_product_search';
     const KEY_CATEGORY_FILTER = 'category_filter';
@@ -69,11 +69,6 @@ abstract class AbstractHandler
     use LoggerTrait {
         LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
     }
-
-    /**
-     * @var ParameterResolverInterface
-     */
-    private $parameterResolver;
 
     /**
      * @var SearchEngine
@@ -96,38 +91,42 @@ abstract class AbstractHandler
     protected $nostoHelperScope;
 
     /**
-     * @var StateAwareCategoryServiceInterface
+     * @var MerchandiseServiceInterface
      */
-    protected $categoryService;
+    protected $merchandiseService;
 
     /**
-     * AbstractHandler constructor.
-     * @param ParameterResolverInterface $parameterResolver
+     * @var RequestParamsService
+     */
+    private $requestParamService;
+
+    /**
      * @param SearchEngine $searchEngineHelper
      * @param NostoHelperAccount $nostoHelperAccount
      * @param NostoHelperScope $nostoHelperScope
      * @param CmpHelperData $cmpHelperData
-     * @param StateAwareCategoryServiceInterface $categoryService
+     * @param MerchandiseServiceInterface $merchandiseService
+     * @param RequestParamsService $requestParamsService
      * @param Logger $logger
      */
     public function __construct(
-        ParameterResolverInterface $parameterResolver,
-        SearchEngine $searchEngineHelper,
-        NostoHelperAccount $nostoHelperAccount,
-        NostoHelperScope $nostoHelperScope,
-        CmpHelperData $cmpHelperData,
-        StateAwareCategoryServiceInterface $categoryService,
-        Logger $logger
+        SearchEngine               $searchEngineHelper,
+        NostoHelperAccount         $nostoHelperAccount,
+        NostoHelperScope           $nostoHelperScope,
+        CmpHelperData              $cmpHelperData,
+        MerchandiseServiceInterface $merchandiseService,
+        RequestParamsService       $requestParamsService,
+        Logger                     $logger
     ) {
         $this->loggerTraitConstruct(
             $logger
         );
-        $this->parameterResolver = $parameterResolver;
         $this->searchEngineHelper = $searchEngineHelper;
         $this->accountHelper = $nostoHelperAccount;
         $this->nostoHelperScope = $nostoHelperScope;
         $this->cmpHelperData = $cmpHelperData;
-        $this->categoryService = $categoryService;
+        $this->merchandiseService = $merchandiseService;
+        $this->requestParamService = $requestParamsService;
     }
 
     /**
@@ -145,10 +144,11 @@ abstract class AbstractHandler
         $store = $this->nostoHelperScope->getStore($storeId);
 
         try {
+            $limit = $this->parseLimit($store, $requestData);
             $productIds = $this->getCmpProductIds(
                 $this->getFilters($store, $requestData),
                 $this->parsePageNumber($store, $requestData),
-                $this->parseLimit($store, $requestData)
+                $limit
             );
             //In case CM category is not configured in nosto
             if ($productIds == null || empty($productIds)) {
@@ -168,7 +168,8 @@ abstract class AbstractHandler
         //Add CM sorting to the RequestData array
         $this->applyCmpFilter(
             $requestData,
-            $productIds
+            $productIds,
+            $limit
         );
     }
 
@@ -210,10 +211,20 @@ abstract class AbstractHandler
      *
      * @param array $requestData
      * @param array $productIds
+     * @param int $limit
      */
-    private function applyCmpFilter(array &$requestData, array $productIds)
+    private function applyCmpFilter(array &$requestData, array $productIds, $limit)
     {
         $bindKey = $this->getBindKey();
+
+        if ($this->searchEngineHelper->isMysql()) {
+            $this->logger->debugWithSource(
+                'Nosto does not support Mysql search',
+                $requestData,
+                $this
+            );
+            return;
+        }
 
         $requestData[self::KEY_QUERIES][$bindKey]['queryReference'][] = [
             'clause' => 'must',
@@ -242,11 +253,11 @@ abstract class AbstractHandler
         ];
         $requestData['filters']['prod_ids'] = [
             'name' => 'prod_ids',
-            'field' => $this->getProductIdField(),
+            'field' => self::KEY_ES_PRODUCT_ID,
             'type' => 'termFilter',
             'value' => $productIds
         ];
-        $requestData['size'] = $this->categoryService->getLastUsedLimit();
+        $requestData['size'] = $limit;
     }
 
     /**
@@ -281,29 +292,14 @@ abstract class AbstractHandler
      * @param $pageNum
      * @param $limit
      * @return array|null
-     * @throws NostoException
+     * @throws MissingAccountException
+     * @throws MissingTokenException
+     * @throws SessionCreationException
      */
     private function getCmpProductIds(FacetInterface $facet, $pageNum, $limit)
     {
-        $res = $this->categoryService->getPersonalisationResult(
-            $facet,
-            $pageNum,
-            $limit
-        );
-        return $res ? CategoryMerchandising::parseProductIds($res) : null;
-    }
-
-    /**
-     * Return the product id field
-     *
-     * @return string
-     */
-    private function getProductIdField()
-    {
-        if ($this->searchEngineHelper->isMysql()) {
-            return self::KEY_MYSQL_PRODUCT_ID;
-        } else {
-            return self::KEY_ES_PRODUCT_ID;
-        }
+        $requestParams = $this->requestParamService->createRequestParams($facet, $pageNum, $limit);
+        $res = $this->merchandiseService->getMerchandiseResults($requestParams);
+        return $res ? $res->parseProductIds() : null;
     }
 }

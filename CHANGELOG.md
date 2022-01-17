@@ -1,5 +1,10 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 4.0.0
+* Remove support for MySQL as search engine
+* Move CategoryMerchandising util to php-sdk
+* Refactor Merchandise service
+
 ### 3.3.3
 * Fix fallback sorting issue on GraphQl when merchandising is not enabled
 

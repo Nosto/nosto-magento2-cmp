@@ -44,8 +44,8 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Nosto\Cmp\Helper\CategorySorting;
 use Nosto\Cmp\Helper\Data as CmpHelperData;
-use Nosto\Cmp\Model\Service\Recommendation\GraphQlParamModel;
-use Nosto\Cmp\Model\Service\Recommendation\SessionService;
+use Nosto\Cmp\Model\Service\MagentoSession\GraphQlParamModel;
+use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 
 class Search
 {

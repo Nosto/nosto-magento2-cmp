@@ -34,31 +34,40 @@
  *
  */
 
-namespace Nosto\Cmp\Utils;
+namespace Nosto\Cmp\Model\Service\MagentoSession;
 
-use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
-
-class CategoryMerchandising
+class GraphQlParamModel
 {
-    const DISPATCH_EVENT_NAME_POST_RESULTS = 'nosto_post_cmp_results';
-    const DISPATCH_EVENT_NAME_PRE_RESULTS = 'nosto_pre_cmp_results';
-    const DISPATCH_EVENT_KEY_REQUEST = 'categoryMerchandising';
-    const DISPATCH_EVENT_KEY_RESULT = 'result';
-    const DISPATCH_EVENT_KEY_LIMIT = 'limit';
-    const DISPATCH_EVENT_KEY_PAGE = 'page';
+    /** @var int */
+    private $limit;
+
+    /** @var int */
+    private $currentPage;
 
     /**
-     * @param CategoryMerchandisingResult $result
-     * @return array
+     * GraphQlParamModel constructor.
+     * @param int $limit
+     * @param int $currentPage
      */
-    public static function parseProductIds(CategoryMerchandisingResult $result)
+    public function __construct(int $limit, int $currentPage)
     {
-        $productIds = [];
-        foreach ($result->getResultSet() as $item) {
-            if ($item->getProductId() && is_numeric($item->getProductId())) {
-                $productIds[] = $item->getProductId();
-            }
-        }
-        return $productIds;
+        $this->limit = $limit;
+        $this->currentPage = $currentPage;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLimit(): int
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
     }
 }
