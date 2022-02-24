@@ -63,6 +63,7 @@ class ProductSearch
      * @param MagentoProductSearch $productSearch
      * @param SearchCriteriaInterface $searchCriteria
      */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function beforeGetList(MagentoProductSearch $productSearch, SearchCriteriaInterface $searchCriteria)
     {
         //Set currentPage to 1, this will make sure that OFFSET is not applied to the MySQL query
