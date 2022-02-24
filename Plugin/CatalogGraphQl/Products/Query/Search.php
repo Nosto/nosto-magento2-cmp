@@ -115,7 +115,7 @@ class Search
         if (isset($args[self::SORT_KEY]) && isset($args[self::SORT_KEY][CategorySorting::NOSTO_PERSONALIZED_KEY])
             && $this->getTotalPages() != 0) {
             return $this->searchResultFactory->create([
-                'totalCount' => $searchResult->getTotalCount(),
+                'totalCount' => $this->getTotalCount(),
                 'productsSearchResult' => $searchResult->getProductsSearchResult(),
                 'searchAggregation' => $searchResult->getSearchAggregation(),
                 'pageSize' => $searchResult->getPageSize(),
@@ -137,5 +137,17 @@ class Search
             return 0;
         }
         return (int) ceil($batchModel->getTotalCount() / $batchModel->getLastUsedLimit());
+    }
+
+    /**
+     * @return int
+     */
+    private function getTotalCount()
+    {
+        $batchModel = $this->sessionService->getBatchModel();
+        if ($batchModel === null) {
+            return 0;
+        }
+        return $batchModel->getTotalCount();
     }
 }

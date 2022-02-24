@@ -37,7 +37,9 @@
 namespace Nosto\Cmp\Plugin\CatalogGraphQl\Products\DataProvider;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch as MagentoProductSearch;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
+use Nosto\Cmp\Helper\CategorySorting;
 use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 
 /**
@@ -55,6 +57,20 @@ class ProductSearch
         LastResult $lastResult
     ) {
         $this->lastResult = $lastResult;
+    }
+
+    /**
+     * @param MagentoProductSearch $productSearch
+     * @param SearchCriteriaInterface $searchCriteria
+     */
+    public function beforeGetList(MagentoProductSearch $productSearch, SearchCriteriaInterface $searchCriteria)
+    {
+        //Set currentPage to 1, this will make sure that OFFSET is not applied to the MySQL query
+        foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+            if ($sortOrder->getField() === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+                $searchCriteria->setCurrentPage(1);
+            }
+        }
     }
 
     /**
