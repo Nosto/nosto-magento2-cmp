@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 4.0.1
+* Fix empty results issues on Magento's GraphQl pagination
+
 ### 4.0.0
 * Remove support for MySQL as search engine
 * Move CategoryMerchandising util to php-sdk
