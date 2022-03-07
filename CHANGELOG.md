@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 4.0.2
+* Fix pagination when CM is disabled
+
 ### 4.0.1
 * Fix empty results issues on Magento's GraphQl pagination
 
