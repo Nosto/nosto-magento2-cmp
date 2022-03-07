@@ -68,7 +68,7 @@ class ProductSearch
     {
         //Set currentPage to 1, this will make sure that OFFSET is not applied to the MySQL query
         foreach ($searchCriteria->getSortOrders() as $sortOrder) {
-            if ($sortOrder->getField() === CategorySorting::NOSTO_PERSONALIZED_KEY) {
+            if ($sortOrder->getField() === CategorySorting::NOSTO_PERSONALIZED_KEY && $this->getCmpSort() != null) {
                 $searchCriteria->setCurrentPage(1);
             }
         }
