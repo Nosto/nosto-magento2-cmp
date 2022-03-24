@@ -199,7 +199,7 @@ class RequestParamsService
         $batchModel = $this->resultSessionService->getBatchModel();
         if ($batchModel != null
             && ($batchModel->getLastUsedLimit() == $limit)
-            && ($batchModel->getLastFetchedPage() == $pageNumber)) {
+            && ($batchModel->getLastFetchedPage() == $pageNumber - 1)) {
             $token = $batchModel->getBatchToken();
         }
 
