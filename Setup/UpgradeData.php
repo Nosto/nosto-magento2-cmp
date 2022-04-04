@@ -42,34 +42,26 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Nosto\Cmp\Helper\SearchEngine;
-use Nosto\Cmp\Exception\SearchEngineException;
-use Nosto\Tagging\Logger\Logger;
 
 class UpgradeData implements UpgradeDataInterface
 {
     /** @var SearchEngine */
     private $searchEngine;
 
-    /** @var Logger */
-    private $logger;
-
     /**
      * UpgradeData constructor.
      * @param SearchEngine $searchEngine
-     * @param Logger $logger
      */
     public function __construct(
-        SearchEngine $searchEngine,
-        Logger $logger
+        SearchEngine $searchEngine
     ) {
         $this->searchEngine = $searchEngine;
-        $this->logger = $logger;
     }
 
     /**
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
-     * @throws SearchEngineException
+     * @throws Exception
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context) // @codingStandardsIgnoreLine
     {

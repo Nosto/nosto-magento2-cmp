@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 4.0.4
+* Add exception during the module upgrade to fail if MySQL is used as a search engine with version 4
+
 ### 4.0.3
 * Fix GraphQl response when querying the same page more than once
 
