@@ -69,7 +69,7 @@ class Compatibility extends Template
      *
      * @return bool
      */
-    public function checkSearchEngine()
+    public function isSearchEngineMysql()
     {
         return $this->searchEngine->isMysql();
     }
