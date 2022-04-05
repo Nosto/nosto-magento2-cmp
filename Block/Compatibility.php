@@ -67,7 +67,7 @@ class Compatibility extends Template
     /**
      * Check if Magento uses MySQL as a search engine.
      *
-     * @return string message
+     * @return bool
      */
     public function checkSearchEngine()
     {
