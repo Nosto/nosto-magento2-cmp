@@ -58,7 +58,6 @@ class Compatibility extends Template
      *
      * @param Context $context the context.
      * @param SearchEngine $searchEngine the data helper.
-     * @param SearchEngine $searchEngine the data helper.
      */
     public function __construct(
         Context $context,
