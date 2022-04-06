@@ -1,7 +1,6 @@
-<?php /** @noinspection PhpUnused */
-
+<?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2022, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -40,16 +39,16 @@ namespace Nosto\Cmp\Block;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Nosto\Cmp\Helper\SearchEngine;
 
 /**
- * Meta data block for outputting <meta> elements in the page <head>.
+ * Meta data block for outputting CMP compatibility <meta> element in the page <head>.
  * This block should be included on all pages.
  */
-class Meta extends Template
+class Compatibility extends Template
 {
-    /** @var NostoCmpHelperData */
-    private $nostoHelperData;
+    /** @var SearchEngine */
+    private $searchEngine;
 
     /** @var Escaper */
     public $escaper;
@@ -58,24 +57,24 @@ class Meta extends Template
      * Constructor.
      *
      * @param Context $context the context.
-     * @param NostoCmpHelperData $nostoHelperData the data helper.
+     * @param SearchEngine $searchEngine the data helper.
      */
     public function __construct(
         Context $context,
-        NostoCmpHelperData $nostoHelperData
+        SearchEngine $searchEngine
     ) {
         parent::__construct($context);
-        $this->nostoHelperData = $nostoHelperData;
+        $this->searchEngine = $searchEngine;
         $this->escaper = $context->getEscaper();
     }
 
     /**
-     * Returns the module version number.
+     * Check if Magento uses MySQL as a search engine.
      *
-     * @return string the module version number.
+     * @return string
      */
-    public function getModuleVersion()
+    public function isSearchEngineMysql()
     {
-        return $this->nostoHelperData->getModuleVersion();
+        return $this->searchEngine->isMysql() ? 'incompatible' : 'compatible';
     }
 }

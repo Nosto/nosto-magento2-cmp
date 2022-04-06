@@ -1,7 +1,6 @@
-<?php /** @noinspection PhpUnused */
-
+<?php
 /**
- * Copyright (c) 2020, Nosto Solutions Ltd
+ * Copyright (c) 2022, Nosto Solutions Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -35,47 +34,72 @@
  *
  */
 
-namespace Nosto\Cmp\Block;
+namespace Nosto\Cmp\Model\System\Message\Notification;
 
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Phrase;
+use Nosto\Cmp\Helper\SearchEngine;
 
-/**
- * Meta data block for outputting <meta> elements in the page <head>.
- * This block should be included on all pages.
- */
-class Meta extends Template
+class CmpIncompatible implements MessageInterface
 {
-    /** @var NostoCmpHelperData */
-    private $nostoHelperData;
-
-    /** @var Escaper */
-    public $escaper;
+    /**
+     * @var SearchEngine
+     */
+    private $searchEngine;
 
     /**
-     * Constructor.
-     *
-     * @param Context $context the context.
-     * @param NostoCmpHelperData $nostoHelperData the data helper.
+     * @var mixed
+     */
+    private $message;
+
+    /**
+     * Messages constructor.
+     * @param SearchEngine $searchEngine
      */
     public function __construct(
-        Context $context,
-        NostoCmpHelperData $nostoHelperData
+        SearchEngine $searchEngine
     ) {
-        parent::__construct($context);
-        $this->nostoHelperData = $nostoHelperData;
-        $this->escaper = $context->getEscaper();
+        $this->searchEngine = $searchEngine;
     }
 
     /**
-     * Returns the module version number.
-     *
-     * @return string the module version number.
+     * @return Phrase
      */
-    public function getModuleVersion()
+    public function getText()
     {
-        return $this->nostoHelperData->getModuleVersion();
+        return __($this->message);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentity()
+    {
+        return sha1('Nosto_Cmp_Incompatibility_Notification');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisplayed()
+    {
+        if (!$this->searchEngine->isMysql()) {
+            return false;
+        }
+
+        $this->message =
+            'Nosto CMP is not compatible with MySQL search engine. '
+            . 'Please downgrade to version 3 of the module or switch '
+            . 'your search engine to Elasticsearch.'
+        ;
+        return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSeverity()
+    {
+        return MessageInterface::SEVERITY_CRITICAL;
     }
 }
