@@ -48,7 +48,7 @@ class CmpIncompatible implements MessageInterface
     private $searchEngine;
 
     /**
-     * @var string
+     * @var mixed
      */
     private $message;
 
@@ -63,7 +63,7 @@ class CmpIncompatible implements MessageInterface
     }
 
     /**
-     * @return Phrase|string
+     * @return Phrase
      */
     public function getText()
     {
@@ -87,11 +87,11 @@ class CmpIncompatible implements MessageInterface
             return false;
         }
 
-        $this->message = __(
+        $this->message =
             'Nosto CMP is not compatible with MySQL search engine. '
             . 'Please downgrade to version 3 of the module or switch '
             . 'your search engine to Elasticsearch.'
-        );
+        ;
         return true;
     }
 
