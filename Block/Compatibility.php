@@ -36,6 +36,7 @@
 
 namespace Nosto\Cmp\Block;
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Helper\SearchEngine;
@@ -49,10 +50,14 @@ class Compatibility extends Template
     /** @var SearchEngine */
     private $searchEngine;
 
+    /** @var Escaper */
+    public $escaper;
+
     /**
      * Constructor.
      *
      * @param Context $context the context.
+     * @param SearchEngine $searchEngine the data helper.
      * @param SearchEngine $searchEngine the data helper.
      */
     public function __construct(
@@ -61,6 +66,7 @@ class Compatibility extends Template
     ) {
         parent::__construct($context);
         $this->searchEngine = $searchEngine;
+        $this->escaper = $context->getEscaper();
     }
 
     /**
