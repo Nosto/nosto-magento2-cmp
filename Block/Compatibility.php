@@ -66,10 +66,10 @@ class Compatibility extends Template
     /**
      * Check if Magento uses MySQL as a search engine.
      *
-     * @return bool
+     * @return string
      */
     public function isSearchEngineMysql()
     {
-        return $this->searchEngine->isMysql();
+        return $this->searchEngine->isMysql() ? 'incompatible' : 'compatible';
     }
 }
