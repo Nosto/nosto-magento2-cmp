@@ -27,7 +27,7 @@
   "require": {
     "nosto/module-nostotagging": "^6.0",
     "nosto/php-sdk": ">=5.5.0",
-    "php": ">=7.1",
+    "php": ">=7.4",
     "ext-json": "*"
   },
   "repositories": [
