@@ -73,32 +73,32 @@ abstract class AbstractHandler
     /**
      * @var SearchEngine
      */
-    private $searchEngineHelper;
+    private SearchEngine $searchEngineHelper;
 
     /**
      * @var NostoHelperAccount
      */
-    private $accountHelper;
+    private NostoHelperAccount $accountHelper;
 
     /**
      * @var CmpHelperData
      */
-    private $cmpHelperData;
+    private CmpHelperData $cmpHelperData;
 
     /**
      * @var NostoHelperScope
      */
-    protected $nostoHelperScope;
+    protected NostoHelperScope $nostoHelperScope;
 
     /**
      * @var MerchandiseServiceInterface
      */
-    protected $merchandiseService;
+    protected MerchandiseServiceInterface $merchandiseService;
 
     /**
      * @var RequestParamsService
      */
-    private $requestParamService;
+    private RequestParamsService $requestParamService;
 
     /**
      * @param SearchEngine $searchEngineHelper

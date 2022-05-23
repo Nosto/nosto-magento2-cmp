@@ -49,10 +49,10 @@ use Nosto\Cmp\Helper\Data as NostoCmpHelperData;
 class Meta extends Template
 {
     /** @var NostoCmpHelperData */
-    private $nostoHelperData;
+    private NostoCmpHelperData $nostoHelperData;
 
     /** @var Escaper */
-    public $escaper;
+    public Escaper $escaper;
 
     /**
      * Constructor.

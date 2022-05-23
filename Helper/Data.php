@@ -47,7 +47,7 @@ class Data extends AbstractHelper
     const MODULE_NAME = 'Nosto_Cmp';
 
     /** @var NostoHelperScope */
-    private $nostoHelperScope;
+    private NostoHelperScope $nostoHelperScope;
 
     /**
      * Path to the configuration object that stores category sorting
@@ -70,7 +70,7 @@ class Data extends AbstractHelper
     const XML_PATH_CATEGORY_MAX_PRODUCT_LIMIT = 'nosto_cmp/limit/max_products';
 
     /** @var ModuleListInterface */
-    private $moduleList;
+    private ModuleListInterface $moduleList;
 
     /**
      * Data constructor.

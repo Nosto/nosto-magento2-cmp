@@ -51,7 +51,7 @@ class ListProduct
     /**
      * @var LastResult
      */
-    private $lastResult;
+    private LastResult $lastResult;
 
     public function __construct(
         LastResult $lastResult

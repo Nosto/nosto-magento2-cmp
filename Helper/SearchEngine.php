@@ -45,7 +45,7 @@ class SearchEngine
     /**
      * @var EngineResolverInterface
      */
-    private $engineResolver;
+    private EngineResolverInterface $engineResolver;
 
     /**
      * Data constructor.

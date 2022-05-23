@@ -49,13 +49,13 @@ class CategoryMapping extends Template
 {
 
     /** @var NostoHelperScope */
-    private $nostoHelperScope;
+    private NostoHelperScope $nostoHelperScope;
 
     /** @var CategoryMappingServiceInterface  */
-    private $mappingService;
+    private CategoryMappingServiceInterface $mappingService;
 
     /** @var Logger */
-    private $logger;
+    private Logger $logger;
 
     /**
      * CategoryMapping constructor.

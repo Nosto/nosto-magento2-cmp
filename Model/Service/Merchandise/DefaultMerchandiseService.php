@@ -52,10 +52,10 @@ class DefaultMerchandiseService implements MerchandiseServiceInterface
     const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /** @var ManagerInterface  */
-    private $eventManager;
+    private ManagerInterface $eventManager;
 
     /** @var LastResult */
-    private $lastResult;
+    private LastResult $lastResult;
 
     /**
      * @param ManagerInterface $eventManager

@@ -54,13 +54,13 @@ class Search
     const CURRENT_PAGE_KEY = 'currentPage';
 
     /** @var SearchResultFactory */
-    private $searchResultFactory;
+    private SearchResultFactory $searchResultFactory;
 
     /** @var SessionService */
-    private $sessionService;
+    private SessionService $sessionService;
 
     /** @var CmpHelperData */
-    private $cmpHelperData;
+    private CmpHelperData $cmpHelperData;
 
     /**
      * Search constructor.

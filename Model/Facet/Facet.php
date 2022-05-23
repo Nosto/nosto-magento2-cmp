@@ -43,10 +43,10 @@ class Facet implements FacetInterface
 {
 
     /** @var IncludeFilters */
-    private $includeFilters;
+    private IncludeFilters $includeFilters;
 
     /** @var ExcludeFilters */
-    private $excludeFilters;
+    private ExcludeFilters $excludeFilters;
 
     /**
      * Facet constructor.

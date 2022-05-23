@@ -62,19 +62,19 @@ class BuildWebFacetService
     }
 
     /** @var State */
-    private $state;
+    private State $state;
 
     /** @var NostoCategoryBuilder */
-    private $nostoCategoryBuilder;
+    private NostoCategoryBuilder $nostoCategoryBuilder;
 
     /** @var CategoryRepository */
-    private $categoryRepository;
+    private CategoryRepository $categoryRepository;
 
     /** @var NostoHelperData */
-    private $nostoHelperData;
+    private NostoHelperData $nostoHelperData;
 
-    /** @var string */
-    private $brand;
+    /** @var ?string */
+    private ?string $brand;
 
     /**
      * BuildWebFacetService constructor.
@@ -238,7 +238,7 @@ class BuildWebFacetService
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, Store $store, string $name, $value)
     {
-        if ($this->brand == null) {
+        if ($this->brand === null) {
             $this->brand = $this->nostoHelperData->getBrandAttribute($store);
         }
 

@@ -47,10 +47,10 @@ class CategorySorting extends AbstractHelper
     const NOSTO_PERSONALIZED_KEY = 'nosto_personalized';
 
     /** @var NostoHelperScope */
-    private $nostoHelperScope;
+    private NostoHelperScope $nostoHelperScope;
 
     /** @var NostoHelperAccount */
-    private $nostoHelperAccount;
+    private NostoHelperAccount $nostoHelperAccount;
 
     /**
      * CategorySorting constructor.

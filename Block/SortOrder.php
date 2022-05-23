@@ -56,10 +56,10 @@ class SortOrder extends Template
     }
 
     /** @var Http */
-    private $httpRequest;
+    private Http $httpRequest;
 
     /** @var Registry */
-    private $registry;
+    private Registry $registry;
 
     /**
      * SortOrder constructor.

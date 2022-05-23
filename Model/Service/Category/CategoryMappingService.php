@@ -49,16 +49,13 @@ class CategoryMappingService implements CategoryMappingServiceInterface
 {
 
     /** @var CollectionFactory */
-    private $collectionFactory;
+    private CollectionFactory $collectionFactory;
 
     /** @var CategoryBuilder */
-    private $categoryBuilder;
+    private CategoryBuilder $categoryBuilder;
 
     /** @var NostoHelperData */
-    private $nostoHelperData;
-
-    /** @var Logger */
-    private $logger;
+    private NostoHelperData $nostoHelperData;
 
     /**
      * @param CollectionFactory $collectionFactory
@@ -75,7 +72,6 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoHelperData = $nostoHelperData;
-        $this->logger = $logger;
     }
 
     /**
@@ -89,10 +85,9 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         $array = $this->getMagentoCategories($store);
         $mapping = json_encode((object)$array, JSON_UNESCAPED_SLASHES);
         if ($mapping) {
-            return $mapping;
-        } else {
             throw new JsonEncodeFailureException($store, $array);
         }
+        return $mapping;
     }
 
     /**

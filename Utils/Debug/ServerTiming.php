@@ -43,12 +43,12 @@ class ServerTiming
     /**
      * @var array holds measurements for each request
      */
-    private $times = [];
+    private array $times = [];
 
     /**
      * @var ServerTiming singleton
      */
-    private static $instance;
+    private static ServerTiming $instance;
 
     /**
      * ServerTiming constructor.

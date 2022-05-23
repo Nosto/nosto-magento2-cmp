@@ -44,10 +44,10 @@ use Nosto\Cmp\Model\Service\MagentoSession\SessionService;
 class TokenMerchandiseService implements MerchandiseServiceInterface
 {
     /** @var MerchandiseServiceInterface */
-    private $merchandiseService;
+    private MerchandiseServiceInterface $merchandiseService;
 
     /** @var SessionService */
-    private $sessionService;
+    private SessionService $sessionService;
 
     /**
      * @param MerchandiseServiceInterface $merchandiseService
