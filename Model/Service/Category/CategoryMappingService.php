@@ -42,7 +42,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\JsonEncodeFailureException;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
-use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class CategoryMappingService implements CategoryMappingServiceInterface
@@ -61,13 +60,11 @@ class CategoryMappingService implements CategoryMappingServiceInterface
      * @param CollectionFactory $collectionFactory
      * @param CategoryBuilder $categoryBuilder
      * @param NostoHelperData $nostoHelperData
-     * @param Logger $logger
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
-        NostoHelperData $nostoHelperData,
-        Logger $logger
+        NostoHelperData $nostoHelperData
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
