@@ -45,23 +45,23 @@ class CachingCategoryMappingService implements CategoryMappingServiceInterface
 {
 
     /** @var CategoryCache */
-    private $cache;
+    private CategoryCache $cache;
 
     /** @var CategoryMappingServiceInterface */
-    private $categoryMappingService;
+    private CategoryMappingServiceInterface $categoryMappingService;
 
     /** @var int */
-    private $ttl;
+    private int $ttl;
 
     /**
      * @param CategoryCache $cache
      * @param CategoryMappingServiceInterface $categoryMappingService
-     * @param $ttl
+     * @param int $ttl
      */
     public function __construct(
         CategoryCache $cache,
         CategoryMappingServiceInterface $categoryMappingService,
-        $ttl
+        int $ttl
     ) {
         $this->cache = $cache;
         $this->categoryMappingService = $categoryMappingService;
