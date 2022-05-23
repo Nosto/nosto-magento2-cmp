@@ -38,7 +38,6 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\AttributeValueException;
 use Nosto\Cmp\Exception\FacetValueException;
@@ -69,7 +68,6 @@ class WebHandler extends AbstractHandler
      * @param MerchandiseServiceInterface $merchandiseService
      * @param RequestParamsService $requestParamsService
      * @param BuildWebFacetService $buildWebFacetService
-     * @param State $state
      * @param Logger $logger
      * @param int $pageSize
      */
