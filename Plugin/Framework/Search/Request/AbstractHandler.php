@@ -213,7 +213,7 @@ abstract class AbstractHandler
      * @param array $productIds
      * @param int $limit
      */
-    private function applyCmpFilter(array &$requestData, array $productIds, $limit)
+    private function applyCmpFilter(array &$requestData, array $productIds, int $limit)
     {
         $bindKey = $this->getBindKey();
 

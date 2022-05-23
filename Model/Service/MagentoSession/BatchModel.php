@@ -73,7 +73,7 @@ class BatchModel
     /**
      * @param string $batchToken
      */
-    public function setBatchToken($batchToken)
+    public function setBatchToken(string $batchToken)
     {
         $this->batchToken = $batchToken;
     }
@@ -81,7 +81,7 @@ class BatchModel
     /**
      * @param int $lastUsedLimit
      */
-    public function setLastUsedLimit($lastUsedLimit)
+    public function setLastUsedLimit(int $lastUsedLimit)
     {
         $this->lastUsedLimit = $lastUsedLimit;
     }

@@ -138,7 +138,7 @@ class Data extends AbstractHelper
      * @param Store|null $store
      * @return mixed|null
      */
-    public function getStoreConfig($path, Store $store = null)
+    public function getStoreConfig(string $path, Store $store = null)
     {
         if ($store === null) {
             $store = $this->nostoHelperScope->getStore(true);

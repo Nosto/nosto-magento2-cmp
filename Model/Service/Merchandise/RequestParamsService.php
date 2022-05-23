@@ -232,7 +232,7 @@ class RequestParamsService
      * @param int $limit
      * @return int
      */
-    private function sanitizeLimit(Store $store, $limit)
+    private function sanitizeLimit(Store $store, int $limit)
     {
         $maxLimit = $this->nostoCmpHelper->getMaxProductLimit($store);
         if (!is_numeric($limit)

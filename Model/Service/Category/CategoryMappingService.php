@@ -131,7 +131,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
      * @param String $categoryString
      * @return string
      */
-    private static function hashCategoryString($categoryString)
+    private static function hashCategoryString(string $categoryString)
     {
         $signedInteger = crc32($categoryString);
         $unsignedInteger = (int)sprintf("%u", $signedInteger);

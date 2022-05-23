@@ -150,7 +150,7 @@ class BuildWebFacetService
         $filter = $item->getFilter();
 
         if ($filter instanceof Category) {
-            $categoryId = $item->getData('value');
+            $categoryId = (int)$item->getData('value');
             $category = $this->getCategoryName($store, $categoryId);
             if ($category == null) {
                 $this->trace('Could not get category from filters');
@@ -217,7 +217,7 @@ class BuildWebFacetService
      * @return string|null
      * @throws NoSuchEntityException
      */
-    private function getCategoryName(Store $store, $categoryId): ?string
+    private function getCategoryName(Store $store, int $categoryId): ?string
     {
         /**
          * Argument is of type \Magento\Catalog\Api\Data\CategoryInterface

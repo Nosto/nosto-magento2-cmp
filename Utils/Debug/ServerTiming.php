@@ -65,7 +65,7 @@ class ServerTiming
      * @param string $name
      * @return mixed
      */
-    public function instrument(callable $fn, $name)
+    public function instrument(callable $fn, string $name)
     {
         $start = microtime(true);
         $value = $fn();
