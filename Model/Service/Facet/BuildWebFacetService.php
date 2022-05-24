@@ -239,7 +239,7 @@ class BuildWebFacetService
     private function mapValueToFilter(IncludeFilters &$includeFilters, Store $store, string $name, $value)
     {
         if (empty($this->brand)) {
-            $this->brand = $this->nostoHelperData->getBrandAttribute($store);
+            $this->brand = $this->nostoHelperData->getBrandAttribute($store) ?? '';
         }
 
         switch (strtolower($name)) {
