@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Model\Service\Merchandise;
 
-use Magento\Framework\Event\ManagerInterface;
 use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
