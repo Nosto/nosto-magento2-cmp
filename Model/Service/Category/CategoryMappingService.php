@@ -81,7 +81,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
     {
         $array = $this->getMagentoCategories($store);
         $mapping = json_encode((object)$array, JSON_UNESCAPED_SLASHES);
-        if ($mapping) {
+        if (!$mapping) {
             throw new JsonEncodeFailureException($store, $array);
         }
         return $mapping;
