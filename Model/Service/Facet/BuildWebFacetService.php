@@ -73,8 +73,8 @@ class BuildWebFacetService
     /** @var NostoHelperData */
     private NostoHelperData $nostoHelperData;
 
-    /** @var ?string */
-    private ?string $brand;
+    /** @var string */
+    private string $brand;
 
     /**
      * BuildWebFacetService constructor.
@@ -238,7 +238,7 @@ class BuildWebFacetService
      */
     private function mapValueToFilter(IncludeFilters &$includeFilters, Store $store, string $name, $value)
     {
-        if ($this->brand === null) {
+        if (empty($this->brand)) {
             $this->brand = $this->nostoHelperData->getBrandAttribute($store);
         }
 
