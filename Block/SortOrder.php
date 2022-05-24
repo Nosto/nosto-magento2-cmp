@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused */
+<?php /** @noinspection PhpDeprecationInspection */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -49,7 +49,7 @@ use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class SortOrder extends Template
 {
-    const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
+    private const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
 
     use TaggingTrait {
         TaggingTrait::__construct as taggingConstruct; // @codingStandardsIgnoreLine
