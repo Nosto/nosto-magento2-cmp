@@ -43,7 +43,6 @@ use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Exception\JsonEncodeFailureException;
 use Nosto\Cmp\Model\Service\Category\CategoryMappingServiceInterface;
 use Nosto\Tagging\Helper\Scope as NostoHelperScope;
-use Nosto\Tagging\Logger\Logger;
 
 class CategoryMapping extends Template
 {
@@ -54,26 +53,20 @@ class CategoryMapping extends Template
     /** @var CategoryMappingServiceInterface  */
     private CategoryMappingServiceInterface $mappingService;
 
-    /** @var Logger */
-    private Logger $logger;
-
     /**
      * CategoryMapping constructor.
      * @param NostoHelperScope $nostoHelperScope
      * @param CategoryMappingServiceInterface $mappingService
      * @param Context $context
-     * @param Logger $logger
      */
     public function __construct(
         NostoHelperScope $nostoHelperScope,
         CategoryMappingServiceInterface $mappingService,
-        Context $context,
-        Logger $logger
+        Context $context
     ) {
         parent::__construct($context);
         $this->nostoHelperScope = $nostoHelperScope;
         $this->mappingService = $mappingService;
-        $this->logger = $logger;
     }
 
     /**
