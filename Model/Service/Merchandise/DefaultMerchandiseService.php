@@ -49,23 +49,17 @@ use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 class DefaultMerchandiseService implements MerchandiseServiceInterface
 {
 
-    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
-
-    /** @var ManagerInterface  */
-    private ManagerInterface $eventManager;
+    private const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /** @var LastResult */
     private LastResult $lastResult;
 
     /**
-     * @param ManagerInterface $eventManager
      * @param LastResult $lastResult
      */
     public function __construct(
-        ManagerInterface $eventManager,
         LastResult $lastResult
     ) {
-        $this->eventManager = $eventManager;
         $this->lastResult = $lastResult;
     }
 
