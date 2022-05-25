@@ -46,9 +46,9 @@ class ServerTiming
     private array $times = [];
 
     /**
-     * @var ServerTiming singleton
+     * @var ServerTiming|null singleton
      */
-    private static ServerTiming $instance;
+    private static ?ServerTiming $instance = null;
 
     /**
      * ServerTiming constructor.
