@@ -6,7 +6,7 @@ use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 
 class LastResult
 {
-    /** @var ?CategoryMerchandisingResult */
+    /** @var CategoryMerchandisingResult|null */
     private ?CategoryMerchandisingResult $lastResult = null;
 
     /**

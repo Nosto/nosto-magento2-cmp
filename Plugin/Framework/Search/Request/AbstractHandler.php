@@ -132,7 +132,6 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return void
-     * @noinspection PhpRedundantCatchClauseInspection
      */
     public function handle(array &$requestData)
     {
