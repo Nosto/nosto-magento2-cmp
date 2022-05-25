@@ -36,7 +36,6 @@
 
 namespace Nosto\Cmp\Model\Service\Merchandise;
 
-use Magento\Framework\Event\ManagerInterface;
 use Nosto\Cmp\Model\Merchandise\MerchandiseRequestParams;
 use Nosto\Cmp\Utils\Debug\ServerTiming;
 use Nosto\NostoException;
@@ -49,23 +48,17 @@ use Nosto\Result\Graphql\Recommendation\CategoryMerchandisingResult;
 class DefaultMerchandiseService implements MerchandiseServiceInterface
 {
 
-    const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
-
-    /** @var ManagerInterface  */
-    private $eventManager;
+    private const TIME_PROF_GRAPHQL_QUERY = 'cmp_graphql_query';
 
     /** @var LastResult */
-    private $lastResult;
+    private LastResult $lastResult;
 
     /**
-     * @param ManagerInterface $eventManager
      * @param LastResult $lastResult
      */
     public function __construct(
-        ManagerInterface $eventManager,
         LastResult $lastResult
     ) {
-        $this->eventManager = $eventManager;
         $this->lastResult = $lastResult;
     }
 

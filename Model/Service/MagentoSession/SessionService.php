@@ -42,7 +42,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 class SessionService
 {
     /** @var SessionManagerInterface */
-    private $session;
+    private SessionManagerInterface $session;
 
     /**
      * CmpSession constructor.

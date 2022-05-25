@@ -47,7 +47,7 @@ class FallbackSorting implements OptionSourceInterface
     /**
      * @var ConfigFactory
      */
-    private $configFactory;
+    private ConfigFactory $configFactory;
 
     /**
      * FallbackSorting constructor.

@@ -48,7 +48,7 @@ use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 class ProductSearch
 {
     /** @var LastResult  */
-    private $lastResult;
+    private LastResult $lastResult;
 
     /**
      * @param LastResult $lastResult

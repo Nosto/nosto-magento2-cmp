@@ -38,7 +38,6 @@ namespace Nosto\Cmp\Plugin\Framework\Search\Request;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\LayeredNavigation\Block\Navigation\State;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\AttributeValueException;
 use Nosto\Cmp\Exception\FacetValueException;
@@ -55,15 +54,11 @@ use Nosto\Tagging\Logger\Logger;
 
 class WebHandler extends AbstractHandler
 {
-
-    /** @var State */
-    private $state;
-
     /** @var BuildWebFacetService  */
-    private $buildWebFacetService;
+    private BuildWebFacetService $buildWebFacetService;
 
     /** @var int  */
-    private $pageSize;
+    private int $pageSize;
 
     /**
      * @param SearchEngine $searchEngineHelper
@@ -73,9 +68,8 @@ class WebHandler extends AbstractHandler
      * @param MerchandiseServiceInterface $merchandiseService
      * @param RequestParamsService $requestParamsService
      * @param BuildWebFacetService $buildWebFacetService
-     * @param State $state
      * @param Logger $logger
-     * @param $pageSize
+     * @param int $pageSize
      */
     public function __construct(
         SearchEngine              $searchEngineHelper,
@@ -85,9 +79,8 @@ class WebHandler extends AbstractHandler
         MerchandiseServiceInterface $merchandiseService,
         RequestParamsService      $requestParamsService,
         BuildWebFacetService      $buildWebFacetService,
-        State                     $state,
         Logger                    $logger,
-        $pageSize
+        int                       $pageSize
     ) {
         parent::__construct(
             $searchEngineHelper,
@@ -99,7 +92,6 @@ class WebHandler extends AbstractHandler
             $logger
         );
         $this->buildWebFacetService = $buildWebFacetService;
-        $this->state = $state;
         $this->pageSize = $pageSize;
     }
 

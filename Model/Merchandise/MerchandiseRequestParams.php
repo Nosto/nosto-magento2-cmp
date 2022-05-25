@@ -42,28 +42,28 @@ use Nosto\Types\Signup\AccountInterface;
 class MerchandiseRequestParams
 {
     /** @var AccountInterface */
-    private $nostoAccount;
+    private AccountInterface $nostoAccount;
 
     /** @var FacetInterface */
-    private $facets;
+    private FacetInterface $facets;
 
     /** @var string */
-    private $customerId;
+    private string $customerId;
 
     /** @var string */
-    private $category;
+    private string $category;
 
     /** @var int */
-    private $pageNumber;
+    private int $pageNumber;
 
     /** @var int */
-    private $limit;
+    private int $limit;
 
     /** @var bool */
-    private $previewMode;
+    private bool $previewMode;
 
     /** @var string */
-    private $batchToken;
+    private string $batchToken;
 
     /**
      * @param AccountInterface $nostoAccount

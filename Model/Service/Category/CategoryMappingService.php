@@ -42,40 +42,33 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\JsonEncodeFailureException;
 use Nosto\Cmp\Helper\Data as NostoHelperData;
-use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 
 class CategoryMappingService implements CategoryMappingServiceInterface
 {
 
     /** @var CollectionFactory */
-    private $collectionFactory;
+    private CollectionFactory $collectionFactory;
 
     /** @var CategoryBuilder */
-    private $categoryBuilder;
+    private CategoryBuilder $categoryBuilder;
 
     /** @var NostoHelperData */
-    private $nostoHelperData;
-
-    /** @var Logger */
-    private $logger;
+    private NostoHelperData $nostoHelperData;
 
     /**
      * @param CollectionFactory $collectionFactory
      * @param CategoryBuilder $categoryBuilder
      * @param NostoHelperData $nostoHelperData
-     * @param Logger $logger
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         CategoryBuilder $categoryBuilder,
-        NostoHelperData $nostoHelperData,
-        Logger $logger
+        NostoHelperData $nostoHelperData
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->categoryBuilder = $categoryBuilder;
         $this->nostoHelperData = $nostoHelperData;
-        $this->logger = $logger;
     }
 
     /**
@@ -88,11 +81,10 @@ class CategoryMappingService implements CategoryMappingServiceInterface
     {
         $array = $this->getMagentoCategories($store);
         $mapping = json_encode((object)$array, JSON_UNESCAPED_SLASHES);
-        if ($mapping) {
-            return $mapping;
-        } else {
+        if (!$mapping) {
             throw new JsonEncodeFailureException($store, $array);
         }
+        return $mapping;
     }
 
     /**
@@ -131,7 +123,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
      * @param String $categoryString
      * @return string
      */
-    private static function hashCategoryString($categoryString)
+    private static function hashCategoryString(string $categoryString)
     {
         $signedInteger = crc32($categoryString);
         $unsignedInteger = (int)sprintf("%u", $signedInteger);

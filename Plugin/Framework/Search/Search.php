@@ -43,7 +43,7 @@ use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 class Search
 {
     /** @var LastResult  */
-    private $lastResult;
+    private LastResult $lastResult;
 
     /**
      * Search constructor.

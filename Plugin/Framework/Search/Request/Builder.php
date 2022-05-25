@@ -48,7 +48,7 @@ class Builder
     /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * Builder constructor.

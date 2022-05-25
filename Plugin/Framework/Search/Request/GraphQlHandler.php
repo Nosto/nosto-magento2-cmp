@@ -55,19 +55,19 @@ class GraphQlHandler extends AbstractHandler
 {
 
     /** @var BuildGraphQlFacetService */
-    private $buildFacetService;
+    private BuildGraphQlFacetService $buildFacetService;
 
     /** @var SessionService */
-    private $sessionService;
+    private SessionService $sessionService;
 
     /** @var CategoryRepositoryInterface */
-    private $categoryRepository;
+    private CategoryRepositoryInterface $categoryRepository;
 
     /** @var Registry */
-    private $registry;
+    private Registry $registry;
 
     /** @var int */
-    private $pageSize;
+    private int $pageSize;
 
     /**
      * @param BuildGraphQlFacetService $buildFacetService
@@ -81,7 +81,7 @@ class GraphQlHandler extends AbstractHandler
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Registry $registry
      * @param Logger $logger
-     * @param $pageSize
+     * @param int $pageSize
      */
     public function __construct(
         BuildGraphQlFacetService    $buildFacetService,
@@ -95,7 +95,7 @@ class GraphQlHandler extends AbstractHandler
         CategoryRepositoryInterface $categoryRepository,
         Registry                    $registry,
         Logger                      $logger,
-        $pageSize
+        int                         $pageSize
     ) {
         parent::__construct(
             $searchEngineHelper,

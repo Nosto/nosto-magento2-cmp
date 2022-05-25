@@ -47,7 +47,7 @@ class Request implements RequestInterface
     /**
      * @var MagentoRequest
      */
-    protected $request;
+    protected MagentoRequest $request;
 
     /**
      * Request constructor.

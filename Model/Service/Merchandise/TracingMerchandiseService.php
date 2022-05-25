@@ -21,16 +21,16 @@ class TracingMerchandiseService implements MerchandiseServiceInterface
     }
 
     /** @var MerchandiseServiceInterface */
-    private $merchandiseService;
+    private MerchandiseServiceInterface $merchandiseService;
 
     /** @var NostoHelperData */
-    private $nostoHelperData;
+    private NostoHelperData $nostoHelperData;
 
     /** @var HttpResponse */
-    private $response;
+    private HttpResponse $response;
 
     /** @var CmpHelperData */
-    private $cmpHelperData;
+    private CmpHelperData $cmpHelperData;
 
     /**
      * @param MerchandiseServiceInterface $merchandiseService

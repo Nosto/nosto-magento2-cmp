@@ -69,52 +69,52 @@ class RequestParamsService
     /**
      * @var CookieManagerInterface
      */
-    private $cookieManager;
+    private CookieManagerInterface $cookieManager;
 
     /**
      * @var NostoHelperAccount
      */
-    private $nostoHelperAccount;
+    private NostoHelperAccount $nostoHelperAccount;
 
     /**
      * @var NostoHelperScope
      */
-    private $nostoHelperScope;
+    private NostoHelperScope $nostoHelperScope;
 
     /**
      * @var Registry
      */
-    private $registry;
+    private Registry $registry;
 
     /**
      * @var CategoryBuilder
      */
-    private $categoryBuilder;
+    private CategoryBuilder $categoryBuilder;
 
     /**
      * @var CategoryRepositoryInterface
      */
-    private $categoryRepository;
+    private CategoryRepositoryInterface $categoryRepository;
 
     /**
      * @var Data
      */
-    private $nostoCmpHelper;
+    private Data $nostoCmpHelper;
 
     /**
      * @var ManagerInterface
      */
-    private $eventManager;
+    private ManagerInterface $eventManager;
 
     /**
      * @var VisitSessionService
      */
-    private $visitSessionService;
+    private VisitSessionService $visitSessionService;
 
     /**
      * @var ResultSessionService
      */
-    private $resultSessionService;
+    private ResultSessionService $resultSessionService;
 
     /**
      * @param CookieManagerInterface $cookieManager
@@ -232,7 +232,7 @@ class RequestParamsService
      * @param int $limit
      * @return int
      */
-    private function sanitizeLimit(Store $store, $limit)
+    private function sanitizeLimit(Store $store, int $limit)
     {
         $maxLimit = $this->nostoCmpHelper->getMaxProductLimit($store);
         if (!is_numeric($limit)
