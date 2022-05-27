@@ -47,10 +47,10 @@ class CategorySorting extends Field implements OptionSourceInterface
 {
 
     /** @var NostoHelperSorting */
-    private $nostoHelperSorting;
+    private NostoHelperSorting $nostoHelperSorting;
 
     /** @var Http $request */
-    private $request;
+    private Http $request;
 
     /**
      * CategorySorting constructor.

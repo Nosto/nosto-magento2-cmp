@@ -43,12 +43,12 @@ class ServerTiming
     /**
      * @var array holds measurements for each request
      */
-    private $times = [];
+    private array $times = [];
 
     /**
-     * @var ServerTiming singleton
+     * @var ServerTiming|null singleton
      */
-    private static $instance;
+    private static ?ServerTiming $instance = null;
 
     /**
      * ServerTiming constructor.
@@ -65,7 +65,7 @@ class ServerTiming
      * @param string $name
      * @return mixed
      */
-    public function instrument(callable $fn, $name)
+    public function instrument(callable $fn, string $name)
     {
         $start = microtime(true);
         $value = $fn();

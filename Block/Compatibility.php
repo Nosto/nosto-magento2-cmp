@@ -48,10 +48,10 @@ use Nosto\Cmp\Helper\SearchEngine;
 class Compatibility extends Template
 {
     /** @var SearchEngine */
-    private $searchEngine;
+    private SearchEngine $searchEngine;
 
     /** @var Escaper */
-    public $escaper;
+    public Escaper $escaper;
 
     /**
      * Constructor.

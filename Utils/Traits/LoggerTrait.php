@@ -42,7 +42,7 @@ use Throwable;
 trait LoggerTrait
 {
     /** @var Logger */
-    protected $logger;
+    protected Logger $logger;
 
     /**
      * LoggerTrait constructor.

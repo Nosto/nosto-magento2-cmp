@@ -43,16 +43,16 @@ namespace Nosto\Cmp\Model\Service\MagentoSession;
 class BatchModel
 {
     /** @var string */
-    private $batchToken;
+    private string $batchToken;
 
     /** @var int */
-    private $lastUsedLimit;
+    private int $lastUsedLimit;
 
     /** @var int */
-    private $lastFetchedPage = 0;
+    private int $lastFetchedPage = 0;
 
     /** @var int */
-    private $totalCount;
+    private int $totalCount;
 
     /**
      * @return int
@@ -73,7 +73,7 @@ class BatchModel
     /**
      * @param string $batchToken
      */
-    public function setBatchToken($batchToken)
+    public function setBatchToken(string $batchToken)
     {
         $this->batchToken = $batchToken;
     }
@@ -81,7 +81,7 @@ class BatchModel
     /**
      * @param int $lastUsedLimit
      */
-    public function setLastUsedLimit($lastUsedLimit)
+    public function setLastUsedLimit(int $lastUsedLimit)
     {
         $this->lastUsedLimit = $lastUsedLimit;
     }

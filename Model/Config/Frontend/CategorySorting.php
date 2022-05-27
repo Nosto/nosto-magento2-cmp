@@ -46,10 +46,10 @@ class CategorySorting extends Field
 {
 
     /** @var NostoHelperSorting */
-    private $nostoHelperSorting;
+    private NostoHelperSorting $nostoHelperSorting;
 
     /** @var Http $request */
-    public $request;
+    public Http $request;
 
     /**
      * CategorySorting constructor.

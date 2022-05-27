@@ -73,32 +73,32 @@ abstract class AbstractHandler
     /**
      * @var SearchEngine
      */
-    private $searchEngineHelper;
+    private SearchEngine $searchEngineHelper;
 
     /**
      * @var NostoHelperAccount
      */
-    private $accountHelper;
+    private NostoHelperAccount $accountHelper;
 
     /**
      * @var CmpHelperData
      */
-    private $cmpHelperData;
+    private CmpHelperData $cmpHelperData;
 
     /**
      * @var NostoHelperScope
      */
-    protected $nostoHelperScope;
+    protected NostoHelperScope $nostoHelperScope;
 
     /**
      * @var MerchandiseServiceInterface
      */
-    protected $merchandiseService;
+    protected MerchandiseServiceInterface $merchandiseService;
 
     /**
      * @var RequestParamsService
      */
-    private $requestParamService;
+    private RequestParamsService $requestParamService;
 
     /**
      * @param SearchEngine $searchEngineHelper
@@ -132,7 +132,6 @@ abstract class AbstractHandler
     /**
      * @param array $requestData
      * @return void
-     * @noinspection PhpRedundantCatchClauseInspection
      */
     public function handle(array &$requestData)
     {
@@ -213,7 +212,7 @@ abstract class AbstractHandler
      * @param array $productIds
      * @param int $limit
      */
-    private function applyCmpFilter(array &$requestData, array $productIds, $limit)
+    private function applyCmpFilter(array &$requestData, array $productIds, int $limit)
     {
         $bindKey = $this->getBindKey();
 

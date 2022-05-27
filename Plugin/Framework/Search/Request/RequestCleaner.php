@@ -54,10 +54,10 @@ class RequestCleaner
     }
 
     /** @var GraphQlHandler */
-    private $graphqlHandler;
+    private GraphQlHandler $graphqlHandler;
 
     /** @var WebHandler */
-    private $webHandler;
+    private WebHandler $webHandler;
 
     /**
      * RequestCleaner constructor.

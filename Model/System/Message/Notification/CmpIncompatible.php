@@ -45,7 +45,7 @@ class CmpIncompatible implements MessageInterface
     /**
      * @var SearchEngine
      */
-    private $searchEngine;
+    private SearchEngine $searchEngine;
 
     /**
      * @var mixed

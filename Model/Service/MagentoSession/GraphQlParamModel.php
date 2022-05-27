@@ -39,10 +39,10 @@ namespace Nosto\Cmp\Model\Service\MagentoSession;
 class GraphQlParamModel
 {
     /** @var int */
-    private $limit;
+    private int $limit;
 
     /** @var int */
-    private $currentPage;
+    private int $currentPage;
 
     /**
      * GraphQlParamModel constructor.

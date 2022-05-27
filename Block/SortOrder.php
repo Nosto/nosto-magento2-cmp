@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused */
+<?php /** @noinspection PhpDeprecationInspection */
 /**
  * Copyright (c) 2020, Nosto Solutions Ltd
  * All rights reserved.
@@ -38,7 +38,7 @@ namespace Nosto\Cmp\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http;
-use /** @noinspection PhpDeprecationInspection */ Magento\Framework\Registry;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Nosto\Cmp\Helper\CategorySorting;
@@ -49,17 +49,17 @@ use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 
 class SortOrder extends Template
 {
-    const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
+    private const DEFAULT_SORTING_ORDER_PARAM = 'product_list_order';
 
     use TaggingTrait {
         TaggingTrait::__construct as taggingConstruct; // @codingStandardsIgnoreLine
     }
 
     /** @var Http */
-    private $httpRequest;
+    private Http $httpRequest;
 
     /** @var Registry */
-    private $registry;
+    private Registry $registry;
 
     /**
      * SortOrder constructor.

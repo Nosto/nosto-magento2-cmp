@@ -49,19 +49,19 @@ use Nosto\Tagging\Helper\Scope as NostoHelperScope;
 class Config
 {
     /** @var SearchEngine */
-    private $searchEngineHelper;
+    private SearchEngine $searchEngineHelper;
 
     /** @var NostoCmpHelperData */
-    private $nostoCmpHelperData;
+    private NostoCmpHelperData $nostoCmpHelperData;
 
     /** @var NostoHelperAccount */
-    private $nostoHelperAccount;
+    private NostoHelperAccount $nostoHelperAccount;
 
     /** @var NostoHelperScope */
-    private $nostoHelperScope;
+    private NostoHelperScope $nostoHelperScope;
 
     /** @var AttributeFactory */
-    private $attributeFactory;
+    private AttributeFactory $attributeFactory;
 
     /**
      * Config constructor.
