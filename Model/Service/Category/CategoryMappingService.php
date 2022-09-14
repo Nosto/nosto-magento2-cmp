@@ -36,7 +36,7 @@
 
 namespace Nosto\Cmp\Model\Service\Category;
 
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
@@ -107,7 +107,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
             $categories->addAttributeToFilter('include_in_menu', ['eq' => 1]);
         }
 
-        /** @var Category $category $item */
+        /** @var CategoryInterface $category */
         foreach ($categories->getItems() as $category) {
             $categoryName = $this->categoryBuilder->getCategory($category, $store);
             if ($categoryName) {
