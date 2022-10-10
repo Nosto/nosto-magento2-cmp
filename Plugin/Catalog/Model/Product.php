@@ -77,7 +77,7 @@ class Product
         if (!empty($parsed)) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
             parse_str($parsed, $result);
-            return $result;
         }
+        return $result;
     }
 }
