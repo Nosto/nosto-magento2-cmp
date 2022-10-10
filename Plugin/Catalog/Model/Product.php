@@ -72,14 +72,8 @@ class Product
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
         $parsed = parse_url($url, PHP_URL_QUERY);
-        // This is in case of PHP 8.0+, which now returns null if the requested component is not in the URL
-        if (!empty($parsed)) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
-            parse_str($parsed, $result);
-        } else {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
-            parse_str($url, $result);
-        }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Ecg.Security.ForbiddenFunction.Found
+        parse_str($parsed, $result);
         return $result;
     }
 }
