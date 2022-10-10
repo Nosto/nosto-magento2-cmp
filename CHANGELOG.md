@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.0.1
+* Fix parsing existing query params for product URL generation
+
 ### 5.0.0
 * Adds compatibility with PHP 8 and bumps minimum PHP version as 7.4
 * Adds compatibility with Magento 2.4.4 and module-nostotagging >6.0
