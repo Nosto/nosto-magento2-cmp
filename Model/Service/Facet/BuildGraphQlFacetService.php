@@ -36,12 +36,25 @@
 
 namespace Nosto\Cmp\Model\Service\Facet;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 
 class BuildGraphQlFacetService
 {
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    public function __construct(
+        ProductAttributeRepositoryInterface $productAttributeRepository
+    ) {
+        $this->productAttributeRepository = $productAttributeRepository;
+    }
 
     /**
      * @param array $requestData
@@ -52,12 +65,36 @@ class BuildGraphQlFacetService
         $includeFilters = new IncludeFilters();
         $excludeFilters = new ExcludeFilters();
 
-        if (isset($requestData['filters']['price_filter'])) {
-            $priceFilters = $requestData['filters']['price_filter'];
-            $includeFilters->setPrice(
-                isset($priceFilters['from']) ? $priceFilters['from'] : null,
-                isset($priceFilters['to']) ? $priceFilters['to'] : null
-            );
+        foreach ($requestData['filters'] as $filter) {
+            // Skip visibility and category filters (for now)
+            if (
+                $filter['name'] === 'category_filter' ||
+                $filter['name'] === 'visibility_filter'
+            ) {
+                continue;
+            }
+
+            // Price filters
+            else if (isset($requestData['filters']['price_filter'])) {
+                $priceFilters = $requestData['filters']['price_filter'];
+                $includeFilters->setPrice(
+                    isset($priceFilters['from']) ? $priceFilters['from'] : null,
+                    isset($priceFilters['to']) ? $priceFilters['to'] : null
+                );
+            }
+
+            // Custom field filters
+            else {
+                $attributeCode = $filter['field'];
+                $value = $filter['value'];
+
+                $attribute = $this->productAttributeRepository->get($attributeCode);
+
+                $includeFilters->setCustomFields(
+                    $attributeCode,
+                    array($attribute->getSource()->getOptionText($value))
+                );
+            }
         }
 
         return new Facet($includeFilters, $excludeFilters);
