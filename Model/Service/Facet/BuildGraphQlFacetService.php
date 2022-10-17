@@ -42,6 +42,7 @@ use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
+use Nosto\Tagging\Helper\Data as NostoDataHelper;
 use Nosto\Tagging\Logger\Logger;
 
 class BuildGraphQlFacetService
@@ -50,23 +51,27 @@ class BuildGraphQlFacetService
         LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
     }
 
-    /**
-     * @var ProductAttributeRepositoryInterface
-     */
+    /** @var NostoDataHelper */
+    private NostoDataHelper $nostoDataHelper;
+
+    /** @var ProductAttributeRepositoryInterface */
     private ProductAttributeRepositoryInterface $productAttributeRepository;
 
     /**
      * BuildGraphQlFacetService constructor.
+     * @param NostoDataHelper $nostoDataHelper
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param Logger $logger
      */
     public function __construct(
+        NostoDataHelper $nostoDataHelper,
         ProductAttributeRepositoryInterface $productAttributeRepository,
         Logger $logger
     ) {
         $this->loggerTraitConstruct(
             $logger
         );
+        $this->nostoDataHelper = $nostoDataHelper;
         $this->productAttributeRepository = $productAttributeRepository;
     }
 
@@ -94,24 +99,30 @@ class BuildGraphQlFacetService
                     $attributeCode = $filter['field'];
                     $filterValues = $filter['value'];
                     $attribute = $this->productAttributeRepository->get($attributeCode);
-                    $customFieldValues = [];
+                    $values = [];
 
                     if (is_string($filterValues)) { // eq attribute
                         /** @phan-suppress-next-next-line PhanUndeclaredMethod */
                         /** @noinspection PhpUndefinedMethodInspection */
-                        $customFieldValues = [$attribute->getSource()->getOptionText($filterValues)];
+                        $values = [$attribute->getSource()->getOptionText($filterValues)];
                     } else { // in attribute
                         foreach ($filterValues as $value) {
                             /** @phan-suppress-next-next-line PhanUndeclaredMethod */
                             /** @noinspection PhpUndefinedMethodInspection */
-                            $customFieldValues[] = $attribute->getSource()->getOptionText($value);
+                            $values[] = $attribute->getSource()->getOptionText($value);
                         }
                     }
 
-                    $includeFilters->setCustomFields(
-                        $attributeCode,
-                        $customFieldValues
-                    );
+                    $brandAttribute = $this->nostoDataHelper->getBrandAttribute($store);
+
+                    if ($attributeCode === $brandAttribute) {
+                        $includeFilters->setBrands($values);
+                    } else {
+                        $includeFilters->setCustomFields(
+                            $attributeCode,
+                            $values
+                        );
+                    }
                 } catch (NoSuchEntityException $e) {
                     $this->logger->exception($e);
                 }
