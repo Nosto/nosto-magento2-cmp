@@ -113,7 +113,7 @@ class BuildGraphQlFacetService
                         }
                     }
 
-                    $brandAttribute = $this->nostoDataHelper->getBrandAttribute($store);
+                    $brandAttribute = $this->nostoDataHelper->getBrandAttribute();
 
                     if ($attributeCode === $brandAttribute) {
                         $includeFilters->setBrands($values);
