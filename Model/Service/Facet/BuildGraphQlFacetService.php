@@ -53,7 +53,7 @@ class BuildGraphQlFacetService
     /**
      * @var ProductAttributeRepositoryInterface
      */
-    private $productAttributeRepository;
+    private ProductAttributeRepositoryInterface $productAttributeRepository;
 
     /**
      * BuildGraphQlFacetService constructor.
