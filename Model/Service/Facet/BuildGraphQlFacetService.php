@@ -97,10 +97,11 @@ class BuildGraphQlFacetService
                     $attribute = $this->productAttributeRepository->get($attributeCode);
 
                     if (is_string($filterValues)) { // eq attribute
-                        $customFieldValues = array($attribute->getSource()->getOptionText($filterValues));
+                        $customFieldValues = [$attribute->getSource()->getOptionText($filterValues)];
                     } else { // in attribute
-                        foreach($filterValues as $value) {
-                            $customFieldValues[] = $attribute->getSource()->getOptionText($value); //@phan-suppress-current-line PhanUndeclaredMethod
+                        foreach ($filterValues as $value) {
+                            /** @phan-suppress-next-line PhanUndeclaredMethod */
+                            $customFieldValues[] = $attribute->getSource()->getOptionText($value);
                         }
                     }
 
