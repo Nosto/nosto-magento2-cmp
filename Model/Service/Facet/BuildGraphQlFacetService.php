@@ -37,22 +37,36 @@
 namespace Nosto\Cmp\Model\Service\Facet;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Nosto\Cmp\Model\Facet\Facet;
+use Nosto\Cmp\Utils\Traits\LoggerTrait;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
+use Nosto\Tagging\Logger\Logger;
 
 class BuildGraphQlFacetService
 {
+    use LoggerTrait {
+        LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
+    }
 
     /**
      * @var ProductAttributeRepositoryInterface
      */
     private $productAttributeRepository;
 
+    /**
+     * BuildGraphQlFacetService constructor.
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param Logger $logger
+     */
     public function __construct(
-        ProductAttributeRepositoryInterface $productAttributeRepository
+        ProductAttributeRepositoryInterface $productAttributeRepository,
+        Logger $logger
     ) {
+        $this->loggerTraitConstruct(
+            $logger
+        );
         $this->productAttributeRepository = $productAttributeRepository;
     }
 
@@ -66,34 +80,37 @@ class BuildGraphQlFacetService
         $excludeFilters = new ExcludeFilters();
 
         foreach ($requestData['filters'] as $filter) {
-            // Skip visibility and category filters (for now)
-            if (
-                $filter['name'] === 'category_filter' ||
+            if ($filter['name'] === 'category_filter' || // Skip visibility and category filters
                 $filter['name'] === 'visibility_filter'
             ) {
                 continue;
-            }
-
-            // Price filters
-            else if (isset($requestData['filters']['price_filter'])) {
+            } elseif (isset($requestData['filters']['price_filter'])) { // Price filters
                 $priceFilters = $requestData['filters']['price_filter'];
                 $includeFilters->setPrice(
                     isset($priceFilters['from']) ? $priceFilters['from'] : null,
                     isset($priceFilters['to']) ? $priceFilters['to'] : null
                 );
-            }
+            } else { // Custom field filters
+                try {
+                    $attributeCode = $filter['field'];
+                    $filterValues = $filter['value'];
+                    $attribute = $this->productAttributeRepository->get($attributeCode);
 
-            // Custom field filters
-            else {
-                $attributeCode = $filter['field'];
-                $value = $filter['value'];
+                    if (is_string($filterValues)) { // eq attribute
+                        $customFieldValues = array($attribute->getSource()->getOptionText($filterValues));
+                    } else { // in attribute
+                        foreach($filterValues as $value) {
+                            $customFieldValues[] = $attribute->getSource()->getOptionText($value); //@phan-suppress-current-line PhanUndeclaredMethod
+                        }
+                    }
 
-                $attribute = $this->productAttributeRepository->get($attributeCode);
-
-                $includeFilters->setCustomFields(
-                    $attributeCode,
-                    array($attribute->getSource()->getOptionText($value))
-                );
+                    $includeFilters->setCustomFields(
+                        $attributeCode,
+                        $customFieldValues
+                    );
+                } catch (NoSuchEntityException $e) {
+                    $this->logger->exception($e);
+                }
             }
         }
 
