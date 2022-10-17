@@ -84,23 +84,26 @@ class BuildGraphQlFacetService
                 $filter['name'] === 'visibility_filter'
             ) {
                 continue;
-            } elseif (isset($requestData['filters']['price_filter'])) { // Price filters
-                $priceFilters = $requestData['filters']['price_filter'];
+            } elseif ($filter['name'] === 'price_filter') { // Price filters
                 $includeFilters->setPrice(
-                    isset($priceFilters['from']) ? $priceFilters['from'] : null,
-                    isset($priceFilters['to']) ? $priceFilters['to'] : null
+                    isset($filter['from']) ? $filter['from'] : null,
+                    isset($filter['to']) ? $filter['to'] : null
                 );
             } else { // Custom field filters
                 try {
                     $attributeCode = $filter['field'];
                     $filterValues = $filter['value'];
                     $attribute = $this->productAttributeRepository->get($attributeCode);
+                    $customFieldValues = [];
 
                     if (is_string($filterValues)) { // eq attribute
+                        /** @phan-suppress-next-next-line PhanUndeclaredMethod */
+                        /** @noinspection PhpUndefinedMethodInspection */
                         $customFieldValues = [$attribute->getSource()->getOptionText($filterValues)];
                     } else { // in attribute
                         foreach ($filterValues as $value) {
-                            /** @phan-suppress-next-line PhanUndeclaredMethod */
+                            /** @phan-suppress-next-next-line PhanUndeclaredMethod */
+                            /** @noinspection PhpUndefinedMethodInspection */
                             $customFieldValues[] = $attribute->getSource()->getOptionText($value);
                         }
                     }
