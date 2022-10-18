@@ -43,7 +43,6 @@ use Magento\Store\Model\Store;
 use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
-use Nosto\Cmp\Exception;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoDataHelper;
@@ -144,7 +143,8 @@ class BuildGraphQlFacetService
      * @return string|boolean
      * @throws FacetValueException
      */
-    private function getOptionText($store, $attribute, $value) {
+    private function getOptionText($store, $attribute, $value)
+    {
         /** @phan-suppress-next-next-line PhanUndeclaredMethod */
         /** @noinspection PhpUndefinedMethodInspection */
         $result = $attribute->getSource()->getOptionText($value);
@@ -152,6 +152,6 @@ class BuildGraphQlFacetService
             return $result;
         }
 
-        throw new FacetValueException($store, $name, $value);
+        throw new FacetValueException($store, $attribute->getAttributeCode(), $value);
     }
 }
