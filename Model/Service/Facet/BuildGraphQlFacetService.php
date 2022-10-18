@@ -36,10 +36,14 @@
 
 namespace Nosto\Cmp\Model\Service\Facet;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+use Nosto\Cmp\Exception\FacetValueException;
 use Nosto\Cmp\Model\Facet\Facet;
 use Nosto\Cmp\Utils\Traits\LoggerTrait;
+use Nosto\Cmp\Exception;
 use Nosto\Operation\Recommendation\ExcludeFilters;
 use Nosto\Operation\Recommendation\IncludeFilters;
 use Nosto\Tagging\Helper\Data as NostoDataHelper;
@@ -47,6 +51,12 @@ use Nosto\Tagging\Logger\Logger;
 
 class BuildGraphQlFacetService
 {
+    const CATEGORY_FILTER = 'category_filter';
+
+    const VISIBILITY_FILTER = 'visibility_filter';
+
+    const PRICE_FILTER = 'price_filter';
+
     use LoggerTrait {
         LoggerTrait::__construct as loggerTraitConstruct; // @codingStandardsIgnoreLine
     }
@@ -76,20 +86,21 @@ class BuildGraphQlFacetService
     }
 
     /**
+     * @param Store $store
      * @param array $requestData
      * @return Facet
      */
-    public function getFacets(array $requestData): Facet
+    public function getFacets(Store $store, array $requestData): Facet
     {
         $includeFilters = new IncludeFilters();
         $excludeFilters = new ExcludeFilters();
 
         foreach ($requestData['filters'] as $filter) {
-            if ($filter['name'] === 'category_filter' || // Skip visibility and category filters
-                $filter['name'] === 'visibility_filter'
+            if ($filter['name'] === self::CATEGORY_FILTER || // Skip visibility and category filters
+                $filter['name'] === self::VISIBILITY_FILTER
             ) {
                 continue;
-            } elseif ($filter['name'] === 'price_filter') { // Price filters
+            } elseif ($filter['name'] === self::PRICE_FILTER) { // Price filters
                 $includeFilters->setPrice(
                     isset($filter['from']) ? $filter['from'] : null,
                     isset($filter['to']) ? $filter['to'] : null
@@ -102,20 +113,14 @@ class BuildGraphQlFacetService
                     $values = [];
 
                     if (is_string($filterValues)) { // eq attribute
-                        /** @phan-suppress-next-next-line PhanUndeclaredMethod */
-                        /** @noinspection PhpUndefinedMethodInspection */
-                        $values = [$attribute->getSource()->getOptionText($filterValues)];
+                        $values = [$this->getOptionText($store, $attribute, $filterValues)];
                     } else { // in attribute
                         foreach ($filterValues as $value) {
-                            /** @phan-suppress-next-next-line PhanUndeclaredMethod */
-                            /** @noinspection PhpUndefinedMethodInspection */
-                            $values[] = $attribute->getSource()->getOptionText($value);
+                            $values[] = $this->getOptionText($store, $attribute, $value);
                         }
                     }
 
-                    $brandAttribute = $this->nostoDataHelper->getBrandAttribute();
-
-                    if ($attributeCode === $brandAttribute) {
+                    if ($attributeCode === $this->nostoDataHelper->getBrandAttribute($store)) {
                         $includeFilters->setBrands($values);
                     } else {
                         $includeFilters->setCustomFields(
@@ -123,12 +128,30 @@ class BuildGraphQlFacetService
                             $values
                         );
                     }
-                } catch (NoSuchEntityException $e) {
+                } catch (NoSuchEntityException | FacetValueException $e) {
                     $this->logger->exception($e);
                 }
             }
         }
 
         return new Facet($includeFilters, $excludeFilters);
+    }
+
+    /**
+     * @param Store $store
+     * @param ProductAttributeInterface $attribute
+     * @param mixed $value
+     * @return string|boolean
+     * @throws FacetValueException
+     */
+    private function getOptionText($store, $attribute, $value) {
+        /** @phan-suppress-next-next-line PhanUndeclaredMethod */
+        /** @noinspection PhpUndefinedMethodInspection */
+        $result = $attribute->getSource()->getOptionText($value);
+        if ($result) {
+            return $result;
+        }
+
+        throw new FacetValueException($store, $name, $value);
     }
 }
