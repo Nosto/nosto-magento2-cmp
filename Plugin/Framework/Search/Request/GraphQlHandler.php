@@ -175,7 +175,7 @@ class GraphQlHandler extends AbstractHandler
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function getFilters(Store $store, array $requestData)
     {
-        return $this->buildFacetService->getFacets($requestData);
+        return $this->buildFacetService->getFacets($store, $requestData);
     }
 
     /**
