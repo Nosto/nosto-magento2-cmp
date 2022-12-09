@@ -72,7 +72,7 @@ class SearchResultSorter
                 $sorted[] = $document;
             }
         }
-        $subject->setTotalCount($this->getTotalPrimaryCount());
+        $subject->setTotalCount(count($result));
         return [$sorted];
     }
 
@@ -100,19 +100,6 @@ class SearchResultSorter
         $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
             return $categoryMerchandisingResult->parseProductIds();
-        }
-        return null;
-    }
-
-    /**
-     * Returns the product ids sorted by Nosto
-     * @return int|null
-     */
-    private function getTotalPrimaryCount()
-    {
-        $categoryMerchandisingResult = $this->lastResult->getLastResult();
-        if ($categoryMerchandisingResult !== null) {
-            return $categoryMerchandisingResult->getTotalPrimaryCount();
         }
         return null;
     }
