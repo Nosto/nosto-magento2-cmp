@@ -55,9 +55,6 @@
             <argument name="pageSize" xsi:type="number">-1</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Search\Search">
-        <plugin name="" type="Nosto\Cmp\Plugin\Framework\Search\Search"/>
-    </type>
     <type name="Magento\Framework\Api\Search\SearchResult">
         <plugin name="nosto_search_result_sort" type="Nosto\Cmp\Plugin\Api\Search\SearchResultSorter"/>
     </type>
