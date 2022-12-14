@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.2.1
+* Fix product counter by using total products that have been rendered instead of totalPrimaryCount result from GraphQL query.
+
 ### 5.2.0
 * Update nosto/module-nostotagging package to ^7.0.0
 
