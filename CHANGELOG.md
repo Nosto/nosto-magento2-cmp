@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.2.2
+* Restore totalPrimaryCount result from GraphQL query as product count in order to fix an issue with pagination.
+
 ### 5.2.1
 * Fix product counter by using total products that have been rendered instead of totalPrimaryCount result from GraphQL query.
 
