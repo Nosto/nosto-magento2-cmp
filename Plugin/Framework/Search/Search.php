@@ -34,81 +34,47 @@
  *
  */
 
-namespace Nosto\Cmp\Plugin\Api\Search;
+namespace Nosto\Cmp\Plugin\Framework\Search;
 
-use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Api\Search\SearchResult;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Search\Search as MagentoSearch;
 use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 
-class SearchResultSorter
+class Search
 {
     /** @var LastResult  */
     private LastResult $lastResult;
 
     /**
+     * Search constructor.
      * @param LastResult $lastResult
      */
-    public function __construct(
-        LastResult $lastResult
-    ) {
+    public function __construct(LastResult $lastResult)
+    {
         $this->lastResult = $lastResult;
     }
 
     /**
-     * @param SearchResult $subject
-     * @param $result
-     * @return array
+     * @param MagentoSearch $search
+     * @param SearchResultInterface $result
+     * @return SearchResultInterface
+     * @noinspection PhpUnusedParameterInspection
      */
-    public function beforeSetItems(SearchResult $subject, $result)
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function afterSearch(MagentoSearch $search, $result)
     {
-        $cmpSort = $this->getCmpSort();
-        if (empty($cmpSort)) {
-            return [$result];
+        $count = $this->getCmpTotalCount();
+        if ($count != null) {
+            $result->setTotalCount($count);
         }
-        $sorted = [];
-        foreach ($cmpSort as $productId) {
-            $document = $this->findDocumentByProductId($result, $productId);
-            if ($document) {
-                $sorted[] = $document;
-            }
-        }
-        $subject->setTotalCount($this->getTotalPrimaryCount());
-        return [$sorted];
-    }
-
-    /**
-     * @param Document[] $result
-     * @param $productId
-     * @return Document|null
-     */
-    private function findDocumentByProductId(array $result, $productId)
-    {
-        foreach ($result as $document) {
-            if ($document->getId() == $productId) {
-                return $document;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns the product ids sorted by Nosto
-     * @return int[]|null
-     */
-    private function getCmpSort()
-    {
-        $categoryMerchandisingResult = $this->lastResult->getLastResult();
-        if ($categoryMerchandisingResult !== null) {
-            return $categoryMerchandisingResult->parseProductIds();
-        }
-        return null;
+        return $result;
     }
 
     /**
      * Returns the product ids sorted by Nosto
      * @return int|null
      */
-    private function getTotalPrimaryCount()
+    private function getCmpTotalCount()
     {
         $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
