@@ -76,10 +76,10 @@ class SearchResultApplier
     ) {
         $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
-            $product_ids = $categoryMerchandisingResult->parseProductIds();
-            $orderList = implode(',', $product_ids);
+            $productIds = $categoryMerchandisingResult->parseProductIds();
+            $orderList = implode(',', $productIds);
             $this->collection->getSelect()
-                ->where('e.entity_id IN (?)', $product_ids)
+                ->where('e.entity_id IN (?)', $productIds)
                 ->reset(Select::ORDER)
                 ->order(new Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
 
