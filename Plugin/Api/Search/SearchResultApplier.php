@@ -67,6 +67,8 @@ class SearchResultApplier
      * @param ESearchResultApplier $subject
      * @param $result
      * @return mixed
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
      */
     public function afterApply(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         ESearchResultApplier $subject,
