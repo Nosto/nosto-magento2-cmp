@@ -39,6 +39,8 @@ namespace Nosto\Cmp\Plugin\Api\Search;
 use Magento\Framework\DB\Select;
 use Nosto\Cmp\Model\Service\Merchandise\LastResult;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Zend_Db_Expr;
+use Zend_Db_Select;
 
 class SearchResultApplier
 {
@@ -61,7 +63,7 @@ class SearchResultApplier
         $this->collection = $collection;
     }
 
-    public function afterApply()
+    public function afterApply(LastResult $subject, $result)
     {
         $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
@@ -69,9 +71,10 @@ class SearchResultApplier
             $orderList = implode(',', $product_ids);
             $this->collection->getSelect()
                 ->where('e.entity_id IN (?)', $product_ids)
-                ->reset(Select::ORDER)
-                ->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
+                ->reset(Zend_Db_Select::ORDER)
+                ->order(new Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
 
         }
+        return $result;
     }
 }
