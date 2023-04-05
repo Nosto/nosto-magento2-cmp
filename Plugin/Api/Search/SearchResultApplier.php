@@ -68,8 +68,10 @@ class SearchResultApplier
      * @param $result
      * @return mixed
      */
-    public function afterApply(ESearchResultApplier $subject, $result)
-    {
+    public function afterApply(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+        ESearchResultApplier $subject,
+        $result
+    ) {
         $categoryMerchandisingResult = $this->lastResult->getLastResult();
         if ($categoryMerchandisingResult !== null) {
             $product_ids = $categoryMerchandisingResult->parseProductIds();
