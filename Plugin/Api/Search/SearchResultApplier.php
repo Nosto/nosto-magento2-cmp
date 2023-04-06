@@ -67,6 +67,7 @@ class SearchResultApplier
      * @param ESearchResultApplier $subject
      * @param $result
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
