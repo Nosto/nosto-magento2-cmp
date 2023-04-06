@@ -75,9 +75,9 @@ class SearchResultApplier
         ESearchResultApplier $subject,
         $result
     ) {
-        $categoryMerchandisingResult = $this->lastResult->getLastResult();
-        if ($categoryMerchandisingResult !== null) {
-            $productIds = $categoryMerchandisingResult->parseProductIds();
+        $cmResult = $this->lastResult->getLastResult();
+        if ($cmResult !== null) {
+            $productIds = $cmResult->parseProductIds();
             $orderList = implode(',', $productIds);
             $this->collection->getSelect()
                 ->where('e.entity_id IN (?)', $productIds)
