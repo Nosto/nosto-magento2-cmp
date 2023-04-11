@@ -61,6 +61,10 @@
     <type name="Magento\Framework\Api\Search\SearchResult">
         <plugin name="nosto_search_result_sort" type="Nosto\Cmp\Plugin\Api\Search\SearchResultSorter"/>
     </type>
+    <type name="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier">
+        <plugin name="nosto_search_result_applier" type="Nosto\Cmp\Plugin\Api\Search\SearchResultApplier" sortOrder="1" disabled="false" />
+    </type>
+
     <type name="Magento\Catalog\Block\Product\ListProduct">
         <plugin name="nosto_search_result_sort" type="Nosto\Cmp\Plugin\Catalog\Block\ListProduct"/>
     </type>
