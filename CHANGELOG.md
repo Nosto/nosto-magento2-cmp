@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.3.0
+* Improve compatibility with Magento 2.4.6
+
 ### 5.2.2
 * Restore totalPrimaryCount result from GraphQL query as product count in order to fix an issue with pagination.
 
