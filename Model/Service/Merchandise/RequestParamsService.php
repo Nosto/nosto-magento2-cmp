@@ -40,6 +40,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Catalog\Model\Category;
 use Nosto\Cmp\Exception\MissingAccountException;
 use Nosto\Cmp\Exception\MissingTokenException;
 use Nosto\Cmp\Exception\SessionCreationException;
@@ -224,6 +225,9 @@ class RequestParamsService
     {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
+        if (!$category instanceof Category) {
+            return null;
+        }
         return $this->categoryBuilder->getCategory($category, $store);
     }
 
