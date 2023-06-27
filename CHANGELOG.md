@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.3.1
+* Add nullcheck to avoid logging errors when the current category is not a regular Magento Category
+
 ### 5.3.0
 * Improve compatibility with Magento 2.4.6
 
