@@ -58,6 +58,7 @@ use Nosto\Tagging\Logger\Logger;
 use Nosto\Tagging\Model\Customer\Customer as NostoCustomer;
 use Nosto\Tagging\Model\Service\Product\Category\DefaultCategoryService as CategoryBuilder;
 use Nosto\Cmp\Model\Service\MagentoSession\SessionService as ResultSessionService;
+use Nosto\Cmp\Exception\InvalidCategoryTypeException;
 
 class RequestParamsService
 {
@@ -219,14 +220,15 @@ class RequestParamsService
     /**
      * Get the current category
      * @param Store $store
-     * @return null|string
+     * @return string
+     * @throws InvalidCategoryTypeException
      */
     private function getCurrentCategoryString(Store $store)
     {
         /** @noinspection PhpDeprecationInspection */
         $category = $this->registry->registry('current_category'); //@phan-suppress-current-line PhanDeprecatedFunction
         if (!$category instanceof Category) {
-            return null;
+            throw new InvalidCategoryTypeException($store);
         }
         return $this->categoryBuilder->getCategory($category, $store);
     }
