@@ -46,7 +46,7 @@ jobs:
     - name: Install Magento
       id: install-magento
       run: |
-        composer create-project magento/community-edition=2.4.2 magento --no-dev
+        composer create-project magento/community-edition=2.4.5 magento --no-dev
         cd magento
         composer config minimum-stability dev
         composer config prefer-stable true
@@ -64,7 +64,7 @@ jobs:
         REPO_PSW: ${{ secrets.REPO_PSW }}
 
     - name: Run PHPStorm
-      uses: mridang/action-phpstorm@master
+      uses: supercid/action-phpstorm@master
       with:
         target: .
         profile: ./.idea/inspectionProfiles/CI.xml
@@ -74,7 +74,7 @@ jobs:
 
     - name: Archive inspection results
       if: always()
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: inspection-results
         path: output
