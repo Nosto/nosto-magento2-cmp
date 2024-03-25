@@ -99,7 +99,7 @@ class CategoryMappingService implements CategoryMappingServiceInterface
         $categoriesArray = [];
 
         $categories = $this->collectionFactory->create()
-            ->addAttributeToSelect('*')
+            ->addAttributeToSelect('entity_id')
             ->addIsActiveFilter()
             ->setStore($store);
 
