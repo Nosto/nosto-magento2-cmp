@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.3.2
+* Update nosto/module-nostotagging package to ^8.0.0
+
 ### 5.3.1
 * Add nullcheck to avoid logging errors when the current category is not a regular Magento Category
 
