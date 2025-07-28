@@ -1,6 +1,6 @@
 name: 'PHPStorm Inspector'
 description: 'Runs PHPStorm inspections on your codebase'
-author: 'Mridang Agarwalla'
+author: 'Matvejev'
 inputs:
   target:
     required: true
