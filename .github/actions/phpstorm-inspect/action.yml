@@ -1,0 +1,34 @@
+name: 'PHPStorm Inspector'
+description: 'Runs PHPStorm inspections on your codebase'
+author: 'Mridang Agarwalla'
+inputs:
+  target:
+    required: true
+    description: 'The directory to be inspected.'
+  profile:
+    required: true
+    description: 'The absolute path to the profile file.'
+  output:
+    required: true
+    description: 'The absolute path to spew outputs to.'
+  verbosity:
+    required: false
+    description: 'The verbose level. v0 - silent, v1 - verbose, v2 - most verbose.'
+    default: 'v2'
+  scope:
+    required: false
+    description: 'The inspection scope to be used. If none, all files are inspected.'
+    default: 'default'
+  noinspect :
+    required: false
+    description: 'A command delimited list of inspection output files to be skipped.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.target }}
+    - ${{ inputs.profile }}
+    - ${{ inputs.output }}
+    - ${{ inputs.verbosity }}
+    - ${{ inputs.scope }}
+    - ${{ inputs.noinspect }}
