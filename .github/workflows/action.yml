@@ -25,7 +25,7 @@ jobs:
       run: |
         composer config cache-files-dir
         echo "::set-output name=dir::$(composer config cache-files-dir)"
-    - uses: actions/cache@v1
+    - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -49,7 +49,7 @@ jobs:
         ./vendor/bin/phpcs --standard=ruleset.xml --report=checkstyle --report-file=chkphpcs.xml
 
     - name: Archive code sniffing results
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: phpcs-xml-result
         path: chkphpcs.xml
@@ -79,7 +79,7 @@ jobs:
       run: |
         composer config cache-files-dir
         echo "::set-output name=dir::$(composer config cache-files-dir)"
-    - uses: actions/cache@v1
+    - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -100,7 +100,7 @@ jobs:
       run: ./vendor/bin/phpmd . xml codesize,naming,unusedcode,controversial,design --exclude vendor,var,build,tests --reportfile pmdphpmd.xml --ignore-violations-on-exit
 
     - name: Archive mess detection results
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: phpmd-xml-result
         path: pmdphpmd.xml
@@ -129,7 +129,7 @@ jobs:
       id: composer-cache
       run: |
         echo "::set-output name=dir::$(composer config cache-files-dir)"
-    - uses: actions/cache@v1
+    - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -153,7 +153,7 @@ jobs:
       run: composer archive --format=zip --file=archive
 
     - name: Archive built arhive
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: composer-zip-archive
         path: archive.zip
