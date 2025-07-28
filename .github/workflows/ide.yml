@@ -63,8 +63,8 @@ jobs:
         REPO_USR: ${{ secrets.REPO_USR }}
         REPO_PSW: ${{ secrets.REPO_PSW }}
 
-    - name: Run PHPStorm
-      uses: supercid/action-phpstorm@master
+    - name: Run PHPStorm Inspection
+      uses: ./.github/actions/phpstorm-inspect
       with:
         target: .
         profile: ./.idea/inspectionProfiles/CI.xml
