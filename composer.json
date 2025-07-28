@@ -25,7 +25,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "nosto/module-nostotagging": "^7.0 || ^8.0",
+    "nosto/module-nostotagging": "^8.0",
     "nosto/php-sdk": ">=5.5.0",
     "php": ">=7.4",
     "ext-json": "*"
