@@ -15,7 +15,7 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '8.3'
         tools: composer:v2, pecl
         extensions: ast, bcmath, gd, pdo_mysql, soap, zip
         coverage: none
@@ -45,7 +45,7 @@ jobs:
     - name: Install Magento
       id: install-magento
       run: |
-        composer create-project magento/community-edition=2.4.5 magento --no-dev
+        composer create-project magento/community-edition=2.4.7 magento --no-dev
         cd magento
         composer config minimum-stability dev
         composer config prefer-stable true
