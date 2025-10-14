@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 5.4.0
+* Add compatibility with OpenSearch implementation
+
 ### 5.3.2
 * Update nosto/module-nostotagging package to ^8.0.0
 
