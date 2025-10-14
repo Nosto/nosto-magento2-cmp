@@ -36,7 +36,7 @@
 
 namespace Nosto\Cmp\Plugin\Elasticsearch\SearchAdapter;
 
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as MagentoMapper;
+use Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper as MagentoMapper;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\RequestInterface;
 use Nosto\Cmp\Model\Search\Request as NostoSearchRequest;
