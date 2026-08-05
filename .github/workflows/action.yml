@@ -182,10 +182,10 @@ jobs:
         name: composer-zip-archive
         path: archive.zip
 
-  # Magento 2.4.8 pins php to ~8.2.0||~8.3.0||~8.4.0, so a normal install cannot
-  # run on 8.5 yet. This lane installs with the platform requirement ignored and
-  # only runs PHPCompatibility, which parses source and never executes Magento,
-  # so the module stays verified 8.5-clean ahead of Magento allowing 8.5.
+  # Magento 2.4.8 pins php to ~8.2.0||~8.3.0||~8.4.0, so a normal Magento install cannot
+  # run on 8.5 yet. This lane runs on PHP 8.5 without installing Magento; it only lints the
+  # repository and runs PHPCompatibility in an isolated directory to keep the module 8.5-clean
+  # ahead of Magento allowing 8.5.
   php-compat:
     name: PHP 8.2-8.5 Compatibility
     runs-on: ubuntu-latest
