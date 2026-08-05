@@ -44,10 +44,22 @@
     <file>./view</file>
     <exclude-pattern>*.js</exclude-pattern>
     <exclude-pattern>*.css</exclude-pattern>
-    <config name="installed_paths"
-            value="./vendor/magento-ecg/coding-standard/EcgM2,./vendor/magento/magento-coding-standard/Magento2"/>
+    <!--
+      installed_paths is registered automatically by the
+      dealerdirect/phpcodesniffer-composer-installer plugin, which discovers
+      EcgM2, Magento2 AND PHPCompatibility. Hardcoding it here drops
+      PHPCompatibility from the search path and breaks standard resolution.
+    -->
     <description>The Magento coding standard.</description>
     <rule ref="./vendor/magento-ecg/coding-standard/EcgM2">
+        <!--
+          magento-ecg/coding-standard 4.x reports these two at error severity.
+          Excluded to match nosto-magento2 (Tagging), which made the same call:
+          @inheritDoc is used throughout, and the "space docblock" rule fires on
+          the @author lines in the BSD copyright headers.
+        -->
+        <exclude name="EcgM2.Deprecated.InheritDoc.Found"/>
+        <exclude name="EcgM2.Deprecated.SpaceDocBlock.Found"/>
     </rule>
     <rule ref="./vendor/magento/magento-coding-standard/Magento2">
         <exclude name="Magento2.Functions.StaticFunction"/>

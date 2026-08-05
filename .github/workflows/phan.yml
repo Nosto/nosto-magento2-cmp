@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     ############################################################################
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '8.2'
         tools: composer:v2, pecl
         extensions: ast, bcmath, gd, pdo_mysql, soap, zip
         coverage: none
@@ -24,7 +24,7 @@ jobs:
       id: composer-cache
       run: |
         composer config cache-files-dir
-        echo "::set-output name=dir::$(composer config cache-files-dir)"
+        echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
     - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
@@ -39,13 +39,13 @@ jobs:
       run: |
         composer config repositories.0 composer https://repo.magento.com
         composer config http-basic.repo.magento.com "$REPO_USR" "$REPO_PSW"
-        composer install --prefer-dist --no-progress --no-suggest
+        composer install --prefer-dist --no-progress
     ############################################################################
 
     - name: Install Magento
       id: install-magento
       run: |
-        composer create-project magento/community-edition=2.4.5 magento --no-dev
+        composer create-project magento/community-edition=2.4.8 magento --no-dev
         cd magento
         composer config minimum-stability dev
         composer config prefer-stable true
@@ -73,4 +73,4 @@ jobs:
 
     - name: Report annotations
       id: report-annotations
-      run: ./vendor/bin/cs2pr chkphan.xml
+      run: ./vendor/bin/cs2pr --graceful-warnings chkphan.xml

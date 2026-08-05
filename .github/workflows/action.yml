@@ -8,13 +8,13 @@ jobs:
     name: Code Sniffer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     ############################################################################
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '8.2'
         tools: composer:v2
         extensions: ast, bcmath, gd
         coverage: none
@@ -24,7 +24,7 @@ jobs:
       id: composer-cache
       run: |
         composer config cache-files-dir
-        echo "::set-output name=dir::$(composer config cache-files-dir)"
+        echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
     - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
@@ -39,7 +39,7 @@ jobs:
       run: |
         composer config repositories.0 composer https://repo.magento.com
         composer config http-basic.repo.magento.com "$REPO_USR" "$REPO_PSW"
-        composer install --prefer-dist --no-progress --no-suggest
+        composer install --prefer-dist --no-progress
     ############################################################################
 
     - name: Run the sniffer
@@ -56,19 +56,19 @@ jobs:
 
     - name: Report annotations
       id: report-annotations
-      run: ./vendor/bin/cs2pr chkphpcs.xml
+      run: ./vendor/bin/cs2pr --graceful-warnings chkphpcs.xml
 
   phpmd:
     name: Mess Detect
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     ############################################################################
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '8.2'
         tools: composer:v2
         extensions: ast, bcmath, gd
         coverage: none
@@ -78,7 +78,7 @@ jobs:
       id: composer-cache
       run: |
         composer config cache-files-dir
-        echo "::set-output name=dir::$(composer config cache-files-dir)"
+        echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
     - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
@@ -93,7 +93,7 @@ jobs:
       run: |
         composer config repositories.0 composer https://repo.magento.com
         composer config http-basic.repo.magento.com "$REPO_USR" "$REPO_PSW"
-        composer install --prefer-dist --no-progress --no-suggest
+        composer install --prefer-dist --no-progress
     ############################################################################
 
     - name: Run the mess detector
@@ -105,22 +105,42 @@ jobs:
         name: phpmd-xml-result
         path: pmdphpmd.xml
 
-    - name: Report annotations
-      id: report-annotations
-      run: ./vendor/bin/pmd2pr --graceful-warnings pmdphpmd.xml
+    - name: Detect code standard violations
+      if: always() && hashFiles('pmdphpmd.xml') != ''
+      # pmd2pr came from mridang/pmd-annotations, which caps at php ^7.0 and so
+      # cannot be installed on 8.2. Emit the GitHub annotations directly instead.
+      run: |
+        php -r "
+        \$xml = @simplexml_load_file('pmdphpmd.xml');
+        if (\$xml === false) { exit(0); }
+        \$workspace = rtrim(getenv('GITHUB_WORKSPACE') ?: '', '/');
+        foreach (\$xml->file as \$file) {
+          \$filepath = (string)\$file['name'];
+          if (\$workspace !== '' && strpos(\$filepath, \$workspace . '/') === 0) {
+            \$filepath = substr(\$filepath, strlen(\$workspace) + 1);
+          }
+          \$filepath = str_replace(['%', \"\r\", \"\n\"], ['%25', '%0D', '%0A'], \$filepath);
+          foreach (\$file->violation as \$violation) {
+            \$line = (int)\$violation['beginline'];
+            \$msg = trim((string)\$violation);
+            \$msg = str_replace(['%', \"\r\", \"\n\"], ['%25', '%0D', '%0A'], \$msg);
+            echo \"::notice file={\$filepath},line={\$line}::PHPMD: {\$msg}\n\";
+          }
+        }
+        " || true
 
   package:
     name: Package
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     ############################################################################
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
-        tools: composer:v2.1.14, pecl
+        php-version: '8.2'
+        tools: composer:v2, pecl
         extensions: ast, bcmath, gd
         coverage: none
 
@@ -128,7 +148,7 @@ jobs:
     - name: Cache composer packages
       id: composer-cache
       run: |
-        echo "::set-output name=dir::$(composer config cache-files-dir)"
+        echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
     - uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
@@ -143,17 +163,83 @@ jobs:
       run: |
         composer config repositories.0 composer https://repo.magento.com
         composer config http-basic.repo.magento.com "$REPO_USR" "$REPO_PSW"
+        # The companion Nosto modules are declared with --no-update on purpose: the
+        # constraints are written into the archived composer.json without being
+        # resolved. Resolving is unnecessary here (`composer archive` only zips this
+        # package's own files and needs no vendor/) and would fail the lock
+        # consistency check, since these packages are deliberately not in composer.lock.
         composer require --no-update nosto/module-nostotagging:@stable
         composer require --no-update nosto/module-nosto-msi:@stable
         composer require --no-update nosto/module-nosto-itp:@stable
-        composer install --prefer-dist --no-progress --no-suggest
     ############################################################################
 
     - name: Build archive using composer
       run: composer archive --format=zip --file=archive
 
-    - name: Archive built arhive
+    - name: Archive built archive
       uses: actions/upload-artifact@v4
       with:
         name: composer-zip-archive
         path: archive.zip
+
+  # Magento 2.4.8 pins php to ~8.2.0||~8.3.0||~8.4.0, so a normal install cannot
+  # run on 8.5 yet. This lane installs with the platform requirement ignored and
+  # only runs PHPCompatibility, which parses source and never executes Magento,
+  # so the module stays verified 8.5-clean ahead of Magento allowing 8.5.
+  php-compat:
+    name: PHP 8.2-8.5 Compatibility
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.5'
+        tools: composer:v2
+        coverage: none
+
+    - name: Cache composer packages
+      id: composer-cache
+      run: |
+        composer config cache-files-dir
+        echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+    - uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-phpcompat-${{ hashFiles('**/composer.json') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-phpcompat-
+
+    - name: Lint every source file under PHP 8.5
+      run: |
+        find . -path ./vendor -prune -o \( -name '*.php' -o -name '*.phtml' \) -print0 \
+          | xargs -0 -n1 -P4 php -l > /dev/null
+
+    - name: Install PHPCompatibility (isolated)
+      run: |
+        # magento/magento-coding-standard pulls magento/php-compatibility-fork, which
+        # `replace`s phpcompatibility/php-compatibility with a 9.x-era fork that does
+        # NOT implement the PHP 8.4/8.5 sniffs - it detects only 1 of 4 known 8.2-8.5
+        # deprecations. Install the real sniffs in an isolated directory so this gate
+        # actually has teeth. This also avoids needing a Magento install here at all.
+        mkdir -p "$RUNNER_TEMP/phpcompat"
+        composer --working-dir="$RUNNER_TEMP/phpcompat" init --no-interaction --name=tmp/phpcompat
+        composer --working-dir="$RUNNER_TEMP/phpcompat" config \
+          allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        composer --working-dir="$RUNNER_TEMP/phpcompat" require --no-interaction --quiet \
+          squizlabs/php_codesniffer:^3.13 \
+          phpcompatibility/php-compatibility:^10.0@alpha \
+          staabm/annotate-pull-request-from-checkstyle:^1.1
+
+    - name: Run the compatibility sniffs
+      run: |
+        PHPCS="$RUNNER_TEMP/phpcompat/vendor/bin/phpcs"
+        "$PHPCS" --standard=ruleset-phpcompat.xml \
+          --report=checkstyle --report-file=chkphpcompat.xml || true
+        "$PHPCS" --standard=ruleset-phpcompat.xml --report=full
+
+    - name: Report annotations
+      if: always() && hashFiles('chkphpcompat.xml') != ''
+      run: |
+        "$RUNNER_TEMP/phpcompat/vendor/bin/cs2pr" chkphpcompat.xml

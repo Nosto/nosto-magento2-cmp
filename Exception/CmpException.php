@@ -48,7 +48,7 @@ abstract class CmpException extends Exception
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(Store $store, $message, $code = 0, Throwable $previous = null)
+    public function __construct(Store $store, $message, $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($this->buildMessage($store, $message), $code, $previous);
     }
