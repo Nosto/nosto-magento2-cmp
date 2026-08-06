@@ -47,7 +47,7 @@ class SessionCreationException extends CmpException
      * @param Store $store
      * @param Throwable|null $previous
      */
-    public function __construct(Store $store, Throwable $previous = null)
+    public function __construct(Store $store, ?Throwable $previous = null)
     {
         parent::__construct($store, self::DEFAULT_MESSAGE, 0, $previous);
     }

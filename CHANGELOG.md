@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file. This project adheres to Semantic Versioning.
 
+### 6.0.0
+* Add support for PHP 8.5 for compatibility with Nosto_Tagging module version 9, drop PHP 8.1 support and below
+
 ### 5.4.0
 * Add compatibility with OpenSearch implementation
 

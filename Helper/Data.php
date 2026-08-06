@@ -95,7 +95,7 @@ class Data extends AbstractHelper
      * @param Store|null $store the store model or null.
      * @return bool the configuration value
      */
-    public function isCategorySortingEnabled(Store $store = null)
+    public function isCategorySortingEnabled(?Store $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_SORTING, $store);
     }
@@ -106,7 +106,7 @@ class Data extends AbstractHelper
      * @param Store|null $store the store model or null.
      * @return bool the configuration value
      */
-    public function isAllCategoriesMapEnabled(Store $store = null)
+    public function isAllCategoriesMapEnabled(?Store $store = null)
     {
         return (bool)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAPPING, $store);
     }
@@ -117,7 +117,7 @@ class Data extends AbstractHelper
      * @param Store|null $store the store model or null.
      * @return string
      */
-    public function getFallbackSorting(Store $store = null)
+    public function getFallbackSorting(?Store $store = null)
     {
         return $this->getStoreConfig(self::XML_PATH_FALLBACK_SORTING, $store);
     }
@@ -128,7 +128,7 @@ class Data extends AbstractHelper
      * @param Store|null $store the store model or null.
      * @return integer
      */
-    public function getMaxProductLimit(Store $store = null)
+    public function getMaxProductLimit(?Store $store = null)
     {
         return (int)$this->getStoreConfig(self::XML_PATH_CATEGORY_MAX_PRODUCT_LIMIT, $store);
     }
@@ -138,7 +138,7 @@ class Data extends AbstractHelper
      * @param Store|null $store
      * @return mixed|null
      */
-    public function getStoreConfig(string $path, Store $store = null)
+    public function getStoreConfig(string $path, ?Store $store = null)
     {
         if ($store === null) {
             $store = $this->nostoHelperScope->getStore(true);

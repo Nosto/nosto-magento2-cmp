@@ -35,6 +35,8 @@
  */
 
 return [
+    'target_php_version' => '8.5',
+    'minimum_target_php_version' => '8.2',
     'backward_compatibility_checks' => false,
     'signature-compatibility' => true,
     'progress-bar' => true,

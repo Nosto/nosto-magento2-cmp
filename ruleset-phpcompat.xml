@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright (c) 2025, Nosto Solutions Ltd
+  ~ All rights reserved.
+  ~
+  ~ @author Nosto Solutions Ltd <contact@nosto.com>
+  ~ @license http://opensource.org/licenses/OSL-3.0 Open Software License 3.0
+  -->
+
+<!--
+  PHP cross-version compatibility gate, kept separate from ruleset.xml so the
+  Magento/ECG style rules and the compatibility rules can be run independently.
+
+  PHPCompatibility is registered by the dealerdirect/phpcodesniffer-composer-installer
+  plugin, so no installed_paths is set here.
+
+  testVersion 8.2- means "8.2 and every version above it", so this flags anything
+  that breaks or is deprecated anywhere in the supported 8.2 - 8.5 range.
+-->
+<ruleset name="NostoCmpPhpCompatibility">
+    <description>PHP 8.2+ compatibility rules for the Nosto CMP module</description>
+
+    <file>./Block</file>
+    <file>./Exception</file>
+    <file>./Helper</file>
+    <file>./Model</file>
+    <file>./Plugin</file>
+    <file>./Utils</file>
+    <file>./view</file>
+    <file>./registration.php</file>
+
+    <!-- Scan Magento .phtml templates too; they contain PHP. -->
+    <arg name="extensions" value="php,phtml"/>
+
+    <rule ref="PHPCompatibility"/>
+    <config name="testVersion" value="8.2-"/>
+
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*.js</exclude-pattern>
+    <exclude-pattern>*.css</exclude-pattern>
+</ruleset>

@@ -37,6 +37,7 @@
 use Nosto\Cmp\Block\Compatibility;
 
 /**  @var Compatibility $block */
+/**  @var \Magento\Framework\Escaper $escaper */
 ?>
 <!-- Nosto CMP Compatibility Meta Tag -->
-<meta name="nosto-cmp-compatibility" content="<?= $block->escaper->escapeHtml($block->isSearchEngineMysql()); ?>">
+<meta name="nosto-cmp-compatibility" content="<?= $escaper->escapeHtml($block->isSearchEngineMysql()); ?>">
