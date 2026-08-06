@@ -37,6 +37,7 @@
 use Nosto\Cmp\Block\Meta;
 
 /**  @var Meta $block */
+/**  @var \Magento\Framework\Escaper $escaper */
 ?>
 <!-- Nosto CMP Meta Tags -->
-<meta name="nosto-cmp-version" content="<?= $block->escaper->escapeHtml($block->getModuleVersion()); ?>">
+<meta name="nosto-cmp-version" content="<?= $escaper->escapeHtml($block->getModuleVersion()); ?>">
